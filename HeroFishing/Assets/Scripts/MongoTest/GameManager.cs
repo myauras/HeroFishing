@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
-{
+public class GameManager_MongoTest : MonoBehaviour {
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         RealmManager.NewApp("application-0-pgfgf");
         if (RealmManager.MyApp.CurrentUser == null) {
-            Debug.LogError("µù¥U¨Ï¥ÎªÌ");
+            Debug.LogError("è¨»å†Šä½¿ç”¨è€…");
             RealmManager.AnonymousSignUp();
         } else {
-            Debug.LogError("¤w¸g¦³¨Ï¥ÎªÌ¤F");
+            Debug.LogError("å·²ç¶“æœ‰ä½¿ç”¨è€…äº†");
             RealmManager.OnSignin();
         }
 
@@ -27,8 +25,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update() {
+
     }
 }
