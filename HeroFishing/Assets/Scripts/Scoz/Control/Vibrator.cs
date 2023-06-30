@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using distriqt.plugins.vibration;
-using TheDoor.Main;
+using HeroFishing.Main;
 
 namespace Scoz.Func {
     public static class Vibrator {

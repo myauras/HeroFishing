@@ -7,7 +7,7 @@ using System.Linq;
 using LitJson;
 using SimpleJSON;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
 
     public partial class GamePlayer : MyPlayer {
 

@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Numerics;
 using UnityEngine.Profiling;
-using TheDoor.Main;
+using HeroFishing.Main;
 using UnityEngine.SceneManagement;
 
 namespace Scoz.Func {

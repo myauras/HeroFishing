@@ -6,7 +6,7 @@ using Scoz.Func;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
     public class GameStateManager : MonoBehaviour {
         public static GameStateManager Instance;
         public int ScheduledInGameNotificationID = 0;

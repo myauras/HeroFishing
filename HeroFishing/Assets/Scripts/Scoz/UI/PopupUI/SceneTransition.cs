@@ -5,7 +5,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TheDoor.Main;
+using HeroFishing.Main;
 using System;
 
 namespace Scoz.Func {

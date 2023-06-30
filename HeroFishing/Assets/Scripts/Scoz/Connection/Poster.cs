@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 using System.Text;
 using System;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
     public class PostData {
         public string URL;
         public string BodyJson;

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
-using TheDoor.Main;
+using HeroFishing.Main;
 using UnityEngine.AddressableAssets;
 
 namespace Scoz.Func {
@@ -391,7 +391,7 @@ namespace Scoz.Func {
         //進遊戲不先初始化，等到要用時才初始化UI
         [SerializeField] Transform SettingUIParent;
         [SerializeField] AssetReference SettingUIAsset;
-        TheDoor.Main.SettingUI MySettingUI;
+        HeroFishing.Main.SettingUI MySettingUI;
 
         void InitSettingUI(Action _ac) {
             PopupUI.ShowLoading(StringData.GetUIString("WaitForLoadingUI"));
@@ -405,7 +405,7 @@ namespace Scoz.Func {
                 //RectTransform rect = go.GetComponent<RectTransform>();
                 //rect.offsetMin = Vector2.zero;//Left、Bottom
                 //rect.offsetMax = Vector2.zero;//Right、Top
-                Instance.MySettingUI = go.GetComponent<TheDoor.Main.SettingUI>();
+                Instance.MySettingUI = go.GetComponent<HeroFishing.Main.SettingUI>();
                 Instance.MySettingUI.Init();
                 Instance.MySettingUI.SetActive(false);
                 _ac?.Invoke();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Scoz.Func;
 using System.Linq;
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
 
     public static class IntExtension {
         public static object[] ToObjs(this int[] _ints) {

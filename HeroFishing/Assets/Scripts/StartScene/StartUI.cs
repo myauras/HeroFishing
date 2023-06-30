@@ -4,7 +4,7 @@ using UnityEngine;
 using Scoz.Func;
 using UnityEngine.UI;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
     public class StartUI : BaseUI {
         [SerializeField] Toggle TermsOfUseToggle;
         [SerializeField] GameObject GuestLoginBtn;//登入按鈕

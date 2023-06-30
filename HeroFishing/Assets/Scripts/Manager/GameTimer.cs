@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using System;
 using Scoz.Func;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
     public class GameTimer : MonoBehaviour {
         MyTimer MinuteTimer;
         static DateTime LastOverMidNightTime;

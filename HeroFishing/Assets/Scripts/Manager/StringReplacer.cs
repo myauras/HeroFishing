@@ -1,10 +1,10 @@
-using TheDoor.Main;
+using HeroFishing.Main;
 using Scoz.Func;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
 
     public class StringReplacer {
 

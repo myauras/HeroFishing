@@ -10,7 +10,7 @@ using Unity.Notifications.iOS;
 
 using System;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
     public class LocoNotification : MonoBehaviour {
         public static LocoNotification Instance { get; private set; }
 #if UNITY_ANDROID

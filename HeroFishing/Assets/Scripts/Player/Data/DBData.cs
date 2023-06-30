@@ -4,12 +4,14 @@ using Realms;
 using MongoDB.Bson;
 using System.Diagnostics;
 
-public partial class Player : IRealmObject {
+public partial class DBData : IRealmObject {
     [MapTo("_id")]
     [PrimaryKey]
     public ObjectId? ID { get; set; }
-    [MapTo("Name")]
-    public string? Name { get; set; }
+    [MapTo("createdAt")]
+    public DateTimeOffset? createdAt { get; set; }
+    [MapTo("updatedAt")]
+    public DateTimeOffset? updatedAt { get; set; }
 
 }
 

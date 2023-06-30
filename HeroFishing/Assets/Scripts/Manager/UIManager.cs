@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
     public enum LinkType {
         None,
         LinkUI,

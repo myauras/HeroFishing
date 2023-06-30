@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using LitJson;
-using TheDoor.Main;
+using HeroFishing.Main;
 
 namespace Scoz.Func {
     public partial class StringData {

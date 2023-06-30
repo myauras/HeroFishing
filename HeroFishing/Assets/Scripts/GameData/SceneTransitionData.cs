@@ -6,7 +6,7 @@ using LitJson;
 using System;
 using System.Linq;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
     public class SceneTransitionData : MyJsonData {
         public static string DataName { get; set; }
         public string Description {

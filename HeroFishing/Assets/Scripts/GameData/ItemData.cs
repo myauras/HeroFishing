@@ -6,7 +6,7 @@ using LitJson;
 using System;
 using System.Linq;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
     /// <summary>
     /// 物品類型
     /// </summary>

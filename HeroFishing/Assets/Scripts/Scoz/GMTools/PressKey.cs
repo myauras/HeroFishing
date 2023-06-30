@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
-using TheDoor.Main;
+using HeroFishing.Main;
 using SimpleJSON;
 
 namespace Scoz.Func {

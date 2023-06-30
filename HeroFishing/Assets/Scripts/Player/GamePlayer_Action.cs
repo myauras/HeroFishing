@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEngine.Purchasing.Security;
 using UnityEngine.SceneManagement;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
 
     public partial class GamePlayer : MyPlayer {
 

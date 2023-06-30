@@ -7,7 +7,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
     public class StartSceneManager : MonoBehaviour {
         public Canvas MyCanvas;
         public StartUI MyStartUI;
@@ -22,7 +22,7 @@ namespace TheDoor.Main {
         public static bool FirstTimeLaunchGame { get; private set; } = true;
 
         private void Start() {
-            SetVersionText();//顯示下方文字
+            SetInfoText();//顯示資訊
             MyStartUI.Init();
             Instance = this;
             //建立遊戲管理者
@@ -34,7 +34,7 @@ namespace TheDoor.Main {
             InternetChecker.SetOnConnectedAction(OnConnected);
             InternetChecker.StartCheckInternet();
         }
-        public void SetVersionText() {
+        public void SetInfoText() {
             VersionText.text = "版本: " + Application.version;
         }
         public void PlayMainMusic() {

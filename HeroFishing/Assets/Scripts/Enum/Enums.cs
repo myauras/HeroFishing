@@ -1,6 +1,6 @@
 using System;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
     public enum Target {
         None,
         Myself,

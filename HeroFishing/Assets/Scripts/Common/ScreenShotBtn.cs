@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using System;
 using System.Linq;
 
-namespace TheDoor.Main {
+namespace HeroFishing.Main {
     public class ScreenShotBtn : MonoBehaviour {
 
         static ScreenCaptureCam MyCam;
