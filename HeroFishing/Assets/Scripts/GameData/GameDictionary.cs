@@ -34,13 +34,13 @@ namespace Scoz.Func {
 
         public static Font GetUsingLanguageFont() {
             if (Instance == null)
-                return Resources.GetBuiltinResource<Font>("Arial.ttf");
+                return Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             else {
                 int index = (int)MyPlayer.Instance.UsingLanguage;
                 if (index < Instance.SysFonts.Count && Instance.SysFonts[index] != null)
                     return Instance.SysFonts[index];
             }
-            return Resources.GetBuiltinResource<Font>("Arial.ttf");
+            return Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         }
         public static TMPro.TMP_FontAsset GetUsingLanguageFontAsset() {
             if (Instance != null) {

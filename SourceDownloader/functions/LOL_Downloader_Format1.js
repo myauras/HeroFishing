@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
 
-const url = 'https://leagueoflegends.fandom.com/wiki/Ahri/LoL/Audio';
+const url = 'https://leagueoflegends.fandom.com/wiki/Caitlyn/LoL/Audio';
 
 axios(url).then(response => {
     const html = response.data;
@@ -18,7 +18,7 @@ axios(url).then(response => {
             // 移除文字 'File:' 並將餘下的標題用作文件名
             title = title.replace('File:', '') + '.ogg';
 
-            const fileDirectory = path.join(__dirname, '..', 'Audios/LOL/Ahri');
+            const fileDirectory = path.join(__dirname, '..', 'Audios/LOL/Caitlyn');
     
             // 檢查目錄是否存在，若不存在則創建
             if (!fs.existsSync(fileDirectory)){

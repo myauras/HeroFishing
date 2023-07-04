@@ -5,6 +5,7 @@ using System.Numerics;
 using UnityEngine.Profiling;
 using HeroFishing.Main;
 using UnityEngine.SceneManagement;
+using System;
 
 namespace Scoz.Func {
     public partial class Debugger : MonoBehaviour {
@@ -33,19 +34,27 @@ namespace Scoz.Func {
         /// </summary>
         public void Start() {
             Instance = this;
-            GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
+            if (GameManager.Instance != null)
+                GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnLevelFinishedLoading;
             GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(Screen.width, Screen.height);
             VersionText.text = "Ver: " + Application.version;
 
         }
+
+
+        void GetNumber(int _n, Action<int> _callback) {
+            _callback?.Invoke(_n);
+        }
+
         void OnDestroy() {
             SceneManager.sceneLoaded -= OnLevelFinishedLoading;
         }
 
         void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
-            GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
+            if (GameManager.Instance != null)
+                GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
         }
 
         public void UpdateEnvVersionText() {

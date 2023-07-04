@@ -115,8 +115,6 @@ namespace Scoz.Func {
             gameObject.AddComponent<GameTimer>().Init();
             //建立GameStateManager
             gameObject.AddComponent<GameStateManager>().Init();
-            //建立LocoNotification
-            gameObject.AddComponent<LocoNotification>().Init();
             //建立CameraManager
             gameObject.AddComponent<CameraManager>().Init();
             //Permission請求
