@@ -1,0 +1,17 @@
+LOL語音下載說明
+LOL語音網址: https://leagueoflegends.fandom.com/wiki/Category:Champion_audio
+打開執行程式並將對應英雄的網址貼上並執行程式碼  
+1. 打開LOL_Downloader_Format1.js
+2. 複製對應英雄的網址貼到程式碼的網址上 例如 const url = 'https://leagueoflegends.fandom.com/wiki/Miss_Fortune/LoL/Audio';
+3. 修改資料夾名稱對應英雄名 例如 const fileDirectory = path.join(__dirname, '..', 'Audios/LOL/Miss_Fortune');
+4. CLI執行node.js 例如 node LOL_Downloader_Format1.js
+※有兩份檔案是因為wiki的html格式有些英雄不太一樣 例如Ahri就要使用LOL_Downloader_Format2.js那份程式 載下來的音檔名稱才會是正確的
+
+DOTA2語音下載說明
+DOTA2語音網址: https://dota2.fandom.com/wiki/Dota_2_Wiki
+打開執行程式並將對應英雄的網址貼上並執行程式碼  
+1. 打開DOTA2_Downloader_Format1.js
+2. 複製對應英雄的網址貼到程式碼的網址上 例如 const url = 'https://dota2.fandom.com/wiki/Ancient_Apparition/Responses';
+3. 修改資料夾名稱對應英雄名 例如 const fileDirectory = path.join(__dirname, '..', 'Audios/DOTA2/Ancient_Apparition');
+4. CLI執行node.js 例如node DOTA2_Downloader_Format1.js
+
