@@ -7,7 +7,6 @@ public class RTPSimulator : MonoBehaviour {
     [SerializeField]
     double GameRTP = 0.95d;
     [SerializeField]
-<<<<<<< HEAD
     double AttackRTP = 0.945d;
     [SerializeField]
     int TargetOdds = 100;
@@ -15,26 +14,14 @@ public class RTPSimulator : MonoBehaviour {
     double Energy = 10;
     [SerializeField]
     double SkillRTP = 10d;
-=======
-    double GivenRTP = 0.05d;
-    [SerializeField]
-    int TargetOdds = 100;
-    [SerializeField]
-    double ChargeRate = 0.1d;
-    [SerializeField]
-    double FreeAmmoRTP = 10d;
->>>>>>> 32cccfb5b31911efd229849f70e346c4d83643bb
     [SerializeField]
     int PlayTimes = 0;
     [SerializeField]
     int Balance = 10000;
-<<<<<<< HEAD
     [SerializeField]
     int BuffAddRTP = 1;
     [SerializeField]
     int BuffAttackTimes = 30;
-=======
->>>>>>> 32cccfb5b31911efd229849f70e346c4d83643bb
 
     int PlayCount = 0;
     int OriginalBalance = 0;
@@ -46,7 +33,6 @@ public class RTPSimulator : MonoBehaviour {
     public void Update() {
         if (Input.GetKeyDown("q")) {
             Hit();
-<<<<<<< HEAD
         } else if (Input.GetKeyDown("w")) {
             Hit2();
         }
@@ -108,36 +94,23 @@ public class RTPSimulator : MonoBehaviour {
         if ((decimal)killCheck < kp) {//擊殺
             Balance += TargetOdds;
         } else {
-=======
->>>>>>> 32cccfb5b31911efd229849f70e346c4d83643bb
         }
     }
     void Hit() {
 
         System.Random random = new System.Random();
-<<<<<<< HEAD
         decimal kp = RTPCalculator.GetKP((decimal)AttackRTP, TargetOdds);
         decimal freeAmmoDropP = RTPCalculator.GetFreeAmmoDropP((decimal)GameRTP, (decimal)AttackRTP, (decimal)SkillRTP, TargetOdds);
         freeAmmoDropP = freeAmmoDropP * (decimal)Energy;
-=======
-        decimal kp = RTPCalculator.GetKP((decimal)GameRTP, (decimal)GivenRTP, TargetOdds);
-        decimal freeAmmoDropP = RTPCalculator.GetFreeAmmoDropP((decimal)GameRTP, (decimal)GivenRTP, (decimal)FreeAmmoRTP, TargetOdds);
-        freeAmmoDropP = freeAmmoDropP / (decimal)ChargeRate;
->>>>>>> 32cccfb5b31911efd229849f70e346c4d83643bb
         if (freeAmmoDropP >= 1) {
             Debug.LogError("免費子彈掉落率不可>=1 這樣代表玩家實際RTP被吃掉 freeAmmoDropP=" + freeAmmoDropP);
         }
         Debug.LogError("目標魚賠率=" + TargetOdds);
         Debug.LogError("免費子彈掉落率=" + freeAmmoDropP);
-<<<<<<< HEAD
         Debug.LogError("一般子彈RTP=" + AttackRTP);
         Debug.LogError("免費子彈RTP=" + SkillRTP);
 
 
-=======
-        Debug.LogError("一般子彈RTP=" + (GameRTP - GivenRTP));
-        Debug.LogError("免費子彈RTP=" + FreeAmmoRTP);
->>>>>>> 32cccfb5b31911efd229849f70e346c4d83643bb
 
         for (int i = 0; i < PlayTimes; i++) {
             PlayCount++;
@@ -148,13 +121,8 @@ public class RTPSimulator : MonoBehaviour {
                 //Debug.LogError("擊殺!");
                 var dropCheck = random.NextDouble();
                 if ((decimal)dropCheck < freeAmmoDropP) {//掉落
-<<<<<<< HEAD
                     CurCharge += 1;
                     if (CurCharge >= Energy) {
-=======
-                    CurCharge += ChargeRate;
-                    if (CurCharge >= 1) {
->>>>>>> 32cccfb5b31911efd229849f70e346c4d83643bb
                         SkillAttack();
                         CurCharge = 0;
                     }
@@ -168,11 +136,7 @@ public class RTPSimulator : MonoBehaviour {
         Debug.LogError("跑模擬後反推RTP=" + espectRTP);
     }
     void SkillAttack() {
-<<<<<<< HEAD
         decimal kp = RTPCalculator.GetKP((decimal)SkillRTP, TargetOdds);
-=======
-        decimal kp = RTPCalculator.GetKP((decimal)FreeAmmoRTP, 0, TargetOdds);
->>>>>>> 32cccfb5b31911efd229849f70e346c4d83643bb
         if (kp >= 1) {
             Debug.LogError("免費子彈對目標的擊殺率不可以大於>=1 這樣代表玩家實際RTP被吃掉 kp=" + kp);
         }
