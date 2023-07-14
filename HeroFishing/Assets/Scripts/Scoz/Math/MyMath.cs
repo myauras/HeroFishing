@@ -115,13 +115,22 @@ namespace Scoz.Func {
         /// <summary>
         /// ax2+bx+c=0的公式解 2a分支-b加減根號b平方減4ac
         /// </summary>
+<<<<<<< HEAD
         public static double QuadraticForm(double _a, double _b, double _c, bool _pos) {
             var preRoot = System.Math.Pow(_b, 2) - (4 * _a * _c);
+=======
+        public static double QuadraticForm(float _a, float _b, float _c, bool _pos) {
+            var preRoot = Mathf.Pow(_b, 2) - (4 * _a * _c);
+>>>>>>> 32cccfb5b31911efd229849f70e346c4d83643bb
             if (preRoot < 0) {
                 return double.NaN;
             } else {
                 var sgn = _pos ? 1 : -1;
+<<<<<<< HEAD
                 return (sgn * System.Math.Sqrt(preRoot) - _b) / (2 * _a);
+=======
+                return (sgn * Mathf.Sqrt(preRoot) - _b) / (2.0 * _a);
+>>>>>>> 32cccfb5b31911efd229849f70e346c4d83643bb
             }
         }
         /// <summary>
