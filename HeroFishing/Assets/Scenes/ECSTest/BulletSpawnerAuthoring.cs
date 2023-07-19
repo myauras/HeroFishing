@@ -13,14 +13,15 @@ namespace HeroFishing.Battlefield {
         class Baker : Baker<BulletSpawnerAuthoring> {
             public override void Bake(BulletSpawnerAuthoring authoring) {
                 var entity = GetEntity(TransformUsageFlags.None);
-                AddComponent(entity, new Spawner {
+                AddComponent(entity, new BulletSpawner {
                     Prefab = GetEntity(authoring.Prefab, TransformUsageFlags.Dynamic)
                 });
             }
         }
+
     }
 
-    struct Spawner : IComponentData {
+    struct BulletSpawner : IComponentData {
         public Entity Prefab;
     }
 }

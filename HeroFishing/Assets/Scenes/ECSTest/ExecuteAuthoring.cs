@@ -4,7 +4,7 @@ using UnityEngine;
 namespace HeroFishing.Battlefield {
     public class ExecuteAuthoring : MonoBehaviour {
         public bool MainThread;
-        public bool IJobEntity;
+        // public bool IJobEntity;
         public bool Aspects;
         public bool Prefabs;
         public bool IJobChunk;
@@ -17,7 +17,7 @@ namespace HeroFishing.Battlefield {
                 var entity = GetEntity(TransformUsageFlags.None);
 
                 if (authoring.MainThread) AddComponent<MainThread>(entity);
-                if (authoring.IJobEntity) AddComponent<IJobEntity>(entity);
+                //if (authoring.IJobEntity) AddComponent<IJobEntity>(entity);
                 if (authoring.Aspects) AddComponent<Aspects>(entity);
                 if (authoring.Prefabs) AddComponent<Prefabs>(entity);
                 if (authoring.IJobChunk) AddComponent<IJobChunk>(entity);
@@ -31,8 +31,8 @@ namespace HeroFishing.Battlefield {
     public struct MainThread : IComponentData {
     }
 
-    public struct IJobEntity : IComponentData {
-    }
+    //public struct IJobEntity : IComponentData {
+    //}
 
     public struct Aspects : IComponentData {
     }

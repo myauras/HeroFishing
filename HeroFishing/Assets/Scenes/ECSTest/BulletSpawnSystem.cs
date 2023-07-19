@@ -3,42 +3,38 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace HeroFishing.Battlefield {
     public partial struct BulletSpawnSystem : ISystem {
-        uint updateCounter;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
 
             // This call makes the system not update unless at least one entity in the world exists that has the Spawner component.
-            state.RequireForUpdate<Spawner>();
+            state.RequireForUpdate<BulletSpawner>();
 
             state.RequireForUpdate<Prefabs>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            var spinningCubesQuery = SystemAPI.QueryBuilder().WithAll<BulletValue>().Build();
+            if (AttackTrigger.MyAttackState != AttackTrigger.AttackState.Attacking) return;
 
+            var prefab = SystemAPI.GetSingleton<BulletSpawner>().Prefab;
+            var instances = state.EntityManager.Instantiate(prefab, 1, Allocator.Temp);
 
-            if (spinningCubesQuery.IsEmpty) {
-                var prefab = SystemAPI.GetSingleton<Spawner>().Prefab;
-
-                Debug.Log("Spawn");
-                var instances = state.EntityManager.Instantiate(prefab, 1, Allocator.Temp);
-
-                foreach (var entity in instances) {
-                    // Update the entity's LocalTransform component with the new position.
-                    var transform = SystemAPI.GetComponentRW<LocalTransform>(entity);
-                    float3 heroPos = SystemAPI.GetSingleton<Singleton_BattlefieldSetting>().HeroPos;
-                    Debug.Log("heroPos=" + heroPos);
-                    transform.ValueRW.Position = heroPos;
-                }
+            foreach (var entity in instances) {
+                var transform = SystemAPI.GetComponentRW<LocalTransform>(entity);
+                transform.ValueRW.Position = AttackTrigger.MyAttackData.AttackerPos;
+                var physicsVel = SystemAPI.GetComponentRW<PhysicsVelocity>(entity);
+                physicsVel.ValueRW.Linear = AttackTrigger.MyAttackData.BulletVelocity;
             }
+            AttackTrigger.EndAttack();
         }
     }
 }
