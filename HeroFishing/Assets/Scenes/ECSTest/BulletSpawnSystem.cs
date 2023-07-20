@@ -10,24 +10,26 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace HeroFishing.Battlefield {
-    public partial struct BulletSpawnSystem : ISystem {
-
-        EntityCommandBuffer ECB;
+namespace HeroFishing.Battlefield
+{
+    public partial struct BulletSpawnSystem : ISystem
+    {
 
         [BurstCompile]
-        public void OnCreate(ref SystemState state) {
+        public void OnCreate(ref SystemState state)
+        {
 
             // This call makes the system not update unless at least one entity in the world exists that has the Spawner component.
             state.RequireForUpdate<BulletSpawner>();
             state.RequireForUpdate<BattlefieldSettingSingleton>();
 
-            ECB = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
+
 
         }
 
         [BurstCompile]
-        public void OnUpdate(ref SystemState state) {
+        public void OnUpdate(ref SystemState state)
+        {
             var battlefieldSetting = SystemAPI.GetSingleton<BattlefieldSettingSingleton>();
             if (battlefieldSetting.MyAttackState != BattlefieldSettingSingleton.AttackState.Attacking) return;
 
@@ -45,32 +47,37 @@ namespace HeroFishing.Battlefield {
             //}
 
 
-
-            var job = new SpawnJob {
-                ECB = ECB,
+            var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+            var job = new SpawnJob
+            {
+                ECBWriter = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
                 BulletEntity = bulletEntity,
                 BattlefieldSetting = battlefieldSetting,
             }.Schedule();
-            job.Complete();//不要呼叫Complete 這樣才不會阻塞
+            job.Complete();
 
         }
 
 
         [BurstCompile]
-        partial struct SpawnJob : IJob {
+        partial struct SpawnJob : IJob
+        {
 
-            public EntityCommandBuffer ECB;
-            public BattlefieldSettingSingleton BattlefieldSetting;
-            public Entity BulletEntity;
+            public EntityCommandBuffer.ParallelWriter ECBWriter;
+            [ReadOnly] public BattlefieldSettingSingleton BattlefieldSetting;
+            [ReadOnly] public Entity BulletEntity;
 
-            public void Execute() {
-                var bulletEntity = ECB.Instantiate(BulletEntity);
-                ECB.SetComponent(bulletEntity, new LocalTransform {
+            public void Execute()
+            {
+                var bulletEntity = ECBWriter.Instantiate(BulletEntity.Index, BulletEntity);
+                ECBWriter.SetComponent(BulletEntity.Index, bulletEntity, new LocalTransform
+                {
                     Position = BattlefieldSetting.MyAttackData.AttackerPos,
                     Scale = 1,
                     Rotation = quaternion.identity,
                 });
-                ECB.SetComponent(bulletEntity, new PhysicsVelocity {
+                ECBWriter.SetComponent(BulletEntity.Index, bulletEntity, new PhysicsVelocity
+                {
                     Linear = BattlefieldSetting.MyAttackData.BulletSpeed * BattlefieldSetting.MyAttackData.Direction,
                 });
             }
