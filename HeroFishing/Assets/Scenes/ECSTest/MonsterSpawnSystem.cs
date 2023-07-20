@@ -12,15 +12,12 @@ namespace HeroFishing.Battlefield {
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-
             state.RequireForUpdate<MonsterSpawner>();
-            state.RequireForUpdate<Prefabs>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
             if (HasSpawned) return;
-
             var prefab = SystemAPI.GetSingleton<MonsterSpawner>().Prefab;
             var instances = state.EntityManager.Instantiate(prefab, 1, Allocator.Temp);
 
