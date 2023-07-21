@@ -18,7 +18,7 @@ namespace HeroFishing.Battlefield {
                 AddComponent(entity, new BulletSpawner {
                     BulletEntity = GetEntity(authoring.BulletPrefab, TransformUsageFlags.Dynamic),
                     BulletHitEntity = GetEntity(authoring.BulletHitPrefab, TransformUsageFlags.Dynamic),
-                    BulletShootEntity = GetEntity(authoring.BulletShootPrefab, TransformUsageFlags.Dynamic),
+                    ShootEntity = GetEntity(authoring.BulletShootPrefab, TransformUsageFlags.Dynamic),
                 });
 
             }
@@ -29,6 +29,6 @@ namespace HeroFishing.Battlefield {
     struct BulletSpawner : IComponentData {
         public Entity BulletEntity;
         public Entity BulletHitEntity;
-        public Entity BulletShootEntity;
+        public Entity ShootEntity;
     }
 }

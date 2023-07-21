@@ -33,7 +33,7 @@ Transform:
   m_Children:
   - {fileID: 7121085373743937852}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4812713151481635461
 MonoBehaviour:
@@ -55,7 +55,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2404769020819980647}
   serializedVersion: 8
-  lengthInSec: 2
+  lengthInSec: 1.5
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -4854,9 +4854,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Flash
       objectReference: {fileID: 0}
+    - target: {fileID: 1418520085859340, guid: eaf2a8203ce5cec4a8cceda82285fafc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4777340165807268, guid: eaf2a8203ce5cec4a8cceda82285fafc, type: 3}
       propertyPath: m_RootOrder
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4777340165807268, guid: eaf2a8203ce5cec4a8cceda82285fafc, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4777340165807268, guid: eaf2a8203ce5cec4a8cceda82285fafc, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4777340165807268, guid: eaf2a8203ce5cec4a8cceda82285fafc, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 4777340165807268, guid: eaf2a8203ce5cec4a8cceda82285fafc, type: 3}
       propertyPath: m_LocalPosition.x

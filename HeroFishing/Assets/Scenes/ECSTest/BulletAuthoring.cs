@@ -15,6 +15,10 @@ namespace HeroFishing.Battlefield {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new BulletValue {
                 });
+                AddComponent(entity, new AutoDestroyTag {
+                    LifeTime = GetComponent<ParticleSystem>().main.duration,
+                    ExistTime = 0f,
+                });
             }
         }
     }

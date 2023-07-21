@@ -2,10 +2,7 @@ using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
-using Unity.Physics;
 using Unity.Transforms;
-using UnityEngine;
 namespace HeroFishing.Battlefield {
     public partial struct MonsterSpawnSystem : ISystem {
         bool HasSpawned;

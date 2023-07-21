@@ -6,7 +6,7 @@ using Unity.Jobs;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
-using UnityEngine;
+
 
 namespace HeroFishing.Battlefield {
 
@@ -17,10 +17,11 @@ namespace HeroFishing.Battlefield {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<SimulationSingleton>();
-            state.RequireForUpdate<BulletSpawner>();
+            state.RequireForUpdate<BulletValue>();
         }
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
+            return;
             var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
             state.Dependency = new TriggerJob {
                 ECB = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged),
