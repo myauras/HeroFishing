@@ -11,6 +11,7 @@ namespace HeroFishing.Battlefield {
         public bool Reparenting;
         public bool EnableableComponents;
         public bool GameObjectSync;
+        public bool CollisionComponents;
 
         class Baker : Baker<ExecuteAuthoring> {
             public override void Bake(ExecuteAuthoring authoring) {
@@ -24,6 +25,7 @@ namespace HeroFishing.Battlefield {
                 if (authoring.GameObjectSync) AddComponent<GameObjectSync>(entity);
                 if (authoring.Reparenting) AddComponent<Reparenting>(entity);
                 if (authoring.EnableableComponents) AddComponent<EnableableComponents>(entity);
+                if (authoring.CollisionComponents) AddComponent<CollisionComponents>(entity);
             }
         }
     }
@@ -50,5 +52,7 @@ namespace HeroFishing.Battlefield {
     }
 
     public struct EnableableComponents : IComponentData {
+    }
+    public struct CollisionComponents : IComponentData {
     }
 }

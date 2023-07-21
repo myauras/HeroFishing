@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Xml;
 using Unity.Burst;
 using Unity.Collections;
@@ -7,7 +8,6 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
-
 namespace HeroFishing.Battlefield {
 
     [UpdateInGroup(typeof(PhysicsSystemGroup))]
@@ -16,12 +16,12 @@ namespace HeroFishing.Battlefield {
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
+            state.RequireForUpdate<CollisionComponents>();
             state.RequireForUpdate<SimulationSingleton>();
             state.RequireForUpdate<BulletValue>();
         }
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            return;
             var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
             state.Dependency = new TriggerJob {
                 ECB = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged),

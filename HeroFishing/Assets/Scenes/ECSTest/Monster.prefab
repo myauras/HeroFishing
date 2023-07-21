@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6968125454787814755}
   - component: {fileID: 3816679326764751617}
   - component: {fileID: 2727252249427782998}
-  - component: {fileID: 548551304857311053}
   - component: {fileID: 6319384892934977346}
   m_Layer: 7
   m_Name: Monster
@@ -33,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3816679326764751617
 MeshFilter:
@@ -85,27 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &548551304857311053
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2030981964880202029}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6319384892934977346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,3 +96,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f677656fdaad7724c87b79576e3fe985, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Radius: 1

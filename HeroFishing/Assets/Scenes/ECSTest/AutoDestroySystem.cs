@@ -1,4 +1,5 @@
 
+using System.Diagnostics;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -9,43 +10,42 @@ using Unity.Transforms;
 namespace HeroFishing.Battlefield {
     public partial struct AutoDestroySystem : ISystem {
 
+        EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
+        NativeList<Entity> EntitiesToProcess;
+
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<AutoDestroyTag>();
-        }
+            EntitiesToProcess = new NativeList<Entity>(Allocator.Persistent);
 
+        }
+        [BurstCompile]
+        public void OnDestroy(ref SystemState state) {
+            EntitiesToProcess.Dispose();
+        }
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
-
+            ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
             float deltaTime = SystemAPI.Time.DeltaTime;
 
+            new DestroyJob {
+                ECBWriter = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
+                DeltaTime = deltaTime,
+            }.ScheduleParallel();
 
-            foreach (var (autoDestroyCom, entity) in SystemAPI.Query<RefRW<AutoDestroyTag>>().WithEntityAccess()) {
-                autoDestroyCom.ValueRW.ExistTime += deltaTime;
-
-                if (autoDestroyCom.ValueRW.ExistTime >= autoDestroyCom.ValueRW.LifeTime) {
-                    var job = new DestroyJob {
-                        ECBWriter = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
-                        ReadyToDestroiedEntity = entity,
-                    }.Schedule();
-                    job.Complete();
-                }
-            }
         }
 
         [BurstCompile]
-        partial struct DestroyJob : IJob {
-
+        partial struct DestroyJob : IJobEntity {
             public EntityCommandBuffer.ParallelWriter ECBWriter;
-            [ReadOnly] public Entity ReadyToDestroiedEntity;
+            [ReadOnly] public float DeltaTime;
 
-
-            public void Execute() {
-                ECBWriter.DestroyEntity(ReadyToDestroiedEntity.Index, ReadyToDestroiedEntity);
+            public void Execute(ref AutoDestroyTag _autoDestroy, in Entity _entity) {
+                _autoDestroy.ExistTime += DeltaTime;
+                if (_autoDestroy.ExistTime >= _autoDestroy.LifeTime)
+                    ECBWriter.DestroyEntity(_entity.Index, _entity);
             }
         }
-
 
     }
 }
