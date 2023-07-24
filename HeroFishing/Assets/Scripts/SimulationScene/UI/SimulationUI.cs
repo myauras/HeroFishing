@@ -1,4 +1,4 @@
-using HeroFishing.Battlefield;
+using HeroFishing.Battle;
 using HeroFishing.Main;
 using JetBrains.Annotations;
 using System.Collections;
@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
-namespace HeroFishing.Battlefield {
+namespace HeroFishing.Battle {
     public class SimulationUI : MonoBehaviour {
+
+
         public void OnAttackBtnClick() {
             SimulationSceneManager.Instance.MyHero.PlayAttackMotion();
             SetAttack();
@@ -17,7 +19,6 @@ namespace HeroFishing.Battlefield {
                 AttackerPos = GameObject.Find("Role").transform.position,
                 TargetPos = GameObject.Find("Target").transform.position,
                 Direction = (GameObject.Find("Target").transform.position - GameObject.Find("Role").transform.position).normalized,
-                BulletSpeed = 20f,
             };
 
             EntityManager _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;

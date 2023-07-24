@@ -8,7 +8,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 
-namespace HeroFishing.Battlefield {
+namespace HeroFishing.Battle {
     public partial struct BulletSpawnSystem : ISystem {
 
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
@@ -63,7 +63,7 @@ namespace HeroFishing.Battlefield {
             public void Execute() {
 
                 float angle = 15f;
-                for (int i = -4; i < 5; i++) {
+                for (int i = 0; i < 1; i++) {
 
                     //建立子彈
                     var bulletEntity = ECBWriter.Instantiate(BulletEntity.Index, BulletEntity);

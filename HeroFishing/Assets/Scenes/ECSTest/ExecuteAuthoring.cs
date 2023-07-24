@@ -1,7 +1,7 @@
 using Unity.Entities;
 using UnityEngine;
 
-namespace HeroFishing.Battlefield {
+namespace HeroFishing.Battle {
     public class ExecuteAuthoring : MonoBehaviour {
         public bool MainThread;
         // public bool IJobEntity;
@@ -55,4 +55,5 @@ namespace HeroFishing.Battlefield {
     }
     public struct CollisionComponents : IComponentData {
     }
+
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-namespace HeroFishing.Battlefield {
+namespace HeroFishing.Battle {
     public class BulletSpawnerAuthoring : MonoBehaviour {
         public GameObject BulletPrefab;
         public GameObject BulletHitPrefab;

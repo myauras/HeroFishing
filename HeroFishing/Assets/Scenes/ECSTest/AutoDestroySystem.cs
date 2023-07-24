@@ -7,7 +7,7 @@ using Unity.Jobs;
 using Unity.Physics;
 using Unity.Transforms;
 
-namespace HeroFishing.Battlefield {
+namespace HeroFishing.Battle {
     public partial struct AutoDestroySystem : ISystem {
 
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;

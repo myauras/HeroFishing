@@ -3,7 +3,7 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace HeroFishing.Battlefield {
+namespace HeroFishing.Battle {
     // An authoring component is just a normal MonoBehavior.
     public class HitParticleAuthoring : MonoBehaviour {
 

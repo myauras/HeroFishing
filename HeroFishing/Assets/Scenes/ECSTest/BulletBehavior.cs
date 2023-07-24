@@ -11,7 +11,7 @@ using UnityEngine.XR;
 using static Cinemachine.CinemachineTriggerAction.ActionSettings;
 using static UnityEngine.EventSystems.EventTrigger;
 
-namespace HeroFishing.Battlefield {
+namespace HeroFishing.Battle {
     public partial struct BulletBehavior : ISystem {
 
 

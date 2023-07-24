@@ -9,5 +9,8 @@ public class Role : MonoBehaviour {
     public void SetAniTrigger(string name) {
         MyAni.SetTrigger(name);
     }
+    public void FaceDir(Quaternion _dir) {
+        transform.rotation = _dir;
+    }
 
 }
