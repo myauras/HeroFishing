@@ -8,15 +8,18 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 
-namespace HeroFishing.Battle {
-    public partial struct BulletSpawnSystem : ISystem {
+namespace HeroFishing.Battle
+{
+    public partial struct BulletSpawnSystem : ISystem
+    {
 
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
         BattlefieldSettingSingleton BattlefieldSetting;
         BulletSpawner MyBulletSpawner;
 
         [BurstCompile]
-        public void OnCreate(ref SystemState state) {
+        public void OnCreate(ref SystemState state)
+        {
 
             // This call makes the system not update unless at least one entity in the world exists that has the Spawner component.
             state.RequireForUpdate<BulletSpawner>();
@@ -26,7 +29,8 @@ namespace HeroFishing.Battle {
         }
 
         [BurstCompile]
-        public void OnUpdate(ref SystemState state) {
+        public void OnUpdate(ref SystemState state)
+        {
             BattlefieldSetting = SystemAPI.GetSingleton<BattlefieldSettingSingleton>();
             if (BattlefieldSetting.MyAttackState != BattlefieldSettingSingleton.AttackState.Attacking) return;
             ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
@@ -39,7 +43,8 @@ namespace HeroFishing.Battle {
 
             var bulletValue = state.EntityManager.GetComponentData<BulletValue>(MyBulletSpawner.BulletEntity);
 
-            var job = new SpawnJob {
+            var job = new SpawnJob
+            {
                 ECBWriter = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
                 BulletEntity = MyBulletSpawner.BulletEntity,
                 ShootEntity = MyBulletSpawner.ShootEntity,
@@ -52,7 +57,8 @@ namespace HeroFishing.Battle {
 
 
         [BurstCompile]
-        partial struct SpawnJob : IJob {
+        partial struct SpawnJob : IJob
+        {
 
             public EntityCommandBuffer.ParallelWriter ECBWriter;
             [ReadOnly] public BattlefieldSettingSingleton BattlefieldSetting;
@@ -60,43 +66,45 @@ namespace HeroFishing.Battle {
             [ReadOnly] public Entity BulletEntity;
             [ReadOnly] public Entity ShootEntity;
 
-            public void Execute() {
+            public void Execute()
+            {
 
                 float angle = 15f;
-                for (int i = 0; i < 1; i++) {
+                for (int i = 0; i < 1; i++)
+                {
 
                     //建立子彈
                     var bulletEntity = ECBWriter.Instantiate(BulletEntity.Index, BulletEntity);
+                    //設定子彈Value
+                    float3 direction = BattlefieldSetting.MyAttackData.Direction;
+                    quaternion rotation = quaternion.RotateY(math.radians(angle * i));  // 建立一個偏移Y軸X度的四元數
+                    float3 rotatedDirection = math.mul(rotation, direction);  // 選轉方向向量
+                    quaternion bulletQuaternion = quaternion.LookRotation(direction, math.up());
                     //設定子彈Transform
-                    ECBWriter.SetComponent(BulletEntity.Index, bulletEntity, new LocalTransform {
+                    ECBWriter.SetComponent(BulletEntity.Index, bulletEntity, new LocalTransform
+                    {
                         Position = BattlefieldSetting.MyAttackData.AttackerPos,
                         Scale = 1,
-                        Rotation = quaternion.identity,
+                        Rotation = bulletQuaternion,
                     });
 
 
 
 
-                    //設定子彈Value
-                    float3 direction = BattlefieldSetting.MyAttackData.Direction;
-                    quaternion rotation = quaternion.RotateY(math.radians(angle * i));  // 建立一個偏移Y軸15度的四元數
-                    float3 rotatedDirection = math.mul(rotation, direction);  // 選轉方向向量
-                    ECBWriter.SetComponent(BulletEntity.Index, bulletEntity, new BulletValue {
+
+                    ECBWriter.SetComponent(BulletEntity.Index, bulletEntity, new BulletValue
+                    {
                         Speed = MyBulletValue.Speed,
                         Radius = MyBulletValue.Radius,
                         Direction = rotatedDirection,
                     });
 
-                    //不使用Unity物理 改自定義子彈移動 寫在BulletBehavior 這樣效能好很多
-                    //設定速度
-                    //ECBWriter.SetComponent(BulletEntity.Index, bulletEntity, new PhysicsVelocity {
-                    //    Linear = rotatedDirection * BattlefieldSetting.MyAttackData.BulletSpeed,
-                    //});
                 }
 
                 //射擊特效
                 var shootEntity = ECBWriter.Instantiate(ShootEntity.Index, ShootEntity);
-                ECBWriter.SetComponent(ShootEntity.Index, shootEntity, new LocalTransform {
+                ECBWriter.SetComponent(ShootEntity.Index, shootEntity, new LocalTransform
+                {
                     Position = BattlefieldSetting.MyAttackData.AttackerPos + math.normalize(BattlefieldSetting.MyAttackData.TargetPos - BattlefieldSetting.MyAttackData.AttackerPos) * 0.8f,
                     Scale = 1,
                     Rotation = quaternion.Euler(BattlefieldSetting.MyAttackData.TargetPos - BattlefieldSetting.MyAttackData.AttackerPos),

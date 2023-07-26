@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1828441916667651550
+--- !u!1 &6097990573071955275
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4529520822352323860}
-  - component: {fileID: 1110795116148249645}
+  - component: {fileID: 812234135168468820}
+  - component: {fileID: 7821885641097453158}
   m_Layer: 0
-  m_Name: MonsterSpawner
+  m_Name: BulletSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4529520822352323860
+--- !u!4 &812234135168468820
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1828441916667651550}
+  m_GameObject: {fileID: 6097990573071955275}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,16 +32,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1110795116148249645
+--- !u!114 &7821885641097453158
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1828441916667651550}
+  m_GameObject: {fileID: 6097990573071955275}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4854fde3a697af6429727bc67392070a, type: 3}
+  m_Script: {fileID: 11500000, guid: 8cd5b70337a0b7746ad9c7441314fee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 5578602687095688270, guid: 72a410cf7b8dcb643a1e1244a7b2bfd0, type: 3}
+  BulletPrefab: {fileID: 8924241032897524249, guid: 2bb44a1a7fd96104096beb959bdf631e,
+    type: 3}
+  BulletHitPrefab: {fileID: 2515346353553090671, guid: c993dde4f15c8e44c867d61e71eb6ec7,
+    type: 3}
+  BulletShootPrefab: {fileID: 6798091615669284390, guid: c112c362f46f19e49828cef2399e0d9d,
+    type: 3}
