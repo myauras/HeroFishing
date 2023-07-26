@@ -15,7 +15,7 @@ namespace Scoz.Func {
     }
     public class GameManager : MonoBehaviour {
         public static GameManager Instance;
-        public static bool IsInit { get; private set; }
+        public static bool IsInit { get; private set; } = false;
         public AssetReference PopupUIAsset;
         public AssetReference PostPocessingAsset;
         public int TargetFPS = 60;
@@ -90,8 +90,7 @@ namespace Scoz.Func {
         }
 
         public void Init() {
-            if (IsInit)
-                return;
+            if (IsInit) return;
             Instance = this;
             IsInit = true;
             DontDestroyOnLoad(gameObject);
@@ -100,7 +99,6 @@ namespace Scoz.Func {
             Application.targetFrameRate = TargetFPS;
             //產生一個新玩家
             new GamePlayer();
-
             //建立FirebaseManager
             //gameObject.AddComponent<FirebaseManager>();
             //建立CoroutineJob
@@ -170,7 +168,7 @@ namespace Scoz.Func {
         public void CreateAddressableUIs(Action _ac) {
             //載入PopupUI(這個UI東西較多會載較久，所以在載好前會先設定StartUI文字讓玩家不要覺得是卡住)
             if (SceneManager.GetActiveScene().name == MyScene.StartScene.ToString()) {
-                StartUI.Instance?.SetMiddleText(StringData.GetUIString("Login_WaitingForStartScene"));
+                StartSceneUI.Instance?.SetMiddleText(StringData.GetUIString("Login_WaitingForStartScene"));
                 PopupUI_Local.ShowLoading(StringData.GetUIString("Login_WaitingForStartScene"));
             }
 

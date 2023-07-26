@@ -98,7 +98,6 @@ namespace Scoz.Func {
                 }
             }
 
-
             PreviousScene = MyEnum.ParseEnum<MyScene>(tmpScene);//紀錄上一個場景的Scene
             FinishTransitionProgress("SceneTransitionScene");
         }

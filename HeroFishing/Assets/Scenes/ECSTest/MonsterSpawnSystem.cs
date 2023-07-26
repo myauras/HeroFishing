@@ -9,11 +9,12 @@ namespace HeroFishing.Battle {
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-            state.RequireForUpdate<MonsterSpawner>();
+            state.RequireForUpdate<MonsterGOPrefab>();
         }
 
         public void OnUpdate(ref SystemState state) {
             if (HasSpawned) return;
+            HasSpawned = true;
             var query = SystemAPI.QueryBuilder().WithAll<MonsterGOPrefab>().Build();
             var entities = query.ToEntityArray(Allocator.Temp);
 
@@ -22,11 +23,10 @@ namespace HeroFishing.Battle {
                 var instance = GameObject.Instantiate(monsterGOPrefab.Prefab);
                 instance.hideFlags |= HideFlags.HideAndDontSave;
                 state.EntityManager.AddComponentObject(entity, instance.GetComponent<Transform>());
-                state.EntityManager.AddComponentObject(entity, instance.GetComponent<Animator>());
                 state.EntityManager.AddComponentData(entity, new MonsterGOInstance { Instance = instance });
                 state.EntityManager.RemoveComponent<MonsterGOPrefab>(entity);
             }
-            HasSpawned = true;
+
         }
     }
 }

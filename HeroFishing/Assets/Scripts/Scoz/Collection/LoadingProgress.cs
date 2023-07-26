@@ -62,6 +62,7 @@ namespace Scoz.Func {
         bool CheckIfProgressIsFinished() {
             foreach (var key in Progress.Keys) {
                 if (Progress[key] == false) {
+                    //Debug.Log(key + "未完成");
                     return false;
                 }
             }

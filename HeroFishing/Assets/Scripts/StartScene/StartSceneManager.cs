@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace HeroFishing.Main {
     public class StartSceneManager : MonoBehaviour {
         public Canvas MyCanvas;
-        public StartUI MyStartUI;
+        public StartSceneUI MyStartSceneUI;
         [SerializeField] Text VersionText;
         [SerializeField] AudioClip StartMusic;
 
@@ -23,7 +23,7 @@ namespace HeroFishing.Main {
 
         private void Start() {
             SetInfoText();//顯示資訊
-            MyStartUI.Init();
+            MyStartSceneUI.Init();
             Instance = this;
             //建立遊戲管理者
             GameManager.CreateNewInstance();
@@ -45,6 +45,11 @@ namespace HeroFishing.Main {
         //確認有網路後才會執行後續
         void OnConnected() {
             PopupUI_Local.ShowLoading("Init Data");
+
+            //以下繞過正式流程
+            PopupUI_Local.HideLoading();
+            MyStartSceneUI.ShowUI(StartSceneUI.Condietion.NotLogin);
+
             ////初始化Firebase
             //FirebaseManager.Init(success => {
             //    if (success)
@@ -71,7 +76,7 @@ namespace HeroFishing.Main {
 
             //            if (FirebaseManager.MyUser == null) {//玩家尚未登入
             //                WriteLog.Log("玩家尚未登入");
-            //                MyStartUI.ShowUI(StartUI.Condietion.NotLogin);
+            //                MyStartSceneUI.ShowUI(StartSceneUI.Condietion.NotLogin);
             //            } else {//玩家已經登入，就開始載入Firestore上的資料(LoadDatas)
 
             //                //是否第一次執行遊戲，第一次執行遊戲後會自動進大廳，之後透過從大廳的設定中點回到主介面就不會又自動進大廳了
@@ -99,7 +104,7 @@ namespace HeroFishing.Main {
 
             //                        //如果是編輯器不直接轉場景(正式機才會直接進Lobby)
             //#if UNITY_EDITOR
-            //                        MyStartUI.ShowUI(StartUI.Condietion.BackFromLobby_ShowLogoutBtn);
+            //                        MyStartSceneUI.ShowUI(StartSceneUI.Condietion.BackFromLobby_ShowLogoutBtn);
             //#else
             //                        StartDownloadingAssetAndGoNextScene();
             //#endif
@@ -107,7 +112,7 @@ namespace HeroFishing.Main {
 
 
             //                } else {//如果是從大廳點設定回到主介面跑這裡，顯示登出按鈕與返回大廳按鈕
-            //                    MyStartUI.ShowUI(StartUI.Condietion.BackFromLobby_ShowLogoutBtn);
+            //                    MyStartSceneUI.ShowUI(StartSceneUI.Condietion.BackFromLobby_ShowLogoutBtn);
             //                }
 
 
@@ -131,27 +136,28 @@ namespace HeroFishing.Main {
         /// 3. 切至下一個場景
         /// </summary>
         public void StartDownloadingAssetAndGoNextScene() {
-            //StartUI.Instance?.SetMiddleText(StringData.GetUIString("Login_DownloadAsset"));
-            //GameManager.StartDownloadAddressable(() => {//下載完資源包後執行
+            StartSceneUI.Instance?.SetMiddleText(StringData.GetUIString("Login_DownloadAsset"));
+            GameManager.StartDownloadAddressable(() => {//下載完資源包後執行
 
-            //    if (!GameManager.OfflineMode) {
-            //        /// 根據是否能進行遊戲來執行各種狀態
-            //        /// 1. 判斷玩家版本，若版本低於最低遊戲版本則會跳強制更新
-            //        /// 2. 判斷玩家版本，若版本低於目前遊戲版本則會跳更新建議
-            //        /// 3. 判斷Maintain是否為true，若為true則不在MaintainExemptPlayerUIDs中的玩家都會跳維護中
-            //        /// 4. 判斷該玩家是否被Ban，不是才能進遊戲
-            //        GameStateManager.Instance.StartCheckCanPlayGame(() => {
-            //            FirstTimeLaunchGame = false;
-            //            PopupUI.InitSceneTransitionProgress(3, "LobbyUILoaded");
-            //            PopupUI.CallSceneTransition(MyScene.LobbyScene);
-            //        });
-            //    } else {//離線模式
-            //        FirstTimeLaunchGame = false;
-            //        PopupUI.InitSceneTransitionProgress(3, "LobbyUILoaded");
-            //        PopupUI.CallSceneTransition(MyScene.LobbyScene);
-            //    }
 
-            //});
+                //繞過正式流程
+                FirstTimeLaunchGame = false;
+                //PopupUI.InitSceneTransitionProgress(1, "LobbyUILoaded");
+                PopupUI.CallSceneTransition(MyScene.LobbyScene);
+                return;
+
+                /// 根據是否能進行遊戲來執行各種狀態
+                /// 1. 判斷玩家版本，若版本低於最低遊戲版本則會跳強制更新
+                /// 2. 判斷玩家版本，若版本低於目前遊戲版本則會跳更新建議
+                /// 3. 判斷Maintain是否為true，若為true則不在MaintainExemptPlayerUIDs中的玩家都會跳維護中
+                /// 4. 判斷該玩家是否被Ban，不是才能進遊戲
+                GameStateManager.Instance.StartCheckCanPlayGame(() => {
+                    FirstTimeLaunchGame = false;
+                    PopupUI.InitSceneTransitionProgress(3, "LobbyUILoaded");
+                    PopupUI.CallSceneTransition(MyScene.LobbyScene);
+                });
+
+            });
         }
 
 
