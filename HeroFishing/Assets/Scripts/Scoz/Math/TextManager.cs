@@ -27,6 +27,15 @@ namespace Scoz.Func {
         public static HashSet<string> StringSplitToStrHashSet(string _str, char _char) {
             return _str.Split(_char).ToHashSet();
         }
+        public static void SetSplitToIntArray(string str, char myChar, ref int[] outPutArray) {
+            string[] tmpStr = str.Split(myChar);
+            for (int i = 0; i < outPutArray.Length; i++) {
+                if (i >= tmpStr.Length) break;
+                if (int.TryParse(tmpStr[i], out int result)) {
+                    outPutArray[i] = result;
+                }
+            }
+        }
         /// <summary>
         /// int陣列轉字串並以字元分割
         /// </summary>

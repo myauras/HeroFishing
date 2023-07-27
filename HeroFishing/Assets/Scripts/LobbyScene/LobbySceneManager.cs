@@ -27,6 +27,12 @@ namespace HeroFishing.Main {
                 //建立遊戲管理者
                 GameManager.CreateNewInstance();
 
+                //以下繞過正式流程
+                //載資源包
+                GameManager.StartDownloadAddressable(() => {
+                    InitLobby();
+                });
+
                 //FirebaseManager.Init(success => {
                 //    if (success) {
                 //        if (FirebaseManager.MyUser == null)//還沒在StartScene註冊帳戶就直接從其他Scene登入會報錯誤(通常還沒註冊帳戶就不會有玩家資料直接進遊戲會有問題)
@@ -85,6 +91,10 @@ namespace HeroFishing.Main {
             //    go.GetComponent<LobbyUI>().Init();
             //    MyLoadingProgress.FinishProgress("LobbyUI");//完成讀取UI
             //};
+        }
+
+        public void OnClick() {
+            PopupUI.CallSceneTransition(MyScene.BattleScene);
         }
 
 

@@ -51,8 +51,18 @@ namespace Scoz.Func {
 
             GameSettingData.DataName = "GameSetting";
             MyJsonData.SetDataStringKey_Remote<GameSettingData>(GameSettingData.DataName, SetDic);
+
             SceneTransitionData.DataName = "SceneTransition";
             MyJsonData.SetData_Remote<SceneTransitionData>(SceneTransitionData.DataName, SetDic);
+
+            MapData.DataName = "Map";
+            MyJsonData.SetData_Remote<MapData>(MapData.DataName, SetDic);
+
+            MonsterSpawnerData.DataName = "MonsterSpawner";
+            MyJsonData.SetData_Remote<MonsterSpawnerData>(MonsterSpawnerData.DataName, SetDic);
+
+            MonsterData.DataName = "Monster";
+            MyJsonData.SetData_Remote<MonsterData>(MonsterData.DataName, SetDic);
 
 
             //設定X秒會顯示尚未載入的JsonData

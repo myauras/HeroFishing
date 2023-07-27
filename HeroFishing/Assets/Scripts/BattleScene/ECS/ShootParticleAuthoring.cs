@@ -13,8 +13,6 @@ namespace HeroFishing.Battle {
             public override void Bake(ShootParticleAuthoring authoring) {
                 // The entity will be moved
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddComponent(entity, new ShootParticleValue {
-                });
                 AddComponent(entity, new AutoDestroyTag {
                     LifeTime = GetComponent<ParticleSystem>().main.duration,
                     ExistTime = 0f,
@@ -23,7 +21,5 @@ namespace HeroFishing.Battle {
         }
     }
 
-    public struct ShootParticleValue : IComponentData {
-    }
 }
 

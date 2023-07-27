@@ -115,6 +115,8 @@ namespace Scoz.Func {
             gameObject.AddComponent<GameStateManager>().Init();
             //建立CameraManager
             gameObject.AddComponent<CameraManager>().Init();
+            //建立UniTaskManager
+            gameObject.AddComponent<UniTaskManager>().Init();
             //Permission請求
 #if UNITY_ANDROID
             gameObject.AddComponent<AndroidPermission>().RequestLaunchPermissions();

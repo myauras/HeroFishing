@@ -3,6 +3,7 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
 using System;
+using System.Collections.ObjectModel;
 
 namespace HeroFishing.Battle {
     public class MonsterAuthoring : MonoBehaviour {

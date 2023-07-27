@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace HeroFishing.Battle {
     public partial struct MonsterSpawnSystem : ISystem {
-        bool HasSpawned;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
@@ -13,8 +12,10 @@ namespace HeroFishing.Battle {
         }
 
         public void OnUpdate(ref SystemState state) {
-            if (HasSpawned) return;
-            HasSpawned = true;
+            if (BattleManager.Instance == null || BattleManager.Instance.MyMonsterScheduler == null) return;
+            var spawnData = BattleManager.Instance.MyMonsterScheduler.DequeueMonster();
+            if (spawnData == null) return;
+
             var query = SystemAPI.QueryBuilder().WithAll<MonsterGOPrefab>().Build();
             var entities = query.ToEntityArray(Allocator.Temp);
 
@@ -24,7 +25,7 @@ namespace HeroFishing.Battle {
                 instance.hideFlags |= HideFlags.HideAndDontSave;
                 state.EntityManager.AddComponentObject(entity, instance.GetComponent<Transform>());
                 state.EntityManager.AddComponentData(entity, new MonsterGOInstance { Instance = instance });
-                state.EntityManager.RemoveComponent<MonsterGOPrefab>(entity);
+                //state.EntityManager.RemoveComponent<MonsterGOPrefab>(entity);
             }
 
         }
