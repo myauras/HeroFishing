@@ -1,3 +1,4 @@
+using Scoz.Func;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -25,6 +26,7 @@ namespace HeroFishing.Battle {
                 instance.hideFlags |= HideFlags.HideAndDontSave;
                 state.EntityManager.AddComponentObject(entity, instance.GetComponent<Transform>());
                 state.EntityManager.AddComponentData(entity, new MonsterGOInstance { Instance = instance });
+                CameraManager.ShakeCam(CameraManager.CamNames.Battle, 3, 3, 2f);
                 //state.EntityManager.RemoveComponent<MonsterGOPrefab>(entity);
             }
 

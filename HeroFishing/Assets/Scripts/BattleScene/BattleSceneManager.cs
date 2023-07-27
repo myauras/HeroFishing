@@ -22,6 +22,7 @@ namespace HeroFishing.Battle {
 
         void Start() {
             Instance = this;
+
             if (GameManager.IsInit) {
                 InitBattleScene();
             } else {
@@ -52,6 +53,7 @@ namespace HeroFishing.Battle {
         }
 
 
+
         /// <summary>
         /// 戰場初始化
         /// </summary>
@@ -60,6 +62,18 @@ namespace HeroFishing.Battle {
             SpawnAddressableAssets();
 
             MyBattleManager.Init();
+            SetCam();
+        }
+
+        /// <summary>
+        /// 將目前攝影機加到CameraManager中，之後方便使用CameraManager的方法
+        /// </summary>
+        void SetCam() {
+            var camBrain = Camera.main.GetComponent<Cinemachine.CinemachineBrain>();
+            if (camBrain == null) return;
+            CameraManager.SetCam(camBrain);
+            var vCam = camBrain.ActiveVirtualCamera as Cinemachine.CinemachineVirtualCamera;
+            CameraManager.AddVirtualCam(CameraManager.CamNames.Battle, vCam);
         }
         void SpawnAddressableAssets() {
             //MyLoadingProgress.AddLoadingProgress("LobbyUI");//新增讀取中項目

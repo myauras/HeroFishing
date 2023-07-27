@@ -10,30 +10,45 @@ namespace Scoz.Func {
 
         [SerializeField] float CamShakeFrequencyGain = 1f;
         public static CameraManager Instance;
+        static bool Shaking;
+        static Vector3 CamPos;
+        static Quaternion CamRot;
 
         public enum CamNames {
-            Adventure,
+            Battle,
         }
         static CinemachineBrain MyCinemachineBrain;
         static Dictionary<CamNames, CinemachineVirtualCamera> VirtualCams = new Dictionary<CamNames, CinemachineVirtualCamera>();
         public void Init() {
             Instance = this;
         }
-
         public static void SetCam(CinemachineBrain _brain) {
             if (_brain == null)
                 return;
             MyCinemachineBrain = _brain;
             MyCinemachineBrain.m_DefaultBlend.m_Time = 2;
         }
+        /// <summary>
+        /// 攝影機震動
+        /// </summary>
+        /// <param name="_camName">攝影機名稱</param>
+        /// <param name="_amplitudeGain">震動強度</param>
+        /// <param name="_frequencyGain">震動頻率</param>
+        /// <param name="_duration">持續秒數</param>
         public static void ShakeCam(CamNames _camName, float _amplitudeGain, float _frequencyGain, float _duration) {
             CinemachineBasicMultiChannelPerlin perlin = GetVirtualCam(_camName)?.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
             if (perlin != null) {
+                if (Shaking) return;
+                Shaking = true;
+                CamPos = MyCinemachineBrain.transform.localPosition;
+                CamRot = MyCinemachineBrain.transform.localRotation;
                 perlin.m_AmplitudeGain = _amplitudeGain;
                 perlin.m_FrequencyGain = _frequencyGain;
                 CoroutineJob.Instance.StartNewAction(() => {
                     perlin.m_AmplitudeGain = 0;
-                    MyCinemachineBrain.transform.localPosition = Vector3.zero;
+                    MyCinemachineBrain.transform.localPosition = CamPos;
+                    MyCinemachineBrain.transform.localRotation = CamRot;
+                    Shaking = false;
                 }, _duration);
             }
         }
