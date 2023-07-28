@@ -32,10 +32,11 @@ namespace Scoz.Func {
             miliSecDic.Add(taskName, miliSecs);
             actionDic.Add(taskName, task);
 
-            _ = Instance.RepeatTaskInternal(taskName, cancellationTokenSource.Token);
+            _ = Instance.RepeatTask(taskName, cancellationTokenSource.Token);
         }
 
-        async UniTask RepeatTaskInternal(string taskName, CancellationToken cancellationToken) {
+
+        async UniTask RepeatTask(string taskName, CancellationToken cancellationToken) {
             while (!cancellationToken.IsCancellationRequested) {
                 try {
                     ExecuteTask(taskName);
@@ -45,8 +46,40 @@ namespace Scoz.Func {
                     break;
                 } catch (Exception ex) {
                     // 其他未預期的異常
-                    WriteLog.LogErrorFormat("錯誤異常Task名稱：{0}，錯誤詳細信息：{1}", taskName, ex.Message);
+                    WriteLog.LogErrorFormat("RepeatTask錯誤異常 Task名稱：{0}，錯誤訊息：{1}", taskName, ex.Message);
                 }
+            }
+        }
+
+        public static void StartTask(string taskName, Action task, int miliSecs) {
+            if (!Instance) {
+                WriteLog.LogError("尚未初始化UniTaskManager");
+                return;
+            }
+            if (cancellationDic.ContainsKey(taskName) || actionDic.ContainsKey(taskName) || miliSecDic.ContainsKey(taskName)) {
+                WriteLog.LogWarningFormat("重複的Task名稱：{0}", taskName);
+                return;
+            }
+
+            var cancellationTokenSource = new CancellationTokenSource();
+            cancellationDic.Add(taskName, cancellationTokenSource);
+            miliSecDic.Add(taskName, miliSecs);
+            actionDic.Add(taskName, task);
+
+            _ = Instance.OneTimesTask(taskName, cancellationTokenSource.Token);
+        }
+        async UniTask OneTimesTask(string taskName, CancellationToken cancellationToken) {
+            try {
+                await UniTask.Delay(miliSecDic[taskName], cancellationToken: cancellationToken);
+                ExecuteTask(taskName);
+                StopTask(taskName);
+            } catch (OperationCanceledException) {
+                // 確保當任務被取消時不會拋出異常
+            } catch (Exception ex) {
+                // 其他未預期的異常
+                WriteLog.LogErrorFormat("OneTimesTask錯誤異常 Task名稱：{0}，錯誤訊息：{1}", taskName, ex.Message);
+            } finally {
+                StopTask(taskName);
             }
         }
 

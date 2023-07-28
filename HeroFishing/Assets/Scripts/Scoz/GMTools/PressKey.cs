@@ -17,7 +17,7 @@ namespace Scoz.Func {
 
 
             if (Input.GetKeyDown(KeyCode.Q)) {
-                CameraManager.ShakeCam(CameraManager.CamNames.Battle, 1f, 2f, 1f);
+                CamManager.ShakeCam(CamManager.CamNames.Battle, 3, 3, 2f);
             } else if (Input.GetKeyDown(KeyCode.W)) {
 
 

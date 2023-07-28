@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17332345, g: 0.21665141, b: 0.2987082, a: 1}
+  m_IndirectSpecularColor: {r: 0.17332318, g: 0.21665111, b: 0.29870728, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,8 +97,10 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000004, guid: a8600c009a45dbb45b2370e930b04e08,
+    type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 5deafa0c80368c543b7987b17b383d4a,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -137,7 +139,7 @@ GameObject:
   - component: {fileID: 36935433}
   - component: {fileID: 36935437}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: BattleCam
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1304,7 +1306,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &422263882
 Transform:
   m_ObjectHideFlags: 0
@@ -5053,7 +5055,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1598434311
 Light:
   m_ObjectHideFlags: 0
@@ -5206,7 +5208,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 36935436}
+  m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 40
     OrthographicSize: 10
@@ -5647,7 +5649,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 0.99264705, g: 0.95036393, b: 0.83937067, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -6933,6 +6935,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RedBrambleback
       objectReference: {fileID: 0}
+    - target: {fileID: 653284313961122508, guid: 6d4261af80a70e94faf9a235be254e5b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3163940769798638945, guid: 6d4261af80a70e94faf9a235be254e5b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7613,6 +7620,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BlueSentinel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396914843766216209, guid: ac763c9ae0740954b8c55499bd2e5e17,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6646443360585632985, guid: ac763c9ae0740954b8c55499bd2e5e17,
         type: 3}

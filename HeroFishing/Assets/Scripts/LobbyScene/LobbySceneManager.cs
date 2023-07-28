@@ -93,7 +93,13 @@ namespace HeroFishing.Main {
             //};
         }
 
+
+        //以下為繞過正是流程
+        public GameObject Btn;
+
         public void OnClick() {
+            Btn.SetActive(false);
+            PopupUI.InitSceneTransitionProgress(1);
             PopupUI.CallSceneTransition(MyScene.BattleScene);
         }
 

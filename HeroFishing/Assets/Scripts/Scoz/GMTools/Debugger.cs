@@ -14,8 +14,6 @@ namespace Scoz.Func {
         [SerializeField] Text EnvVersion;
         public Text TotalMemoryText = null;
         public Text Text_FPS;
-        public bool IsLimitFPS = true;
-        public int MaxFPS = 60;
         public float InfoRefreshInterval = 0.5f;
         public Text VersionText;
 
@@ -40,7 +38,6 @@ namespace Scoz.Func {
             SceneManager.sceneLoaded += OnLevelFinishedLoading;
             GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(Screen.width, Screen.height);
             VersionText.text = "Ver: " + Application.version;
-            LimitFPS(IsLimitFPS, MaxFPS);
         }
 
 
@@ -77,18 +74,6 @@ namespace Scoz.Func {
                 Instance.InitDebugger();
             }
             return Instance;
-        }
-
-        /// <summary>
-        /// 是否限制FPS
-        /// </summary>
-        public void LimitFPS(bool _limit, int _fps) {
-            if (_limit) {
-                QualitySettings.vSyncCount = 0;  // VSync must be disabled
-                Application.targetFrameRate = _fps;
-            } else {
-                QualitySettings.vSyncCount = 1;
-            }
         }
 
         void FPSCalc() {

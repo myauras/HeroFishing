@@ -95,8 +95,13 @@ namespace Scoz.Func {
             IsInit = true;
             DontDestroyOnLoad(gameObject);
             //設定FPS
+#if Develop
             QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = 0;
+#else
+            QualitySettings.vSyncCount = 1;
             Application.targetFrameRate = TargetFPS;
+#endif
             //產生一個新玩家
             new GamePlayer();
             //建立FirebaseManager
@@ -114,7 +119,7 @@ namespace Scoz.Func {
             //建立GameStateManager
             gameObject.AddComponent<GameStateManager>().Init();
             //建立CameraManager
-            gameObject.AddComponent<CameraManager>().Init();
+            gameObject.AddComponent<CamManager>().Init();
             //建立UniTaskManager
             gameObject.AddComponent<UniTaskManager>().Init();
             //Permission請求

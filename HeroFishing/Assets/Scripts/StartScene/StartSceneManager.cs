@@ -142,7 +142,7 @@ namespace HeroFishing.Main {
 
                 //繞過正式流程
                 FirstTimeLaunchGame = false;
-                //PopupUI.InitSceneTransitionProgress(1, "LobbyUILoaded");
+                PopupUI.InitSceneTransitionProgress(0);
                 PopupUI.CallSceneTransition(MyScene.LobbyScene);
                 return;
 
@@ -153,7 +153,7 @@ namespace HeroFishing.Main {
                 /// 4. 判斷該玩家是否被Ban，不是才能進遊戲
                 GameStateManager.Instance.StartCheckCanPlayGame(() => {
                     FirstTimeLaunchGame = false;
-                    PopupUI.InitSceneTransitionProgress(3, "LobbyUILoaded");
+                    PopupUI.InitSceneTransitionProgress(0, "LobbyUILoaded");
                     PopupUI.CallSceneTransition(MyScene.LobbyScene);
                 });
 

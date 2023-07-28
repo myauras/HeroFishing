@@ -62,7 +62,7 @@ namespace HeroFishing.Battle {
             SpawnAddressableAssets();
 
             MyBattleManager.Init();
-            SetCam();
+            UniTaskManager.StartTask("SetBattleCam", SetCam, 100);//等待後再設定Cam避免場景切換時CinemachineBrain的CinemachineVirtualCamera尚未啟用而抓到null
         }
 
         /// <summary>
@@ -71,9 +71,9 @@ namespace HeroFishing.Battle {
         void SetCam() {
             var camBrain = Camera.main.GetComponent<Cinemachine.CinemachineBrain>();
             if (camBrain == null) return;
-            CameraManager.SetCam(camBrain);
+            CamManager.SetCam(camBrain);
             var vCam = camBrain.ActiveVirtualCamera as Cinemachine.CinemachineVirtualCamera;
-            CameraManager.AddVirtualCam(CameraManager.CamNames.Battle, vCam);
+            CamManager.AddVirtualCam(CamManager.CamNames.Battle, vCam);
         }
         void SpawnAddressableAssets() {
             //MyLoadingProgress.AddLoadingProgress("LobbyUI");//新增讀取中項目

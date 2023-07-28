@@ -6,10 +6,10 @@ using UnityEngine.SceneManagement;
 namespace Scoz.Func {
 
 
-    public class CameraManager : MonoBehaviour {
+    public class CamManager : MonoBehaviour {
 
         [SerializeField] float CamShakeFrequencyGain = 1f;
-        public static CameraManager Instance;
+        public static CamManager Instance;
         static bool Shaking;
         static Vector3 CamPos;
         static Quaternion CamRot;
@@ -29,12 +29,12 @@ namespace Scoz.Func {
             MyCinemachineBrain.m_DefaultBlend.m_Time = 2;
         }
         /// <summary>
-        /// Äá¼v¾÷¾_°Ê
+        /// æ”å½±æ©Ÿéœ‡å‹•
         /// </summary>
-        /// <param name="_camName">Äá¼v¾÷¦WºÙ</param>
-        /// <param name="_amplitudeGain">¾_°Ê±j«×</param>
-        /// <param name="_frequencyGain">¾_°ÊÀW²v</param>
-        /// <param name="_duration">«ùÄò¬í¼Æ</param>
+        /// <param name="_camName">æ”å½±æ©Ÿåç¨±</param>
+        /// <param name="_amplitudeGain">éœ‡å‹•å¼·åº¦</param>
+        /// <param name="_frequencyGain">éœ‡å‹•é »ç‡</param>
+        /// <param name="_duration">æŒçºŒç§’æ•¸</param>
         public static void ShakeCam(CamNames _camName, float _amplitudeGain, float _frequencyGain, float _duration) {
             CinemachineBasicMultiChannelPerlin perlin = GetVirtualCam(_camName)?.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
             if (perlin != null) {
