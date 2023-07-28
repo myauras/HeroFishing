@@ -95,7 +95,7 @@ namespace Scoz.Func {
             IsInit = true;
             DontDestroyOnLoad(gameObject);
             //設定FPS
-#if Develop
+#if Dev
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = 0;
 #else
@@ -141,7 +141,7 @@ namespace Scoz.Func {
             MyVideoPlayer.CreateNewVideoPlayer();
             //建立Debugger
 #if !Release
-            Debugger.CreateNewInstance();
+            //Debugger.CreateNewInstance();
 #endif
             //建立AudioPlayer    
             AudioPlayer.CreateNewAudioPlayer();
