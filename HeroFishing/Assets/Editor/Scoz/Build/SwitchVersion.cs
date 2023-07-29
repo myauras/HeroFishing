@@ -149,10 +149,10 @@ namespace Scoz.Editor {
                 _cb?.Invoke(false);
             }
             //修改Keystore
-            if (KEYSTORE_ALIAS_DIC.TryGetValue(_version, out string aliasName)) {
-                PlayerSettings.Android.keystoreName = "../Key/auro.keystore";
-                PlayerSettings.Android.keyaliasName = aliasName;
-            }
+            //if (KEYSTORE_ALIAS_DIC.TryGetValue(_version, out string aliasName)) {
+            //    PlayerSettings.Android.keystoreName = "../Key/auro.keystore";
+            //    PlayerSettings.Android.keyaliasName = aliasName;
+            //}
             //修改package名稱
             if (PACKAGE_NAME_DIC.TryGetValue(_version, out string packageName)) {
                 PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, packageName);
@@ -160,7 +160,7 @@ namespace Scoz.Editor {
             }
 
             //重新讀取更新後的google-services.json避免沒有刷新問題
-            //AssetDatabase.Refresh();
+            AssetDatabase.Refresh();
 
 
             //在這裡寫Log可能會沒用，因為ChangeDefine會呼叫PlayerSettings.SetScriptingDefineSymbolsForGroup之後Unity會自動呼叫CompilationPipeline.RequestScriptCompilation()重新載入Scripts所以會清空log
