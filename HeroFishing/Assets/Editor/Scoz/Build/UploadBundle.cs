@@ -104,7 +104,7 @@ namespace Scoz.Editor {
 
                 // do not wait for the child process to exit before
                 // reading to the end of its redirected stream.
-                process.WaitForExit(); // 確保 Unity 等待外部命令檔執行完完成
+                process.WaitForExit(); // 確保 Unity 等待外部命令檔執行完成
 
 
 
