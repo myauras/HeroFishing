@@ -10,7 +10,6 @@ if not "%1" == "" (
 			::gsutil setmeta -h "Cache-Control:no-store" gs://%2/%3/Android/catalog_%3.json
 			::gsutil setmeta -h "Cache-Control:no-store" gs://%2/%3/iOS/catalog_%3.hash
 			::gsutil setmeta -h "Cache-Control:no-store" gs://%2/%3/iOS/catalog_%3.json
-			pause
 			exit 0
 		)
 	)
