@@ -40,14 +40,9 @@ namespace Scoz.Func {
 
         void Init() {
             TheVideoPlayer.gameObject.SetActive(true);
-            GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
             DontDestroyOnLoad(gameObject);
             InitVideo();
             gameObject.SetActive(false);
-        }
-        void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
-            Debug.LogError("aaaaaaaaaaaa");
-            GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
         }
         private void OnDestroy() {
             Instance = null;

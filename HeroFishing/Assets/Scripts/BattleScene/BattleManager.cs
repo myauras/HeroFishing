@@ -16,7 +16,6 @@ namespace HeroFishing.Battle {
             InitMonsterScheduler();
         }
         void InitMonsterScheduler() {
-            Debug.Log("InitMonsterScheduler");
             MyMonsterScheduler = new MonsterScheduler();
             MyMonsterScheduler.Init(MapData.GetData(7));
         }

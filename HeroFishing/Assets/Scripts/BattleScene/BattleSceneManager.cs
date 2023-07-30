@@ -22,7 +22,6 @@ namespace HeroFishing.Battle {
 
         void Start() {
             Instance = this;
-
             if (GameManager.IsInit) {
                 InitBattleScene();
             } else {
@@ -69,7 +68,7 @@ namespace HeroFishing.Battle {
         /// 將目前攝影機加到CameraManager中，之後方便使用CameraManager的方法
         /// </summary>
         void SetCam() {
-            var camBrain = Camera.main.GetComponent<Cinemachine.CinemachineBrain>();
+            var camBrain = GameObject.FindGameObjectWithTag("SceneCam").GetComponent<Camera>().GetComponent<Cinemachine.CinemachineBrain>();
             if (camBrain == null) return;
             CamManager.SetCam(camBrain);
             var vCam = camBrain.ActiveVirtualCamera as Cinemachine.CinemachineVirtualCamera;

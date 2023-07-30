@@ -94,12 +94,12 @@ namespace Scoz.Func {
             Instance = this;
             IsInit = true;
             DontDestroyOnLoad(gameObject);
-            //設定FPS
+            //設定FPS與垂直同步
 #if Dev
             QualitySettings.vSyncCount = 0;
-            Application.targetFrameRate = 0;
+            Application.targetFrameRate = 100;
 #else
-            QualitySettings.vSyncCount = 1;
+            QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = TargetFPS;
 #endif
             //產生一個新玩家
@@ -141,7 +141,7 @@ namespace Scoz.Func {
             MyVideoPlayer.CreateNewVideoPlayer();
             //建立Debugger
 #if !Release
-            //Debugger.CreateNewInstance();
+            Debugger.CreateNewInstance();
 #endif
             //建立AudioPlayer    
             AudioPlayer.CreateNewAudioPlayer();

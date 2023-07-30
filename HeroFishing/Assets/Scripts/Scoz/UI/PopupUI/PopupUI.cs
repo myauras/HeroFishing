@@ -12,7 +12,6 @@ namespace Scoz.Func {
     public class PopupEventSpawner : ItemSpawner<PopupEventItem> { }
     public partial class PopupUI : MonoBehaviour {
         public static PopupUI Instance;
-        public Camera MyCam { get; private set; }
         public Canvas MyCanvas { get; private set; }
 
 
@@ -21,12 +20,9 @@ namespace Scoz.Func {
 
         public void Init() {
             Instance = this;
-
-            GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
             DontDestroyOnLoad(gameObject);
             MyCanvas = GetComponent<Canvas>();
-            MyCam = GetComponent<Camera>();
-
+            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); ;
             InitGameInfo();
             InitLoading();
             InitPopupEvent();
@@ -49,7 +45,7 @@ namespace Scoz.Func {
             if (ConfirmCancel_ConfirmBtnTimer != null) ConfirmCancel_ConfirmBtnTimer.RunTimer();
         }
         void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
-            GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
+            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); ;
         }
 
 

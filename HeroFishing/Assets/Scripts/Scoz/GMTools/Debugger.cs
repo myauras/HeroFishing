@@ -22,6 +22,7 @@ namespace Scoz.Func {
         float LastFrameRate = 0.0f;
 
         MyTimer InfoRefreshTimer = null;
+        public Canvas MyCanvas { get; private set; }
 
 
         public Camera GetCamera() {
@@ -32,12 +33,13 @@ namespace Scoz.Func {
         /// </summary>
         public void Start() {
             Instance = this;
-            if (GameManager.Instance != null)
-                GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
             DontDestroyOnLoad(gameObject);
+            MyCanvas = GetComponent<Canvas>();
+            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             SceneManager.sceneLoaded += OnLevelFinishedLoading;
             GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(Screen.width, Screen.height);
             VersionText.text = "Ver: " + Application.version;
+
         }
 
 
@@ -50,8 +52,7 @@ namespace Scoz.Func {
         }
 
         void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
-            if (GameManager.Instance != null)
-                GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
+            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); ;
         }
 
         public void UpdateEnvVersionText() {

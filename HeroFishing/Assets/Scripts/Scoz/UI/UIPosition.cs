@@ -21,7 +21,7 @@ namespace Scoz.Func {
             return _canvas.transform.TransformPoint(movePos);
         }
         public static Vector3 GetMouseWorldPointOnYZero(float _y) {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = GameObject.FindGameObjectWithTag("SceneCam").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             Plane yZeroPlane = new Plane(Vector3.up, _y); // 創建一個Y軸為_y的平面
             if (yZeroPlane.Raycast(ray, out float enter)) {
                 return ray.GetPoint(enter); // 返回交點

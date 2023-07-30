@@ -22,13 +22,17 @@ namespace Scoz.Func {
             } else {
                 GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/PopupUI_Local");
                 GameObject go = Instantiate(prefab);
+
                 go.name = "PopupUI_Local";
                 Instance = go.GetComponent<PopupUI_Local>();
                 Instance.Init();
+
             }
             return Instance;
         }
         void Start() {
+            MyCanvas = GetComponent<Canvas>();
+            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); ;
             SceneManager.sceneLoaded += OnLevelFinishedLoading;
         }
 
@@ -40,7 +44,7 @@ namespace Scoz.Func {
         }
 
         void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
-            GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
+            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); ;
         }
         public void Init() {
             Instance = this;
@@ -49,7 +53,7 @@ namespace Scoz.Func {
             InitLoading();
             InitClickCamcel();
             InitConfirmCancel();
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
             WriteLog.Log("初始化PopupUI_Local");
         }
 

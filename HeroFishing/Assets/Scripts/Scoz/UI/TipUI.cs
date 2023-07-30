@@ -39,7 +39,7 @@ namespace Scoz.Func {
             ContentText.text = _content;
 
             //螢幕座標轉Canvas座標
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(transform.parent.GetComponent<RectTransform>(), _screenPos, PopupUI.Instance.MyCam, out Vector2 localPos);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(transform.parent.GetComponent<RectTransform>(), _screenPos, Camera.main, out Vector2 localPos);
 
             transform.GetComponent<RectTransform>().anchoredPosition = localPos + _offset;
             ContentSizeFitters.Update();
