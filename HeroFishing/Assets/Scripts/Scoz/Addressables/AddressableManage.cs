@@ -100,9 +100,6 @@ namespace Scoz.Func {
             if (CheckInternetCoroutine != null)
                 StopCoroutine(CheckInternetCoroutine);
             CheckInternetCoroutine = StartCoroutine(WaitForCheckingBundle());
-            ////初始化(好像不需要 會占用讀取時間)
-            //AsyncOperationHandle<IResourceLocator> initializeAsyncHandle = Addressables.InitializeAsync();
-            //yield return initializeAsyncHandle;
             //取Bundle包大小
             AsyncOperationHandle<long> getDownloadSize = Addressables.GetDownloadSizeAsync(Keys);
             yield return getDownloadSize;

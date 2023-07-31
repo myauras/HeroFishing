@@ -39,7 +39,8 @@ namespace HeroFishing.Main {
         }
         public void PlayMainMusic() {
             AudioPlayer.StopAllMusic_static();
-            AudioPlayer.PlayAudioByAudioClip(MyAudioType.Music, StartMusic, true);
+            if (StartMusic != null)
+                AudioPlayer.PlayAudioByAudioClip(MyAudioType.Music, StartMusic, true);
         }
 
         //確認有網路後才會執行後續

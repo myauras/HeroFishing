@@ -110,18 +110,18 @@ namespace Scoz.Editor {
             PlayerSettings.bundleVersion = version;
             EditorCoroutine editorCoroutine = EditorCoroutineUtility.StartCoroutine(BuildAssetBundleAsync(envVersion, Close), owner);
         }
-        [MenuItem("Scoz/ForTest/BuildBundleWithArg_Test")]
-        public static void BuildBundleWithArg_Test() {
-            EnvVersion envVersion = EnvVersion.Dev;
-#if Dev
-            envVersion = EnvVersion.Dev;
-#elif Test
-               envVersion=EnvVersion.Test;
-#elif Release
-            envVersion = EnvVersion.Release;
-#endif
-            EditorCoroutine editorCoroutine = EditorCoroutineUtility.StartCoroutine(BuildAssetBundleAsync(envVersion, Close), owner);
-        }
+//        [MenuItem("Scoz/ForTest/BuildBundleWithArg_Test")]
+//        public static void BuildBundleWithArg_Test() {
+//            EnvVersion envVersion = EnvVersion.Dev;
+//#if Dev
+//            envVersion = EnvVersion.Dev;
+//#elif Test
+//               envVersion=EnvVersion.Test;
+//#elif Release
+//            envVersion = EnvVersion.Release;
+//#endif
+//            EditorCoroutine editorCoroutine = EditorCoroutineUtility.StartCoroutine(BuildAssetBundleAsync(envVersion, Close), owner);
+//        }
 
         public static void UpdateBundleWithArg() {
             EditorSceneManager.OpenScene($"Assets/Scenes/" + MyScene.StartScene.ToString() + ".unity");
@@ -151,18 +151,18 @@ namespace Scoz.Editor {
             PlayerSettings.bundleVersion = version;
             EditorCoroutine editorCoroutine = EditorCoroutineUtility.StartCoroutine(UpdateAssetBundleAsync(envVersion, Close), owner);
         }
-        [MenuItem("Scoz/ForTest/UpdateBundleWithArg_Test")]
-        public static void UpdateBundleWithArg_Test() {
-            EnvVersion envVersion = EnvVersion.Dev;
-#if Dev
-            envVersion = EnvVersion.Dev;
-#elif Test
-               envVersion=EnvVersion.Test;
-#elif Release
-            envVersion = EnvVersion.Release;
-#endif
-            EditorCoroutine editorCoroutine = EditorCoroutineUtility.StartCoroutine(UpdateAssetBundleAsync(envVersion, null), owner);
-        }
+//        [MenuItem("Scoz/ForTest/UpdateBundleWithArg_Test")]
+//        public static void UpdateBundleWithArg_Test() {
+//            EnvVersion envVersion = EnvVersion.Dev;
+//#if Dev
+//            envVersion = EnvVersion.Dev;
+//#elif Test
+//               envVersion=EnvVersion.Test;
+//#elif Release
+//            envVersion = EnvVersion.Release;
+//#endif
+//            EditorCoroutine editorCoroutine = EditorCoroutineUtility.StartCoroutine(UpdateAssetBundleAsync(envVersion, null), owner);
+//        }
         public static void BuildAPK() {
             string[] args = System.Environment.GetCommandLineArgs();
             EnvVersion envVersion = EnvVersion.Dev;
@@ -249,22 +249,22 @@ namespace Scoz.Editor {
             EditorCoroutineUtility.StartCoroutine(BuildAabAsync(envVersion, outputFileName, Close), owner);
         }
 
-        [MenuItem("Scoz/ForTest/BuildAAB_Test")]
-        public static void BuildAAB_Test() {
-            string[] args = System.Environment.GetCommandLineArgs();
-            EnvVersion envVersion = EnvVersion.Dev;
-            string version = "1.1.1";
-            string versionCode = "1";
-            string keyaliasPass = "amongus";
-            string keystorePass = "amongus";
-            string outputFileName = "../../TheDoor.aab";
-            Debug.LogFormat("輸出AAB位置: {0}", outputFileName);
-            PlayerSettings.bundleVersion = version;
-            PlayerSettings.Android.bundleVersionCode = int.Parse(versionCode);
-            PlayerSettings.keyaliasPass = keyaliasPass;
-            PlayerSettings.keystorePass = keystorePass;
-            EditorCoroutineUtility.StartCoroutine(BuildAabAsync(envVersion, outputFileName, null), owner);
-        }
+        //[MenuItem("Scoz/ForTest/BuildAAB_Test")]
+        //public static void BuildAAB_Test() {
+        //    string[] args = System.Environment.GetCommandLineArgs();
+        //    EnvVersion envVersion = EnvVersion.Dev;
+        //    string version = "1.1.1";
+        //    string versionCode = "1";
+        //    string keyaliasPass = "amongus";
+        //    string keystorePass = "amongus";
+        //    string outputFileName = "../../TheDoor.aab";
+        //    Debug.LogFormat("輸出AAB位置: {0}", outputFileName);
+        //    PlayerSettings.bundleVersion = version;
+        //    PlayerSettings.Android.bundleVersionCode = int.Parse(versionCode);
+        //    PlayerSettings.keyaliasPass = keyaliasPass;
+        //    PlayerSettings.keystorePass = keystorePass;
+        //    EditorCoroutineUtility.StartCoroutine(BuildAabAsync(envVersion, outputFileName, null), owner);
+        //}
         private static void Close() {
             EditorApplication.Exit(0);
         }
@@ -358,24 +358,24 @@ namespace Scoz.Editor {
                 Debug.LogError("BuildXcode發生錯誤: " + _e);
             }
         }
-        [MenuItem("Scoz/ForTest/BuildXcode_Test")]
-        public static void BuildXcode_Test() {
-            EnvVersion envVersion = EnvVersion.Dev;
-#if Dev
-            envVersion = EnvVersion.Dev;
-#elif Test
-               envVersion=EnvVersion.Test;
-#elif Release
-            envVersion = EnvVersion.Release;
-#endif
-            string outputFileName = "../../xcode_build";
-            Debug.LogFormat("輸出Xcode Project位置: {0}", outputFileName);
-            try {
-                EditorCoroutineUtility.StartCoroutine(BuildXcodeAsync(envVersion, outputFileName, null), owner);
-            } catch (Exception _e) {
-                Debug.LogError("BuildXcode發生錯誤: " + _e);
-            }
-        }
+//        [MenuItem("Scoz/ForTest/BuildXcode_Test")]
+//        public static void BuildXcode_Test() {
+//            EnvVersion envVersion = EnvVersion.Dev;
+//#if Dev
+//            envVersion = EnvVersion.Dev;
+//#elif Test
+//               envVersion=EnvVersion.Test;
+//#elif Release
+//            envVersion = EnvVersion.Release;
+//#endif
+//            string outputFileName = "../../xcode_build";
+//            Debug.LogFormat("輸出Xcode Project位置: {0}", outputFileName);
+//            try {
+//                EditorCoroutineUtility.StartCoroutine(BuildXcodeAsync(envVersion, outputFileName, null), owner);
+//            } catch (Exception _e) {
+//                Debug.LogError("BuildXcode發生錯誤: " + _e);
+//            }
+//        }
         private static IEnumerator BuildXcodeAsync(EnvVersion evnVersion, string outputFileName, Action callback) {
             SwitchVersion.RunSwitchVersion(evnVersion, result => {
 
