@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Scoz.Func;
 using LitJson;
-using System;
-using System.Linq;
-using static HeroFishing.Main.MonsterSpawnerData;
 
 namespace HeroFishing.Main {
     public class MonsterData : MyJsonData {
@@ -26,6 +23,7 @@ namespace HeroFishing.Main {
         public MonsterType MyMonsterType { get; private set; }
         public int[] DropIDs { get; private set; }
         public int[] SummonSkillID { get; private set; }
+
 
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
             DataName = _dataName;
@@ -59,6 +57,7 @@ namespace HeroFishing.Main {
         public static MonsterData GetData(int id) {
             return GameDictionary.GetJsonData<MonsterData>(DataName, id);
         }
+
     }
 
 }

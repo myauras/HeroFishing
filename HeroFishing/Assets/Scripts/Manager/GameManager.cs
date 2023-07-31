@@ -162,6 +162,7 @@ namespace Scoz.Func {
             {
                 OnAddressableDownloaded();
                 GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
+                    GameDictionary.PreLoadMonsterPrefabs();//預載MonsterPrefab
                     MyText.RefreshActivityTextsAndFunctions();//更新介面的MyTex
                     Instance.CreateAddressableUIs(() => { //產生PopupUI
                         _action?.Invoke();

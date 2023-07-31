@@ -45,8 +45,8 @@ namespace Scoz.Func {
                 MyLoadingProgress.FinishProgress("String");
             });
 
-            //清空static字典
-            GameSettingData.ClearStaticDic();
+            //重置靜態資料
+            GameSettingData.ResetStaticData();
 
 
             GameSettingData.DataName = "GameSetting";

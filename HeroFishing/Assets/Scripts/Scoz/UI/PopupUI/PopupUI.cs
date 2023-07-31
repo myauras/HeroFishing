@@ -22,7 +22,8 @@ namespace Scoz.Func {
             Instance = this;
             DontDestroyOnLoad(gameObject);
             MyCanvas = GetComponent<Canvas>();
-            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); ;
+            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            MyCanvas.sortingLayerName = "UI";
             InitGameInfo();
             InitLoading();
             InitPopupEvent();
@@ -45,7 +46,8 @@ namespace Scoz.Func {
             if (ConfirmCancel_ConfirmBtnTimer != null) ConfirmCancel_ConfirmBtnTimer.RunTimer();
         }
         void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
-            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); ;
+            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            MyCanvas.sortingLayerName = "UI";
         }
 
 

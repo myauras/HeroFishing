@@ -13,6 +13,7 @@ namespace Scoz.Func {
         /// 依json表設定資料(Key為int)
         /// </summary>
         public static void SetData_Remote<T>(string _dataName, Action<string, Dictionary<int, MyJsonData>> _cb) where T : MyJsonData, new() {
+
             GameDictionary.AddLoadingKey(_dataName);
             try {
                 Addressables.LoadAssetAsync<TextAsset>(string.Format("Assets/AddressableAssets/Json/{0}.json", _dataName)).Completed += handle => {

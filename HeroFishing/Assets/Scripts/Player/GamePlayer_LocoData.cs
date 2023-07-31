@@ -18,11 +18,10 @@ namespace HeroFishing.Main {
                 try {
                     LoadDataFromLoco(name);
                 } catch (Exception _e) {
-                    WriteLog.LogError("LoadDataFromLoco Error:" + _e);
+                    WriteLog.LogError("LoadDataFromLoco 錯誤:" + _e);
                 }
             }
         }
-        bool start = false;
         public void LoadDataFromLoco(LocoDataName _name) {
             string json = LocoDataManager.GetDataFromLoco(_name);
             if (string.IsNullOrEmpty(json)) return;

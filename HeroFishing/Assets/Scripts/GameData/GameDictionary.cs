@@ -67,7 +67,7 @@ namespace Scoz.Func {
         /// </summary>
         void LoadLocalJson() {
             StringDic = StringData.GetStringDic("String");
-            GameSettingData.ClearStaticDic();
+            GameSettingData.ResetStaticData();
             StrKeyJsonDic["GameSetting"] = MyJsonData.GetDataStringKey<GameSettingData>("GameSetting");
         }
     }

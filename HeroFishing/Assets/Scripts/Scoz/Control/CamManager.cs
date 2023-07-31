@@ -8,7 +8,6 @@ namespace Scoz.Func {
 
     public class CamManager : MonoBehaviour {
 
-        [SerializeField] float CamShakeFrequencyGain = 1f;
         public static CamManager Instance;
         static bool Shaking;
         static Vector3 CamPos;

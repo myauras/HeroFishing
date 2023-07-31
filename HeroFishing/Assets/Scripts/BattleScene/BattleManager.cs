@@ -1,4 +1,5 @@
 using HeroFishing.Main;
+using Scoz.Func;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace HeroFishing.Battle {
         public MonsterScheduler MyMonsterScheduler { get; private set; }
 
 
+
         public void Init() {
             Instance = this;
             InitMonsterScheduler();
@@ -18,6 +20,11 @@ namespace HeroFishing.Battle {
         void InitMonsterScheduler() {
             MyMonsterScheduler = new MonsterScheduler();
             MyMonsterScheduler.Init(MapData.GetData(7));
+        }
+        void LoadAllMonster() {
+
+            AddressablesLoader.GetPrefab("Monsters", (go, handle) => {
+            });
         }
         public Hero GetHero(int _index) {
             if (_index < 0 || _index >= MyHeros.Length) return null;

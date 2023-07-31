@@ -36,6 +36,7 @@ namespace Scoz.Func {
             DontDestroyOnLoad(gameObject);
             MyCanvas = GetComponent<Canvas>();
             MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            MyCanvas.sortingLayerName = "UI";
             SceneManager.sceneLoaded += OnLevelFinishedLoading;
             GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(Screen.width, Screen.height);
             VersionText.text = "Ver: " + Application.version;
@@ -52,7 +53,9 @@ namespace Scoz.Func {
         }
 
         void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
-            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); ;
+            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            MyCanvas.sortingLayerName = "UI";
+
         }
 
         public void UpdateEnvVersionText() {

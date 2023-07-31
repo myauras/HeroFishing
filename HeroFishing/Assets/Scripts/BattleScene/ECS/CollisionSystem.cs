@@ -16,7 +16,7 @@ namespace HeroFishing.Battle {
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-            state.RequireForUpdate<CollisionComponents>();
+            state.RequireForUpdate<CollisionSys>();
             state.RequireForUpdate<SimulationSingleton>();
             state.RequireForUpdate<BulletValue>();
         }

@@ -33,7 +33,10 @@ namespace Scoz.Func {
             JSONNode jsNode = JSONNode.Parse(jsStr);
             return jsNode;
         }
-        public static void ClearStaticDic() {
+        /// <summary>
+        /// 重置靜態資料，當Addressable重載json資料時需要先呼叫這個方法來重置靜態資料
+        /// </summary>
+        public static void ResetStaticData() {
             SettingDic.Clear();
         }
         protected override void GetDataFromJson(JsonData _item, string _dataName) {

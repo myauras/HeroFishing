@@ -151,7 +151,7 @@ namespace Scoz.Func {
                 return;
             }
 
-            _path = string.Format("Assets/AddressableAssets/Image/{0}.png", _path);
+            _path = string.Format("Assets/AddressableAssets/Images/{0}.png", _path);
             Addressables.LoadAssetAsync<Sprite>(_path).Completed += handle => {
                 switch (handle.Status) {
                     case AsyncOperationStatus.Succeeded:
@@ -168,7 +168,7 @@ namespace Scoz.Func {
                 return;
             }
 
-            _path = string.Format("Assets/AddressableAssets/Image/{0}.png", _path);
+            _path = string.Format("Assets/AddressableAssets/Images/{0}.png", _path);
             Addressables.LoadAssetAsync<Sprite[]>(_path).Completed += handle => {
                 switch (handle.Status) {
                     case AsyncOperationStatus.Succeeded:
@@ -185,7 +185,7 @@ namespace Scoz.Func {
                 return;
             }
 
-            _path = string.Format("Assets/AddressableAssets/Particle/{0}.prefab", _path);
+            _path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", _path);
 
             Addressables.LoadAssetAsync<GameObject>(_path).Completed += handle => {
                 switch (handle.Status) {
@@ -260,7 +260,7 @@ namespace Scoz.Func {
             if (_path == "") {
                 return;
             }
-            _path = string.Format("Assets/AddressableAssets/Prefab/{0}.prefab", _path);
+            _path = string.Format("Assets/AddressableAssets/Prefabs/{0}.prefab", _path);
 
             Addressables.LoadResourceLocationsAsync(_path).Completed += check => {
                 if (check.Status == AsyncOperationStatus.Succeeded) {
@@ -312,7 +312,7 @@ namespace Scoz.Func {
                 _cb?.Invoke(null);
                 return;
             }
-            _path = string.Format("Assets/AddressableAssets/Animation/{0}.{1}", _path, _fileExtension);
+            _path = string.Format("Assets/AddressableAssets/Animations/{0}.{1}", _path, _fileExtension);
             Addressables.LoadAssetAsync<RuntimeAnimatorController>(_path).Completed += handle => {
                 switch (handle.Status) {
                     case AsyncOperationStatus.Succeeded:
