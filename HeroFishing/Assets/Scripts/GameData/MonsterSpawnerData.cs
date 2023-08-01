@@ -20,8 +20,7 @@ namespace HeroFishing.Main {
         public string TypeValue { get; private set; }
         public int[] MonsterIDs { get; private set; }
         public int[] MonsterSpawnIntervalSecs = new int[2] { 0, 0 };
-        public Vector3 SpawnPos { get; private set; } = Vector3.zero;
-        public Vector3 TargetPos { get; private set; } = Vector3.zero;
+        public int[] Routes { get; private set; }
 
         /// <summary>
         /// 測試用本地出怪時用，回傳是否需要計時執行出怪
@@ -46,11 +45,8 @@ namespace HeroFishing.Main {
                     case "MonsterSpawnIntervalSec":
                         TextManager.StrSplitToIntArray(item[key].ToString(), '~', ref MonsterSpawnIntervalSecs);
                         break;
-                    case "SpawnPos":
-                        SpawnPos = TextManager.ParseTextToVect3(item[key].ToString(), ',');
-                        break;
-                    case "TargetPos":
-                        TargetPos = TextManager.ParseTextToVect3(item[key].ToString(), ',');
+                    case "Routes":
+                        Routes = TextManager.StringSplitToIntArray(item[key].ToString(), ',');
                         break;
                     default:
                         WriteLog.LogWarning(string.Format("{0}表有不明屬性:{1}", DataName, key));
@@ -63,6 +59,12 @@ namespace HeroFishing.Main {
         }
         public int GetRandSpawnSec() {
             return UnityEngine.Random.Range(MonsterSpawnIntervalSecs[0], MonsterSpawnIntervalSecs[1] + 1);
+        }
+        /// <summary>
+        /// 本地測試時，取得隨機路徑用
+        /// </summary>
+        public int GetRandRoute() {
+            return Prob.GetRandomTFromTArray(Routes);
         }
     }
 

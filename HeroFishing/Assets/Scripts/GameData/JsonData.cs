@@ -19,7 +19,7 @@ namespace Scoz.Func {
         public static void SetData<T>(Dictionary<int, T> _dic, string _dataName) where T : MyJsonData, new() {
             DateTime startTime = DateTime.Now;
 
-            string jsonStr = Resources.Load<TextAsset>(string.Format("Json/{0}", _dataName)).ToString();
+            string jsonStr = Resources.Load<TextAsset>(string.Format("Jsons/{0}", _dataName)).ToString();
             JsonData jd = JsonMapper.ToObject(jsonStr);
             JsonData items = jd[_dataName];
             for (int i = 0; i < items.Count; i++) {
@@ -43,7 +43,7 @@ namespace Scoz.Func {
         /// </summary>
         public static void SetData<T>(Dictionary<string, T> _dic, string _dataName) where T : MyJsonData, new() {
             DateTime startTime = DateTime.Now;
-            string jsonStr = Resources.Load<TextAsset>(string.Format("Json/{0}", _dataName)).ToString();
+            string jsonStr = Resources.Load<TextAsset>(string.Format("Jsons/{0}", _dataName)).ToString();
             JsonData jd = JsonMapper.ToObject(jsonStr);
             JsonData items = jd[_dataName];
             for (int i = 0; i < items.Count; i++) {
@@ -66,7 +66,7 @@ namespace Scoz.Func {
         /// 依json表設定資料(Key為String)
         /// </summary>
         public static Dictionary<string, MyJsonData> GetDataStringKey<T>(string _dataName) where T : MyJsonData, new() {
-            string jsonStr = Resources.Load<TextAsset>(string.Format("Json/{0}", _dataName)).ToString();
+            string jsonStr = Resources.Load<TextAsset>(string.Format("Jsons/{0}", _dataName)).ToString();
             JsonData jd = null;
             try {
                 jd = JsonMapper.ToObject(jsonStr);
@@ -93,7 +93,7 @@ namespace Scoz.Func {
         /// </summary>
         public static void SetData<T>(string _dataName) where T : MyJsonData, new() {
             DateTime startTime = DateTime.Now;
-            string jsonStr = Resources.Load<TextAsset>(string.Format("Json/{0}", _dataName)).ToString();
+            string jsonStr = Resources.Load<TextAsset>(string.Format("Jsons/{0}", _dataName)).ToString();
             JsonData jd = JsonMapper.ToObject(jsonStr);
             JsonData items = jd[_dataName];
             for (int i = 0; i < items.Count; i++) {
@@ -111,7 +111,7 @@ namespace Scoz.Func {
         /// </summary>
         public static void SetKeyValueData<T>(string _dataName) where T : MyJsonData, new() {
             DateTime startTime = DateTime.Now;
-            string jsonStr = Resources.Load<TextAsset>(string.Format("Json/{0}", _dataName)).ToString();
+            string jsonStr = Resources.Load<TextAsset>(string.Format("Jsons/{0}", _dataName)).ToString();
             JsonData jd = JsonMapper.ToObject(jsonStr);
             JsonData items = jd[_dataName];
             for (int i = 0; i < items.Count; i++) {

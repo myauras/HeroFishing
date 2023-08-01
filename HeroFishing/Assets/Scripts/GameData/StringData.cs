@@ -54,7 +54,7 @@ namespace Scoz.Func {
         /// </summary>
         public static Dictionary<string, StringData> GetStringDic(string _dataName) {
             DateTime startTime = DateTime.Now;
-            string jsonStr = Resources.Load<TextAsset>(string.Format("Json/{0}", _dataName)).ToString();
+            string jsonStr = Resources.Load<TextAsset>(string.Format("Jsons/{0}", _dataName)).ToString();
             JsonData jd = JsonMapper.ToObject(jsonStr);
             JsonData items = jd[_dataName];
             Dictionary<string, StringData> dic = new Dictionary<string, StringData>();

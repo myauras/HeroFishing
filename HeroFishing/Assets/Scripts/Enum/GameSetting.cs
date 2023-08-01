@@ -22,4 +22,7 @@ public enum GameSetting
 	SpotlightWaitTime_ChangeUI,
 	PopupEventVibrationMilliSecs,
 	VibrationOnVibrationMilliSecs,
+	CamShake_BossDebut_AmplitudeGain,
+	CamShake_BossDebut_FrequencyGain,
+	CamShake_BossDebut_Duration,
 }

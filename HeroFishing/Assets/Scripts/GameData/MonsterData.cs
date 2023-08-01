@@ -14,6 +14,8 @@ namespace HeroFishing.Main {
         }
         public string Ref { get; private set; }
         public float Multiplier { get; private set; }
+        public float Radius { get; private set; }
+        public float Speed { get; private set; }
         public int[] MonsterIDs { get; private set; }
         public enum MonsterType {
             Minion,
@@ -38,6 +40,12 @@ namespace HeroFishing.Main {
                         break;
                     case "Multiplier":
                         Multiplier = float.Parse(item[key].ToString());
+                        break;
+                    case "Radius":
+                        Radius = float.Parse(item[key].ToString());
+                        break;
+                    case "Speed":
+                        Speed = float.Parse(item[key].ToString());
                         break;
                     case "MonsterType":
                         MyMonsterType = MyEnum.ParseEnum<MonsterType>(item[key].ToString());

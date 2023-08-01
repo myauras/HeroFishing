@@ -61,6 +61,9 @@ namespace Scoz.Func {
             MonsterSpawnerData.DataName = "MonsterSpawner";
             MyJsonData.SetData_Remote<MonsterSpawnerData>(MonsterSpawnerData.DataName, SetDic);
 
+            RouteData.DataName = "Route";
+            MyJsonData.SetData_Remote<RouteData>(RouteData.DataName, SetDic);
+
             MonsterData.DataName = "Monster";
             MyJsonData.SetData_Remote<MonsterData>(MonsterData.DataName, SetDic);
 

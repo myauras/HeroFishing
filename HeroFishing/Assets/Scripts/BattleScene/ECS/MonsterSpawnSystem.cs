@@ -1,19 +1,24 @@
+using HeroFishing.Main;
 using Scoz.Func;
 using System;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 namespace HeroFishing.Battle {
     public struct MonsterValue : IComponentData {
         public float Radius;
+        public float3 Pos;
     }
-    public class MonsterGOInstance : IComponentData, IDisposable {
-        public GameObject Instance;
+    public class MonsterInstance : IComponentData, IDisposable {
+        public GameObject GO;
+        public Transform Trans;
+        public Monster MyMonster;
+        public Vector3 Dir;
         public void Dispose() {
-            UnityEngine.Object.DestroyImmediate(Instance);
+            UnityEngine.Object.DestroyImmediate(GO);
         }
     }
     public partial struct MonsterSpawnSystem : ISystem {
@@ -25,35 +30,54 @@ namespace HeroFishing.Battle {
 
         public void OnUpdate(ref SystemState state) {
             if (BattleManager.Instance == null || BattleManager.Instance.MyMonsterScheduler == null) return;
-            var spawnData = BattleManager.Instance.MyMonsterScheduler.DequeueMonster();
-            if (spawnData == null) return;
-            if (spawnData.MonsterIDs == null || spawnData.MonsterIDs.Length == 0) return;
+            var spawn = BattleManager.Instance.MyMonsterScheduler.DequeueMonster();
+            if (spawn == null) return;
+            if (spawn.MonsterIDs == null || spawn.MonsterIDs.Length == 0) return;
 
-            foreach (var monsterID in spawnData.MonsterIDs) {
+            foreach (var monsterID in spawn.MonsterIDs) {
                 GameObject monsterPrefab = GameDictionary.GetMonsterPrefab(monsterID);
                 if (monsterPrefab == null) continue;
+                var monsterData = MonsterData.GetData(monsterID);
+                if (monsterData == null) continue;
                 var monsterGO = GameObject.Instantiate(monsterPrefab);
+                var routeData = spawn.RouteID != 0 ? RouteData.GetData(spawn.RouteID) : null;
                 monsterGO.hideFlags |= HideFlags.HideAndDontSave;
                 var entity = state.EntityManager.CreateEntity();
                 state.EntityManager.AddComponentObject(entity, monsterGO.GetComponent<Transform>());
-                state.EntityManager.AddComponentData(entity, new MonsterGOInstance { Instance = monsterGO });
+                var monster = monsterGO.GetComponent<Monster>();
+                monster.SetData(monsterData);
+                //設定怪物位置與方向
+                Vector3 dir = Vector3.zero;
+                if (routeData != null) {
+                    monsterGO.transform.localPosition = routeData.SpawnPos;
+                    dir = (routeData.TargetPos - routeData.SpawnPos).normalized;
+                    state.EntityManager.AddComponentData(entity, new MonsterValue {
+                        Radius = monsterData.Radius,
+                        Pos = routeData.SpawnPos,
+                    });
+                } else {
+                    monsterGO.transform.localPosition = Vector3.zero;
+                    state.EntityManager.AddComponentData(entity, new MonsterValue {
+                        Radius = monsterData.Radius,
+                        Pos = float3.zero,
+                    });
+                }
+                monster.FaceDir(Quaternion.LookRotation(dir));
+                monster.SetAniTrigger("run");
+                state.EntityManager.AddComponentData(entity, new MonsterInstance {
+                    GO = monsterGO,
+                    Trans = monsterGO.transform,
+                    MyMonster = monster,
+                    Dir = dir,
+                });
             }
-            //BOSS出場攝影機震動
-            if (spawnData.MySpanwType == Main.MonsterSpawnerData.SpawnType.Boss) CamManager.ShakeCam(CamManager.CamNames.Battle, 3, 3, 2f);
 
-
-
-            //var query = SystemAPI.QueryBuilder().WithAll<MonsterValue>().Build();
-            //var entities = query.ToEntityArray(Allocator.Temp);
-
-            //foreach (var entity in entities) {
-            //    var instance = GameObject.Instantiate(GameDictionary.GetMonsterPrefab(spawnData.ID));
-            //    instance.hideFlags |= HideFlags.HideAndDontSave;
-            //    state.EntityManager.AddComponentObject(entity, instance.GetComponent<Transform>());
-            //    state.EntityManager.AddComponentData(entity, new MonsterGOInstance { Instance = instance });
-            //    CamManager.ShakeCam(CamManager.CamNames.Battle, 3, 3, 2f);
-            //    //state.EntityManager.RemoveComponent<MonsterGOPrefab>(entity);
-            //}
+            //是BOSS就會攝影機震動
+            if (spawn.IsBooss)
+                CamManager.ShakeCam(CamManager.CamNames.Battle,
+                    GameSettingData.GetFloat(GameSetting.CamShake_BossDebut_AmplitudeGain),
+                    GameSettingData.GetFloat(GameSetting.CamShake_BossDebut_FrequencyGain),
+                    GameSettingData.GetFloat(GameSetting.CamShake_BossDebut_Duration));
 
         }
     }

@@ -18,8 +18,6 @@ namespace Scoz.Editor {
         }
 
         protected override TResult DoBuild<TResult>(AddressablesDataBuilderInput builderInput, AddressableAssetsBuildContext aaContext) {
-            //需要reimport 數值才會讀入 PlaerSetting裡的
-            //AssetDatabase.ImportAsset("Asset/Editor/Scoz/BuildSetting.cs", ImportAssetOptions.ForceSynchronousImport);
             WriteLog.Log("Build Bund Version : " + VersionSetting.AppLargeVersion);
             return base.DoBuild<TResult>(builderInput, aaContext);
         }

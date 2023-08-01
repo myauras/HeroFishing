@@ -12,6 +12,7 @@ namespace Scoz.Func {
             var monsterDatas = GetIntKeyJsonDic<MonsterData>("Monster");
             foreach (var data in monsterDatas.Values) {
                 var tmData = data;
+                if (string.IsNullOrEmpty(tmData.Ref)) continue;
                 string path = string.Format("Monster/{0}", tmData.Ref);
                 AddressablesLoader.GetPrefab(path, (go, handle) => {
                     MonsterPrefabs.Add(tmData.ID, go);
