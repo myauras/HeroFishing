@@ -16,7 +16,7 @@ namespace HeroFishing.Battle {
     }
 
     public class MonsterScheduler {
-        public bool BossExist { get; private set; }//BOSS是否存在場上的標記
+        public static bool BossExist { get; set; }//BOSS是否存在場上的標記
 
         bool LocoTest = true;//是否進行本地測試
         Queue<ScheduledSpawn> spawnMonsterQueue = new Queue<ScheduledSpawn>();//出怪排程
@@ -46,11 +46,12 @@ namespace HeroFishing.Battle {
         /// </summary>
         void SpawnCheck() {
             foreach (var id in spawnTimerDic.Keys.ToArray()) {
+                var spawnData = MonsterSpawnerData.GetData(id);
+                if (spawnData == null) continue;
+                if (BossExist && spawnData.MySpanwType == MonsterSpawnerData.SpawnType.Boss) continue;//BOSS還活著就不會加入BOSS類型的出怪表ID
                 spawnTimerDic[id]--;
+
                 if (spawnTimerDic[id] <= 0) {
-                    var spawnData = MonsterSpawnerData.GetData(id);
-                    if (spawnData == null) continue;
-                    if (BossExist && spawnData.MySpanwType == MonsterSpawnerData.SpawnType.Boss) continue;//BOSS還活著就不會加入BOSS類型的出怪表ID
                     ScheduledSpawn spawn;
                     switch (spawnData.MySpanwType) {
                         case MonsterSpawnerData.SpawnType.RandomGroup:

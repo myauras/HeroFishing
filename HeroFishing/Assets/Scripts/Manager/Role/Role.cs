@@ -6,6 +6,9 @@ namespace HeroFishing.Battle {
         [SerializeField]
         Animator MyAni;
 
+        public virtual void Start() {
+        }
+
         public void SetAniTrigger(string name) {
             MyAni.SetTrigger(name);
         }

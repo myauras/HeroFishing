@@ -8,10 +8,24 @@ using Unity.Transforms;
 using UnityEngine;
 
 namespace HeroFishing.Battle {
+    /// <summary>
+    /// 資料元件
+    /// </summary>
     public struct MonsterValue : IComponentData {
         public float Radius;
         public float3 Pos;
     }
+    /// <summary>
+    /// 擊中標籤元件
+    /// </summary>
+    public struct MonsterHitTag : IComponentData { }
+    /// <summary>
+    /// 死亡標籤元件
+    /// </summary>
+    public struct MonsterDieTag : IComponentData { }
+    /// <summary>
+    /// 怪物參照元件，用於參照GameObject實例用
+    /// </summary>
     public class MonsterInstance : IComponentData, IDisposable {
         public GameObject GO;
         public Transform Trans;

@@ -21,10 +21,10 @@ namespace HeroFishing.Main {
                         ID = int.Parse(item[key].ToString());
                         break;
                     case "SpawnPos":
-                        SpawnPos = TextManager.ParseTextToVect3(item[key].ToString(), ',');
+                        SpawnPos = TextManager.ParseTextToVector3(item[key].ToString(), ',');
                         break;
                     case "TargetPos":
-                        TargetPos = TextManager.ParseTextToVect3(item[key].ToString(), ',');
+                        TargetPos = TextManager.ParseTextToVector3(item[key].ToString(), ',');
                         break;
                     default:
                         WriteLog.LogWarning(string.Format("{0}表有不明屬性:{1}", DataName, key));

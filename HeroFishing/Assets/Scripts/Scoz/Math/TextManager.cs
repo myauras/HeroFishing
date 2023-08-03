@@ -61,7 +61,7 @@ namespace Scoz.Func {
             Int2D int2D = new Int2D(values[0], values[1]);
             return int2D;
         }
-        public static Vector3 ParseTextToVect3(string _text, char _char) {
+        public static Vector3 ParseTextToVector3(string _text, char _char) {
             float[] values = new float[3] { 0, 0, 0 };
             try {
                 values = Array.ConvertAll(_text.Split(_char), a => float.Parse(a));
@@ -73,6 +73,29 @@ namespace Scoz.Func {
             }
             Vector3 vector3 = new Vector3(values[0], values[1], values[2]);
             return vector3;
+        }
+        public static Vector4 ParseTextToVector4(string _text, char _char) {
+            float[] values = new float[4] { 0, 0, 0, 0 };
+            try {
+                values = Array.ConvertAll(_text.Split(_char), a => float.Parse(a));
+                if (values.Length != 4)
+                    WriteLog.LogErrorFormat("Parse {0} to Vector4 失敗", _text);
+            } catch {
+                WriteLog.LogErrorFormat("Parse {0} to Vector4 失敗", _text);
+                return Vector4.zero;
+            }
+            Vector4 vector4 = new Vector4(values[0], values[1], values[2], values[3]);
+            return vector4;
+        }
+        public static Color32 ParseTextToColor32(string _str) {
+            // 分解字串，取得各個部分的整數值
+            string[] parts = _str.Split(',');
+            byte r = byte.Parse(parts[0]);
+            byte g = byte.Parse(parts[1]);
+            byte b = byte.Parse(parts[2]);
+            byte a = byte.Parse(parts[3]);
+
+            return new Color32(r, g, b, a);
         }
         /// <summary>
         /// int List轉字串並以字元分割

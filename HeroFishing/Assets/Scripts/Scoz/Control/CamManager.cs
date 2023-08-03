@@ -43,12 +43,14 @@ namespace Scoz.Func {
                 CamRot = MyCinemachineBrain.transform.localRotation;
                 perlin.m_AmplitudeGain = _amplitudeGain;
                 perlin.m_FrequencyGain = _frequencyGain;
-                CoroutineJob.Instance.StartNewAction(() => {
+                UniTaskManager.StartTask("ShakeCam", () => {
                     perlin.m_AmplitudeGain = 0;
-                    MyCinemachineBrain.transform.localPosition = CamPos;
-                    MyCinemachineBrain.transform.localRotation = CamRot;
-                    Shaking = false;
-                }, _duration);
+                    UniTaskManager.StartTask("ShakeCam2", () => {
+                        MyCinemachineBrain.transform.localPosition = CamPos;
+                        MyCinemachineBrain.transform.localRotation = CamRot;
+                        Shaking = false;
+                    }, 100);
+                }, (int)(_duration * 1000));
             }
         }
         public static void AddVirtualCam(CamNames _camName, CinemachineVirtualCamera _cam) {

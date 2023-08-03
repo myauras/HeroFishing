@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MyAni: {fileID: 640248582737966786}
+  MyMeshRenderer: {fileID: 7197781948343984558}
+  DieDissolveParticle: {fileID: 0}
 --- !u!1001 &5123811350040944586
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -127,17 +129,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: fd2aa2eb0a7ec4e489bf6a95803ab82d,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd2aa2eb0a7ec4e489bf6a95803ab82d,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd2aa2eb0a7ec4e489bf6a95803ab82d,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd2aa2eb0a7ec4e489bf6a95803ab82d,
         type: 3}
@@ -1616,3 +1618,9 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!137 &7197781948343984558 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2664098864995057252, guid: fd2aa2eb0a7ec4e489bf6a95803ab82d,
+    type: 3}
+  m_PrefabInstance: {fileID: 5123811350040944586}
+  m_PrefabAsset: {fileID: 0}

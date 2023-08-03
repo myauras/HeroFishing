@@ -17,6 +17,7 @@ namespace Scoz.Func {
         public static GameManager Instance;
         public static bool IsInit { get; private set; } = false;
         public AssetReference PopupUIAsset;
+        public AssetReference ResourcePreSetterAsset;
         public AssetReference PostPocessingAsset;
         public int TargetFPS = 60;
         public static EnvVersion CurVersion {//取得目前版本
@@ -67,9 +68,6 @@ namespace Scoz.Func {
 
 
         public static GameManager CreateNewInstance() {
-
-
-
 
             if (Instance != null) {
                 WriteLog.Log("GameManager之前已經被建立了");
@@ -167,6 +165,7 @@ namespace Scoz.Func {
                     Instance.CreateAddressableUIs(() => { //產生PopupUI
                         _action?.Invoke();
                     });
+                    Instance.CreateResourcePreSetter();//載入ResourcePreSetter
                 });
             });
         }
@@ -201,6 +200,15 @@ namespace Scoz.Func {
                 PostProcessingManager manager = go.GetComponent<PostProcessingManager>();
                 manager.Init();
                 go.SetActive(true);
+            };
+        }
+
+
+        public void CreateResourcePreSetter() {
+            Addressables.LoadAssetAsync<GameObject>(Instance.ResourcePreSetterAsset).Completed += handle => {
+                GameObject go = Instantiate(handle.Result);
+                ResourcePreSetter preSetter = go.GetComponent<ResourcePreSetter>();
+                preSetter.Init();
             };
         }
 

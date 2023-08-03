@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MyAni: {fileID: 3073408187451943874}
+  MyMeshRenderer: {fileID: 6051288269239375649}
+  DieDissolveParticle: {fileID: 0}
 --- !u!1001 &8575620410208250181
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -83,6 +85,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bf0d24b36e1190a498dc67a762b83f0b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bf0d24b36e1190a498dc67a762b83f0b,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bf0d24b36e1190a498dc67a762b83f0b,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bf0d24b36e1190a498dc67a762b83f0b,
         type: 3}
@@ -1213,6 +1230,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3073408187451943874}
   m_SourcePrefab: {fileID: 100100000, guid: bf0d24b36e1190a498dc67a762b83f0b, type: 3}
+--- !u!137 &6051288269239375649 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2664098864995057252, guid: bf0d24b36e1190a498dc67a762b83f0b,
+    type: 3}
+  m_PrefabInstance: {fileID: 8575620410208250181}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8108731329495961262 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bf0d24b36e1190a498dc67a762b83f0b,
