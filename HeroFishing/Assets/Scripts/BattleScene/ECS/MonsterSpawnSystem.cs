@@ -12,6 +12,7 @@ namespace HeroFishing.Battle {
     /// 資料元件
     /// </summary>
     public struct MonsterValue : IComponentData {
+        public Entity MyEntity;
         public float Radius;
         public float3 Pos;
     }
@@ -66,12 +67,14 @@ namespace HeroFishing.Battle {
                     monsterGO.transform.localPosition = routeData.SpawnPos;
                     dir = (routeData.TargetPos - routeData.SpawnPos).normalized;
                     state.EntityManager.AddComponentData(entity, new MonsterValue {
+                        MyEntity = entity,
                         Radius = monsterData.Radius,
                         Pos = routeData.SpawnPos,
                     });
                 } else {
                     monsterGO.transform.localPosition = Vector3.zero;
                     state.EntityManager.AddComponentData(entity, new MonsterValue {
+                        MyEntity = entity,
                         Radius = monsterData.Radius,
                         Pos = float3.zero,
                     });
