@@ -15,11 +15,11 @@ namespace HeroFishing.Battle {
             // 創建網格實體並新增網格元件
             GridEntity = state.EntityManager.CreateEntity();
             var gridData = new MapGridData {
-                CellSize = 2f,//網格大小是2x2
+                CellSize = 1f,//網格大小是2x2
                 GridWidth = 12,//網格寬度為12
                 GridHeight = 10,//網格高度為10
-                BoundaryX = new int2(-3, 3),//網格索引範圍
-                BoundaryY = new int2(-2, 2),//網格索引範圍
+                BoundaryX = new int2(-6, 6),//網格索引範圍
+                BoundaryY = new int2(-5, 5),//網格索引範圍
                 GridMap = new NativeParallelMultiHashMap<int2, MonsterValue>(120, Allocator.Persistent)
             };
             state.EntityManager.AddComponentData(GridEntity, gridData);
