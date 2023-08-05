@@ -16,7 +16,7 @@ namespace HeroFishing.Battle {
 
         public void OnPointerDown(PointerEventData eventData) {
             var pos = BattleManager.Instance.GetHero(0).transform.position;
-            Indicator.position = new Vector3(pos.x, pos.y + 0.1f, pos.z);
+            //Indicator.position = new Vector3(pos.x, pos.y + 0.1f, pos.z);
             origin = eventData.position;
             Indicator.gameObject.SetActive(true); // 顯示指示器
         }
@@ -24,7 +24,7 @@ namespace HeroFishing.Battle {
         public void OnDrag(PointerEventData eventData) {
             Vector2 direction = eventData.position - origin;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            Indicator.rotation = Quaternion.Euler(0, 360 - angle, 0);
+            Indicator.rotation = Quaternion.Euler(0, 90 - angle, 0);
         }
 
         public void OnPointerUp(PointerEventData eventData) {
