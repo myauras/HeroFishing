@@ -28,6 +28,15 @@ namespace Scoz.Func {
             }
             return Vector3.zero; // 如果沒有交叉點，返回(0,0,0)
         }
+        public static Vector2 GetMouseWorldPointVector2OnYZeroTo(float _y) {
+            Ray ray = GameObject.FindGameObjectWithTag("SceneCam").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+            Plane yZeroPlane = new Plane(Vector3.up, _y); // 創建一個Y軸為_y的平面
+            if (yZeroPlane.Raycast(ray, out float enter)) {
+                var pos = ray.GetPoint(enter);// 取得交點
+                return new Vector2(pos.x, pos.z); //將交點(x,y,z)轉(x,z)
+            }
+            return Vector2.zero; // 如果沒有交叉點，返回(0,0,0)
+        }
         public static void SetUIToMouthPos(Transform _trans, Canvas _canvas, Vector2 _offset) {
             Vector2 pos;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Input.mousePosition, _canvas.worldCamera, out pos);

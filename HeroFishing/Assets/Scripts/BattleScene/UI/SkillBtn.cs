@@ -36,9 +36,5 @@ namespace HeroFishing.Battle {
         void ShootSkill(Vector2 direction) {
             // 你的技能射擊邏輯
         }
-        Vector3 GetTargetPos() {
-            Vector3 worldPoint = UIPosition.GetMouseWorldPointOnYZero(-1);
-            return worldPoint;
-        }
     }
 }

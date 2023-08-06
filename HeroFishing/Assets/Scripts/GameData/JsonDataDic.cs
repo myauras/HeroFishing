@@ -67,6 +67,12 @@ namespace Scoz.Func {
             MonsterData.DataName = "Monster";
             MyJsonData.SetData_Remote<MonsterData>(MonsterData.DataName, SetDic);
 
+            HeroData.DataName = "Hero";
+            MyJsonData.SetData_Remote<HeroData>(HeroData.DataName, SetDic);
+
+            HeroSpellData.DataName = "HeroSpell";
+            MyJsonData.SetDataStringKey_Remote<HeroSpellData>(HeroSpellData.DataName, SetDic);
+
 
             //設定X秒會顯示尚未載入的JsonData
             CoroutineJob.Instance.StartNewAction(ShowUnLoadedJsondata, 5);
