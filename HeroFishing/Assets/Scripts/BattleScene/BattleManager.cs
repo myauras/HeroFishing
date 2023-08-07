@@ -8,6 +8,7 @@ namespace HeroFishing.Battle {
         public static BattleManager Instance;
 
         [SerializeField] Hero[] MyHeros;
+        [SerializeField] public Transform MonsterParent;
 
         public MonsterScheduler MyMonsterScheduler { get; private set; }
 
@@ -16,6 +17,10 @@ namespace HeroFishing.Battle {
         public void Init() {
             Instance = this;
             InitMonsterScheduler();
+            InitPlayerHero();
+        }
+        void InitPlayerHero() {
+            GetHero(0).SetData(19, "19_2");
         }
         void InitMonsterScheduler() {
             MyMonsterScheduler = new MonsterScheduler();

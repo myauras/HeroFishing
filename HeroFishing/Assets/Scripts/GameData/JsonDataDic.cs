@@ -70,6 +70,9 @@ namespace Scoz.Func {
             HeroData.DataName = "Hero";
             MyJsonData.SetData_Remote<HeroData>(HeroData.DataName, SetDic);
 
+            HeroSkinData.DataName = "HeroSkin";
+            MyJsonData.SetDataStringKey_Remote<HeroSkinData>(HeroSkinData.DataName, SetDic);
+
             HeroSpellData.DataName = "HeroSpell";
             MyJsonData.SetDataStringKey_Remote<HeroSpellData>(HeroSpellData.DataName, SetDic);
 

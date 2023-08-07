@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4172178774631868075}
-  - component: {fileID: 8749929917466012404}
+  - component: {fileID: -3826221879322384885}
   m_Layer: 8
   m_Name: RazorBeak
   m_TagString: Untagged
@@ -25,15 +25,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1719050268189065540}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8108731329495961262}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &8749929917466012404
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-3826221879322384885
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,11 +42,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1719050268189065540}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 514cbc7614d5aca47bb41d5142de5a53, type: 3}
+  m_Script: {fileID: 11500000, guid: 286c4f28fc8f7bb46b2683fc4b9b1055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MyAni: {fileID: 3073408187451943874}
-  MyMeshRenderer: {fileID: 6051288269239375649}
   DieDissolveParticle: {fileID: 0}
 --- !u!1001 &8575620410208250181
 PrefabInstance:
@@ -1230,12 +1228,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3073408187451943874}
   m_SourcePrefab: {fileID: 100100000, guid: bf0d24b36e1190a498dc67a762b83f0b, type: 3}
---- !u!137 &6051288269239375649 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 2664098864995057252, guid: bf0d24b36e1190a498dc67a762b83f0b,
-    type: 3}
-  m_PrefabInstance: {fileID: 8575620410208250181}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8108731329495961262 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bf0d24b36e1190a498dc67a762b83f0b,

@@ -4,6 +4,8 @@ using UnityEngine;
 using Unity.Entities;
 using Scoz.Func;
 using UnityEngine.EventSystems;
+using System.Data;
+
 public enum SpellName {
     attack,
     spell1,
@@ -32,7 +34,7 @@ namespace HeroFishing.Battle {
                 return;
             }
             var pos = UIPosition.GetMouseWorldPointOnYZero(0);
-            role.PlayAttackMotion();
+            role.PlaySpellMotion(SpellName.attack);
             var dir = pos - role.transform.position;
             dir.y = 0;
             Quaternion qDir = Quaternion.LookRotation(dir);
@@ -65,6 +67,12 @@ namespace HeroFishing.Battle {
         }
 
         void Spell(SpellName _spell, Vector2 _dir) {
+            var role = BattleManager.Instance.GetHero(0);
+            if (role == null) {
+                WriteLog.LogError("腳色不存在");
+                return;
+            }
+            role.PlaySpellMotion(_spell);
         }
 
         void SetAttack() {

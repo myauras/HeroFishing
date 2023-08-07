@@ -19,8 +19,8 @@ namespace HeroFishing.Main {
             }
         }
         public string Ref { get; private set; }
-        public int Rank { get; private set; }
         public RoleCategory MyRoleCategory { get; private set; }
+        public string[] IdleMotions { get; private set; }
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
             DataName = _dataName;
             JsonData item = _item;
@@ -32,11 +32,11 @@ namespace HeroFishing.Main {
                     case "Ref":
                         Ref = item[key].ToString();
                         break;
-                    case "Rank":
-                        Rank = int.Parse(item[key].ToString());
-                        break;
                     case "RoleCategory":
                         MyRoleCategory = MyEnum.ParseEnum<RoleCategory>(item[key].ToString());
+                        break;
+                    case "IdleMotions":
+                        IdleMotions = item[key].ToString().Split(',');
                         break;
                     default:
                         WriteLog.LogWarning(string.Format("{0}表有不明屬性:{1}", DataName, key));

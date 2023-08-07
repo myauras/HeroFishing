@@ -78,16 +78,33 @@ namespace Scoz.Func {
                 _cb?.Invoke(handle.Result, handle);
             };
         }
-        public static void GetResourceByFullPath<T>(string _fullPpath, Action<T> _cb) {
+        public static void GetResourceByFullPath<T>(string _fullPpath, Action<T, AsyncOperationHandle> _cb) {
             Addressables.LoadAssetAsync<T>(_fullPpath).Completed += handle => {
                 if (_fullPpath == "") {
-                    _cb?.Invoke(default(T));
+                    _cb?.Invoke(default(T), handle);
                     return;
                 }
                 switch (handle.Status) {
                     case AsyncOperationStatus.Succeeded:
-                        _cb?.Invoke(handle.Result);
-                        Addressables.Release(handle);
+                        _cb?.Invoke(handle.Result, handle);
+                        break;
+                    default:
+                        //WriteLog.LogError("讀取資源失敗:" + _path);
+                        break;
+                }
+                //Addressables.Release(handle);
+            };
+        }
+        public static void GetPrefabResourceByPath<T>(string _path, Action<T, AsyncOperationHandle> _cb) {
+            _path = string.Format("Assets/AddressableAssets/Prefabs/{0}", _path);
+            Addressables.LoadAssetAsync<T>(_path).Completed += handle => {
+                if (_path == "") {
+                    _cb?.Invoke(default(T), handle);
+                    return;
+                }
+                switch (handle.Status) {
+                    case AsyncOperationStatus.Succeeded:
+                        _cb?.Invoke(handle.Result, handle);
                         break;
                     default:
                         //WriteLog.LogError("讀取資源失敗:" + _path);
@@ -202,7 +219,7 @@ namespace Scoz.Func {
             if (_path == "") {
                 return;
             }
-            _path = string.Format("Assets/AddressableAssets/Images/{0}.png", _path);
+            _path = string.Format("Assets/AddressableAssets/Textures/{0}.png", _path);
 
             Addressables.LoadResourceLocationsAsync(_path).Completed += check => {
                 if (check.Status == AsyncOperationStatus.Succeeded) {
@@ -229,7 +246,7 @@ namespace Scoz.Func {
             if (_path == "")
                 return;
 
-            _path = string.Format("Assets/AddressableAssets/Images/{0}.png", _path);
+            _path = string.Format("Assets/AddressableAssets/Textures/{0}.png", _path);
 
 
 

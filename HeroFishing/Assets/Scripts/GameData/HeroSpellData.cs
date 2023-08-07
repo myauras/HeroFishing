@@ -45,8 +45,14 @@ namespace HeroFishing.Main {
         public int[] Threshold { get; private set; }
         public string[] Motions { get; private set; }
         public string Voice { get; private set; }
+        static Dictionary<int, Dictionary<SpellName, HeroSpellData>> SpellDic = new Dictionary<int, Dictionary<SpellName, HeroSpellData>>();
 
-
+        /// <summary>
+        /// 重置靜態資料，當Addressable重載json資料時需要先呼叫這個方法來重置靜態資料
+        /// </summary>
+        public static void ResetStaticData() {
+            SpellDic = null;
+        }
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
             DataName = _dataName;
             JsonData item = _item;
@@ -57,9 +63,6 @@ namespace HeroFishing.Main {
                         break;
                     case "Ref":
                         Ref = item[key].ToString();
-                        break;
-                    case "SpellName":
-                        SpellName = MyEnum.ParseEnum<SpellName>(item[key].ToString());
                         break;
                     case "RTP":
                         RTP = float.Parse(item[key].ToString());
@@ -102,11 +105,45 @@ namespace HeroFishing.Main {
                         break;
                 }
             }
-        }
-        public static HeroSpellData GetData(int id) {
-            return GameDictionary.GetJsonData<HeroSpellData>(DataName, id);
+            AddToSpellDic(ID, this);
         }
 
+
+        static void AddToSpellDic(string _id, HeroSpellData _data) {
+            string[] strs = _id.Split('_');
+            if (strs.Length != 2) return;
+            if (string.IsNullOrEmpty(strs[1])) return;
+
+            SpellName spellName;
+            if (!MyEnum.TryParseEnum(strs[1], out spellName)) {
+                WriteLog.LogErrorFormat("HeroSpell ID為 {0} 的格式應該為 HeroID_SpellName", _id);
+                return;
+            }
+            _data.SpellName = spellName;
+            if (int.TryParse(strs[0], out int _heroID)) {
+                if (SpellDic.ContainsKey(_heroID)) {
+                    if (SpellDic[_heroID].ContainsKey(spellName))
+                        WriteLog.LogErrorFormat("重複的SpellName: {0}", strs[1]);
+                    SpellDic[_heroID][spellName] = _data;
+                } else {
+                    SpellDic.Add(_heroID, new Dictionary<SpellName, HeroSpellData>() { { spellName, _data } });
+                }
+            }
+
+        }
+
+        public static HeroSpellData GetData(string _id) {
+            return GameDictionary.GetJsonData<HeroSpellData>(DataName, _id);
+        }
+        public static Dictionary<SpellName, HeroSpellData> GetSpellDic(int _heroID) {
+            if (!SpellDic.ContainsKey(_heroID)) return null;
+            return SpellDic[_heroID];
+        }
+        public static HeroSpellData GetSpell(int _heroID, SpellName _spellName) {
+            if (!SpellDic.ContainsKey(_heroID)) return null;
+            if (!SpellDic[_heroID].ContainsKey(_spellName)) return null;
+            return SpellDic[_heroID][_spellName];
+        }
     }
 
 }

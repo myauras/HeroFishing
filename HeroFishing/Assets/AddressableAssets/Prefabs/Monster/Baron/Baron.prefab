@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2414446747420378605}
-  - component: {fileID: 8627079574072603843}
+  - component: {fileID: -8125178121756455752}
   m_Layer: 8
   m_Name: Baron
   m_TagString: Untagged
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 2956182474890310672}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8627079574072603843
+--- !u!114 &-8125178121756455752
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,11 +44,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5578602687095688270}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 514cbc7614d5aca47bb41d5142de5a53, type: 3}
+  m_Script: {fileID: 11500000, guid: 286c4f28fc8f7bb46b2683fc4b9b1055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MyAni: {fileID: 719518827603864163}
-  MyMeshRenderer: {fileID: 6450333886337703572}
   DieDissolveParticle: {fileID: 5425216222482546495}
 --- !u!1001 &952348975124745954
 PrefabInstance:
@@ -112,31 +110,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Blackening
-      objectReference: {fileID: 0}
-    - target: {fileID: 5079305229233992157, guid: f3445fb7c59a62640bb08796a3a0b54c,
-        type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5079305229233992157, guid: f3445fb7c59a62640bb08796a3a0b54c,
-        type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 5079305229233992157, guid: f3445fb7c59a62640bb08796a3a0b54c,
-        type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5079305229233992157, guid: f3445fb7c59a62640bb08796a3a0b54c,
-        type: 3}
-      propertyPath: InitialModule.startLifetime.minScalar
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5079305229233992157, guid: f3445fb7c59a62640bb08796a3a0b54c,
-        type: 3}
-      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
-      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -310,7 +283,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 517817e0e32895342a2a710b4f5b30e6,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 517817e0e32895342a2a710b4f5b30e6,
         type: 3}
@@ -320,7 +293,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 517817e0e32895342a2a710b4f5b30e6,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 517817e0e32895342a2a710b4f5b30e6,
         type: 3}
@@ -335,7 +308,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 517817e0e32895342a2a710b4f5b30e6,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 517817e0e32895342a2a710b4f5b30e6,
         type: 3}
@@ -951,12 +924,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 719518827603864163}
   m_SourcePrefab: {fileID: 100100000, guid: 517817e0e32895342a2a710b4f5b30e6, type: 3}
---- !u!137 &6450333886337703572 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 2664098864995057252, guid: 517817e0e32895342a2a710b4f5b30e6,
-    type: 3}
-  m_PrefabInstance: {fileID: 9042374504174575856}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8195881040952352161 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 517817e0e32895342a2a710b4f5b30e6,
