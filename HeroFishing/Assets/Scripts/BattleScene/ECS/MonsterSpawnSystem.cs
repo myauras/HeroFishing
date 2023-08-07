@@ -50,7 +50,7 @@ namespace HeroFishing.Battle {
             if (spawn.MonsterIDs == null || spawn.MonsterIDs.Length == 0) return;
 
             foreach (var monsterID in spawn.MonsterIDs) {
-                GameObject monsterPrefab = GameDictionary.Instance.MonsterPrefab.gameObject;
+                GameObject monsterPrefab = ResourcePreSetter.Instance.MonsterPrefab.gameObject;
                 if (monsterPrefab == null) continue;
                 var monsterData = MonsterData.GetData(monsterID);
                 if (monsterData == null) continue;

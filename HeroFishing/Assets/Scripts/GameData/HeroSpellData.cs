@@ -5,6 +5,12 @@ using Scoz.Func;
 using LitJson;
 
 namespace HeroFishing.Main {
+    public enum SpellName {
+        attack,
+        spell1,
+        spell2,
+        spell3,
+    }
     public class HeroSpellData : MyJsonData {
         public enum SpellType {
             Line,

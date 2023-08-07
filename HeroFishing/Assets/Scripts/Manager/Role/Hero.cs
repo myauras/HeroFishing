@@ -8,7 +8,7 @@ using UnityEngine.AddressableAssets;
 namespace HeroFishing.Battle {
     public class Hero : Role {
 
-        HeroData MyData;
+        public HeroData MyData { get; private set; }
         HeroSkinData MyHeroSkinData;
 
         public void SetData(int _heroID, string _heroSkinID) {
