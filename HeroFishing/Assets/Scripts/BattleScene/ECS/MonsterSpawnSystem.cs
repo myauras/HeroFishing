@@ -12,9 +12,10 @@ namespace HeroFishing.Battle {
     /// 資料元件
     /// </summary>
     public struct MonsterValue : IComponentData {
-        public Entity MyEntity;
+        public Entity MyEntity;//把自己的Enity記錄起來，之後取的時候較快
         public float Radius;
         public float3 Pos;
+        public bool InField;//是否進入戰場，進入之後會改為true，並在怪物離開區域後會將InField為true的怪物移除
     }
     /// <summary>
     /// 擊中標籤元件
@@ -78,6 +79,7 @@ monsterGO.hideFlags |= HideFlags.HideAndDontSave;
                         MyEntity = entity,
                         Radius = monsterData.Radius,
                         Pos = routeData.SpawnPos,
+                        InField = false,
                     });
                 } else {
                     monsterGO.transform.localPosition = Vector3.zero;
@@ -85,6 +87,7 @@ monsterGO.hideFlags |= HideFlags.HideAndDontSave;
                         MyEntity = entity,
                         Radius = monsterData.Radius,
                         Pos = float3.zero,
+                        InField = false,
                     });
                 }
                 //設定怪物資料，並在完成載入模型後設定動畫與方向

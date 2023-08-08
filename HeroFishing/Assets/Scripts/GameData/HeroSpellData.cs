@@ -13,12 +13,9 @@ namespace HeroFishing.Main {
     }
     public class HeroSpellData : MyJsonData {
         public enum SpellType {
-            Line,
-            Sector,
-        }
-        public enum TargetType {
-            Single,
-            Piercing,
+            LineShot,//直線命中路徑上第一個目標 參數說明：[指示物長度,子彈寬度,子彈速度] 
+            SpreadLineShot,//錐形直線散射命中路徑上第一個目標 參數說明：[指示物長度,子彈寬度,子彈寬度,散射間隔角度,散射數量]
+            LineRange,//直線命中範圍內目標 參數說明：[指示物長度,子彈寬度]
         }
         public enum HitType {
             None,
@@ -44,10 +41,9 @@ namespace HeroFishing.Main {
         public int Cost { get; private set; }
         public int Waves { get; private set; }
         public SpellType MySpellType { get; private set; }
-        public string[] SpellValues { get; private set; }
-        public TargetType MyTargetType { get; private set; }
+        public string[] SpellTypeValues { get; private set; }
         public HitType MyHitType { get; private set; }
-        public string[] HitValues { get; private set; }
+        public string[] HitTypeValues { get; private set; }
         public int[] Threshold { get; private set; }
         public string[] Motions { get; private set; }
         public string Voice { get; private set; }
@@ -86,16 +82,13 @@ namespace HeroFishing.Main {
                         MySpellType = MyEnum.ParseEnum<SpellType>(item[key].ToString());
                         break;
                     case "SpellValues":
-                        SpellValues = item[key].ToString().Split(',');
-                        break;
-                    case "TargetType":
-                        MyTargetType = MyEnum.ParseEnum<TargetType>(item[key].ToString());
+                        SpellTypeValues = item[key].ToString().Split(',');
                         break;
                     case "HitType":
                         MyHitType = MyEnum.ParseEnum<HitType>(item[key].ToString());
                         break;
                     case "HitValues":
-                        HitValues = item[key].ToString().Split(',');
+                        HitTypeValues = item[key].ToString().Split(',');
                         break;
                     case "Threshold":
                         Threshold = TextManager.StringSplitToIntArray(item[key].ToString(), ',');

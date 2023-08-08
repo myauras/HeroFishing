@@ -1,5 +1,6 @@
 using HeroFishing.Main;
 using Scoz.Func;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,10 +14,10 @@ namespace HeroFishing.Battle {
         [SerializeField] BattleManager MyBattleManager;
         [HeaderAttribute("==============Addressable Assets==============")]
         public AssetReference BattleUIAsset;
+        public AssetReference SpellIndicatorAsset;
 
         [HeaderAttribute("==============設定==============")]
         LoadingProgress MyLoadingProgress;//讀取進度，讀取完會跑FinishInitLobby()
-        List<AsyncOperationHandle> HandleList = new List<AsyncOperationHandle>();
 
         public static BattleSceneManager Instance { get; private set; }
 
@@ -75,13 +76,12 @@ namespace HeroFishing.Battle {
             CamManager.AddVirtualCam(CamManager.CamNames.Battle, vCam);
         }
         void SpawnAddressableAssets() {
-            //MyLoadingProgress.AddLoadingProgress("LobbyUI");//新增讀取中項目
 
-            //DateTime now = DateTime.Now;
-            ////初始化UI
+
+
+            ////載入UI
+            ///            MyLoadingProgress.AddLoadingProgress("LobbyUI");//新增讀取中項目
             //Addressables.LoadAssetAsync<GameObject>(LobbyUIAsset).Completed += handle => {
-            //    WriteLog.LogFormat("載入LobbyUI花費: {0}秒", (DateTime.Now - now).TotalSeconds);
-            //    HandleList.Add(handle);
             //    GameObject go = Instantiate(handle.Result);
             //    go.transform.SetParent(MyCanvas.transform);
             //    go.transform.localPosition = handle.Result.transform.localPosition;
@@ -92,6 +92,17 @@ namespace HeroFishing.Battle {
             //    go.GetComponent<LobbyUI>().Init();
             //    MyLoadingProgress.FinishProgress("LobbyUI");//完成讀取UI
             //};
+
+            //載入SpellIndicator
+            MyLoadingProgress.AddLoadingProgress("SpellIndicator");//新增讀取中項目
+            Addressables.LoadAssetAsync<GameObject>(SpellIndicatorAsset).Completed += handle => {
+                GameObject go = Instantiate(handle.Result);
+                go.transform.localPosition = handle.Result.transform.localPosition;
+                go.transform.localScale = handle.Result.transform.localScale;
+                go.GetComponent<SpellIndicator>().Init();
+                MyLoadingProgress.FinishProgress("SpellIndicator");//完成讀取UI
+                Addressables.Release(handle);
+            };
         }
         /// <summary>
         /// 戰場初始化完成時執行
@@ -103,10 +114,6 @@ namespace HeroFishing.Battle {
         }
         private void OnDestroy() {
             Instance = null;
-            for (int i = 0; i < HandleList.Count; i++) {
-                if (HandleList[i].IsValid())
-                    Addressables.Release(HandleList[i]);
-            }
         }
     }
 }

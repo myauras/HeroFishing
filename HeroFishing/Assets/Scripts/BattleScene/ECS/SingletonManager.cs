@@ -9,19 +9,9 @@ using UnityEngine;
 public partial struct DirectoryInitSystem : ISystem {
     [BurstCompile]
     public void OnCreate(ref SystemState state) {
-        var entity = state.EntityManager.CreateEntity();
-        state.EntityManager.AddComponentData(entity, new BattlefieldSettingSingleton {
-            MyAttackState = BattlefieldSettingSingleton.AttackState.Ready,
-        });
+        //var entity = state.EntityManager.CreateEntity();
+        //state.EntityManager.AddComponentData(entity, new BattlefieldSettingSingleton {
+        //    MyAttackState = BattlefieldSettingSingleton.AttackState.Default,
+        //});
     }
-}
-public struct BattlefieldSettingSingleton : IComponentData {
-    public enum AttackState {
-        StopAttacking,
-        Ready,
-        Attacking,
-    }
-    public AttackState MyAttackState;
-    public AttackData MyAttackData;
-
 }

@@ -8,37 +8,49 @@ namespace HeroFishing.Battle {
     public class SpellIndicator : MonoBehaviour {
         public enum IndicatorType {
             Line,
+            Cone,
             Circle,
         }
         [Serializable] public class IndicatorDicClass : SerializableDictionary<IndicatorType, GameObject> { }
         [SerializeField] IndicatorDicClass MyIndicatorDic;//施法指示UI字典
 
         Material TmpMaterial;
+        HeroSpellData TmpSpellData;
+        IndicatorType TmpIndicatorType;
 
         public static SpellIndicator Instance { get; private set; }
 
-        private void Start() {
+
+        public void Init() {
             Instance = this;
+            Hide();
+        }
+        public void Hide() {
+            gameObject.SetActive(false);
+        }
+        public void Show() {
+            gameObject.SetActive(true);
         }
         void HideIndicators() {
             foreach (var go in MyIndicatorDic.Values)
                 go.SetActive(false);
         }
         public void ShowIndicator(HeroSpellData _spellData) {
+            Show();
             HideIndicators();
-
-            switch (_spellData.MySpellType) {
-                case SpellType.Line:
-                    MyIndicatorDic[IndicatorType.Line].SetActive(true);
-                    TmpMaterial = MyIndicatorDic[IndicatorType.Line].GetComponent<MeshRenderer>().material;
-                    MyIndicatorDic[IndicatorType.Line].transform.localScale = new Vector3(float.Parse(_spellData.SpellValues[1]), MyIndicatorDic[IndicatorType.Line].transform.localScale.y, MyIndicatorDic[IndicatorType.Line].transform.localScale.z);
-                    TmpMaterial.SetTextureOffset("_MainTex", new Vector2(0, float.Parse(_spellData.SpellValues[0])));
-                    break;
-                case SpellType.Sector:
-                    MyIndicatorDic[IndicatorType.Circle].SetActive(true);
-                    TmpMaterial = MyIndicatorDic[IndicatorType.Circle].GetComponent<MeshRenderer>().material;
+            TmpSpellData = _spellData;
+            switch (TmpSpellData.MySpellType) {
+                case SpellType.LineShot:
+                    TmpIndicatorType = IndicatorType.Line;
+                    MyIndicatorDic[TmpIndicatorType].SetActive(true);
+                    TmpMaterial = MyIndicatorDic[TmpIndicatorType].GetComponent<MeshRenderer>().material;
+                    MyIndicatorDic[TmpIndicatorType].transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[1]), MyIndicatorDic[IndicatorType.Line].transform.localScale.y, MyIndicatorDic[IndicatorType.Line].transform.localScale.z);
+                    TmpMaterial.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[0])));
                     break;
             }
+        }
+        public void RotateLineIndicator(Quaternion _rotation) {
+            transform.localRotation = _rotation;
         }
 
     }
