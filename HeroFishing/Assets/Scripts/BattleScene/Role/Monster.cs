@@ -26,7 +26,7 @@ namespace HeroFishing.Battle {
                 go.transform.localScale = prefab.transform.localScale;
                 var monsterSpecialize = go.GetComponent<MonsterSpecialize>();
                 MyMonsterSpecialize = monsterSpecialize;
-                //Addressables.Release(handle);
+                Addressables.Release(handle);
                 SetModel();
                 LoadDone();
                 _ac?.Invoke();

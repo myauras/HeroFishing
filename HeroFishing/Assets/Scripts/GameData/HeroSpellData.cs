@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Scoz.Func;
 using LitJson;
+using Unity.Entities;
 
 namespace HeroFishing.Main {
     public enum SpellName {
@@ -47,6 +48,7 @@ namespace HeroFishing.Main {
         public int[] Threshold { get; private set; }
         public string[] Motions { get; private set; }
         public string Voice { get; private set; }
+        public int PrefabID { get; private set; }
         static Dictionary<int, Dictionary<SpellName, HeroSpellData>> SpellDic = new Dictionary<int, Dictionary<SpellName, HeroSpellData>>();
 
         /// <summary>
@@ -81,13 +83,13 @@ namespace HeroFishing.Main {
                     case "SpellType":
                         MySpellType = MyEnum.ParseEnum<SpellType>(item[key].ToString());
                         break;
-                    case "SpellValues":
+                    case "SpellTypeValues":
                         SpellTypeValues = item[key].ToString().Split(',');
                         break;
-                    case "HitType":
+                    case "HitEffectType":
                         MyHitType = MyEnum.ParseEnum<HitType>(item[key].ToString());
                         break;
-                    case "HitValues":
+                    case "HitEffectValues":
                         HitTypeValues = item[key].ToString().Split(',');
                         break;
                     case "Threshold":
@@ -98,6 +100,12 @@ namespace HeroFishing.Main {
                         break;
                     case "Voice":
                         Voice = item[key].ToString();
+                        break;
+                    case "PrefabID":
+                        if (int.TryParse(item[key].ToString(), out int _id))
+                            PrefabID = _id;
+                        else
+                            WriteLog.LogErrorFormat("{0}表ID為{1}的PrefabID必須為數字 {2}", DataName, ID, item[key]);
                         break;
                     default:
                         WriteLog.LogWarning(string.Format("{0}表有不明屬性:{1}", DataName, key));

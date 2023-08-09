@@ -1,44 +1,88 @@
-﻿using Scoz.Func;
+﻿using HeroFishing.Main;
+using Scoz.Func;
 using System;
-using System.Diagnostics;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Entities.UniversalDelegates;
-using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Physics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace HeroFishing.Battle {
-    [CreateAfter(typeof(BulletSpawnerAuthoring))]
+    public struct BulletValue : IComponentData {
+        public float Speed;
+        public float Radius;
+        public float3 Direction;
+    }
+    /// <summary>
+    /// 子彈參照元件，用於參照GameObject實例用
+    /// </summary>
+    public class BulletInstance : IComponentData, IDisposable {
+        public GameObject GO;
+        public Transform Trans;
+        public Bullet MyBullet;
+        public Vector3 Dir;
+        public void Dispose() {
+            UnityEngine.Object.DestroyImmediate(GO);
+        }
+    }
     public partial struct BulletSpawnSystem : ISystem {
 
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
-        BulletSpawner MyBulletSpawner;
 
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-
-            state.RequireForUpdate<BulletSpawner>();
+            state.RequireForUpdate<BulletSpawnSys>();
             state.RequireForUpdate<SpellCom>();
-
-            MyBulletSpawner = BulletSpawnerAuthoring.MyBulletSpawner;
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state) {
 
 
-            ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+            foreach (var spellCom in SystemAPI.Query<SpellCom>()) {
+                var bulletPrefab = ResourcePreSetter.Instance.BulletPrefab;
+                if (bulletPrefab == null) continue;
+                var bulletGO = GameObject.Instantiate(bulletPrefab.gameObject);
+#if UNITY_EDITOR
+                bulletGO.name = "BulletProjectile" + spellCom.BulletPrefabID;
+                //bulletGO.hideFlags |= HideFlags.HideAndDontSave;
+#else
+bulletGO.hideFlags |= HideFlags.HideAndDontSave;
+#endif
+                var bullet = bulletGO.GetComponent<Bullet>();
+                if (bullet == null) continue;
 
+                //建立Entity
+                var entity = state.EntityManager.CreateEntity();
+                float3 direction = spellCom.Direction;
+                quaternion bulletQuaternion = quaternion.LookRotation(spellCom.Direction, math.up());
+                //設定子彈模型
+                bullet.SetData(spellCom.BulletPrefabID, null);
+                //設定子彈Transform
+                var bulletTrans = new LocalTransform() {
+                    Position = spellCom.AttackerPos,
+                    Scale = 1,
+                    Rotation = bulletQuaternion,
+                };
+                state.EntityManager.AddComponentData(entity, bulletTrans);
+                //設定BulletValue
+                var bulletValue = new BulletValue() {
+                    Speed = spellCom.Speed,
+                    Radius = spellCom.Radius,
+                    Direction = direction,
+                };
+                state.EntityManager.AddComponentData(entity, bulletValue);
+                //設定子彈參考物件
+                state.EntityManager.AddComponentData(entity, new BulletInstance {
+                    GO = bulletGO,
+                    Trans = bulletGO.transform,
+                    MyBullet = bullet,
+                    Dir = direction,
+                });
 
-            new SpawnJob {
-                ECBWriter = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
-                BulletEntity = MyBulletSpawner. ,
-                ShootEntity = MyBulletSpawner.ShootEntity,
-            }.ScheduleParallel();
+            }
+
 
 
             //var job = new SpawnJob {
@@ -53,75 +97,40 @@ namespace HeroFishing.Battle {
         }
 
 
-        [BurstCompile]
-        partial struct SpawnJob : IJobEntity {
+        //[BurstCompile]
+        //partial struct SpawnJob : IJobEntity {
 
-            public EntityCommandBuffer.ParallelWriter ECBWriter;
-            [ReadOnly] public Entity BulletEntity;
-            [ReadOnly] public Entity ShootEntity;
+        //    public EntityCommandBuffer.ParallelWriter ECBWriter;
+        //    [ReadOnly] public SpellEntities BulletEntitys;
 
-            public void Execute(in SpellCom _spellCom, in Entity _entity) {
-                //建立子彈
-                var bulletEntity = ECBWriter.Instantiate(BulletEntity.Index, BulletEntity);
-                //設定子彈Value
-                float3 direction = _spellCom.Direction;
-                quaternion bulletQuaternion = quaternion.LookRotation(direction, math.up());
-                //設定子彈Transform
-                ECBWriter.SetComponent(BulletEntity.Index, bulletEntity, new LocalTransform {
-                    Position = _spellCom.AttackerPos,
-                    Scale = 1,
-                    Rotation = bulletQuaternion,
-                });
-                //設定BulletValue
-                ECBWriter.SetComponent(BulletEntity.Index, bulletEntity, new BulletValue {
-                    Speed = _spellCom.Speed,
-                    Radius = _spellCom.Radius,
-                    Direction = direction,
-                });
-                //射擊特效
-                var shootEntity = ECBWriter.Instantiate(ShootEntity.Index, ShootEntity);
-                ECBWriter.SetComponent(ShootEntity.Index, shootEntity, new LocalTransform {
-                    Position = _spellCom.AttackerPos + math.normalize(_spellCom.TargetPos - _spellCom.AttackerPos) * 0.8f,
-                    Scale = 1,
-                    Rotation = quaternion.Euler(_spellCom.TargetPos - _spellCom.AttackerPos),
-                });
-            }
+        //    public void Execute(in SpellCom _spellCom, in Entity _entity) {
+        //        //建立子彈
+        //        var bulletEntity = ECBWriter.Instantiate(0, BulletEntitys.ProjectileEntity);
+        //        //設定子彈Value
+        //        float3 direction = _spellCom.Direction;
+        //        quaternion bulletQuaternion = quaternion.LookRotation(direction, math.up());
+        //        //設定子彈Transform
+        //        ECBWriter.SetComponent(1, bulletEntity, new LocalTransform {
+        //            Position = _spellCom.AttackerPos,
+        //            Scale = 1,
+        //            Rotation = bulletQuaternion,
+        //        });
+        //        //設定BulletValue
+        //        ECBWriter.SetComponent(2, bulletEntity, new BulletValue {
+        //            Speed = _spellCom.Speed,
+        //            Radius = _spellCom.Radius,
+        //            Direction = direction,
+        //        });
+        //        //射擊特效
+        //        var shootEntity = ECBWriter.Instantiate(3, BulletEntitys.FireEntity);
+        //        ECBWriter.SetComponent(4, shootEntity, new LocalTransform {
+        //            Position = _spellCom.AttackerPos + math.normalize(_spellCom.TargetPos - _spellCom.AttackerPos) * 0.8f,
+        //            Scale = 1,
+        //            Rotation = quaternion.Euler(_spellCom.TargetPos - _spellCom.AttackerPos),
+        //        });
+        //    }
 
-            //public void Execute() {
-
-            //    float angle = 15f;
-            //    for (int i = 0; i < 1; i++) {
-
-            //        //建立子彈
-            //        var bulletEntity = ECBWriter.Instantiate(BulletEntity.Index, BulletEntity);
-            //        //設定子彈Value
-            //        float3 direction = BattlefieldSetting.MyAttackData.Direction;
-            //        quaternion rotation = quaternion.RotateY(math.radians(angle * i));  // 建立一個偏移Y軸X度的四元數
-            //        float3 rotatedDirection = math.mul(rotation, direction) * new float3(1, 0, 1);  // 選轉方向向量
-            //        quaternion bulletQuaternion = quaternion.LookRotation(direction, math.up());
-            //        //設定子彈Transform
-            //        ECBWriter.SetComponent(BulletEntity.Index, bulletEntity, new LocalTransform {
-            //            Position = BattlefieldSetting.MyAttackData.AttackerPos,
-            //            Scale = 1,
-            //            Rotation = bulletQuaternion,
-            //        });
-
-            //        ECBWriter.SetComponent(BulletEntity.Index, bulletEntity, new BulletValue {
-            //            Speed = MyBulletValue.Speed,
-            //            Radius = MyBulletValue.Radius,
-            //            Direction = rotatedDirection,
-            //        });
-            //    }
-
-            //    //射擊特效
-            //    var shootEntity = ECBWriter.Instantiate(ShootEntity.Index, ShootEntity);
-            //    ECBWriter.SetComponent(ShootEntity.Index, shootEntity, new LocalTransform {
-            //        Position = BattlefieldSetting.MyAttackData.AttackerPos + math.normalize(BattlefieldSetting.MyAttackData.TargetPos - BattlefieldSetting.MyAttackData.AttackerPos) * 0.8f,
-            //        Scale = 1,
-            //        Rotation = quaternion.Euler(BattlefieldSetting.MyAttackData.TargetPos - BattlefieldSetting.MyAttackData.AttackerPos),
-            //    });
-            //}
-        }
+        //}
 
     }
 }

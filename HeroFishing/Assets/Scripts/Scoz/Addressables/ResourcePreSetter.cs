@@ -11,6 +11,7 @@ namespace Scoz.Func {
 
         [SerializeField] MaterialDicClass MyMaterialDic;//材質字典
         [SerializeField] public Monster MonsterPrefab;
+        [SerializeField] public Bullet BulletPrefab;
 
         //[HeaderAttribute("==============AssetReference引用的資源==============")]
 

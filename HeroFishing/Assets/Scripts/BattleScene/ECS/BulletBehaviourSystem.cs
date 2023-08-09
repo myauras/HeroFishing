@@ -21,7 +21,6 @@ namespace HeroFishing.Battle {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<BulletValue>();
-            //MonsterQuery = state.GetEntityQuery(typeof(MonsterValue), ComponentType.Exclude<AutoDestroyTag>());
 
             // 定義一個範圍來檢查子彈所在和周圍的網格
             OffsetGrids = new NativeArray<int2>(9, Allocator.Persistent);
@@ -41,7 +40,6 @@ namespace HeroFishing.Battle {
             OffsetGrids.Dispose();
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state) {
 
 
@@ -56,10 +54,9 @@ namespace HeroFishing.Battle {
             var gridData = SystemAPI.GetSingleton<MapGridData>();
 
 
-
             new MoveJob {
                 ECB = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
-                BulletHitEntity = SystemAPI.GetSingleton<BulletSpawner>().BulletHitEntity,
+                BulletHitEntity = bulletSpawner.SpellEntitieMap[0].HitEntity,
                 DeltaTime = deltaTime,
                 //MonsterValues = MonsterValues,
                 //MonsterEntities = MonsterEntities,

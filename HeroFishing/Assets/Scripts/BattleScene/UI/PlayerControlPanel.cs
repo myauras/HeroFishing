@@ -93,6 +93,7 @@ namespace HeroFishing.Battle {
             //_entityManager.SetComponentData(query.GetSingletonEntity(), battlefieldSetting);
 
             //在ECS世界中建立一個施法
+            Debug.LogError(TmpSpellData.ID);
             float radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
             float speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
 
@@ -100,6 +101,7 @@ namespace HeroFishing.Battle {
             var entity = _entityManager.CreateEntity();
             _entityManager.AddComponentData(entity, new SpellCom() {
                 PlayerID = 1,
+                BulletPrefabID = TmpSpellData.PrefabID,
                 AttackerPos = _hero.transform.position,
                 TargetPos = pos,
                 Direction = (pos - _hero.transform.position).normalized,
