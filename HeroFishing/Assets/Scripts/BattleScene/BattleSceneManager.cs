@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Battle {
     public class BattleSceneManager : MonoBehaviour {
@@ -20,6 +21,7 @@ namespace HeroFishing.Battle {
         LoadingProgress MyLoadingProgress;//讀取進度，讀取完會跑FinishInitLobby()
 
         public static BattleSceneManager Instance { get; private set; }
+
 
         void Start() {
             Instance = this;

@@ -12,6 +12,7 @@ using UnityEngine.Video;
 using UnityEngine.AddressableAssets.ResourceLocators;
 using System.Linq;
 using UnityEngine.ResourceManagement.ResourceLocations;
+using Unity.VisualScripting;
 
 namespace Scoz.Func {
 
@@ -27,11 +28,37 @@ namespace Scoz.Func {
         Coroutine CheckInternetCoroutine = null;
         Action FinishedAction = null;
 
+        static HashSet<AsyncOperationHandle> ResourcesToReleaseWhileChangingScene = new HashSet<AsyncOperationHandle>();//加入到此清單的資源Handle會在切場景時一起釋放
+
         const float TryReDownloadCD = 8;//嘗試重新call Addressables.DownloadDependenciesAsync的冷卻秒數(載入卡住時重新呼叫下載)
         void Awake() {
             BG.SetActive(false);
             ShowDownloadUI(false);
         }
+        void Start() {
+            SceneManager.sceneLoaded += OnLevelFinishedLoading;
+        }
+
+        void OnDestroy() {
+            SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+        }
+        void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
+            //釋放資源
+            WriteLog.LogColorFormat("開始釋放{0}個Addressables資源", WriteLog.LogType.Addressable, ResourcesToReleaseWhileChangingScene.Count);
+            foreach (var handle in ResourcesToReleaseWhileChangingScene) Addressables.Release(handle);
+            ResourcesToReleaseWhileChangingScene.Clear();
+        }
+
+        /// <summary>
+        /// 加入到此清單的資源Handle會在切場景時一起釋放
+        /// </summary>
+        /// <param name="_handle">要釋放的Addressables Handle</param>
+        public static void SetToChangeSceneRelease(AsyncOperationHandle _handle) {
+            if (ResourcesToReleaseWhileChangingScene.Contains(_handle)) return;
+            ResourcesToReleaseWhileChangingScene.Add(_handle);
+        }
+
+
         public static AddressableManage CreateNewAddressableManage() {
             if (Instance != null) {
             } else {

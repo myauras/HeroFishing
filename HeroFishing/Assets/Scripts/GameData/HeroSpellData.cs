@@ -13,10 +13,13 @@ namespace HeroFishing.Main {
         spell3,
     }
     public class HeroSpellData : MyJsonData {
+
+
         public enum SpellType {
-            LineShot,//直線命中路徑上第一個目標 參數說明：[指示物長度,子彈寬度,子彈速度] 
-            SpreadLineShot,//錐形直線散射命中路徑上第一個目標 參數說明：[指示物長度,子彈寬度,子彈寬度,散射間隔角度,散射數量]
-            LineRange,//直線命中範圍內目標 參數說明：[指示物長度,子彈寬度]
+            LineShot,//(直線飛射)： [指示物長度, 子彈寬度, 子彈速度, 生命週期]
+            SpreadLineShot,//(錐形直線飛射)：[指示物長度, 子彈寬度, 子彈速度, 散射間隔角度, 散射數量, 生命週期]
+            LineRange,//(直線飛射穿透)：[指示物長度, 子彈寬度, 子彈速度, 生命週期]
+            LineRangeInstant,//(直線立即範圍)：[指示物長度, 子彈寬度, 生命週期]
         }
         public enum HitType {
             None,

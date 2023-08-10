@@ -12,18 +12,18 @@ namespace HeroFishing.Battle {
     public struct BulletValue : IComponentData {
         public float Speed;
         public float Radius;
+        public float3 Position;
         public float3 Direction;
     }
     /// <summary>
     /// 子彈參照元件，用於參照GameObject實例用
     /// </summary>
     public class BulletInstance : IComponentData, IDisposable {
-        public GameObject GO;
         public Transform Trans;
         public Bullet MyBullet;
         public Vector3 Dir;
         public void Dispose() {
-            UnityEngine.Object.DestroyImmediate(GO);
+            UnityEngine.Object.Destroy(Trans.gameObject);
         }
     }
     public partial struct BulletSpawnSystem : ISystem {
@@ -35,12 +35,15 @@ namespace HeroFishing.Battle {
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<BulletSpawnSys>();
             state.RequireForUpdate<SpellCom>();
+            ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         public void OnUpdate(ref SystemState state) {
 
 
-            foreach (var spellCom in SystemAPI.Query<SpellCom>()) {
+            var ECB = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged);
+
+            foreach (var (spellCom, spellEntity) in SystemAPI.Query<SpellCom>().WithEntityAccess()) {
                 var bulletPrefab = ResourcePreSetter.Instance.BulletPrefab;
                 if (bulletPrefab == null) continue;
                 var bulletGO = GameObject.Instantiate(bulletPrefab.gameObject);
@@ -51,36 +54,42 @@ namespace HeroFishing.Battle {
 bulletGO.hideFlags |= HideFlags.HideAndDontSave;
 #endif
                 var bullet = bulletGO.GetComponent<Bullet>();
-                if (bullet == null) continue;
+                if (bullet == null) {
+                    WriteLog.LogErrorFormat("子彈{0}身上沒有掛Bullet Component", bulletPrefab.name);
+                    continue;
+                }
+
+                float3 direction = spellCom.Direction;
+                quaternion bulletQuaternion = quaternion.LookRotation(spellCom.Direction, math.up());
+                //設定子彈Gameobject的Transfrom
+                bulletGO.transform.localPosition = spellCom.AttackerPos;
+                bulletGO.transform.localRotation = bulletQuaternion;
 
                 //建立Entity
                 var entity = state.EntityManager.CreateEntity();
-                float3 direction = spellCom.Direction;
-                quaternion bulletQuaternion = quaternion.LookRotation(spellCom.Direction, math.up());
                 //設定子彈模型
-                bullet.SetData(spellCom.BulletPrefabID, null);
-                //設定子彈Transform
-                var bulletTrans = new LocalTransform() {
+                bullet.SetData(spellCom.BulletPrefabID);
+                //加入BulletValue
+                ECB.AddComponent(entity, new BulletValue() {
                     Position = spellCom.AttackerPos,
-                    Scale = 1,
-                    Rotation = bulletQuaternion,
-                };
-                state.EntityManager.AddComponentData(entity, bulletTrans);
-                //設定BulletValue
-                var bulletValue = new BulletValue() {
                     Speed = spellCom.Speed,
                     Radius = spellCom.Radius,
                     Direction = direction,
-                };
-                state.EntityManager.AddComponentData(entity, bulletValue);
-                //設定子彈參考物件
-                state.EntityManager.AddComponentData(entity, new BulletInstance {
-                    GO = bulletGO,
+                });
+                //加入BulletInstance
+                ECB.AddComponent(entity, new BulletInstance {
                     Trans = bulletGO.transform,
                     MyBullet = bullet,
                     Dir = direction,
                 });
+                //加入自動銷毀Tag
+                ECB.AddComponent(entity, new AutoDestroyTag {
+                    LifeTime = spellCom.LifeTime,
+                    ExistTime = 0,
+                });
 
+                //移除施法
+                ECB.DestroyEntity(spellEntity);
             }
 
 
