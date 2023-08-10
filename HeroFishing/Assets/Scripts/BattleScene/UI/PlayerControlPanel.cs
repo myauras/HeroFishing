@@ -79,14 +79,16 @@ namespace HeroFishing.Battle {
             float radius;
             float speed;
             float lifeTime;
+            Entity entity;
             //在ECS世界中建立一個施法
             EntityManager _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             switch (TmpSpellData.MySpellType) {
                 case HeroSpellData.SpellType.LineShot:
-                    var entity = _entityManager.CreateEntity();
+
                     radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
                     speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
                     lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);
+                    entity = _entityManager.CreateEntity();
                     _entityManager.AddComponentData(entity, new SpellCom() {
                         PlayerID = 1,
                         BulletPrefabID = TmpSpellData.PrefabID,
@@ -97,16 +99,33 @@ namespace HeroFishing.Battle {
                         LifeTime = lifeTime,
                     });
                     break;
+                case HeroSpellData.SpellType.SpreadLineShot:
+                    radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
+                    speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
+                    lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);
+                    float intervalAngle = float.Parse(TmpSpellData.SpellTypeValues[3]);//射散間隔角度
+                    int spreadLineCount = int.Parse(TmpSpellData.SpellTypeValues[4]);//射散數量
+                    float startAngle = -intervalAngle * (spreadLineCount - 1) / 2.0f;//設定第一個指標的角度
+                    for (int i = 0; i < spreadLineCount; i++) {
+                        float curAngle = startAngle + intervalAngle * i;
+                        Quaternion rotateQ = Quaternion.Euler(new Vector3(0, curAngle, 0));//旋轉X度的四元數
+                        entity = _entityManager.CreateEntity();
+                        _entityManager.AddComponentData(entity, new SpellCom() {
+                            PlayerID = 1,
+                            BulletPrefabID = TmpSpellData.PrefabID,
+                            AttackerPos = _attackPos,
+                            Direction = rotateQ * _attackDir,//使用四元數來旋轉本來的攻擊向量
+                            Speed = speed,
+                            Radius = radius,
+                            LifeTime = lifeTime,
+                        });
+                    }
+
+                    break;
 
             }
 
-
-
-
-
         }
-
-
 
     }
 }

@@ -5,6 +5,7 @@ using System;
 using static HeroFishing.Main.HeroSpellData;
 using UnityEngine.AddressableAssets;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace HeroFishing.Battle {
     public class SpellIndicator : MonoBehaviour {
@@ -45,6 +46,8 @@ namespace HeroFishing.Battle {
             }
             AddressablesLoader.GetPrefabByRef(MyIndicatorPrfabDic[_type], (prefab, handle) => {
                 var go = Instantiate(prefab, transform);
+                if (Indicators.ContainsKey(_type)) Indicators[_type].Add(go);
+                else Indicators.Add(_type, new List<GameObject>() { go });
                 _ac?.Invoke(go);
             });
         }
@@ -54,7 +57,8 @@ namespace HeroFishing.Battle {
                 return;
             }
             foreach (var go in Indicators[_type]) {
-                if (!go.activeInHierarchy) continue;
+                if (go.activeSelf) continue;
+                go.SetActive(true);
                 _ac?.Invoke(go);
                 return;
             }
@@ -67,10 +71,30 @@ namespace HeroFishing.Battle {
             switch (TmpSpellData.MySpellType) {
                 case SpellType.LineShot:
                     GetAvailableIndicator(IndicatorType.Line, go => {
-                        var mat = go.GetComponent<MeshRenderer>().material;
+                        var mr = go.GetComponentInChildren<MeshRenderer>();
+                        var mat = mr.material;
                         mat.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[0])));
-                        go.transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[1]), go.transform.localScale.y, go.transform.localScale.z);
+                        mr.transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[1]), mr.transform.localScale.y, mr.transform.localScale.z);
+                        go.transform.localRotation = Quaternion.identity;
                     });
+                    break;
+                case SpellType.SpreadLineShot:
+                    float intervalAngle = float.Parse(TmpSpellData.SpellTypeValues[3]);//射散間隔角度
+                    int spreadLineCount = int.Parse(TmpSpellData.SpellTypeValues[4]);//射散數量
+
+                    float startAngle = -intervalAngle * (spreadLineCount - 1) / 2.0f;//設定第一個指標的角度
+                    for (int i = 0; i < spreadLineCount; i++) {
+                        float curAngle = startAngle + intervalAngle * i;
+                        GetAvailableIndicator(IndicatorType.Line, go => {
+                            var mr = go.GetComponentInChildren<MeshRenderer>();
+                            var mat = mr.material;
+                            mat.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[0])));
+                            mr.transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[1]), mr.transform.localScale.y, mr.transform.localScale.z);
+                            go.transform.localRotation = Quaternion.Euler(new Vector3(0, curAngle, 0));
+                        });
+                    }
+
+
                     break;
             }
         }
