@@ -7,15 +7,15 @@ import (
 
 
 // 判斷對齊兩軸的矩形間是否有碰撞
-func AxisAligned_RectanglesColliding(r1, r2 collider.Rectangle1) bool {
-	return r1.X < r2.X+r2.Width &&
-		r1.X+r1.Width > r2.X &&
-		r1.Y < r2.Y+r2.Height &&
-		r1.Y+r1.Height > r2.Y
+func AxisAligned_RectangleToRectangleColliding(r1, r2 collider.Rectangle1) bool {
+	return r1.X <= r2.X+r2.Width &&
+		r1.X+r1.Width >= r2.X &&
+		r1.Y <= r2.Y+r2.Height &&
+		r1.Y+r1.Height >= r2.Y
 }
 
 // 判斷兩矩形間是否有碰撞(使用分離軸定理 Separating Axis Theorem, SAT)
-func RectanglesColliding(r1, r2 collider.Rectangle2) bool {
+func RectangleToRectangleColliding(r1, r2 collider.Rectangle2) bool {
 	// 矩形沒有對齊兩軸(旋轉的矩形)，可用「分離軸定理」（Separating Axis Theorem, SAT）來判斷兩個是否有碰撞。
 	// 分離軸定理就是：如果能找到任一軸，使得兩個多邊形在這個軸上的投影沒有重疊，那麼這兩個多邊形就不可能碰撞。
 
