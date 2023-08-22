@@ -1,3 +1,4 @@
+using HeroFishing.Socket;
 using Scoz.Func;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,14 @@ namespace HeroFishing.Main {
             PopupUI_Local.ShowLoading("Checking Internet");
             InternetChecker.SetOnConnectedAction(OnConnected);
             InternetChecker.StartCheckInternet();
+            Test();
+        }
+        void Test() {
+            GameConnector.Instance.Init();
+            GameConnector.Instance.Run(OnConnectGame);
+        }
+        private void OnConnectGame(bool isSuccess, bool isMaintain) {
+            WriteLog.Log("isSuccess=" + isSuccess);
         }
         public void SetInfoText() {
             VersionText.text = "版本: " + Application.version;

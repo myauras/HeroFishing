@@ -10,12 +10,13 @@ namespace Scoz.Func {
             Player,
             Realm,
             Addressable,
+            Connection,
         }
         public static Dictionary<LogType, string> LocColorCodes = new Dictionary<LogType, string>() {
-            { LogType.Player,"db7777"},
-            { LogType.Realm,"db77c9"},
-            { LogType.Addressable,"dbdb77"},
-
+            { LogType.Player,"db7777"},//紅
+            { LogType.Realm,"db77c9"},//粉紅
+            { LogType.Addressable,"dbdb77"},//黃
+            { LogType.Connection,"6f7be7"},//藍
         };
 
 
