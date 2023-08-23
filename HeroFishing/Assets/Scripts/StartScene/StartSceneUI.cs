@@ -22,7 +22,8 @@ namespace HeroFishing.Main {
             base.Init();
             Instance = this;
         }
-
+        public override void RefreshText() {
+        }
 
         private void Start() {
             //編輯器材顯示Debugger物件
@@ -31,7 +32,7 @@ namespace HeroFishing.Main {
             //#else
             //            Debugger.gameObject.SetActive(false);
             //#endif
-            SetMiddleText(StringData.GetUIString("LoginType"));
+            SetMiddleText(StringJsonData.GetUIString("LoginType"));
             AppleLoginGO.SetActive(false);
             //#if UNITY_IOS
             //            AppleLoginGO.SetActive(true);
@@ -176,7 +177,7 @@ namespace HeroFishing.Main {
         /// 移除帳戶，按下後會解除所有平台綁定並登出並顯示回需要登入狀態
         /// </summary>
         public void DeleteAccount() {
-            PopupUI_Local.ShowConfirmCancel(StringData.GetUIString("DeleteAccountCheck"), GameSettingData.GetInt(GameSetting.LogoutCowndownSecs), () => {
+            PopupUI_Local.ShowConfirmCancel(StringJsonData.GetUIString("DeleteAccountCheck"), GameSettingJsonData.GetInt(GameSetting.LogoutCowndownSecs), () => {
                 UnlinkAllPlatfromsAndLogout();
             }, null);
         }
@@ -385,5 +386,7 @@ namespace HeroFishing.Main {
             //});
 
         }
+
+
     }
 }

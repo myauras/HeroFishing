@@ -27,11 +27,11 @@ namespace HeroFishing.Battle {
         /// 初始化
         /// </summary>
         /// <param name="mapData">表格-地圖資料</param>
-        public void Init(MapData mapData) {
+        public void Init(MapJsonData mapData) {
             if (LocoTest) {
                 spawnTimerDic = new Dictionary<int, int>();
                 foreach (var id in mapData.MonsterSpawnerIDs) {
-                    var spawnData = MonsterSpawnerData.GetData(id);
+                    var spawnData = MonsterSpawnerJsonData.GetData(id);
                     if (spawnData == null) continue;
                     if (spawnData.Scheduled)
                         spawnTimerDic.Add(id, spawnData.GetRandSpawnSec());
@@ -46,26 +46,26 @@ namespace HeroFishing.Battle {
         /// </summary>
         void SpawnCheck() {
             foreach (var id in spawnTimerDic.Keys.ToArray()) {
-                var spawnData = MonsterSpawnerData.GetData(id);
+                var spawnData = MonsterSpawnerJsonData.GetData(id);
                 if (spawnData == null) continue;
-                if (BossExist && spawnData.MySpanwType == MonsterSpawnerData.SpawnType.Boss) continue;//BOSS還活著就不會加入BOSS類型的出怪表ID
+                if (BossExist && spawnData.MySpanwType == MonsterSpawnerJsonData.SpawnType.Boss) continue;//BOSS還活著就不會加入BOSS類型的出怪表ID
                 spawnTimerDic[id]--;
 
                 if (spawnTimerDic[id] <= 0) {
                     ScheduledSpawn spawn;
                     switch (spawnData.MySpanwType) {
-                        case MonsterSpawnerData.SpawnType.RandomGroup:
+                        case MonsterSpawnerJsonData.SpawnType.RandomGroup:
                             int[] ids = TextManager.StringSplitToIntArray(spawnData.TypeValue, ',');
                             if (ids == null || ids.Length == 0) continue;
                             var newSpawnID = Prob.GetRandomTFromTArray(ids);
-                            var newSpawnData = MonsterSpawnerData.GetData(newSpawnID);
+                            var newSpawnData = MonsterSpawnerJsonData.GetData(newSpawnID);
                             if (newSpawnData == null) continue;
-                            spawn = new ScheduledSpawn(newSpawnData.MonsterIDs, newSpawnData.GetRandRoute(), newSpawnData.MySpanwType == MonsterSpawnerData.SpawnType.Boss);
+                            spawn = new ScheduledSpawn(newSpawnData.MonsterIDs, newSpawnData.GetRandRoute(), newSpawnData.MySpanwType == MonsterSpawnerJsonData.SpawnType.Boss);
                             spawnMonsterQueue.Enqueue(spawn);//加入排程
                             break;
-                        case MonsterSpawnerData.SpawnType.Minion:
-                        case MonsterSpawnerData.SpawnType.Boss:
-                            spawn = new ScheduledSpawn(spawnData.MonsterIDs, spawnData.GetRandRoute(), spawnData.MySpanwType == MonsterSpawnerData.SpawnType.Boss);
+                        case MonsterSpawnerJsonData.SpawnType.Minion:
+                        case MonsterSpawnerJsonData.SpawnType.Boss:
+                            spawn = new ScheduledSpawn(spawnData.MonsterIDs, spawnData.GetRandRoute(), spawnData.MySpanwType == MonsterSpawnerJsonData.SpawnType.Boss);
                             spawnMonsterQueue.Enqueue(spawn);//加入排程
                             break;
                     }

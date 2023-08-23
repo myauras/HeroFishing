@@ -5,8 +5,18 @@ using System;
 using LitJson;
 using System.Linq;
 using UnityEngine.AddressableAssets;
+using HeroFishing.Main;
+
 namespace Scoz.Func {
+    /// <summary>
+    /// 這是Excel輸出的Json資料父類別，繼承自這個類的都是Excel表輸出的資料
+    /// </summary>
     public abstract partial class MyJsonData {
+
+        /// <summary>
+        /// 重置靜態資料，當Addressable重載json資料時需要先呼叫這個方法來重置靜態資料
+        /// </summary>
+        protected abstract void ResetStaticData();
 
 
         /// <summary>
@@ -23,6 +33,7 @@ namespace Scoz.Func {
                     Dictionary<int, MyJsonData> dic = new Dictionary<int, MyJsonData>();
                     for (int i = 0; i < items.Count; i++) {
                         T data = new T();
+                        if (i == 0) data.ResetStaticData();//在取第一筆資料前先重置靜態資料
                         data.GetDataFromJson(items[i], _dataName);
                         int id = 0;
                         if (!int.TryParse(items[i]["ID"].ToString(), out id)) {

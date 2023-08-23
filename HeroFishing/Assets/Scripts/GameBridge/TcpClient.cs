@@ -96,7 +96,7 @@ namespace HeroFishing.Socket {
             }
         }
 
-        public int Send<T>(SocketCommand<T> command) where T : BaseContent {
+        public int Send<T>(SocketCMD<T> command) where T : SocketContent {
 
             if (IsConnected) {
                 try {

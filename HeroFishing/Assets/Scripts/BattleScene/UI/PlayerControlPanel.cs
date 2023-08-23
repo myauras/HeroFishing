@@ -10,7 +10,7 @@ namespace HeroFishing.Battle {
 
         bool IsSkillMode = false;
         Vector3 OriginPos;
-        HeroSpellData TmpSpellData;
+        HeroSpellJsonData TmpSpellData;
         Hero TmpHero;
         Vector3 TmpSpellDir;
 
@@ -25,7 +25,7 @@ namespace HeroFishing.Battle {
             var hero = BattleManager.Instance.GetHero(0);
             if (hero == null) { WriteLog.LogError("玩家英雄不存在"); return; }
             TmpHero = hero;
-            var spellData = HeroSpellData.GetSpell(TmpHero.MyData.ID, SpellName.attack);
+            var spellData = HeroSpellJsonData.GetSpell(TmpHero.MyData.ID, SpellName.attack);
             if (spellData == null) { WriteLog.LogErrorFormat("玩家英雄的 {0} 不存在", SpellName.attack); return; }
             TmpSpellData = spellData;
 
@@ -44,7 +44,7 @@ namespace HeroFishing.Battle {
             var hero = BattleManager.Instance.GetHero(0);
             if (hero == null) { WriteLog.LogError("玩家英雄不存在"); return; }
             TmpHero = hero;
-            var spellData = HeroSpellData.GetSpell(TmpHero.MyData.ID, spellName);
+            var spellData = HeroSpellJsonData.GetSpell(TmpHero.MyData.ID, spellName);
             if (spellData == null) { WriteLog.LogErrorFormat("玩家英雄的 {0} 不存在", spellName); return; }
             TmpSpellData = spellData;
             OriginPos = UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
@@ -83,7 +83,7 @@ namespace HeroFishing.Battle {
             //在ECS世界中建立一個施法
             EntityManager _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             switch (TmpSpellData.MySpellType) {
-                case HeroSpellData.SpellType.LineShot:
+                case HeroSpellJsonData.SpellType.LineShot:
 
                     radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
                     speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
@@ -99,7 +99,7 @@ namespace HeroFishing.Battle {
                         LifeTime = lifeTime,
                     });
                     break;
-                case HeroSpellData.SpellType.SpreadLineShot:
+                case HeroSpellJsonData.SpellType.SpreadLineShot:
                     radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
                     speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
                     lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);

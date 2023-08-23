@@ -60,5 +60,8 @@ namespace Scoz.Func {
                 }
             }
         }
+
+        public override void RefreshText() {
+        }
     }
 }

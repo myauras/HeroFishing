@@ -32,7 +32,7 @@ namespace Scoz.Func {
 
         IEnumerator CheckInternet() {
             if (!InternetConnected) {
-                PopupUI_Local.ShowClickCancel(string.Format(StringData.GetUIString("NoInternetReTry"), "Disconnected"), () => {
+                PopupUI_Local.ShowClickCancel(string.Format(StringJsonData.GetUIString("NoInternetReTry"), "Disconnected"), () => {
                     CheckInternetCoroutine = StartCoroutine(CheckInternet());
                 });
                 if (CheckInternetCoroutine != null)
@@ -43,21 +43,21 @@ namespace Scoz.Func {
                 yield return webRequest.SendWebRequest();
                 switch (webRequest.result) {
                     case UnityWebRequest.Result.ConnectionError:
-                        PopupUI_Local.ShowClickCancel(string.Format(StringData.GetUIString("NoInternetReTry"), webRequest.result), () => {
+                        PopupUI_Local.ShowClickCancel(string.Format(StringJsonData.GetUIString("NoInternetReTry"), webRequest.result), () => {
                             CheckInternetCoroutine = StartCoroutine(CheckInternet());
                         });
                         if (CheckInternetCoroutine != null)
                             StopCoroutine(CheckInternetCoroutine);
                         break;
                     case UnityWebRequest.Result.DataProcessingError:
-                        PopupUI_Local.ShowClickCancel(string.Format(StringData.GetUIString("NoInternetReTry"), webRequest.result), () => {
+                        PopupUI_Local.ShowClickCancel(string.Format(StringJsonData.GetUIString("NoInternetReTry"), webRequest.result), () => {
                             CheckInternetCoroutine = StartCoroutine(CheckInternet());
                         });
                         if (CheckInternetCoroutine != null)
                             StopCoroutine(CheckInternetCoroutine);
                         break;
                     case UnityWebRequest.Result.ProtocolError:
-                        PopupUI_Local.ShowClickCancel(string.Format(StringData.GetUIString("NoInternetReTry"), webRequest.result), () => {
+                        PopupUI_Local.ShowClickCancel(string.Format(StringJsonData.GetUIString("NoInternetReTry"), webRequest.result), () => {
                             CheckInternetCoroutine = StartCoroutine(CheckInternet());
                         });
                         if (CheckInternetCoroutine != null)
@@ -69,7 +69,7 @@ namespace Scoz.Func {
                         OnConnectedAction?.Invoke();
                         break;
                     default:
-                        PopupUI_Local.ShowClickCancel(string.Format(StringData.GetUIString("NoInternetReTry"), webRequest.result), () => {
+                        PopupUI_Local.ShowClickCancel(string.Format(StringJsonData.GetUIString("NoInternetReTry"), webRequest.result), () => {
                             CheckInternetCoroutine = StartCoroutine(CheckInternet());
                         });
                         if (CheckInternetCoroutine != null)

@@ -66,9 +66,8 @@ namespace Scoz.Func {
         /// 讀取本機的String表
         /// </summary>
         void LoadLocalJson() {
-            StringDic = StringData.GetStringDic("String");
-            GameSettingData.ResetStaticData();
-            StrKeyJsonDic["GameSetting"] = MyJsonData.GetDataStringKey<GameSettingData>("GameSetting");
+            StringDic = StringJsonData.GetStringDic("String");
+            StrKeyJsonDic["GameSetting"] = MyJsonData.GetDataStringKey<GameSettingJsonData>("GameSetting");
         }
     }
 }

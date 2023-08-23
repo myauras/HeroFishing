@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace HeroFishing.Socket {
-    public class Auth : BaseContent {
+    public class Auth : SocketContent {
         public string Token { get; private set; }
 
         public Auth(string token) {

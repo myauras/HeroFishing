@@ -61,7 +61,7 @@ namespace Scoz.Func {
         }
 
         public static void UnloadUnusedAssets() {
-            if (!CDChecker.DoneCD("UnloadUnusedAssets", GameSettingData.GetFloat(GameSetting.UnloadUnusedAssetsCD)))
+            if (!CDChecker.DoneCD("UnloadUnusedAssets", GameSettingJsonData.GetFloat(GameSetting.UnloadUnusedAssetsCD)))
                 return;
             Resources.UnloadUnusedAssets();
         }
@@ -174,8 +174,8 @@ namespace Scoz.Func {
         public void CreateAddressableUIs(Action _ac) {
             //載入PopupUI(這個UI東西較多會載較久，所以在載好前會先設定StartUI文字讓玩家不要覺得是卡住)
             if (SceneManager.GetActiveScene().name == MyScene.StartScene.ToString()) {
-                StartSceneUI.Instance?.SetMiddleText(StringData.GetUIString("Login_WaitingForStartScene"));
-                PopupUI_Local.ShowLoading(StringData.GetUIString("Login_WaitingForStartScene"));
+                StartSceneUI.Instance?.SetMiddleText(StringJsonData.GetUIString("Login_WaitingForStartScene"));
+                PopupUI_Local.ShowLoading(StringJsonData.GetUIString("Login_WaitingForStartScene"));
             }
 
             Addressables.LoadAssetAsync<GameObject>(Instance.PopupUIAsset).Completed += handle => {

@@ -24,7 +24,7 @@ namespace HeroFishing.Battle {
                     materials[i].SetFloat("_Progress", 0);
                     int index = i;
                     UniTaskManager.StartTask(GetInstanceID() + "_" + index.ToString(), () => {
-                        DOTween.To(() => 0f, x => materials[index].SetFloat("_Progress", x), 1f, GameSettingData.GetFloat(GameSetting.DieEffect_DissolveDecaySec));
+                        DOTween.To(() => 0f, x => materials[index].SetFloat("_Progress", x), 1f, GameSettingJsonData.GetFloat(GameSetting.DieEffect_DissolveDecaySec));
                     }, 500);
                 }
             }

@@ -53,11 +53,11 @@ namespace HeroFishing.Battle {
             foreach (var monsterID in spawn.MonsterIDs) {
                 GameObject monsterPrefab = ResourcePreSetter.Instance.MonsterPrefab.gameObject;
                 if (monsterPrefab == null) continue;
-                var monsterData = MonsterData.GetData(monsterID);
+                var monsterData = MonsterJsonData.GetData(monsterID);
                 if (monsterData == null) continue;
                 var monsterGO = GameObject.Instantiate(monsterPrefab);
                 monsterGO.transform.SetParent(BattleManager.Instance.MonsterParent);
-                var routeData = spawn.RouteID != 0 ? RouteData.GetData(spawn.RouteID) : null;
+                var routeData = spawn.RouteID != 0 ? RouteJsonData.GetData(spawn.RouteID) : null;
 #if UNITY_EDITOR
                 monsterGO.name = monsterData.Ref;
                 //monsterGO.hideFlags |= HideFlags.HideAndDontSave;
@@ -106,9 +106,9 @@ monsterGO.hideFlags |= HideFlags.HideAndDontSave;
             //是BOSS就會攝影機震動
             if (spawn.IsBooss)
                 CamManager.ShakeCam(CamManager.CamNames.Battle,
-                    GameSettingData.GetFloat(GameSetting.CamShake_BossDebut_AmplitudeGain),
-                    GameSettingData.GetFloat(GameSetting.CamShake_BossDebut_FrequencyGain),
-                    GameSettingData.GetFloat(GameSetting.CamShake_BossDebut_Duration));
+                    GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_AmplitudeGain),
+                    GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_FrequencyGain),
+                    GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_Duration));
 
         }
     }

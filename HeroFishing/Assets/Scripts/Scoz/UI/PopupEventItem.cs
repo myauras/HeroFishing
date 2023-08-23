@@ -44,7 +44,7 @@ namespace Scoz.Func {
             if (WaitToShowCount < 2)
                 MyAni.Play("play");
             else {
-                CoroutineJob.Instance.StartNewAction(Show, GameSettingData.GetFloat(GameSetting.EventPopupMinimumInterval) * (WaitToShowCount - 1));
+                CoroutineJob.Instance.StartNewAction(Show, GameSettingJsonData.GetFloat(GameSetting.EventPopupMinimumInterval) * (WaitToShowCount - 1));
             }
         }
 

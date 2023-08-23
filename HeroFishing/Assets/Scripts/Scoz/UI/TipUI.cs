@@ -50,5 +50,8 @@ namespace Scoz.Func {
             IsShowing = false;
             SetActive(false);
         }
+
+        public override void RefreshText() {
+        }
     }
 }

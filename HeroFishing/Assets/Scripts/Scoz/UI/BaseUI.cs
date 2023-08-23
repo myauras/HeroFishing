@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using System;
 
 namespace Scoz.Func {
-    public class BaseUI : MonoBehaviour {
+    public abstract class BaseUI : MonoBehaviour {
         protected bool IsInit = false;
         //public static Dictionary<string, BaseUI> UIDic = new Dictionary<string, BaseUI>();
         public static bool operator true(BaseUI baseUI) { return baseUI != null; }
@@ -32,8 +32,7 @@ namespace Scoz.Func {
             //UIDic[this.GetType().FullName] = this;
 
             IsInit = true;
-            MyText.AddRefreshFunc(RefreshUI);
-            //RefreshUI();
+            MyText.AddRefreshFunc(RefreshText);
         }
         protected virtual void OnEnable() {
 
@@ -42,13 +41,18 @@ namespace Scoz.Func {
 
         }
         protected virtual void OnDestroy() {
-            MyText.RemoveRefreshFunc(RefreshUI);
+            MyText.RemoveRefreshFunc(RefreshText);
             //UIDic[this.GetType().FullName] = null;
             //Destroy(gameObject);
         }
-        public virtual void RefreshUI() {
-        }
+        /// <summary>
+        /// 把在地化文字加到這裡會隨著切換語系時自動切換
+        /// </summary>
+        public abstract void RefreshText();
 
+        /// <summary>
+        /// 開關介面用這個
+        /// </summary>
         public virtual void SetActive(bool _bool) {
             gameObject.SetActive(_bool);
         }

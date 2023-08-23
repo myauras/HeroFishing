@@ -59,16 +59,18 @@ namespace Scoz.Func {
         public void OnNextLanguageClick() {
             //Language language = MyEnum.GetNext(GamePlayer.Instance.UsingLanguage);
             //GamePlayer.Instance.SetLanguage(language);
-            RefreshUI();
+            RefreshText();
         }
         public void OnPreviousLanguageClick() {
             //Language language = MyEnum.GetPrevious(GamePlayer.Instance.UsingLanguage);
             //GamePlayer.Instance.SetLanguage(language);
-            RefreshUI();
+            RefreshText();
         }
         public void ClearData() {
             PlayerPrefs.DeleteAll();
         }
 
+        public override void RefreshText() {
+        }
     }
 }

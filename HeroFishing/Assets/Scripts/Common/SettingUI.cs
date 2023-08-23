@@ -39,7 +39,8 @@ namespace HeroFishing.Main {
         [SerializeField] Text Apple_Text;
         [SerializeField] GameObject AppleGO;
 
-
+        public override void RefreshText() {
+        }
 
 
         Language CurLanguage;
@@ -126,7 +127,7 @@ namespace HeroFishing.Main {
         public void OnVibrationChange() {
             GamePlayer.Instance.SetVibration(VibrationToggle.isOn);
             if (VibrationToggle.isOn)
-                Vibrator.Vibrate(GameSettingData.GetInt(GameSetting.VibrationOnVibrationMilliSecs));
+                Vibrator.Vibrate(GameSettingJsonData.GetInt(GameSetting.VibrationOnVibrationMilliSecs));
         }
 
         public void OnLanguageSelectClick() {
@@ -278,6 +279,7 @@ namespace HeroFishing.Main {
 
             //}
         }
+
 
     }
 }

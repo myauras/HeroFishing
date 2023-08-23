@@ -1,3 +1,5 @@
+using DG.Tweening;
+using HeroFishing.Main;
 using LitJson;
 using Scoz.Func;
 using System;
@@ -9,11 +11,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Socket {
-    public class HeroFishingSocket : HeroFishingNetwork {
+    public class HeroFishingSocket {
 
-
-        static HeroFishingSocket Instance = null;
-        public static HeroFishingNetwork GetInstance() {
+        public enum SendTarget {
+            Master,
+            Other,
+            All,//include self.
+            One
+        }
+        protected static HeroFishingSocket Instance = null;
+        public static HeroFishingSocket GetInstance() {
             if (Instance == null) {
                 Instance = new HeroFishingSocket();
                 Instance.Init();
@@ -21,99 +28,95 @@ namespace HeroFishing.Socket {
             return Instance;
         }
 
+        // 回呼
+        public event Action<bool, string> CreateRoomCallback;
 
         //public static readonly DateTime SERVER_START_TIME = new DateTime(1970, 1, 1, 0 ,0, 0, DateTimeKind.Utc);
 
-        private TcpClient MatchmakerClient;
-        private TcpClient gameClient;
-        private UdpSocket udpClient;
-        private ServerTimeSyncer timeSyncer;
 
-        private Dictionary<Tuple<string, int>, Action<string>> commandCallback = new Dictionary<Tuple<string, int>, Action<string>>();
+        TcpClient MatchmakerClient;
+        TcpClient GameClient;
+        UdpSocket UDPClient;
+        ServerTimeSyncer TimeSyncer;
+
+        Dictionary<Tuple<string, int>, Action<string>> CMDCallback = new Dictionary<Tuple<string, int>, Action<string>>();
 
         //斷線事件
         public event Action disconnectCallback;
         //房間狀態更新事件
         public event Action roomUpdateCallback;
 
-        public event Action<bool, string> waitinglayerCallback;
-
-        //房主更新事件
-        public event Action<bool> masterSwitchCallback;
-
-        //離開房間事件
-        public event Action leftRoomCallback;
-
 
         private string gameServerIP;
         private int gameServerPort;
         private string gameServerUdpToken;
 
-        /// <summary>
-        /// 快速開房等待中
-        /// </summary>
-        public bool IsInCreateQuickRoomWaiting { get; private set; }
 
-        public override void Init() {
+        public void Init() {
         }
-        public override void Release() {
+        public void Release() {
             if (Instance != null)
                 Instance.Dispose();
             Instance = null;
         }
-        public override void SetServerIP(string _ip, int _port) {
+        public void SetServerIP(string _ip, int _port) {
             if (MatchmakerClient != null)
                 MatchmakerClient.Close();
             MatchmakerClient = new GameObject("MatchmakerSocket").AddComponent<TcpClient>();
 
 #if Dev
-            WriteLog.Log("Connect to server " + _ip + " " + _port);
+            WriteLog.LogColor("Connect to server " + _ip + " " + _port, WriteLog.LogType.Connection);
             MatchmakerClient.Init(_ip, _port);
 #else
-            lobbyClient.Init(address, port);
+            MatchmakerClient.Init(_ip, _port);
 #endif      
             MatchmakerClient.OnReceiveMsg += OnRecieveMessage;
+
         }
 
-        public override void Dispose() {
+        public void Dispose() {
             if (MatchmakerClient != null)
                 MatchmakerClient.Close();
-            if (gameClient != null)
-                gameClient.Close();
-            if (udpClient != null)
-                udpClient.Close();
-            if (timeSyncer != null)
-                GameObject.Destroy(timeSyncer.gameObject);
+            if (GameClient != null)
+                GameClient.Close();
+            if (UDPClient != null)
+                UDPClient.Close();
+            if (TimeSyncer != null)
+                GameObject.Destroy(TimeSyncer.gameObject);
         }
 
         private void OnRecieveMessage(string message) {
-            if (udpClient != null)
-                udpClient.ResetTimer();
+            if (UDPClient != null)
+                UDPClient.ResetTimer();
             else if (!string.IsNullOrEmpty(gameServerIP) && !string.IsNullOrEmpty(gameServerUdpToken)) {
-                udpClient = new GameObject("GameUdpSocket").AddComponent<UdpSocket>();
-                udpClient.Init(gameServerIP, gameServerPort);
+                UDPClient = new GameObject("GameUdpSocket").AddComponent<UdpSocket>();
+                UDPClient.Init(gameServerIP, gameServerPort);
                 try {
-                    udpClient.StartConnect(gameServerUdpToken, (bool isConnect) => {
+                    UDPClient.StartConnect(gameServerUdpToken, (bool isConnect) => {
                         if (isConnect)
-                            udpClient.OnReceiveMsg += OnConnectionCheck;
+                            UDPClient.OnReceiveMsg += OnConnectionCheck;
                     });
-                    udpClient.RegistOnDisconnect(OnUDPDisconnect);
+                    UDPClient.RegistOnDisconnect(OnUDPDisconnect);
                 } catch (Exception e) {
                     WriteLog.LogError("UDP error " + e.ToString());
                 }
             }
             try {
-                SocketCommand<BaseContent> data = JsonMapper.ToObject<SocketCommand<BaseContent>>(message);
+                SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(message);
                 //LitJson.JsonData obj = LitJson.JsonMapper.ToObject(message);
-                WriteLog.LogFormat($"<color=#9b791d>Recieve Command [{data.Command}] </color>");
-                Tuple<string, int> commandID = new Tuple<string, int>(data.Command, data.PacketID);
-                if (commandCallback.TryGetValue(commandID, out Action<string> _cb)) {
-                    commandCallback.Remove(commandID);
+                WriteLog.LogColorFormat("Recieve Command: {0}", WriteLog.LogType.Connection, data.CMD);
+                Tuple<string, int> commandID = new Tuple<string, int>(data.CMD, data.PacketID);
+                if (CMDCallback.TryGetValue(commandID, out Action<string> _cb)) {
+                    CMDCallback.Remove(commandID);
                     _cb?.Invoke(message);
                 } else {
-                    //Server brocast message or just no callback?
-                    switch (data.Command) {
-                        case "START_GAME":
+                    SocketContent.ReplyType cmdType;
+                    if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
+                        WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
+                        return;
+                    }
+                    switch (cmdType) {
+                        case SocketContent.ReplyType.CreateRoom_Reply:
                             break;
                     }
                 }
@@ -126,95 +129,128 @@ namespace HeroFishing.Socket {
         }
 
         private void RegistCommandCallback(Tuple<string, int> commandID, Action<string> callback) {
-            if (commandCallback.ContainsKey(commandID)) {
+            if (CMDCallback.ContainsKey(commandID)) {
                 WriteLog.LogError("Command remain here should not happen.");
-                commandCallback.Remove(commandID);
+                CMDCallback.Remove(commandID);
             }
-            commandCallback.Add(commandID, callback);
+            CMDCallback.Add(commandID, callback);
         }
 
         private void OnLobbyDisConnect() {
-            WriteLog.Log("[MaJamSocket] OnLobbyDisConnect");
+            WriteLog.LogColor("[HeroFishingSocket] OnLobbyDisConnect", WriteLog.LogType.Connection);
             disconnectCallback?.Invoke();
         }
 
         private void OnGameDisConnect() {
-            WriteLog.Log("[MaJamSocket] OnGameDisConnect");
+            WriteLog.LogColor("[HeroFishingSocket] OnGameDisConnect", WriteLog.LogType.Connection);
             disconnectCallback?.Invoke();
         }
 
-        public override void Login(string token, Action<bool> callback) {
-            WriteLog.Log("[MaJamSocket] Login");
+        public void Login(string token, Action<bool> callback) {
+            WriteLog.LogColor("[HeroFishingSocket] Login", WriteLog.LogType.Connection);
             if (MatchmakerClient == null) {
-                WriteLog.LogError("LobbyClient is null");
+                WriteLog.LogError("MatchmakerClient is null");
                 callback?.Invoke(false);
                 return;
             }
-            commandCallback.Clear();
+            CMDCallback.Clear();
             MatchmakerClient.UnRegistOnDisconnect(OnLobbyDisConnect);
             MatchmakerClient.StartConnect((bool isConnect) => {
                 if (!isConnect) {
                     callback?.Invoke(false);
                     return;
                 }
-                SocketCommand<Auth> command = new SocketCommand<Auth>(new Auth(token));
+                SocketCMD<Auth> command = new SocketCMD<Auth>(new Auth(token));
 
                 int id = MatchmakerClient.Send(command);
                 if (id < 0) {
                     callback?.Invoke(false);
                     return;
                 }
-                RegistCommandCallback(new Tuple<string, int>("ReAuth", id), (string msg) => {
-                    SocketCommand<Auth_Receive> packet = LitJson.JsonMapper.ToObject<SocketCommand<Auth_Receive>>(msg);
+                RegistCommandCallback(new Tuple<string, int>(SocketContent.ReplyType.Auth_Reply.ToString(), id), (string msg) => {
+                    SocketCMD<Auth_Reply> packet = LitJson.JsonMapper.ToObject<SocketCMD<Auth_Reply>>(msg);
                     callback?.Invoke(packet.Content.IsAuth);
                 });
             });
             MatchmakerClient.RegistOnDisconnect(OnLobbyDisConnect);
         }
 
-        public override void CreateRoom(string roomName, Action<bool, string> creatCallback) {
-            WriteLog.Log("[MaJamSocket] CreateRoom");
+        public void CreateRoom(string _mapID, Action<bool, string> _cb) {
+            WriteLog.LogColor("[HeroFishingSocket] CreateRoom", WriteLog.LogType.Connection);
+            RegistCreateRoomCallback(_cb);
+            CreateRoom cmdContent = new CreateRoom(_mapID, new string[] { "scoz" }, "scoz");//建立封包內容
+            SocketCMD<CreateRoom> cmd = new SocketCMD<CreateRoom>(cmdContent);//建立封包
+            int id = MatchmakerClient.Send(cmd);//送出封包
+            if (id < 0) {
+                _cb?.Invoke(false, "");
+                return;
+            }
+            //註冊回呼
+            RegistCommandCallback(new Tuple<string, int>(SocketContent.ReplyType.CreateRoom_Reply.ToString(), -1), OnCreateRoom_Reply);
         }
-        public override void Disconnect() {
-            WriteLog.Log("[MaJamSocket] DisConnect");
+        public void RegistCreateRoomCallback(Action<bool, string> callback) {
+            CreateRoomCallback = callback;
+        }
+        public void UnRegistCreateRoomCallback() {
+            CreateRoomCallback = null;
+        }
+        public void OnCreateRoom_Reply(string _msg) {
+            WriteLog.LogColor("[MaJamSocket] OnWaitingReCreateRoom", WriteLog.LogType.Connection);
+            var packet = LitJson.JsonMapper.ToObject<SocketCMD<CreateRoom_Reply>>(_msg);
+
+            //有錯誤
+            if (!string.IsNullOrEmpty(packet.ErrMsg)) {
+                WriteLog.LogError("Create Room Fail : " + packet.ErrMsg);
+                CreateRoomCallback?.Invoke(false, packet.ErrMsg);
+                UnRegistCreateRoomCallback();
+                return;
+            }
+
+
+            GameRoomData.Instance.Init();//初始化房間資料
+            CreateRoomCallback?.Invoke(true, string.Empty);
+            UnRegistCreateRoomCallback();
+        }
+        public void Disconnect() {
+            WriteLog.Log("[HeroFishingSocket] DisConnect");
         }
 
-        public override int GetPing() {
-            if (timeSyncer)
-                return Mathf.RoundToInt(timeSyncer.GetLantency() * 1000);
+        public int GetPing() {
+            if (TimeSyncer)
+                return Mathf.RoundToInt(TimeSyncer.GetLantency() * 1000);
             return 0;
         }
-        public override bool IsLogin() {
-            return (MatchmakerClient != null && MatchmakerClient.IsConnected) || (gameClient != null && gameClient.IsConnected);
+        public bool IsLogin() {
+            return (MatchmakerClient != null && MatchmakerClient.IsConnected) || (GameClient != null && GameClient.IsConnected);
         }
 
         public void OnConnectionCheck(string message) {
             try {
-                SocketCommand<UdpUpdatePacket> packet = LitJson.JsonMapper.ToObject<SocketCommand<UdpUpdatePacket>>(message);
+                SocketCMD<UdpUpdatePacket> packet = LitJson.JsonMapper.ToObject<SocketCMD<UdpUpdatePacket>>(message);
                 //WriteLog.Log("server time : " + packet.Content.ServerTime);
-                timeSyncer.SycServerTime(packet.Content.ServerTime);
+                TimeSyncer.SycServerTime(packet.Content.ServerTime);
             } catch (Exception e) {
                 WriteLog.LogError("Parse UDP Message with Error : " + e.ToString());
             }
         }
 
         public void OnUDPDisconnect() {
-            udpClient.OnReceiveMsg -= OnConnectionCheck;
+            UDPClient.OnReceiveMsg -= OnConnectionCheck;
             //沒有timeout重連UDP
-            if (udpClient != null && udpClient.CheckTimerInTime()) {
-                udpClient.Close();
-                udpClient = new GameObject("GameUdpSocket").AddComponent<UdpSocket>();
-                udpClient.Init(gameServerIP, gameServerPort);
-                udpClient.StartConnect(gameServerUdpToken, (bool udpConnect) => {
+            if (UDPClient != null && UDPClient.CheckTimerInTime()) {
+                UDPClient.Close();
+                UDPClient = new GameObject("GameUdpSocket").AddComponent<UdpSocket>();
+                UDPClient.Init(gameServerIP, gameServerPort);
+                UDPClient.StartConnect(gameServerUdpToken, (bool udpConnect) => {
                     WriteLog.Log("Udp isConnect :" + udpConnect);
                     if (udpConnect)
-                        udpClient.OnReceiveMsg += OnConnectionCheck;
+                        UDPClient.OnReceiveMsg += OnConnectionCheck;
                     else {
                         this.OnGameDisConnect();
                         this.Disconnect();
                     }
                 });
-                udpClient.RegistOnDisconnect(OnUDPDisconnect);
+                UDPClient.RegistOnDisconnect(OnUDPDisconnect);
             } else {
                 WriteLog.LogError("OnUDPDisconnect");
 
@@ -223,11 +259,11 @@ namespace HeroFishing.Socket {
             }
         }
 
-        public override void LeaveRoom() {
+        public void LeaveRoom() {
         }
 
-        public override void RegistDisconnectCallback(Action callback) {
-            WriteLog.Log("[MaJamSocket] RegistDisconnectCallback");
+        public void RegistDisconnectCallback(Action callback) {
+            WriteLog.LogColor("[HeroFishingSocket] RegistDisconnectCallback", WriteLog.LogType.Connection);
             disconnectCallback += callback;
         }
     }

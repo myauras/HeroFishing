@@ -22,7 +22,7 @@ namespace Scoz.Func {
             if (IsLoadingSceneTransitionAsset)
                 return;
             IsLoadingSceneTransitionAsset = true;
-            PopupUI.ShowLoading(StringData.GetUIString("Loading"));
+            PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
             //初始化UI
             AddressablesLoader.GetPrefabByRef(Instance.SceneTransitionAsset, (prefab, handle) => {
                 IsLoadingSceneTransitionAsset = false;

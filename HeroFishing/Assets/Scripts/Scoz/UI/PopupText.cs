@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 namespace Scoz.Func {
-    public class PopupTextSpawner : ItemSpawner<PopupTextItem> { }
+    public class PopupTextSpawner : ItemSpawner<PopupTextItem> {
+        public override void RefreshText() {
+        }
+    }
     public class PopupText : MonoBehaviour {
         public enum AniName {
             gainCurrecny,

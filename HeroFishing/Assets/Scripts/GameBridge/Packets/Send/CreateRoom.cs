@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace HeroFishing.Socket {
-    public class CreateRoom : BaseContent {
+    public class CreateRoom : SocketContent {
         /// <summary>
         /// 地圖ID
         /// </summary>
@@ -17,16 +17,11 @@ namespace HeroFishing.Socket {
         /// </summary>
         public string CreaterID { get; private set; }
 
-        //public Dictionary<string, object> RoomSetting = new Dictionary<string, object>();
-
         public CreateRoom(string roomID, string[] playerIDs, string masterID) {
             MapID = roomID;
             PlayerIDs = playerIDs;
             CreaterID = masterID;
         }
 
-        //public void AddGameSetting(string key, object value) {
-        //    RoomSetting.Add(key, value);
-        //}
     }
 }

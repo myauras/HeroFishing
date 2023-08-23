@@ -34,9 +34,8 @@ namespace HeroFishing.Main {
             PopupUI_Local.ShowLoading("Checking Internet");
             InternetChecker.SetOnConnectedAction(OnConnected);
             InternetChecker.StartCheckInternet();
-            Test();
         }
-        void Test() {
+        public void Test() {
             GameConnector.Instance.Init();
             GameConnector.Instance.Run(OnConnectGame);
         }
@@ -146,7 +145,7 @@ namespace HeroFishing.Main {
         /// 3. 切至下一個場景
         /// </summary>
         public void StartDownloadingAssetAndGoNextScene() {
-            StartSceneUI.Instance?.SetMiddleText(StringData.GetUIString("Login_DownloadAsset"));
+            StartSceneUI.Instance?.SetMiddleText(StringJsonData.GetUIString("Login_DownloadAsset"));
             GameManager.StartDownloadAddressable(() => {//下載完資源包後執行
 
 

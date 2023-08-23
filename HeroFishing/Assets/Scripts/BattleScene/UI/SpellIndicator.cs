@@ -2,7 +2,7 @@ using UnityEngine;
 using Scoz.Func;
 using HeroFishing.Main;
 using System;
-using static HeroFishing.Main.HeroSpellData;
+using static HeroFishing.Main.HeroSpellJsonData;
 using UnityEngine.AddressableAssets;
 using System.Collections.Generic;
 using JetBrains.Annotations;
@@ -17,7 +17,7 @@ namespace HeroFishing.Battle {
         [Serializable] public class IndicatorDicClass : SerializableDictionary<IndicatorType, AssetReference> { }
         [SerializeField] IndicatorDicClass MyIndicatorPrfabDic;//施法指示UI字典
 
-        HeroSpellData TmpSpellData;
+        HeroSpellJsonData TmpSpellData;
         public Dictionary<IndicatorType, List<GameObject>> Indicators = new Dictionary<IndicatorType, List<GameObject>>();
 
 
@@ -64,7 +64,7 @@ namespace HeroFishing.Battle {
             }
             SpawnNewIndicator(_type, _ac);
         }
-        public void ShowIndicator(HeroSpellData _spellData) {
+        public void ShowIndicator(HeroSpellJsonData _spellData) {
             Show();
             HideIndicators();
             TmpSpellData = _spellData;

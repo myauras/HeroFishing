@@ -11,10 +11,10 @@ using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Socket {
     public class GameConnector : MonoBehaviour {
-        private const float RETRY_INTERVAL = 3.0f;
-        private const int MAX_RETRY_TIME = 10;
-        private const float CONNECT_TIMEOUT = 60.0f;//1*60 1分鐘        
-        private static GameConnector instance = null;
+        const float RETRY_INTERVAL = 3.0f;
+        const int MAX_RETRY_TIME = 3;
+        const float CONNECT_TIMEOUT = 60.0f;//1*60 1分鐘        
+        static GameConnector instance = null;
         public static GameConnector Instance {
             get {
                 if (instance == null)
@@ -22,25 +22,25 @@ namespace HeroFishing.Socket {
                 return instance;
             }
         }
-        private bool isConnectGameRoom = false;
-        private int reTryConnectTimes = 0;
-        private string roomName = "";
+        bool isConnectGameRoom = false;
+        int RetryTimes = 0;
+        string RoomName = "";
 
-        private event Action<bool, bool> OnConnectEvent;
+        event Action<bool, bool> OnConnectEvent;
 
         // 設定預設值
-        private string gameServerIP = "192.168.0.121";
-        private int gameServerPort = 7654;
-        private Coroutine timeoutCheckCoroutine;
-        private WaitForFixedUpdate fixedUpdate = new WaitForFixedUpdate();
-        private bool isInMaJam = false;
+        string gameServerIP = "192.168.0.121";
+        int gameServerPort = 7654;
+        Coroutine timeoutCheckCoroutine;
+        WaitForFixedUpdate fixedUpdate = new WaitForFixedUpdate();
+        bool isInMaJam = false;
 
         void Start() {
             DontDestroyOnLoad(this);
         }
 
         public void Init() {
-            WriteLog.Log("[GameConnector] Init");
+            WriteLog.LogColor("[GameConnector] Init", WriteLog.LogType.Connection);
             //nothing just create object.
             isConnectGameRoom = false;
             isInMaJam = false;
@@ -49,8 +49,8 @@ namespace HeroFishing.Socket {
             timeoutCheckCoroutine = StartCoroutine(CheckConnectTimeout());
         }
 
-        private IEnumerator CheckConnectTimeout() {
-            WriteLog.Log("[GameConnector] CheckConnectTimeout");
+        IEnumerator CheckConnectTimeout() {
+            WriteLog.LogColor("[GameConnector] CheckConnectTimeout", WriteLog.LogType.Connection);
             float timer = 0;
             while (!isInMaJam) {
                 timer += Time.fixedDeltaTime;
@@ -94,55 +94,88 @@ namespace HeroFishing.Socket {
         /// <summary>
         /// 開始跑連線相關流程
         /// </summary>
-        /// <param name="_cb"></param>
         public void Run(Action<bool, bool> _cb) {
-            WriteLog.Log("[GameConnector Run]");
+            WriteLog.LogColor("[GameConnector Run]", WriteLog.LogType.Connection);
             OnConnectEvent = _cb;
             OnConnectEvent += OnConnectFromLobby;
             isConnectGameRoom = false;
-            reTryConnectTimes = 0;
+            RetryTimes = 0;
             HeroFishingSocket.GetInstance().RegistDisconnectCallback(OnDisConnect);
 
             ConnectToLobbyServer();
         }
 
 
-        private void OnDisConnect() {
-            WriteLog.Log("[GameConnector] OnDisConnect");
+        void OnDisConnect() {
+            WriteLog.LogColor("[GameConnector] OnDisConnect", WriteLog.LogType.Connection);
         }
 
         public bool IsConnectGame() {
-            WriteLog.Log("[GameConnector] IsConnectGame");
+            WriteLog.LogColor("[GameConnector] IsConnectGame", WriteLog.LogType.Connection);
             return isConnectGameRoom;
         }
 
         public void CheckLobbyServerStatus(Action<bool, bool> _cb) {
-            WriteLog.Log("[GameConnector] CheckLobbyServerStatus");
+            WriteLog.LogColor("[GameConnector] CheckLobbyServerStatus", WriteLog.LogType.Connection);
         }
 
-        private void ConnectToLobbyServer() {
-            WriteLog.Log("[GameConnector] ConnectToLobbyServer");
+        void ConnectToLobbyServer() {
+            WriteLog.LogColor("[GameConnector] ConnectToLobbyServer", WriteLog.LogType.Connection);
             HeroFishingSocket.GetInstance().SetServerIP("35.194.151.95", 32680);
             HeroFishingSocket.GetInstance().Login("scoz", OnLoginToLobbyServer);
         }
 
         /// <summary>
-        /// 在
+        /// 登入配對伺服器成功時執行
         /// </summary>
         /// <param name="isLogin"></param>
-        private void OnLoginToLobbyServer(bool isLogin) {
-            WriteLog.Log("[GameConnector] OnLoginToLobbyServer");
+        void OnLoginToLobbyServer(bool isLogin) {
+            WriteLog.LogColor("[GameConnector] OnLoginToLobbyServer", WriteLog.LogType.Connection);
+
+            //連線失敗時嘗試重連
+            if (!isLogin) {
+                RetryTimes++;
+                if (RetryTimes >= MAX_RETRY_TIME || !InternetChecker.InternetConnected) {
+                    OnConnectEvent?.Invoke(false, false);
+                } else {
+                    WriteLog.LogColorFormat("[GameConnector] 連線失敗，{0}秒後嘗試重連", WriteLog.LogType.Connection, RETRY_INTERVAL);
+                    DG.Tweening.DOVirtual.DelayedCall(RETRY_INTERVAL, () => {
+                        //連線失敗有可能TOKEN過期 重要後再連
+                        HeroFishingSocket.GetInstance().Login("scoz_retry", OnLoginToLobbyServer);
+                    });
+                }
+                return;
+            }
+            RetryTimes = 0;
+            //連線成功就跟Server要求建立房間
+            HeroFishingSocket.GetInstance().CreateRoom(RoomName, OnCreateRoom);
+        }
+        void OnCreateRoom(bool isCreate, string errorMsg) {
+            WriteLog.LogColor("[GameConnector] OnCreateRoom", WriteLog.LogType.Connection);
+
+            // 建立房間失敗
+            if (!isCreate) {
+                RetryTimes++;
+                if (RetryTimes >= MAX_RETRY_TIME || errorMsg == "NOT_FOUR_PLAYER" || !InternetChecker.InternetConnected) {
+                    OnConnectEvent?.Invoke(false, false);
+                    PopupUI.ShowClickCancel(StringJsonData.GetUIString("ErrorCreateGame"), () => {
+                    });
+                } else {
+                    // 再試一次
+                    DG.Tweening.DOVirtual.DelayedCall(RETRY_INTERVAL, () => {
+                        HeroFishingSocket.GetInstance().CreateRoom(RoomName, OnCreateRoom);
+                    });
+                }
+                return;
+            }
+
+            // 建立房間成功
 
         }
 
-        private void OnCreateRoom(bool isCreate, string errorMsg) {
-            WriteLog.Log("[GameConnector] OnCreateRoom");
 
-        }
-
-
-        private void OnConnectRoom(bool isConnect) {
-            WriteLog.Log($"[GameConnector] OnConnectRoom isConnect={isConnect}");
+        void OnConnectRoom(bool isConnect) {
+            WriteLog.LogColorFormat("[GameConnector] OnConnectRoom isConnect={0}", WriteLog.LogType.Connection, isConnect);
         }
 
         public void JoinGame(string serverIp, int port, Action<bool> _cb) {
@@ -156,7 +189,7 @@ namespace HeroFishing.Socket {
 
 
 
-        private void OnConnectFromLobby(bool isSuccess, bool isServerMatain) {
+        void OnConnectFromLobby(bool isSuccess, bool isServerMatain) {
             WriteLog.Log($"[GameConnector] OnConnectFromLobby isSuccess={isSuccess} isServerMatain={isServerMatain}");
         }
 

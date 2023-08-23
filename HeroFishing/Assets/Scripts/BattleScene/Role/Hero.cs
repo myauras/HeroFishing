@@ -8,12 +8,12 @@ using UnityEngine.AddressableAssets;
 namespace HeroFishing.Battle {
     public class Hero : Role {
 
-        public HeroData MyData { get; private set; }
-        HeroSkinData MyHeroSkinData;
+        public HeroJsonData MyData { get; private set; }
+        HeroSkinJsonData MyHeroSkinData;
 
         public void SetData(int _heroID, string _heroSkinID) {
-            MyData = HeroData.GetData(_heroID);
-            MyHeroSkinData = HeroSkinData.GetData(_heroSkinID);
+            MyData = HeroJsonData.GetData(_heroID);
+            MyHeroSkinData = HeroSkinJsonData.GetData(_heroSkinID);
             LoadModel();
         }
         void LoadModel() {
@@ -44,7 +44,7 @@ namespace HeroFishing.Battle {
 
         public void PlaySpellMotion(SpellName _spellName) {
 
-            var spellData = HeroSpellData.GetSpell(MyData.ID, _spellName);
+            var spellData = HeroSpellJsonData.GetSpell(MyData.ID, _spellName);
             if (MyData == null) { WriteLog.LogErrorFormat("HeroData尚未設定"); return; }
             if (spellData == null) { WriteLog.LogErrorFormat("此HeroID {0} 無此 SpellName:{1}", MyData.ID, _spellName); return; }
             if (spellData.Motions.Length == 0) { WriteLog.LogErrorFormat("SpellID為 {0} 的Mostions欄位沒有填", spellData.ID); return; }
