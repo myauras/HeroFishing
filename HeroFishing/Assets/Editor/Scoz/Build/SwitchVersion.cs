@@ -13,42 +13,44 @@ namespace Scoz.Editor {
     public class SwitchVersion {
         //※這裡的版本有新增Dev,Test,Release以外的版本要記得GameManager那邊CurVersion也要新增
 
-        //private const string FIREBASE_VERSION_PATH_ANDROID = "VersionSettings/{0}/google-services.json";
-        //private const string FIREBASE_SETTING_PATH_ANDROID = "Assets/StreamingAssets/google-services.json";
-        //private const string FIREBASE_VERSION_PATH_IOS = "VersionSettings/{0}/GoogleService-Info.plist";
-        //private const string FIREBASE_SETTING_PATH_IOS = "Assets/StreamingAssets/GoogleService-Info.plist";
-        //private const string FIREBASE_EDITOR_FILE = "Assets/StreamingAssets/google-services-desktop.json";
+        //Firebase版本檔案路徑
+        //const string FIREBASE_VERSION_PATH_ANDROID = "VersionSettings/{0}/google-services.json";
+        //const string FIREBASE_SETTING_PATH_ANDROID = "Assets/StreamingAssets/google-services.json";
+        //const string FIREBASE_VERSION_PATH_IOS = "VersionSettings/{0}/GoogleService-Info.plist";
+        //const string FIREBASE_SETTING_PATH_IOS = "Assets/StreamingAssets/GoogleService-Info.plist";
+        //const string FIREBASE_EDITOR_FILE = "Assets/StreamingAssets/google-services-desktop.json";
 
-        private const string ADDRESABLE_BIN_PATH = "Assets/AddressableAssetsData/{0}/";
+
+        const string ADDRESABLE_BIN_PATH = "Assets/AddressableAssetsData/{0}/";
 
         //非Release版本的Defines
         static readonly List<string> UnReleaseDefines = new List<string> { "DEBUG_LOG" };
         static object owner = new System.Object();
 
-        //private static Dictionary<EnvVersion, int> FACEBOOK_APP_INDEX_DIC = new Dictionary<EnvVersion, int>() {
+        //static Dictionary<EnvVersion, int> FACEBOOK_APP_INDEX_DIC = new Dictionary<EnvVersion, int>() {
         //    { EnvVersion.Dev, 0},
         //    { EnvVersion.Test, 1},
         //    { EnvVersion.Release, 2},
         //};
 
-        private static Dictionary<EnvVersion, string> ADDRESABALE_PROFILE_DIC = new Dictionary<EnvVersion, string>() {
+        static Dictionary<EnvVersion, string> ADDRESABALE_PROFILE_DIC = new Dictionary<EnvVersion, string>() {
             { EnvVersion.Dev, "GoogleCloud-Dev"},
             { EnvVersion.Test, "GoogleCloud-Test"},
             { EnvVersion.Release, "GoogleCloud-Release"},
         };
-        //private static Dictionary<EnvVersion, string> PUN_APPID_DIC = new Dictionary<EnvVersion, string>() {
+        //static Dictionary<EnvVersion, string> PUN_APPID_DIC = new Dictionary<EnvVersion, string>() {
         //    { EnvVersion.Dev, ""},
         //    { EnvVersion.Test, ""},
         //    { EnvVersion.Release, ""},
         //};
 
-        private static Dictionary<EnvVersion, string> KEYSTORE_ALIAS_DIC = new Dictionary<EnvVersion, string>() {
+        static Dictionary<EnvVersion, string> KEYSTORE_ALIAS_DIC = new Dictionary<EnvVersion, string>() {
             { EnvVersion.Dev, "herofishing"},
             { EnvVersion.Test, "herofishing"},
             { EnvVersion.Release, "herofishing"},
         };
 
-        private static Dictionary<EnvVersion, string> PACKAGE_NAME_DIC = new Dictionary<EnvVersion, string>() {
+        static Dictionary<EnvVersion, string> PACKAGE_NAME_DIC = new Dictionary<EnvVersion, string>() {
             { EnvVersion.Dev, "com.auro.herofishingdev"},
             { EnvVersion.Test, "com.auro.herofishingtest"},
             { EnvVersion.Release, "com.auro.herofishingrelease"},

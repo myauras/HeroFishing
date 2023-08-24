@@ -14,7 +14,6 @@ namespace Scoz.Func {
 
 
         public static int GetInt(GameSetting _type) {
-            Debug.Log(SettingDic);
             return int.Parse(SettingDic[_type]);
         }
         public static float GetFloat(GameSetting _type) {

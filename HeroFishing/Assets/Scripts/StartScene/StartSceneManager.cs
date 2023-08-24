@@ -1,5 +1,6 @@
 using HeroFishing.Socket;
 using Scoz.Func;
+using Service.Realms;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,9 +36,16 @@ namespace HeroFishing.Main {
             InternetChecker.SetOnConnectedAction(OnConnected);
             InternetChecker.StartCheckInternet();
         }
-        public void Test() {
+        public void SocketConnectTest() {
             GameConnector.Instance.Init();
             GameConnector.Instance.Run(OnConnectGame);
+        }
+        public void RealmInitTest() {
+            RealmManager.NewApp();
+            //RealmManager.AnonymousSignUp();
+        }
+        public void TestAtlasFunction() {
+            RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.Signup);
         }
         private void OnConnectGame(bool isSuccess, bool isMaintain) {
             WriteLog.Log("isSuccess=" + isSuccess);

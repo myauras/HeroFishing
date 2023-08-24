@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 
 public class FindUsedShader : EditorWindow {
-    [MenuItem("Scoz/Find Used Shader")]
+    [MenuItem("Scoz/Utility/Find Used Shader")]
     public static void Open() {
         GetWindow<FindUsedShader>();
     }
