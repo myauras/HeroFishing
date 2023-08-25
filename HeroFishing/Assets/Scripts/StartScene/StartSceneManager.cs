@@ -24,7 +24,7 @@ namespace HeroFishing.Main {
         public static bool FirstTimeLaunchGame { get; private set; } = true;
 
         private void Start() {
-            SetInfoText();//顯示資訊
+            ShowInfo();//顯示資訊
             MyStartSceneUI.Init();
             Instance = this;
             //建立遊戲管理者
@@ -50,8 +50,15 @@ namespace HeroFishing.Main {
         private void OnConnectGame(bool isSuccess, bool isMaintain) {
             WriteLog.Log("isSuccess=" + isSuccess);
         }
-        public void SetInfoText() {
-            VersionText.text = "版本: " + Application.version;
+        /// <summary>
+        /// 1. (玩家尚未登入) 顯示版本
+        /// 2. (玩家登入) 顯示版本+玩家ID
+        /// </summary>
+        public void ShowInfo() {
+            if (RealmManager.MyApp != null && RealmManager.MyApp.CurrentUser != null)
+                VersionText.text = string.Format("Ver: {0} {1} " + Application.version, RealmManager.MyApp.CurrentUser.Id);
+            else
+                VersionText.text = string.Format("Ver: {0}" + Application.version);
         }
         public void PlayMainMusic() {
             AudioPlayer.StopAllMusic_static();
@@ -63,78 +70,68 @@ namespace HeroFishing.Main {
         void OnConnected() {
             PopupUI_Local.ShowLoading("Init Data");
 
-            //以下繞過正式流程
-            PopupUI_Local.HideLoading();
-            MyStartSceneUI.ShowUI(StartSceneUI.Condietion.NotLogin);
-
-            ////初始化Firebase
-            //FirebaseManager.Init(success => {
-            //    if (success)
-            //        OnFirebaseInitFInished();
-            //});
+            ////初始化Realm
+            RealmManager.NewApp();
+            AuthChek();//登入狀態確認
         }
         /// <summary>
-        /// Firebase初始化後觸發
+        /// 登入狀態確認
+        /// 1. (還沒登入)打開UI介面，讓玩家選擇登入方式
+        /// 2. (已登入且第一次開遊戲)開始取同步Realm上的資料，都取完後就開始載Addressable資源包，載完後進入大廳場景(在編輯器模式中，為了測試不會直接進大廳)
+        /// 3. (已登入且是從大廳退回主介面)打開UI介面，讓玩家選擇回大廳,登出還是移除帳戶(Apple限定)
         /// </summary>
-        void OnFirebaseInitFInished() {
-            //            PopupUI_Local.HideLoading();
-            //            // 詢問IOS玩家是否要開啟透明追蹤
-            //#if APPSFLYER && UNITY_IOS && !UNITY_EDITOR
-            //             AppsFlyerManager.Inst.IOSAskATTUserTrack();
-            //#endif
-
-            //            //離線模式
-            //            if (GameManager.OfflineMode) {
-            //                GameManager.Instance.SetTime(DateTime.Now);
-            //                StartDownloadingAssetAndGoNextScene();
-            //                return;
-            //            }
+        void AuthChek() {
+            PopupUI_Local.HideLoading();
+            // 詢問IOS玩家是否要開啟透明追蹤(Appsflyer會用到)
+#if APPSFLYER && UNITY_IOS && !UNITY_EDITOR
+                         AppsFlyerManager.Inst.IOSAskATTUserTrack();
+#endif
 
 
-            //            if (FirebaseManager.MyUser == null) {//玩家尚未登入
-            //                WriteLog.Log("玩家尚未登入");
-            //                MyStartSceneUI.ShowUI(StartSceneUI.Condietion.NotLogin);
-            //            } else {//玩家已經登入，就開始載入Firestore上的資料(LoadDatas)
+            if (RealmManager.MyApp.CurrentUser == null) {//玩家尚未登入
+                WriteLog.LogColor("玩家尚未登入Realm", WriteLog.LogType.Realm);
+                MyStartSceneUI.ShowUI(StartSceneUI.Condition.NotLogin);
+            } else {//已經登入，就同步Realm上的資料
 
-            //                //是否第一次執行遊戲，第一次執行遊戲後會自動進大廳，之後透過從大廳的設定中點回到主介面就不會又自動進大廳了
-            //                if (FirstTimeLaunchGame) {
-            //                    FirebaseManager.LoadDatas(() => {
-            //                        WriteLog.LogFormat("玩家 {0} 已經登入", FirebaseManager.MyUser.UserId);
-            //                        StartSceneManager.Instance.SetVersionText();//顯示下方文字
-            //#if APPSFLYER
-            //                        // 設定玩家UID
-            //                        AppsFlyerManager.Inst.SetCustomerUserId(FirebaseManager.MyUser.UserId);
-            //                        // AppsFlyer紀錄玩家登入
-            //                        AppsFlyerManager.Inst.Login(FirebaseManager.MyUser.UserId);
-            //#endif
+                //                //是否第一次執行遊戲，第一次執行遊戲後會自動進大廳，之後透過從大廳的設定中點回到主介面就不會又自動進大廳了
+                //                if (FirstTimeLaunchGame) {
+                //                    FirebaseManager.LoadDatas(() => {
+                //                        WriteLog.LogFormat("玩家 {0} 已經登入", FirebaseManager.MyUser.UserId);
+                //                        StartSceneManager.Instance.SetVersionText();//顯示下方文字
+                //#if APPSFLYER
+                //                                    // 設定玩家UID
+                //                                    AppsFlyerManager.Inst.SetCustomerUserId(FirebaseManager.MyUser.UserId);
+                //                                    // AppsFlyer紀錄玩家登入
+                //                                    AppsFlyerManager.Inst.Login(FirebaseManager.MyUser.UserId);
+                //#endif
 
-            //#if !UNITY_EDITOR && FIREBASE_ANALYTICS
-            //                    FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
-            //                    // 設定Firebase UserId
-            //                    FirebaseAnalytics.SetUserId(FirebaseManager.MyUser.UserId);
-            //                    // 記錄登入事件
-            //                    Parameter[] loginParameters = {
-            //                          new Parameter(FirebaseAnalytics.ParameterMethod, FirebaseManager.MyUser.UserId)
-            //                    };
-            //                    FirebaseAnalytics.LogEvent(FirebaseAnalytics.EventLogin, loginParameters);
-            //#endif
+                //#if !UNITY_EDITOR && FIREBASE_ANALYTICS
+                //                                FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
+                //                                // 設定Firebase UserId
+                //                                FirebaseAnalytics.SetUserId(FirebaseManager.MyUser.UserId);
+                //                                // 記錄登入事件
+                //                                Parameter[] loginParameters = {
+                //                                      new Parameter(FirebaseAnalytics.ParameterMethod, FirebaseManager.MyUser.UserId)
+                //                                };
+                //                                FirebaseAnalytics.LogEvent(FirebaseAnalytics.EventLogin, loginParameters);
+                //#endif
 
-            //                        //如果是編輯器不直接轉場景(正式機才會直接進Lobby)
-            //#if UNITY_EDITOR
-            //                        MyStartSceneUI.ShowUI(StartSceneUI.Condietion.BackFromLobby_ShowLogoutBtn);
-            //#else
-            //                        StartDownloadingAssetAndGoNextScene();
-            //#endif
-            //                    });
+                //                        //如果是編輯器不直接轉場景(正式機才會直接進Lobby)
+                //#if UNITY_EDITOR
+                //                        MyStartSceneUI.ShowUI(StartSceneUI.Condietion.BackFromLobby_ShowLogoutBtn);
+                //#else
+                //                                    StartDownloadingAssetAndGoNextScene();
+                //#endif
+                //                    });
 
 
-            //                } else {//如果是從大廳點設定回到主介面跑這裡，顯示登出按鈕與返回大廳按鈕
-            //                    MyStartSceneUI.ShowUI(StartSceneUI.Condietion.BackFromLobby_ShowLogoutBtn);
-            //                }
+                //                } else {//如果是從大廳點設定回到主介面跑這裡，顯示登出按鈕與返回大廳按鈕
+                //                    MyStartSceneUI.ShowUI(StartSceneUI.Condietion.BackFromLobby_ShowLogoutBtn);
+                //                }
 
 
 
-            //            }
+            }
         }
 
 
