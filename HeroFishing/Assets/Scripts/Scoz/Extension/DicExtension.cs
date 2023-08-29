@@ -87,6 +87,11 @@ namespace Scoz.Func {
             }
             return resultDic;
         }
+        public static void LogDic(IDictionary _dic) {
+            if (_dic == null) return;
+            foreach (var key in _dic.Keys)
+                WriteLog.LogFormat("{0}: {1}", key, _dic[key]);
+        }
 
 
     }

@@ -4,7 +4,7 @@ using MongoDB.Bson;
 public partial class DBPlayer : IRealmObject {
     [PrimaryKey]
     [MapTo("_id")]
-    public ObjectId ID { get; set; }
-    [MapTo("name")]
-    public string Name { get; set; }
+    public string ID { get; set; }
+    [MapTo("authType")]
+    public string AuthType { get; set; }
 }

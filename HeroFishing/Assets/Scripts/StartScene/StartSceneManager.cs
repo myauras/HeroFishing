@@ -44,8 +44,10 @@ namespace HeroFishing.Main {
             RealmManager.NewApp();
             //RealmManager.AnonymousSignUp();
         }
-        public void TestAtlasFunction() {
-            RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.Signup);
+        public async void TestAtlasFunction() {
+            var replyData = await RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.InitPlayerData, new Dictionary<string, object> {
+                { "AuthType", AuthType.Guest.ToString() }
+            });
         }
         private void OnConnectGame(bool isSuccess, bool isMaintain) {
             WriteLog.Log("isSuccess=" + isSuccess);
@@ -56,9 +58,9 @@ namespace HeroFishing.Main {
         /// </summary>
         public void ShowInfo() {
             if (RealmManager.MyApp != null && RealmManager.MyApp.CurrentUser != null)
-                VersionText.text = string.Format("Ver: {0} {1} " + Application.version, RealmManager.MyApp.CurrentUser.Id);
+                VersionText.text = string.Format("Ver: {0} {1} ", Application.version, RealmManager.MyApp.CurrentUser.Id);
             else
-                VersionText.text = string.Format("Ver: {0}" + Application.version);
+                VersionText.text = string.Format("Ver: {0}", Application.version);
         }
         public void PlayMainMusic() {
             AudioPlayer.StopAllMusic_static();

@@ -104,6 +104,7 @@ namespace HeroFishing.Main {
                             CompleteRegistrationEvent(authType);// 通知分析註冊完成事件
                             await InitPlayerData(authType);//初始化玩家資料
 
+
                         });
 
                     } else {//如果本來就有登入，代表是從大廳退回主畫面的，此時讓玩家登出並重新登入
@@ -168,7 +169,12 @@ namespace HeroFishing.Main {
         async Task InitPlayerData(AuthType _authType) {
             WriteLog.LogColorFormat("User: {0} Auth: {1} ", WriteLog.LogType.Realm, RealmManager.MyApp.CurrentUser.Id, "代處理");
             ShowUI(Condition.HideAll);
-            WriteLog.LogColor("尚無此玩家資料，開始初始化Firebase玩家資料", WriteLog.LogType.Realm);
+            WriteLog.LogColor("尚無此玩家資料，開始初始化玩家資料", WriteLog.LogType.Realm);
+            var replyData = await RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.InitPlayerData, new Dictionary<string, object> {
+                { "AuthType", AuthType.Guest.ToString() }
+            });
+            Debug.LogError("finish call func");
+            RealmManager.GetDatas();
             //FirebaseManager.SignUp(_authType, data => {//初始化玩家帳號完成後跑這裡
             //    FirebaseManager.LoadDatas(() => {
             //        StartManager.Instance.SetVersionText();//顯示下方文字

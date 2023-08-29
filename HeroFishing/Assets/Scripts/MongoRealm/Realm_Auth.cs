@@ -6,6 +6,7 @@ using Realms.Sync;
 using Scoz.Func;
 using System.Threading.Tasks;
 using System.Linq;
+using System;
 
 namespace Service.Realms {
     public static partial class RealmManager {
@@ -51,20 +52,21 @@ namespace Service.Realms {
         /// 設定FlexibleSyncConfg
         /// </summary>
         static async Task SetConfiguration() {
-
-            //var config = new FlexibleSyncConfiguration(MyApp.CurrentUser) {
-            //    PopulateInitialSubscriptions = (realm) => {
-            //        var players = realm.All<DBPlayer>().Where(a => a.ID.ToString() == MyApp.CurrentUser.Id);
-            //        realm.Subscriptions.Add(players);
-            //    }
-            //};
-
-            var config = new FlexibleSyncConfiguration(MyApp.CurrentUser);
-            // The process will complete when all the user's items have been downloaded.
-            MyRealm = await Realm.GetInstanceAsync(config);
+            WriteLog.LogColorFormat("開始註冊Realm設定檔...", WriteLog.LogType.Realm);
+            var config = new FlexibleSyncConfiguration(MyApp.CurrentUser) {
+                PopulateInitialSubscriptions = (realm) => {
+                    var players = realm.All<DBPlayer>().Where(a => a.ID.ToString() == MyApp.CurrentUser.Id);
+                    realm.Subscriptions.Add(players, new SubscriptionOptions() { Name = "player" });
+                }
+            };
+            try {
+                MyRealm = await Realm.GetInstanceAsync(config);
+            } catch (Exception ex) {
+                Console.WriteLine($@"Error creating or opening the realm file. {ex.Message}");
+            }
             //訂閱玩家自己
-            var playerQuery = MyRealm.All<DBPlayer>().Where(i => i.ID.ToString() == MyApp.CurrentUser.Id);
-            var subscription = MyRealm.Subscriptions.Add(playerQuery, new SubscriptionOptions() { Name = "MyPlayer" });
+            //var playerQuery = MyRealm.All<DBPlayer>().Where(i => i.ID.ToString() == MyApp.CurrentUser.Id);
+            //var subscription = MyRealm.Subscriptions.Add(playerQuery, new SubscriptionOptions() { Name = "player" });
             WriteLog.LogColorFormat("Realm設定檔註冊完成", WriteLog.LogType.Realm);
         }
 

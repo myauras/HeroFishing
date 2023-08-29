@@ -28,22 +28,6 @@ namespace Service.Realms {
         }
 
 
-        public static void GetData() {
-            var playerId = new ObjectId("649152d10d942c2bf0ccafb5");
-            var player = MyRealm.Find<DBPlayer>(playerId);
-
-            // 在這裡使用 player 物件
-            if (player != null) {
-                // 找到了相應的文件
-                Debug.LogError("Name=" + player.Name);
-                Debug.LogError("Id=" + player.ID);
-                // ...
-            } else {
-                Debug.LogError("找不到");
-                // 沒有找到相應的文件
-            }
-        }
-
         public static async void CallFunc(string _funcName, params object[] _params) {
             Debug.LogError("CallFunc");
             try {
