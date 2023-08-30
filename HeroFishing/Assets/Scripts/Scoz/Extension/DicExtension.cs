@@ -87,13 +87,25 @@ namespace Scoz.Func {
             }
             return resultDic;
         }
-        public static void LogDic(IDictionary _dic) {
+        /// <summary>
+        /// 輸出Dictionary的key-value到console
+        /// </summary>
+        public static void Log(this IDictionary _dic) {
             if (_dic == null) return;
             foreach (var key in _dic.Keys)
                 WriteLog.LogFormat("{0}: {1}", key, _dic[key]);
         }
-
-
+        /// <summary>
+        /// IDictionary的TryGetValue版本
+        /// </summary>
+        public static bool TryGetValue(this IDictionary _dic, object _key, out object _value) {
+            if (_dic.Contains(_key)) {
+                _value = _dic[_key];
+                return true;
+            }
+            _value = null;
+            return false;
+        }
     }
 
 }

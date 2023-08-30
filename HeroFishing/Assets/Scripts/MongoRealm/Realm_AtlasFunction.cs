@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using LitJson;
 using Scoz.Func;
@@ -13,8 +15,17 @@ namespace Service.Realms {
 
         static Dictionary<string, object> HandleReplyData(string _replyJson) {
             try {
-                var resultDictionary = JsonMapper.ToObject<Dictionary<string, object>>(_replyJson);
-                if (!resultDictionary.TryGetValue(ReplyKey.Error.ToString(), out object error)) {
+                var jsonObj = JsonMapper.ToObject(_replyJson.UnwrapQuotedJson());
+                if (jsonObj == null) {
+                    WriteLog.LogError("AtlasFunc回傳json無法轉為jsonObj: " + _replyJson);
+                    return null;
+                }
+                var iDic = jsonObj as IDictionary;
+                if (iDic == null) {
+                    WriteLog.LogError("AtlasFunc回傳jsonObj無法轉為IDictionary類型: " + _replyJson);
+                    return null;
+                }
+                if (!iDic.TryGetValue(ReplyKey.Error.ToString(), out object error)) {
                     WriteLog.LogError("AtlasFunc回傳的資料缺少欄位: " + ReplyKey.Error);
                     return null;
                 }
@@ -22,7 +33,7 @@ namespace Service.Realms {
                     WriteLog.LogError("AtlasFunc錯誤: " + error);
                     return null;
                 }
-                if (!resultDictionary.TryGetValue(ReplyKey.Data.ToString(), out object replyData)) {
+                if (!iDic.TryGetValue(ReplyKey.Data.ToString(), out object replyData)) {
                     WriteLog.LogError("AtlasFunc回傳的資料缺少欄位: " + ReplyKey.Error);
                     return null;
                 }
@@ -42,7 +53,7 @@ namespace Service.Realms {
         /// 呼叫MonsgoDB Atlas 傳入方法名稱與參數 
         /// </summary>
         /// <param name="_func">方法名稱</param>
-        /// <param name="_params">參數</param>
+        /// <param name="_params">傳入參數字典</param>
         /// <returns></returns>
         public static async Task<Dictionary<string, object>> CallAtlasFunc(AtlasFunc _func, Dictionary<string, object> _data) {
 
@@ -50,9 +61,9 @@ namespace Service.Realms {
             if (_data == null) jsonResult = await MyApp.CurrentUser.Functions.CallAsync<string>(_func.ToString());
             else jsonResult = await MyApp.CurrentUser.Functions.CallAsync<string>(_func.ToString(), _data);
             try {
-                WriteLog.LogColorFormat("jsonResult: {0}", WriteLog.LogType.Realm, jsonResult);
+                //WriteLog.LogColorFormat("jsonResult: {0}", WriteLog.LogType.Realm, jsonResult);
                 var dataDic = HandleReplyData(jsonResult);
-                DicExtension.LogDic(dataDic);
+                //dataDic.Log();
                 return dataDic;
             } catch (Exception _e) {
                 WriteLog.LogError("CallAtlasFunc回傳發生錯誤: " + _e);

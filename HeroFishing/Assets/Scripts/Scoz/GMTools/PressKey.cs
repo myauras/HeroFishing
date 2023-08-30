@@ -7,7 +7,7 @@ using HeroFishing.Main;
 using SimpleJSON;
 
 namespace Scoz.Func {
-    public partial class Debugger : MonoBehaviour {
+    public partial class TestTool : MonoBehaviour {
 
         [SerializeField] GameObject ToolGO;
 

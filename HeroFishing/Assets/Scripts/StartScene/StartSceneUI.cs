@@ -15,7 +15,7 @@ namespace HeroFishing.Main {
         [SerializeField] GameObject LogutoutGO;//登出
         [SerializeField] GameObject DeleteACGO;//刪除帳戶(蘋果要求)
         [SerializeField] GameObject BackToLobbyGO;//返回大廳按鈕
-        [SerializeField] GameObject Debugger;//編輯器登入會顯示的物件
+        [SerializeField] GameObject TestTool;//編輯器登入會顯示的物件
         [SerializeField] Text MiddleText;//等待登入文字
         [SerializeField] RectTransform QuestReportButton; // 問題回報的按鍵
 

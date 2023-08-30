@@ -137,9 +137,9 @@ namespace Scoz.Func {
                 PopupUI_Local.CreateNewInstance();
             //建立影片播放器
             MyVideoPlayer.CreateNewVideoPlayer();
-            //建立Debugger
+            //建立TestTool
 #if !Release
-            Debugger.CreateNewInstance();
+            TestTool.CreateNewInstance();
 #endif
             //建立AudioPlayer    
             AudioPlayer.CreateNewAudioPlayer();

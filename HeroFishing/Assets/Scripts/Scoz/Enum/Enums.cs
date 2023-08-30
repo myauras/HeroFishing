@@ -22,7 +22,7 @@ namespace Scoz.Func {
         CH,
         JP,
     }
-    public enum BuffDebuff {
+    public enum BuffType {
         Buff = 0,
         None = 1,
         Debuff = 2,

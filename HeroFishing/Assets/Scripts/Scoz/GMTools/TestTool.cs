@@ -8,11 +8,10 @@ using UnityEngine.SceneManagement;
 using System;
 
 namespace Scoz.Func {
-    public partial class Debugger : MonoBehaviour {
+    public partial class TestTool : MonoBehaviour {
         public static bool IsInit;
-        public static Debugger Instance;
+        public static TestTool Instance;
         [SerializeField] Text EnvVersion;
-        public Text TotalMemoryText = null;
         public Text Text_FPS;
         public float InfoRefreshInterval = 0.5f;
         public Text VersionText;
@@ -62,20 +61,20 @@ namespace Scoz.Func {
             //if (FirebaseManager.MyFirebaseApp != null)
             //    EnvVersion.text = "Env: " + FirebaseManager.MyFirebaseApp.Options.ProjectId;
         }
-        void InitDebugger() {
+        void InitTestTool() {
             IsInit = true;
             DontDestroyOnLoad(gameObject);
 
         }
-        public static Debugger CreateNewInstance() {
+        public static TestTool CreateNewInstance() {
             if (Instance != null) {
-                WriteLog.Log("Debugger之前已經被建立了");
+                WriteLog.Log("TestTool之前已經被建立了");
             } else {
-                GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/Debugger");
+                GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/TestTool");
                 GameObject go = Instantiate(prefab);
-                go.name = "Debugger";
-                Instance = go.GetComponent<Debugger>();
-                Instance.InitDebugger();
+                go.name = "TestTool";
+                Instance = go.GetComponent<TestTool>();
+                Instance.InitTestTool();
             }
             return Instance;
         }
