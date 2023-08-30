@@ -173,7 +173,6 @@ namespace HeroFishing.Main {
             var replyData = await RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.InitPlayerData, new Dictionary<string, object> {
                 { "AuthType", AuthType.Guest.ToString() }
             });
-            Debug.LogError("finish call func");
             RealmManager.GetDatas();
             //FirebaseManager.SignUp(_authType, data => {//初始化玩家帳號完成後跑這裡
             //    FirebaseManager.LoadDatas(() => {

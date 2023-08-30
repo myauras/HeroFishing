@@ -54,7 +54,7 @@ namespace Service.Realms {
         /// </summary>
         /// <param name="_func">方法名稱</param>
         /// <param name="_params">傳入參數字典</param>
-        /// <returns></returns>
+        /// <returns>回傳結果字典</returns>
         public static async Task<Dictionary<string, object>> CallAtlasFunc(AtlasFunc _func, Dictionary<string, object> _data) {
 
             string jsonResult = null;
