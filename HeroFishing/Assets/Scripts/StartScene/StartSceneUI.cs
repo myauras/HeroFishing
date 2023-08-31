@@ -104,7 +104,6 @@ namespace HeroFishing.Main {
                             CompleteRegistrationEvent(authType);// 通知分析註冊完成事件
                             await InitPlayerData(authType);//初始化玩家資料
 
-
                         });
 
                     } else {//如果本來就有登入，代表是從大廳退回主畫面的，此時讓玩家登出並重新登入
@@ -117,7 +116,6 @@ namespace HeroFishing.Main {
                                 StartSceneManager.Instance.ShowInfo();//顯示下方文字
                                 CompleteRegistrationEvent(authType);// 通知分析註冊完成事件
                                 await InitPlayerData(authType);//初始化玩家資料
-
                             });
 
                         }, null);
@@ -173,13 +171,15 @@ namespace HeroFishing.Main {
             var replyData = await RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.InitPlayerData, new Dictionary<string, object> {
                 { "AuthType", AuthType.Guest.ToString() }
             });
-            RealmManager.GetDatas();
-            //FirebaseManager.SignUp(_authType, data => {//初始化玩家帳號完成後跑這裡
-            //    FirebaseManager.LoadDatas(() => {
-            //        StartManager.Instance.SetVersionText();//顯示下方文字
-            //        StartDownloadingAssetAndGoNextScene();
-            //    });
-            //});
+
+            //如果是編輯器不直接轉場景(正式機才會直接進Lobby)
+#if UNITY_EDITOR
+            ShowUI(StartSceneUI.Condition.BackFromLobby_ShowLogoutBtn);
+#else
+            StartDownloadingAssetAndGoNextScene();//開始載資源包並開始遊戲
+#endif
+
+
         }
         /// <summary>
         /// 登出帳戶，按下後會登出並顯示回需要登入狀態

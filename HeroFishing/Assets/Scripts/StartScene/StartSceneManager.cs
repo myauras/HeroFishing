@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using HeroFishing.Socket;
 using Scoz.Func;
 using Service.Realms;
@@ -93,45 +94,31 @@ namespace HeroFishing.Main {
             if (RealmManager.MyApp.CurrentUser == null) {//玩家尚未登入
                 WriteLog.LogColor("玩家尚未登入Realm", WriteLog.LogType.Realm);
                 MyStartSceneUI.ShowUI(StartSceneUI.Condition.NotLogin);
-            } else {//已經登入，就同步Realm上的資料
+            } else {//已經登入，就開始載包並進入遊戲
 
-                //                //是否第一次執行遊戲，第一次執行遊戲後會自動進大廳，之後透過從大廳的設定中點回到主介面就不會又自動進大廳了
-                //                if (FirstTimeLaunchGame) {
-                //                    FirebaseManager.LoadDatas(() => {
-                //                        WriteLog.LogFormat("玩家 {0} 已經登入", FirebaseManager.MyUser.UserId);
-                //                        StartSceneManager.Instance.SetVersionText();//顯示下方文字
-                //#if APPSFLYER
-                //                                    // 設定玩家UID
-                //                                    AppsFlyerManager.Inst.SetCustomerUserId(FirebaseManager.MyUser.UserId);
-                //                                    // AppsFlyer紀錄玩家登入
-                //                                    AppsFlyerManager.Inst.Login(FirebaseManager.MyUser.UserId);
-                //#endif
+                //是否第一次執行遊戲，第一次執行遊戲後會自動進大廳，之後透過從大廳的設定中點回到主介面就不會又自動進大廳了
+                if (FirstTimeLaunchGame) {
+                    UniTask.Void(async () => {
+                        await RealmManager.OnSignin();
+                        StartSceneManager.Instance.ShowInfo();//顯示下方文字
 
-                //#if !UNITY_EDITOR && FIREBASE_ANALYTICS
-                //                                FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
-                //                                // 設定Firebase UserId
-                //                                FirebaseAnalytics.SetUserId(FirebaseManager.MyUser.UserId);
-                //                                // 記錄登入事件
-                //                                Parameter[] loginParameters = {
-                //                                      new Parameter(FirebaseAnalytics.ParameterMethod, FirebaseManager.MyUser.UserId)
-                //                                };
-                //                                FirebaseAnalytics.LogEvent(FirebaseAnalytics.EventLogin, loginParameters);
-                //#endif
+#if APPSFLYER
+                        // 設定玩家UID
+                        AppsFlyerManager.Inst.SetCustomerUserId(RealmManager.MyApp.CurrentUser.Id);
+                        // AppsFlyer紀錄玩家登入
+                        AppsFlyerManager.Inst.Login(RealmManager.MyApp.CurrentUser.Id);
+#endif
 
-                //                        //如果是編輯器不直接轉場景(正式機才會直接進Lobby)
-                //#if UNITY_EDITOR
-                //                        MyStartSceneUI.ShowUI(StartSceneUI.Condietion.BackFromLobby_ShowLogoutBtn);
-                //#else
-                //                                    StartDownloadingAssetAndGoNextScene();
-                //#endif
-                //                    });
-
-
-                //                } else {//如果是從大廳點設定回到主介面跑這裡，顯示登出按鈕與返回大廳按鈕
-                //                    MyStartSceneUI.ShowUI(StartSceneUI.Condietion.BackFromLobby_ShowLogoutBtn);
-                //                }
-
-
+                        //如果是編輯器不直接轉場景(正式機才會直接進Lobby)
+#if UNITY_EDITOR
+                        MyStartSceneUI.ShowUI(StartSceneUI.Condition.BackFromLobby_ShowLogoutBtn);
+#else
+                        StartDownloadingAssetAndGoNextScene();//開始載資源包並開始遊戲
+#endif
+                    });
+                } else {//如果是從大廳點設定回到主介面跑這裡，顯示登出按鈕與返回大廳按鈕
+                    MyStartSceneUI.ShowUI(StartSceneUI.Condition.BackFromLobby_ShowLogoutBtn);
+                }
 
             }
         }

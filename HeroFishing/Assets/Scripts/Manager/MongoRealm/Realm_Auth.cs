@@ -7,6 +7,7 @@ using Scoz.Func;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using static UnityEditor.Progress;
 
 namespace Service.Realms {
     public static partial class RealmManager {
@@ -16,7 +17,6 @@ namespace Service.Realms {
         /// </summary>
         public static async Task AnonymousSignup() {
             if (MyApp == null) { WriteLog.LogError("尚未建立Realm App"); return; }
-            Debug.Log("MyApp=" + MyApp);
             await MyApp.LogInAsync(Credentials.Anonymous());
             await OnSignin();
         }
@@ -55,15 +55,17 @@ namespace Service.Realms {
             WriteLog.LogColorFormat("開始註冊Realm設定檔...", WriteLog.LogType.Realm);
             var config = new FlexibleSyncConfiguration(MyApp.CurrentUser) {
                 PopulateInitialSubscriptions = (realm) => {
-                    var players = realm.All<DBPlayer>().Where(a => a.ID.ToString() == MyApp.CurrentUser.Id);
-                    realm.Subscriptions.Add(players, new SubscriptionOptions() { Name = "player" });
+                    var players = realm.All<DBPlayer>().Where(i => i.ID == MyApp.CurrentUser.Id);
+                    realm.Subscriptions.Add(players, new SubscriptionOptions() { Name = "MyPlayer" });
                 }
             };
+
             try {
                 MyRealm = await Realm.GetInstanceAsync(config);
-            } catch (Exception ex) {
-                Console.WriteLine($@"Error creating or opening the realm file. {ex.Message}");
+            } catch (Exception _e) {
+                WriteLog.LogError("Realm 使用config來GetInstanceAsync時發生錯誤: " + _e);
             }
+            RegisterPropertyChangedNotify();
             //訂閱玩家自己
             //var playerQuery = MyRealm.All<DBPlayer>().Where(i => i.ID.ToString() == MyApp.CurrentUser.Id);
             //var subscription = MyRealm.Subscriptions.Add(playerQuery, new SubscriptionOptions() { Name = "player" });

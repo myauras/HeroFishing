@@ -29,14 +29,12 @@ namespace Service.Realms {
 
 
         public static async void CallFunc(string _funcName, params object[] _params) {
-            Debug.LogError("CallFunc");
             try {
                 var bsonValue = await MyApp.CurrentUser.Functions.CallAsync(_funcName, _params);
                 Debug.LogError(bsonValue.ToString());
                 var result = bsonValue.ToBsonDocument().ToDictionary();
-                Debug.LogError("test");
             } catch (Exception _e) {
-                Debug.LogError("呼叫Function錯誤: " + _funcName + "//// E: " + _e);
+                Debug.LogError("呼叫Atlas Function錯誤 方法名: " + _funcName + "  錯誤內容: " + _e);
             }
 
         }
