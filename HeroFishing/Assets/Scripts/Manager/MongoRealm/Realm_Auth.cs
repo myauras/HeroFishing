@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using static UnityEditor.Progress;
+using Cysharp.Threading.Tasks;
 
 namespace Service.Realms {
     public static partial class RealmManager {
@@ -17,7 +18,11 @@ namespace Service.Realms {
         /// </summary>
         public static async Task AnonymousSignup() {
             if (MyApp == null) { WriteLog.LogError("尚未建立Realm App"); return; }
-            await MyApp.LogInAsync(Credentials.Anonymous());
+            try {
+                await MyApp.LogInAsync(Credentials.Anonymous());
+            } catch (Exception _e) {
+                WriteLog.LogError("在AnonymousSignup時MyApp.LogInAsync發生錯誤: " + _e);
+            }
             await OnSignin();
         }
         /// <summary>
@@ -41,11 +46,31 @@ namespace Service.Realms {
         }
 
         /// <summary>
-        /// 玩家登入後執行
+        /// 玩家登入後都會執行這裡(不管是剛註冊後還是已註冊的玩家登入)
         /// </summary>
         public static async Task OnSignin() {
             WriteLog.LogColorFormat("Realm帳號登入: {0}", WriteLog.LogType.Realm, MyApp.CurrentUser);
+            Task getServerTimeTask = GetServerTime();
             await SetConfiguration();
+        }
+
+        /// <summary>
+        /// 向AtlasFunction取Server時間
+        /// </summary>
+        static async Task GetServerTime() {
+            var serverTimeData = await CallAtlasFunc(AtlasFunc.GetServerTime, null);
+            if (serverTimeData.TryGetValue("serverTime", out object _obj)) {
+                //WriteLog.LogColor(_obj.ToString(), WriteLog.LogType.Realm);
+                try {
+                    DateTimeOffset utcDateTimeOffset = DateTimeOffset.Parse(_obj.ToString());
+                    //DateTimeOffset localDateTimeOffset = utcDateTimeOffset.ToOffset(TimeSpan.FromHours(8));
+                    GameManager.Instance.SetTime(utcDateTimeOffset);
+                } catch (Exception _e) {
+                    WriteLog.LogError("GetServerTime發生錯誤: " + _e);
+                }
+            } else {
+                WriteLog.LogError("GetServerTime發生錯誤: Atlas Function回傳格式錯誤");
+            }
         }
 
         /// <summary>
@@ -65,7 +90,6 @@ namespace Service.Realms {
             } catch (Exception _e) {
                 WriteLog.LogError("Realm 使用config來GetInstanceAsync時發生錯誤: " + _e);
             }
-            RegisterPropertyChangedNotify();
             //訂閱玩家自己
             //var playerQuery = MyRealm.All<DBPlayer>().Where(i => i.ID.ToString() == MyApp.CurrentUser.Id);
             //var subscription = MyRealm.Subscriptions.Add(playerQuery, new SubscriptionOptions() { Name = "player" });

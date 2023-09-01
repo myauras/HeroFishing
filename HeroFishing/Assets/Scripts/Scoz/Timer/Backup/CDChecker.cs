@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Scoz.Func {
 
     public class CDChecker : MonoBehaviour {
-        static Dictionary<string, DateTime> ColdDownDic = new Dictionary<string, DateTime>();
+        static Dictionary<string, DateTimeOffset> ColdDownDic = new Dictionary<string, DateTimeOffset>();
         /// <summary>
         /// 傳入ID與CD秒數，回傳是否已經CD結束，如果是就反回true並更新時間，還在CD就回傳false
         /// </summary>

@@ -19,25 +19,22 @@ namespace Service.Realms {
         public static App MyApp { get; private set; }
         public static Realm MyRealm { get; private set; }
 
+        public static void ClearApp() {
+            if (MyRealm != null) {
+                MyRealm.Dispose();
+                MyRealm = null;
+            }
+            if (MyApp != null) MyApp = null;
+        }
         /// <summary>
         /// 最初Realm初始化要先New一個Ream App
         /// </summary>
         public static App NewApp() {
             MyApp = App.Create(REALM_APPID_DIC[GameManager.CurVersion]); // 創建 Realm App
+            DeviceManager.AddOnApplicationQuitAction(() => { ClearApp(); });
             return MyApp;
         }
 
-
-        public static async void CallFunc(string _funcName, params object[] _params) {
-            try {
-                var bsonValue = await MyApp.CurrentUser.Functions.CallAsync(_funcName, _params);
-                Debug.LogError(bsonValue.ToString());
-                var result = bsonValue.ToBsonDocument().ToDictionary();
-            } catch (Exception _e) {
-                Debug.LogError("呼叫Atlas Function錯誤 方法名: " + _funcName + "  錯誤內容: " + _e);
-            }
-
-        }
 
     }
 }

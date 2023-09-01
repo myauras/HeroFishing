@@ -100,25 +100,30 @@ namespace HeroFishing.Main {
 
                         UniTask.Void(async () => {
                             await RealmManager.AnonymousSignup();//Realm訪客註冊
+                            ShowUI(Condition.HideAll);
                             StartSceneManager.Instance.ShowInfo();//顯示下方文字
                             CompleteRegistrationEvent(authType);// 通知分析註冊完成事件
                             await InitPlayerData(authType);//初始化玩家資料
-
+                            await RealmManager.RegisterRealmEvents();//註冊Realm事件
+                            PopupUI_Local.HideLoading();
                         });
 
-                    } else {//如果本來就有登入，代表是從大廳退回主畫面的，此時讓玩家登出並重新登入
-                        PopupUI_Local.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
-
-                            PopupUI_Local.ShowLoading(string.Format("Loading"));
-                            UniTask.Void(async () => {
-                                await RealmManager.Signout();//Realm登出
-                                await RealmManager.AnonymousSignup();//Realm訪客註冊
-                                StartSceneManager.Instance.ShowInfo();//顯示下方文字
-                                CompleteRegistrationEvent(authType);// 通知分析註冊完成事件
-                                await InitPlayerData(authType);//初始化玩家資料
-                            });
-
-                        }, null);
+                    } else {//如果本來就有登入，代表是UI顯示錯誤(登入中的玩家不該點的到訪客註冊)
+                        WriteLog.LogError("本來就有登入，代表是UI顯示錯誤(登入中的玩家不該點的到訪客註冊)");
+                        PopupUI_Local.HideLoading();
+                        //登入中進行登出並重新註冊
+                        //PopupUI_Local.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
+                        //    PopupUI_Local.ShowLoading(string.Format("Loading"));
+                        //    UniTask.Void(async () => {
+                        //        await RealmManager.Signout();//Realm登出
+                        //        await RealmManager.AnonymousSignup();//Realm訪客註冊
+                        //        StartSceneManager.Instance.ShowInfo();//顯示下方文字
+                        //        CompleteRegistrationEvent(authType);// 通知分析註冊完成事件
+                        //        await InitPlayerData(authType);//初始化玩家資料
+                        //        await RealmManager.RegisterPropertyChangedNotifies();//註冊DB異動通知
+                        //        PopupUI_Local.HideLoading();
+                        //    });
+                        //}, null);
                     }
                     break;
                     //                case AuthType.Facebook:
@@ -165,12 +170,8 @@ namespace HeroFishing.Main {
         /// 初始化玩家資料
         /// </summary>
         async Task InitPlayerData(AuthType _authType) {
-            WriteLog.LogColorFormat("User: {0} Auth: {1} ", WriteLog.LogType.Realm, RealmManager.MyApp.CurrentUser.Id, "代處理");
-            ShowUI(Condition.HideAll);
-            WriteLog.LogColor("尚無此玩家資料，開始初始化玩家資料", WriteLog.LogType.Realm);
-            var replyData = await RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.InitPlayerData, new Dictionary<string, object> {
-                { "AuthType", AuthType.Guest.ToString() }
-            });
+            WriteLog.LogColorFormat("尚無此玩家資料，開始初始化玩家 {0} 的資料", WriteLog.LogType.Realm, RealmManager.MyApp.CurrentUser.Id);
+            var replyData = await RealmManager.CallAtlasFunc_InitPlayerData(AuthType.Guest);
 
             //如果是編輯器不直接轉場景(正式機才會直接進Lobby)
 #if UNITY_EDITOR

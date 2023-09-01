@@ -35,11 +35,11 @@ namespace Scoz.Func {
         }
 
 
-        DateTime LastServerTime;
-        DateTime LastClientTime;
-        public DateTime NowTime {
+        DateTimeOffset LastServerTime;
+        DateTimeOffset LastClientTime;
+        public DateTimeOffset NowTime {
             get {
-                TimeSpan span = DateTime.Now - LastClientTime;
+                TimeSpan span = DateTimeOffset.Now - LastClientTime;
                 return LastServerTime.AddSeconds(span.TotalSeconds);
             }
         }
@@ -56,7 +56,7 @@ namespace Scoz.Func {
         /// </summary>
         public int LocoHourOffsetToServer {
             get {
-                return (int)((DateTime.Now - NowTime).TotalHours);
+                return (int)((DateTimeOffset.Now - NowTime).TotalHours);
             }
         }
 
@@ -81,9 +81,9 @@ namespace Scoz.Func {
             return Instance;
         }
 
-        public void SetTime(DateTime _serverTime) {
+        public void SetTime(DateTimeOffset _serverTime) {
             LastServerTime = _serverTime;
-            LastClientTime = DateTime.Now;
+            LastClientTime = DateTimeOffset.Now;
             WriteLog.Log("Get Server Time: " + LastServerTime);
         }
 

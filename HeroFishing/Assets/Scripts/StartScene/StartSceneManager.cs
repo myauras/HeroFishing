@@ -46,9 +46,7 @@ namespace HeroFishing.Main {
             //RealmManager.AnonymousSignUp();
         }
         public async void TestAtlasFunction() {
-            var replyData = await RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.InitPlayerData, new Dictionary<string, object> {
-                { "AuthType", AuthType.Guest.ToString() }
-            });
+            var replyData = await RealmManager.CallAtlasFunc_InitPlayerData(AuthType.Guest);
         }
         private void OnConnectGame(bool isSuccess, bool isMaintain) {
             WriteLog.Log("isSuccess=" + isSuccess);
@@ -71,8 +69,8 @@ namespace HeroFishing.Main {
 
         //確認有網路後才會執行後續
         void OnConnected() {
+            PopupUI_Local.HideLoading();
             PopupUI_Local.ShowLoading("Init Data");
-
             ////初始化Realm
             RealmManager.NewApp();
             AuthChek();//登入狀態確認
@@ -90,6 +88,10 @@ namespace HeroFishing.Main {
                          AppsFlyerManager.Inst.IOSAskATTUserTrack();
 #endif
 
+            //※之後也要新增玩家註冊完但是初始化玩家資料失敗的流程(不太會發生 但要考慮這個可能性)
+            //※之後也要新增玩家註冊完但是初始化玩家資料失敗的流程(不太會發生 但要考慮這個可能性)
+            //※之後也要新增玩家註冊完但是初始化玩家資料失敗的流程(不太會發生 但要考慮這個可能性)
+            //※之後也要新增玩家註冊完但是初始化玩家資料失敗的流程(不太會發生 但要考慮這個可能性)
 
             if (RealmManager.MyApp.CurrentUser == null) {//玩家尚未登入
                 WriteLog.LogColor("玩家尚未登入Realm", WriteLog.LogType.Realm);
@@ -98,8 +100,11 @@ namespace HeroFishing.Main {
 
                 //是否第一次執行遊戲，第一次執行遊戲後會自動進大廳，之後透過從大廳的設定中點回到主介面就不會又自動進大廳了
                 if (FirstTimeLaunchGame) {
+                    PopupUI_Local.ShowLoading("Loading");
                     UniTask.Void(async () => {
                         await RealmManager.OnSignin();
+                        await RealmManager.RegisterRealmEvents();//註冊Realm事件
+                        PopupUI_Local.HideLoading();
                         StartSceneManager.Instance.ShowInfo();//顯示下方文字
 
 #if APPSFLYER
@@ -115,6 +120,7 @@ namespace HeroFishing.Main {
 #else
                         StartDownloadingAssetAndGoNextScene();//開始載資源包並開始遊戲
 #endif
+
                     });
                 } else {//如果是從大廳點設定回到主介面跑這裡，顯示登出按鈕與返回大廳按鈕
                     MyStartSceneUI.ShowUI(StartSceneUI.Condition.BackFromLobby_ShowLogoutBtn);

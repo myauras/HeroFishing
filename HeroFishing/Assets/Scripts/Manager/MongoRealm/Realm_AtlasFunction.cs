@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using LitJson;
+using Realms;
 using Scoz.Func;
 
 namespace Service.Realms {
@@ -47,6 +49,7 @@ namespace Service.Realms {
 
         public enum AtlasFunc {
             InitPlayerData,//註冊玩家資料
+            GetServerTime,//取Server時間
         }
 
         /// <summary>
@@ -70,6 +73,33 @@ namespace Service.Realms {
                 return null;
             }
 
+        }
+
+        /// <summary>
+        /// 註冊帳戶，傳入AuthType
+        /// </summary>
+        public static async Task<Dictionary<string, object>> CallAtlasFunc_InitPlayerData(AuthType _authType) {
+            try {
+                var dataDic = new Dictionary<string, object> { { "AuthType", _authType.ToString() } };
+                var replyData = await CallAtlasFunc(AtlasFunc.InitPlayerData, dataDic);
+                if (replyData == null) {
+                    WriteLog.LogErrorFormat("CallAtlasFunc_InitPlayerData發生錯誤");
+                    return null;
+                }
+
+                var tcs = new TaskCompletionSource<object>();
+                using var token = MyRealm.All<DBPlayer>().Where(i => i.ID == MyApp.CurrentUser.Id).SubscribeForNotifications((sender, e) => {
+                    if (sender.Count > 0) {
+                        tcs.TrySetResult(null);
+                    }
+                });
+                await tcs.Task;
+                return replyData;
+
+            } catch (Exception _e) {
+                WriteLog.LogErrorFormat("CallAtlasFunc_InitPlayerData發生錯誤：{0}", _e);
+                return null;
+            }
         }
 
     }

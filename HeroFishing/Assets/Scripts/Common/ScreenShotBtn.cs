@@ -29,7 +29,7 @@ namespace HeroFishing.Main {
                 return;
             }
             //PopupUI.CallScreenEffect("Flash");
-            string fileName = string.Format("{0}.jpg", GameManager.Instance.NowTime.ToScozTimeStr());
+            string fileName = string.Format("{0}.jpg", GameManager.Instance.NowTime);
             MyCam.TakePicAndGetBytes(bytes => {
                 //SpriteConvert.GetSprite(bytes);<------要將bytes轉sprite可以用這個Function
                 WriteLog.Log("螢幕截圖成功");
