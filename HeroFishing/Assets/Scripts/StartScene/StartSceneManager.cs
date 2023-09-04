@@ -103,7 +103,7 @@ namespace HeroFishing.Main {
                     PopupUI_Local.ShowLoading("Loading");
                     UniTask.Void(async () => {
                         await RealmManager.OnSignin();
-                        await RealmManager.RegisterRealmEvents();//註冊Realm事件
+                        RealmManager.OnDataLoaded();
                         PopupUI_Local.HideLoading();
                         StartSceneManager.Instance.ShowInfo();//顯示下方文字
 

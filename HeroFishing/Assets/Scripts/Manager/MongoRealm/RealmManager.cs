@@ -8,7 +8,14 @@ using System;
 using MongoDB.Bson;
 
 namespace Service.Realms {
-
+    /// <summary>
+    /// DB玩家資料集合
+    /// </summary>
+    public enum DBPlayerCol {
+        player,
+        playerHistory,
+        playerState,
+    }
     public static partial class RealmManager {
         //環境版本對應Realm App ID
         static Dictionary<EnvVersion, string> REALM_APPID_DIC = new Dictionary<EnvVersion, string>() {
@@ -18,6 +25,7 @@ namespace Service.Realms {
         };
         public static App MyApp { get; private set; }
         public static Realm MyRealm { get; private set; }
+
 
         public static void ClearApp() {
             if (MyRealm != null) {

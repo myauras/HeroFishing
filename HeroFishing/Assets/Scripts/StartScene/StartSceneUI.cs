@@ -104,7 +104,7 @@ namespace HeroFishing.Main {
                             StartSceneManager.Instance.ShowInfo();//顯示下方文字
                             CompleteRegistrationEvent(authType);// 通知分析註冊完成事件
                             await InitPlayerData(authType);//初始化玩家資料
-                            await RealmManager.RegisterRealmEvents();//註冊Realm事件
+                            RealmManager.OnDataLoaded();
                             PopupUI_Local.HideLoading();
                         });
 
@@ -179,7 +179,6 @@ namespace HeroFishing.Main {
 #else
             StartDownloadingAssetAndGoNextScene();//開始載資源包並開始遊戲
 #endif
-
 
         }
         /// <summary>

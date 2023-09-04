@@ -50,6 +50,8 @@ namespace Service.Realms {
         public enum AtlasFunc {
             InitPlayerData,//註冊玩家資料
             GetServerTime,//取Server時間
+            UpdateOnlineTime,//更新在線時間
+            Signin,//登入
         }
 
         /// <summary>
