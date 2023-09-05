@@ -51,6 +51,10 @@ namespace HeroFishing.Main {
         private void OnConnectGame(bool isSuccess, bool isMaintain) {
             WriteLog.Log("isSuccess=" + isSuccess);
         }
+        public async void Signout() {
+            await RealmManager.Signout();
+            //RealmManager.AnonymousSignUp();
+        }
         /// <summary>
         /// 1. (玩家尚未登入) 顯示版本
         /// 2. (玩家登入) 顯示版本+玩家ID

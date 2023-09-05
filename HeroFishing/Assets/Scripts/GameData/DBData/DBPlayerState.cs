@@ -4,7 +4,7 @@ using Realms;
 using MongoDB.Bson;
 using Service.Realms;
 
-[MapTo("player")]
+[MapTo("playerState")]
 public partial class DBPlayerState : IRealmObject {
     [Required]
     [MapTo("_id")]
