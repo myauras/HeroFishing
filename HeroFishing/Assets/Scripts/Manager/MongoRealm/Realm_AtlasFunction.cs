@@ -14,6 +14,12 @@ namespace Service.Realms {
             Data,//回傳資料放這裡
             Error,//有Error文字會放這裡, 沒有就會是null
         }
+        public enum AtlasFunc {
+            InitPlayerData,//註冊玩家資料
+            GetServerTime,//取Server時間
+            UpdateOnlineTime,//更新在線時間
+            Signin,//登入
+        }
 
         static Dictionary<string, object> HandleReplyData(string _replyJson) {
             try {
@@ -47,12 +53,7 @@ namespace Service.Realms {
             }
         }
 
-        public enum AtlasFunc {
-            InitPlayerData,//註冊玩家資料
-            GetServerTime,//取Server時間
-            UpdateOnlineTime,//更新在線時間
-            Signin,//登入
-        }
+
 
         /// <summary>
         /// 呼叫MonsgoDB Atlas 傳入方法名稱與參數 

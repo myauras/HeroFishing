@@ -112,8 +112,6 @@ namespace Scoz.Func {
             gameObject.AddComponent<DeviceManager>();
             //建立TypeEffector
             gameObject.AddComponent<TextTypeEffector>().Init();
-            //建立GameTimer
-            gameObject.AddComponent<GameTimer>().Init();
             //建立GameStateManager
             gameObject.AddComponent<GameStateManager>().Init();
             //建立CameraManager

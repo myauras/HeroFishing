@@ -21,7 +21,7 @@ namespace HeroFishing.Main {
             UniTaskManager.StartRepeatTask("DoMinteThings", DoMinteThings, 1000);
 
             //Realm在線時間更新
-            var realmTimerDoc = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.timer.ToString());
+            var realmTimerDoc = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.Timer.ToString());
             int onlineCheckSec = realmTimerDoc.OnlineCheckSec.GetValueOrDefault();
             if (onlineCheckSec <= MinimumOnlineSentSec) onlineCheckSec = MinimumOnlineSentSec;
             UniTaskManager.StartRepeatTask("OnlineSentRepeat", OnlineSentRepeat, onlineCheckSec * 1000);

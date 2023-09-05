@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
+using UnityEngine;
 
 namespace Service.Realms {
 
@@ -16,8 +17,9 @@ namespace Service.Realms {
         /// 玩家資料已經取到後執行
         /// </summary>
         public static void OnDataLoaded() {
-            RegisterRealmEvents();//註冊Realm事件
-            GamePlayer.Instance.InitDBPlayerDocs();
+            RegisterRealmEvents();//註冊Realm事件            
+            GameManager.Instance.AddComponent<GameTimer>().Init();//建立GameTimer
+            GamePlayer.Instance.InitDBPlayerDocs();//初始化玩家DB資料
         }
 
         /// <summary>

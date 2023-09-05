@@ -4,10 +4,10 @@ using Realms;
 using MongoDB.Bson;
 
 public enum DBGameSettingDoc {
-    timer,
-    address,
-    gameState,
-    scheduledInGameNotification,
+    Timer,
+    Address,
+    GameState,
+    ScheduledInGameNotification,
 }
 
 [MapTo("gameSetting")]

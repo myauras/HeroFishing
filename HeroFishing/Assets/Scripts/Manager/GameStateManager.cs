@@ -26,7 +26,7 @@ namespace HeroFishing.Main {
         /// </summary>
         public void InGameCheckScheduledInGameNotification() {
             if (SceneManager.GetActiveScene().name == MyScene.StartScene.ToString()) return;
-            var notification = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.scheduledInGameNotification.ToString());
+            var notification = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.ScheduledInGameNotification.ToString());
             if (notification.ScheduledNoticication_Enable == false) return;
             if (notification.ScheduledNoticication_Index <= ScheduledInGameNotificationIndex) return;
             if (notification.ScheduledNoticication_EndTime < GameManager.Instance.NowTime) return;
@@ -75,8 +75,8 @@ namespace HeroFishing.Main {
         /// 剛開始進遊戲時檢測是否可以進遊戲用，不能進入遊戲就跳對應的通知視窗
         /// </summary>
         public void StartCheckCanPlayGame(Action _passAction) {
-            var gameState = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.gameState.ToString());
-            var address = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.address.ToString());
+            var gameState = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.GameState.ToString());
+            var address = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.Address.ToString());
             var state = GetCanPlayGameState(gameState);
             switch (state) {
                 case CanPlayGameState.Available://可直接進行遊戲
@@ -139,8 +139,8 @@ namespace HeroFishing.Main {
         /// </summary>
         public void InGameCheckCanPlayGame() {
             if (SceneManager.GetActiveScene().name == MyScene.StartScene.ToString()) return;//不在StartScene時才會執行
-            var gameState = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.gameState.ToString());
-            var address = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.address.ToString());
+            var gameState = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.GameState.ToString());
+            var address = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.Address.ToString());
             var state = GetCanPlayGameState(gameState);
             switch (state) {
                 case GameStateManager.CanPlayGameState.Available://可直接進行遊戲
