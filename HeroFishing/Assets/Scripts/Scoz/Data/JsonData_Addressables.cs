@@ -47,12 +47,12 @@ namespace Scoz.Func {
                     }
                     Addressables.Release(handle);
                     if (ShowLoadTime) {
-                        WriteLog.LogFormat("<color=#398000>[Json] {0}.json載入完成</color>", _dataName);
+                        WriteLog.LogColorFormat("{0}.json載入完成", WriteLog.LogType.Json, _dataName);
                     }
                     _cb?.Invoke(_dataName, dic);
                 };
             } catch {
-                WriteLog.LogErrorFormat("[Json] 載入{0}.json時發生錯誤", _dataName);
+                WriteLog.LogErrorFormat("載入{0}.json時發生錯誤", _dataName);
             }
         }
         /// <summary>
@@ -68,6 +68,7 @@ namespace Scoz.Func {
                     Dictionary<string, MyJsonData> dic = new Dictionary<string, MyJsonData>();
                     for (int i = 0; i < items.Count; i++) {
                         T data = new T();
+                        if (i == 0) data.ResetStaticData();//在取第一筆資料前先重置靜態資料
                         data.GetDataFromJson(items[i], _dataName);
                         string id = items[i]["ID"].ToString();
                         if (!dic.ContainsKey(id))
@@ -78,13 +79,13 @@ namespace Scoz.Func {
                     }
                     Addressables.Release(handle);
                     if (ShowLoadTime) {
-                        WriteLog.LogFormat("<color=#398000>[Json] {0}.json載入完成</color>", _dataName);
+                        WriteLog.LogColorFormat("{0}.json載入完成", WriteLog.LogType.Json, _dataName);
                     }
                     _cb?.Invoke(_dataName, dic);
 
                 };
             } catch {
-                WriteLog.LogErrorFormat("[Json] 載入{0}.json時發生錯誤", _dataName);
+                WriteLog.LogErrorFormat("載入{0}.json時發生錯誤", _dataName);
             }
 
         }

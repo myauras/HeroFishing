@@ -17,9 +17,13 @@ namespace Service.Realms {
         /// 玩家資料已經取到後執行
         /// </summary>
         public static void OnDataLoaded() {
-            RegisterRealmEvents();//註冊Realm事件            
-            GameManager.Instance.AddComponent<GameTimer>().Init();//建立GameTimer
-            GamePlayer.Instance.InitDBPlayerDocs();//初始化玩家DB資料
+            try {
+                GamePlayer.Instance.InitDBPlayerDocs();//初始化玩家DB資料
+                RegisterRealmEvents();//註冊Realm事件    
+                GameManager.Instance.AddComponent<GameTimer>().Init();//建立GameTimer
+            } catch (Exception _e) {
+                WriteLog.LogError(_e);
+            }
         }
 
         /// <summary>
@@ -74,17 +78,13 @@ namespace Service.Realms {
         /// MyPlayer文件通知
         /// </summary>
         static void RegisterPropertyChanges_MyPlayer() {
-            var player = MyRealm.Find<DBPlayer>(MyApp.CurrentUser.Id);
+            var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
             if (player != null) {
                 player.PropertyChanged += (sender, e) => {
-                    if (player.Ban) {
-
-                    }
-                    //var propertyName = e.PropertyName;
-                    //var propertyValue = player.GetType().GetProperty(propertyName).GetValue(player);
-                    //WriteLog.LogColorFormat("Changed field: {0}  Value: {1}", WriteLog.LogType.Realm, propertyName, propertyValue);
-                    //if (e.PropertyName == "Ban") {
-                    //}
+                    var propertyName = e.PropertyName;
+                    var propertyValue = player.GetType().GetProperty(propertyName).GetValue(player);
+                    GameStateManager.Instance.InGameCheckCanPlayGame();
+                    WriteLog.LogColorFormat("Changed field: {0}  Value: {1}", WriteLog.LogType.Realm, propertyName, propertyValue);
                 };
             }
         }

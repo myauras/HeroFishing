@@ -12,6 +12,8 @@ namespace Scoz.Func {
             Addressable,
             Connection,
             Loco,
+            Json,
+            Plugin2,
         }
         public static Dictionary<LogType, string> LocColorCodes = new Dictionary<LogType, string>() {
             { LogType.Player,"db7777"},//紅
@@ -19,6 +21,8 @@ namespace Scoz.Func {
             { LogType.Connection,"dbdb77"},//黃
             { LogType.Addressable,"83a5d9"},//藍
 			{ LogType.Loco,"d9ad83"},//橘
+			{ LogType.Json,"398000"},//綠
+			{ LogType.Plugin2,"008080"},//藍綠
         };
 
 
@@ -34,9 +38,11 @@ namespace Scoz.Func {
         public static LogDelegate LogError { get { return UnityEngine.Debug.LogError; } }
         public static LogDelegate LogWarning { get { return UnityEngine.Debug.LogWarning; } }
         public static void LogColor(string format, LogType _type) {
+            format = string.Format("[{0}] {1}", _type, format);
             UnityEngine.Debug.Log(TextManager.GetColorText(format, LocColorCodes[_type]));
         }
         public static void LogColorFormat(string format, LogType _type, params object[] args) {
+            format = string.Format("[{0}] {1}", _type, format);
             UnityEngine.Debug.LogFormat(TextManager.GetColorText(format, LocColorCodes[_type]), args);
         }
         public static void LogFormat(string format, params object[] args) {

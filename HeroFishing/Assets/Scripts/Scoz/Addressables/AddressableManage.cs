@@ -95,7 +95,7 @@ namespace Scoz.Func {
         Coroutine Downloader;
         public void StartLoadAsset(Action _action) {
             BG.SetActive(false);
-            WriteLog.Log("<color=#008080>[Addressables] LoadAsset-Start</color>");
+            WriteLog.LogColor("LoadAsset-Start", WriteLog.LogType.Addressable);
             Keys.RemoveAll(a => a == "");
             PopupUI_Local.ShowLoading(StringJsonData.GetUIString("AddressableLoading"));
             FinishedAction = _action;
@@ -131,7 +131,7 @@ namespace Scoz.Func {
             AsyncOperationHandle<long> getDownloadSize = Addressables.GetDownloadSizeAsync(Keys);
             yield return getDownloadSize;
             long totalSize = getDownloadSize.Result;
-            WriteLog.LogFormat("<color=#008080>[Addressables] LoadAsset-TotalSize={0}</color>", MyMath.BytesToMB(totalSize).ToString("0.00"));
+            WriteLog.LogColorFormat("LoadAsset-TotalSize={0}", WriteLog.LogType.Addressable, MyMath.BytesToMB(totalSize).ToString("0.00"));
 
             //已經抓到資料就取消Coroutine
             if (CheckInternetCoroutine != null)
@@ -181,7 +181,7 @@ namespace Scoz.Func {
             FinishedAction?.Invoke();
             MyScene scene = MyEnum.ParseEnum<MyScene>(SceneManager.GetActiveScene().name);
             ShowDownloadUI(false);
-            WriteLog.Log("<color=#008080>[Addressables] LoadAsset-Finished</color>");
+            WriteLog.LogColorFormat("LoadAsset-Finished", WriteLog.LogType.Addressable);
 
 
         }
