@@ -29,6 +29,20 @@ namespace HeroFishing.Main {
         /// 初始化玩家自己的資料字典，有錯誤時返回false
         /// </summary>
         public bool InitDBPlayerDocs() {
+            //var query = RealmManager.MyRealm.All<DBPlayer>();
+            //var list = query.ToList();
+            //WriteLog.Log(list.Count);
+            //foreach (var p in list) {
+            //    WriteLog.Log(p);
+            //}
+
+            //var query2 = RealmManager.MyRealm.All<DBGameSetting>();
+            //var list2 = query2.ToList();
+            //WriteLog.Log(list2.Count);
+            //foreach (var p in list2) {
+            //    WriteLog.Log(p);
+            //}
+
             PlayerDatas.Clear();
             DBPlayer myPlayer = RealmManager.MyRealm.Find<DBPlayer>(RealmManager.MyApp.CurrentUser.Id);
             if (myPlayer == null) {

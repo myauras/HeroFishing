@@ -50,7 +50,13 @@ namespace Service.Realms {
         /// </summary>
         public static async Task OnSignin() {
             WriteLog.LogColorFormat("Realm帳號登入: {0}", WriteLog.LogType.Realm, MyApp.CurrentUser);
-            Task getServerTimeTask = GetServerTime();
+            UniTask.Void(async () => {
+                try {
+                    await GetServerTime();
+                } catch (Exception _e) {
+                    WriteLog.LogError(_e);
+                }
+            });
             await SetConfiguration();
         }
 
@@ -80,19 +86,23 @@ namespace Service.Realms {
             WriteLog.LogColorFormat("開始註冊Realm設定檔...", WriteLog.LogType.Realm);
             var config = new FlexibleSyncConfiguration(MyApp.CurrentUser) {
                 PopulateInitialSubscriptions = (realm) => {
+                    //註冊玩家自己的player資料
                     var players = realm.All<DBPlayer>().Where(i => i.ID == MyApp.CurrentUser.Id);
                     realm.Subscriptions.Add(players, new SubscriptionOptions() { Name = "MyPlayer" });
+                    //註冊GameSetting資料
+                    var gameSettings = realm.All<DBGameSetting>();
+                    realm.Subscriptions.Add(gameSettings, new SubscriptionOptions() { Name = "GameSetting" });
                 }
             };
 
             try {
                 MyRealm = await Realm.GetInstanceAsync(config);
+                //await MyRealm.SyncSession.WaitForDownloadAsync();
             } catch (Exception _e) {
                 WriteLog.LogError("Realm 使用config來GetInstanceAsync時發生錯誤: " + _e);
+                WriteLog.LogError("Realm設定檔註冊失敗");
+                return;
             }
-            //訂閱玩家自己
-            //var playerQuery = MyRealm.All<DBPlayer>().Where(i => i.ID.ToString() == MyApp.CurrentUser.Id);
-            //var subscription = MyRealm.Subscriptions.Add(playerQuery, new SubscriptionOptions() { Name = "player" });
             WriteLog.LogColorFormat("Realm設定檔註冊完成", WriteLog.LogType.Realm);
         }
 

@@ -29,7 +29,7 @@ public partial class DBGameSetting : IRealmObject {
     public string StoreURL_Apple { get; set; }
     [MapTo("storeURL_Google")]
     public string StoreURL_Google { get; set; }
-    [MapTo("CustomerServiceURL")]
+    [MapTo("customerServiceURL")]
     public string CustomerServiceURL { get; set; }
     #endregion
 
@@ -41,8 +41,9 @@ public partial class DBGameSetting : IRealmObject {
     public string GameVersion { get; set; }
     [MapTo("maintain")]
     public bool? Maintain { get; set; }
-    [MapTo("maintainEndTime")]
-    public DateTimeOffset? MaintainEndTime { get; set; }
+    [MapTo("maintainEndAt")]
+    public DateTimeOffset? MaintainEndAt { get; set; }
+    [Required]
     [MapTo("maintainExemptPlayerIDs")]
     public IList<string> MaintainExemptPlayerIDs { get; }
     [MapTo("minimumGameVersion")]
@@ -60,14 +61,14 @@ public partial class DBGameSetting : IRealmObject {
     #region scheduledInGameNotification(遊戲內跳通知設定)
     [MapTo("content")]
     public string ScheduledNoticication_Content { get; set; }
-    [MapTo("endTime")]
-    public DateTimeOffset? ScheduledNoticication_EndTime { get; set; }
-    [MapTo("startTime")]
-    public DateTimeOffset? ScheduledNoticication_StartTime { get; set; }
+    [MapTo("startAt")]
+    public DateTimeOffset? StartAt { get; set; }
+    [MapTo("endAt")]
+    public DateTimeOffset? EndAt { get; set; }
     [MapTo("enable")]
-    public bool? ScheduledNoticication_Enable { get; set; }
+    public bool? Enable { get; set; }
     [MapTo("index")]
-    public int? ScheduledNoticication_Index { get; set; }
+    public int? Index { get; set; }
     #endregion
 
 

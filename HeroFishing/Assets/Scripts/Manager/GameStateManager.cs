@@ -27,10 +27,10 @@ namespace HeroFishing.Main {
         public void InGameCheckScheduledInGameNotification() {
             if (SceneManager.GetActiveScene().name == MyScene.StartScene.ToString()) return;
             var notification = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.ScheduledInGameNotification.ToString());
-            if (notification.ScheduledNoticication_Enable == false) return;
-            if (notification.ScheduledNoticication_Index <= ScheduledInGameNotificationIndex) return;
-            if (notification.ScheduledNoticication_EndTime < GameManager.Instance.NowTime) return;
-            ScheduledInGameNotificationIndex = notification.ScheduledNoticication_Index.GetValueOrDefault();
+            if (notification.Enable == false) return;
+            if (notification.Index <= ScheduledInGameNotificationIndex) return;
+            if (notification.EndAt < GameManager.Instance.NowTime) return;
+            ScheduledInGameNotificationIndex = notification.Index.GetValueOrDefault();
             PopupUI.ShowClickCancel(notification.ScheduledNoticication_Content, null);
         }
         /// <summary>
@@ -106,8 +106,8 @@ namespace HeroFishing.Main {
                     });
                     break;
                 case GameStateManager.CanPlayGameState.Maintain://維護中
-                    if (GameManager.Instance.NowTime < gameState.MaintainEndTime) {
-                        PopupUI_Local.ShowClickCancel(string.Format(StringJsonData.GetUIString("MaintainWithTime"), gameState.MaintainEndTime), () => {
+                    if (GameManager.Instance.NowTime < gameState.MaintainEndAt) {
+                        PopupUI_Local.ShowClickCancel(string.Format(StringJsonData.GetUIString("MaintainWithTime"), gameState.MaintainEndAt), () => {
                             //點擊後關閉遊戲
                             Application.Quit();
                         });
@@ -158,8 +158,8 @@ namespace HeroFishing.Main {
                     });
                     break;
                 case GameStateManager.CanPlayGameState.Maintain://維護中
-                    if (GameManager.Instance.NowTime < gameState.MaintainEndTime) {
-                        PopupUI_Local.ShowClickCancel(string.Format(StringJsonData.GetUIString("MaintainWithTime"), gameState.MaintainEndTime), () => {
+                    if (GameManager.Instance.NowTime < gameState.MaintainEndAt) {
+                        PopupUI_Local.ShowClickCancel(string.Format(StringJsonData.GetUIString("MaintainWithTime"), gameState.MaintainEndAt), () => {
                             //點擊後關閉遊戲
                             Application.Quit();
                         });

@@ -7,6 +7,8 @@ using System;
 using Scoz.Func;
 using Service.Realms;
 using System.Threading.Tasks;
+using System.Linq;
+using Cysharp.Threading.Tasks;
 
 namespace HeroFishing.Main {
     public class GameTimer : MonoBehaviour {
@@ -18,13 +20,16 @@ namespace HeroFishing.Main {
             Instance = this;
 
             //每分鐘定時檢查項目
-            UniTaskManager.StartRepeatTask("DoMinteThings", DoMinteThings, 1000);
+            UniTaskManager.StartRepeatTask("DoMinteThings", DoMinteThings, 60 * 1000);
 
             //Realm在線時間更新
             var realmTimerDoc = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.Timer.ToString());
-            int onlineCheckSec = realmTimerDoc.OnlineCheckSec.GetValueOrDefault();
-            if (onlineCheckSec <= MinimumOnlineSentSec) onlineCheckSec = MinimumOnlineSentSec;
-            UniTaskManager.StartRepeatTask("OnlineSentRepeat", OnlineSentRepeat, onlineCheckSec * 1000);
+            if (realmTimerDoc != null) {
+                int onlineCheckSec = realmTimerDoc.OnlineCheckSec.GetValueOrDefault();
+                if (onlineCheckSec <= MinimumOnlineSentSec) onlineCheckSec = MinimumOnlineSentSec;
+                int miliSecs = onlineCheckSec * 1000;
+                UniTaskManager.StartRepeatTask("OnlineSentRepeat", OnlineSentRepeat, miliSecs);
+            }
         }
 
         /// <summary>
@@ -35,20 +40,16 @@ namespace HeroFishing.Main {
             GameStateManager.Instance.InGameCheckScheduledInGameNotification();//檢測是否跳出遊戲內推播
         }
         void OnlineSentRepeat() {
-
             //送更新在線時間
-            Task updateOnlineTimeTask = RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.UpdateOnlineTime, null);
-
+            RealmManager.CallAtlasFuncNoneAsync(RealmManager.AtlasFunc.UpdateOnlineTime, null);
             //距離上一次更新不是同一天就會送登入
-            if (LastOverMidNightTime == default(DateTime))
+            if (LastOverMidNightTime == default(DateTimeOffset))
                 LastOverMidNightTime = GameManager.Instance.NowTime;
             if (GameManager.Instance.NowTime.Day != LastOverMidNightTime.Day) {//確認上一次更新是不是同一天
                 LastOverMidNightTime = GameManager.Instance.NowTime;
-                Task signinTask = RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.Signin, null);
+                RealmManager.CallAtlasFuncNoneAsync(RealmManager.AtlasFunc.Signin, null);
             }
-
         }
-
 
     }
 }

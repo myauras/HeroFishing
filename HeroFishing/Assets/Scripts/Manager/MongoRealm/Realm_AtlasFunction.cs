@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using LitJson;
 using Realms;
 using Scoz.Func;
@@ -62,7 +63,6 @@ namespace Service.Realms {
         /// <param name="_params">傳入參數字典</param>
         /// <returns>回傳結果字典</returns>
         public static async Task<Dictionary<string, object>> CallAtlasFunc(AtlasFunc _func, Dictionary<string, object> _data) {
-
             string jsonResult = null;
             if (_data == null) jsonResult = await MyApp.CurrentUser.Functions.CallAsync<string>(_func.ToString());
             else jsonResult = await MyApp.CurrentUser.Functions.CallAsync<string>(_func.ToString(), _data);
@@ -75,8 +75,22 @@ namespace Service.Realms {
                 WriteLog.LogError("CallAtlasFunc回傳發生錯誤: " + _e);
                 return null;
             }
-
         }
+        /// <summary>
+        /// 呼叫MonsgoDB Atlas，且不在乎回傳時使用此方法，傳入方法名稱與參數 
+        /// </summary>
+        /// <param name="_func">方法名稱</param>
+        /// <param name="_data">傳入參數字典</param>
+        public static void CallAtlasFuncNoneAsync(AtlasFunc _func, Dictionary<string, object> _data) {
+            UniTask.Void(async () => {
+                try {
+                    await CallAtlasFunc(_func, _data);
+                } catch (Exception _e) {
+                    WriteLog.LogError(_e);
+                }
+            });
+        }
+
 
         /// <summary>
         /// 註冊帳戶，傳入AuthType
