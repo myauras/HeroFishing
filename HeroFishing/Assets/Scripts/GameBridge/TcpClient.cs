@@ -100,11 +100,11 @@ namespace HeroFishing.Socket {
 
             if (IsConnected) {
                 try {
-                    command.PacketID = packetID++ % int.MaxValue;
+                    command.PackID = packetID++ % int.MaxValue;
                     string msg = LitJson.JsonMapper.ToJson(command);
                     socket.Send(Encoding.UTF8.GetBytes(msg));
                     WriteLog.LogColorFormat("Socket send: {0}", WriteLog.LogType.Connection, msg);
-                    return command.PacketID;
+                    return command.PackID;
                 } catch (Exception e) {
                     WriteLog.LogErrorFormat("Socket send error: {0}", e.ToString());
                     OnDisConnect();

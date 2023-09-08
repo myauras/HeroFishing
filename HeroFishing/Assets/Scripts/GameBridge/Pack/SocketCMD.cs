@@ -8,7 +8,7 @@ namespace HeroFishing.Socket {
     /// </summary>
     public class SocketCMD<T> where T : SocketContent {
         public string CMD;
-        public int PacketID;
+        public int PackID;
         public string ErrMsg;
         public T Content;
 

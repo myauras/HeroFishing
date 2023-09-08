@@ -105,7 +105,7 @@ namespace HeroFishing.Socket {
                 SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(message);
                 //LitJson.JsonData obj = LitJson.JsonMapper.ToObject(message);
                 WriteLog.LogColorFormat("Recieve Command: {0}", WriteLog.LogType.Connection, data.CMD);
-                Tuple<string, int> commandID = new Tuple<string, int>(data.CMD, data.PacketID);
+                Tuple<string, int> commandID = new Tuple<string, int>(data.CMD, data.PackID);
                 if (CMDCallback.TryGetValue(commandID, out Action<string> _cb)) {
                     CMDCallback.Remove(commandID);
                     _cb?.Invoke(message);
