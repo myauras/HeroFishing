@@ -48,8 +48,8 @@ namespace HeroFishing.Main {
         public async void TestAtlasFunction() {
             var replyData = await RealmManager.CallAtlasFunc_InitPlayerData(AuthType.Guest);
         }
-        private void OnConnectGame(bool isSuccess, bool isMaintain) {
-            WriteLog.Log("isSuccess=" + isSuccess);
+        private void OnConnectGame(bool _success, bool _maintain) {
+            WriteLog.Log("isSuccess=" + _success);
         }
         public async void Signout() {
             await RealmManager.Signout();

@@ -3,24 +3,21 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace HeroFishing.Socket {
-    public class CreateRoom : SocketContent {
+    public class CREATEROOM : SocketContent {
+        //class名稱就是封包的CMD名稱
+
         /// <summary>
-        /// 地圖ID
+        /// DB Map文件ID
         /// </summary>
-        public string MapID { get; private set; }
-        /// <summary>
-        /// 玩家ID列表
-        /// </summary>
-        public string[] PlayerIDs { get; private set; }
+        public string DBMapID { get; private set; }
         /// <summary>
         /// 開房者ID
         /// </summary>
         public string CreaterID { get; private set; }
 
-        public CreateRoom(string roomID, string[] playerIDs, string masterID) {
-            MapID = roomID;
-            PlayerIDs = playerIDs;
-            CreaterID = masterID;
+        public CREATEROOM(string _dbMapID, string _createrID) {
+            DBMapID = _dbMapID;
+            CreaterID = _createrID;
         }
 
     }

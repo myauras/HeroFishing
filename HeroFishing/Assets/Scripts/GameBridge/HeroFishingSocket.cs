@@ -116,7 +116,7 @@ namespace HeroFishing.Socket {
                         return;
                     }
                     switch (cmdType) {
-                        case SocketContent.ReplyType.CreateRoom_Reply:
+                        case SocketContent.ReplyType.CREATEROOM_REPLY:
                             break;
                     }
                 }
@@ -160,14 +160,14 @@ namespace HeroFishing.Socket {
                     callback?.Invoke(false);
                     return;
                 }
-                SocketCMD<Auth> command = new SocketCMD<Auth>(new Auth(token));
+                SocketCMD<AUTH> command = new SocketCMD<AUTH>(new AUTH(token));
 
                 int id = MatchmakerClient.Send(command);
                 if (id < 0) {
                     callback?.Invoke(false);
                     return;
                 }
-                RegistCommandCallback(new Tuple<string, int>(SocketContent.ReplyType.Auth_Reply.ToString(), id), (string msg) => {
+                RegistCommandCallback(new Tuple<string, int>(SocketContent.ReplyType.AUTH_REPLY.ToString(), id), (string msg) => {
                     SocketCMD<Auth_Reply> packet = LitJson.JsonMapper.ToObject<SocketCMD<Auth_Reply>>(msg);
                     callback?.Invoke(packet.Content.IsAuth);
                 });
@@ -178,15 +178,15 @@ namespace HeroFishing.Socket {
         public void CreateRoom(string _mapID, Action<bool, string> _cb) {
             WriteLog.LogColor("[HeroFishingSocket] CreateRoom", WriteLog.LogType.Connection);
             RegistCreateRoomCallback(_cb);
-            CreateRoom cmdContent = new CreateRoom(_mapID, new string[] { "scoz" }, "scoz");//建立封包內容
-            SocketCMD<CreateRoom> cmd = new SocketCMD<CreateRoom>(cmdContent);//建立封包
+            CREATEROOM cmdContent = new CREATEROOM(_mapID, new string[] { "scoz" }, "scoz");//建立封包內容
+            SocketCMD<CREATEROOM> cmd = new SocketCMD<CREATEROOM>(cmdContent);//建立封包
             int id = MatchmakerClient.Send(cmd);//送出封包
             if (id < 0) {
                 _cb?.Invoke(false, "");
                 return;
             }
             //註冊回呼
-            RegistCommandCallback(new Tuple<string, int>(SocketContent.ReplyType.CreateRoom_Reply.ToString(), -1), OnCreateRoom_Reply);
+            RegistCommandCallback(new Tuple<string, int>(SocketContent.ReplyType.CREATEROOM_REPLY.ToString(), -1), OnCreateRoom_Reply);
         }
         public void RegistCreateRoomCallback(Action<bool, string> callback) {
             CreateRoomCallback = callback;

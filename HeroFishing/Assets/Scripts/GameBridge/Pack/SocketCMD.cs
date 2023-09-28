@@ -29,13 +29,9 @@ namespace HeroFishing.Socket {
     /// Socket封包的內容
     /// </summary>
     public class SocketContent {
-        public enum SendType {
-            Auth,
-            CreateRoom,
-        }
         public enum ReplyType {
-            Auth_Reply,
-            CreateRoom_Reply,
+            AUTH_REPLY,
+            CREATEROOM_REPLY,
         }
     }
 }
