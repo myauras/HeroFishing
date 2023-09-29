@@ -169,7 +169,7 @@ namespace HeroFishing.Socket {
                 } else {
                     // 再試一次
                     DG.Tweening.DOVirtual.DelayedCall(RETRY_INTERVAL, () => {
-                        HeroFishingSocket.GetInstance().CreateRoom(RoomName, OnCreateRoom);
+                        HeroFishingSocket.GetInstance().CreateRoom("dbMapID", OnCreateRoom);
                     });
                 }
                 return;

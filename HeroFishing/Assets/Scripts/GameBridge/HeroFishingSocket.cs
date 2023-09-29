@@ -175,10 +175,10 @@ namespace HeroFishing.Socket {
             MatchmakerClient.RegistOnDisconnect(OnLobbyDisConnect);
         }
 
-        public void CreateRoom(string _mapID, Action<bool, string> _cb) {
+        public void CreateRoom(string _dbMapID, Action<bool, string> _cb) {
             WriteLog.LogColor("[HeroFishingSocket] CreateRoom", WriteLog.LogType.Connection);
             RegistCreateRoomCallback(_cb);
-            CREATEROOM cmdContent = new CREATEROOM(_mapID, new string[] { "scoz" }, "scoz");//建立封包內容
+            CREATEROOM cmdContent = new CREATEROOM(_dbMapID, "scoz");//建立封包內容
             SocketCMD<CREATEROOM> cmd = new SocketCMD<CREATEROOM>(cmdContent);//建立封包
             int id = MatchmakerClient.Send(cmd);//送出封包
             if (id < 0) {

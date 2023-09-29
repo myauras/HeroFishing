@@ -20,6 +20,7 @@ namespace Service.Realms {
             GetServerTime,//取Server時間
             UpdateOnlineTime,//更新在線時間
             Signin,//登入
+            PlayerVerify,//測試
         }
 
         static Dictionary<string, object> HandleReplyData(string _replyJson) {

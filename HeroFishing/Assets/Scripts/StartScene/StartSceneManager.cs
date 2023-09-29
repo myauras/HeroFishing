@@ -46,7 +46,11 @@ namespace HeroFishing.Main {
             //RealmManager.AnonymousSignUp();
         }
         public async void TestAtlasFunction() {
-            var replyData = await RealmManager.CallAtlasFunc_InitPlayerData(AuthType.Guest);
+            //var replyData = await RealmManager.CallAtlasFunc_InitPlayerData(AuthType.Guest);
+            var token = await RealmManager.GetValidAccessToken();
+            WriteLog.Log("token=" + token);
+            var dataDic = new Dictionary<string, object> { { "Token", token }, { "Env", "Dev" } };
+            var replyData = await RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.PlayerVerify, dataDic);
         }
         private void OnConnectGame(bool _success, bool _maintain) {
             WriteLog.Log("isSuccess=" + _success);

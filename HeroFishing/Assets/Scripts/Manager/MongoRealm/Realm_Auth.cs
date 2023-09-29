@@ -40,7 +40,7 @@ namespace Service.Realms {
         /// 取得AccessToken
         /// </summary>
         public static async Task<string> GetValidAccessToken() {
-            if (MyApp == null || MyApp.CurrentUser == null) { WriteLog.LogError("尚未建立Realm App，無法取得AccessToken"); return null; }
+            if (MyApp == null || MyApp.CurrentUser == null) { WriteLog.LogErrorFormat("尚未建立Realm App，無法取得AccessToken"); return null; }
             await MyApp.CurrentUser.RefreshCustomDataAsync();
             return MyApp.CurrentUser.AccessToken;
         }
