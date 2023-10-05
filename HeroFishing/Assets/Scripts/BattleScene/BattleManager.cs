@@ -20,7 +20,7 @@ namespace HeroFishing.Battle {
             InitPlayerHero();
         }
         void InitPlayerHero() {
-            GetHero(0).SetData(19, "19_2");
+            GetHero(0).SetData(1, "1_1");
         }
         void InitMonsterScheduler() {
             MyMonsterScheduler = new MonsterScheduler();
