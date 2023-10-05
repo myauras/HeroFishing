@@ -23,11 +23,13 @@ namespace Service.Realms {
             { EnvVersion.Test, "aurafortest-bikmm"},
             { EnvVersion.Release, "aurafortest-bikmm"},
         };
+        
         public static App MyApp { get; private set; }
         public static Realm MyRealm { get; private set; }
 
 
         public static void ClearApp() {
+            
             if (MyRealm != null) {
                 MyRealm.Dispose();
                 MyRealm = null;

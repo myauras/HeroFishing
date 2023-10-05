@@ -28,8 +28,6 @@ namespace HeroFishing.Socket {
         event Action<bool, bool> OnConnectEvent;
 
         // 設定預設值
-        string gameServerIP = "192.168.0.121";
-        int gameServerPort = 7654;
         Coroutine timeoutCheckCoroutine;
         WaitForFixedUpdate fixedUpdate = new WaitForFixedUpdate();
         bool isInMaJam = false;
@@ -93,7 +91,7 @@ namespace HeroFishing.Socket {
         /// <summary>
         /// 開始跑連線相關流程
         /// </summary>
-        public void Run(Action<bool, bool> _cb) {
+        public void Run(string _ip,int _port,string _plaeyrToken,Action<bool, bool> _cb) {
             WriteLog.LogColor("[GameConnector Run]", WriteLog.LogType.Connection);
             OnConnectEvent = _cb;
             OnConnectEvent += OnConnectToMatchmakerServer;
@@ -101,7 +99,7 @@ namespace HeroFishing.Socket {
             RetryTimes = 0;
             HeroFishingSocket.GetInstance().RegistDisconnectCallback(OnDisConnect);
 
-            ConnectToMatchmakerServer();
+            ConnectToMatchmakerServer(_ip,_port,_plaeyrToken);
         }
 
 
@@ -118,21 +116,20 @@ namespace HeroFishing.Socket {
             WriteLog.LogColor("[GameConnector] CheckLobbyServerStatus", WriteLog.LogType.Connection);
         }
 
-        void ConnectToMatchmakerServer() {
+        void ConnectToMatchmakerServer(string _ip, int _port, string _plaeyrToken) {
             WriteLog.LogColor("[GameConnector] ConnectToMatchmakerServer", WriteLog.LogType.Connection);
-            HeroFishingSocket.GetInstance().SetServerIP("35.185.130.204", 32680);
-            HeroFishingSocket.GetInstance().Login("scoz", OnLoginToMatchmakerServer);
+            HeroFishingSocket.GetInstance().SetServerIP(_ip, _port);
+            HeroFishingSocket.GetInstance().Login(_plaeyrToken, OnLoginToMatchmakerServer);
         }
 
         /// <summary>
         /// 登入配對伺服器成功時執行
         /// </summary>
-        /// <param name="isLogin"></param>
-        void OnLoginToMatchmakerServer(bool isLogin) {
+        void OnLoginToMatchmakerServer(string _token,bool _isLogin) {
             WriteLog.LogColor("[GameConnector] OnLoginToLobbyServer", WriteLog.LogType.Connection);
 
             //連線失敗時嘗試重連
-            if (!isLogin) {
+            if (!_isLogin) {
                 RetryTimes++;
                 if (RetryTimes >= MAX_RETRY_TIME || !InternetChecker.InternetConnected) {
                     OnConnectEvent?.Invoke(false, false);
@@ -140,7 +137,7 @@ namespace HeroFishing.Socket {
                     WriteLog.LogColorFormat("[GameConnector] 連線失敗，{0}秒後嘗試重連", WriteLog.LogType.Connection, RETRY_INTERVAL);
                     DG.Tweening.DOVirtual.DelayedCall(RETRY_INTERVAL, () => {
                         //連線失敗有可能TOKEN過期 重要後再連
-                        HeroFishingSocket.GetInstance().Login("重新連線token", OnLoginToMatchmakerServer);
+                        HeroFishingSocket.GetInstance().Login(_token, OnLoginToMatchmakerServer);
                     });
                 }
                 return;

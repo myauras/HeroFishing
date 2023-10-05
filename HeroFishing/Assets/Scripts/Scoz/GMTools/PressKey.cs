@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System;
 using HeroFishing.Main;
 using SimpleJSON;
+using Service.Realms;
 
 namespace Scoz.Func {
     public partial class TestTool : MonoBehaviour {
@@ -19,8 +20,6 @@ namespace Scoz.Func {
             if (Input.GetKeyDown(KeyCode.Q)) {
                 CamManager.ShakeCam(CamManager.CamNames.Battle, 3, 3, 2f);
             } else if (Input.GetKeyDown(KeyCode.W)) {
-
-
             } else if (Input.GetKeyDown(KeyCode.E)) {
 
 

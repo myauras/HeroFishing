@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using HeroFishing.Socket;
+using Realms.Sync;
 using Scoz.Func;
 using Service.Realms;
 using System;
@@ -37,9 +38,10 @@ namespace HeroFishing.Main {
             InternetChecker.SetOnConnectedAction(OnConnected);
             InternetChecker.StartCheckInternet();
         }
-        public void SocketConnectTest() {
+        public async void SocketConnectTest() {
             GameConnector.Instance.Init();
-            GameConnector.Instance.Run(OnConnectGame);
+            var token = await RealmManager.GetValidAccessToken();
+            GameConnector.Instance.Run("34.80.92.225", 32680, token, OnConnectGame);
         }
         public void RealmInitTest() {
             RealmManager.NewApp();
@@ -49,7 +51,7 @@ namespace HeroFishing.Main {
             //var replyData = await RealmManager.CallAtlasFunc_InitPlayerData(AuthType.Guest);
             var token = await RealmManager.GetValidAccessToken();
             WriteLog.Log("token=" + token);
-            var dataDic = new Dictionary<string, object> { { "Token", token }, { "Env", "Dev" } };
+            var dataDic = new Dictionary<string, object> { { "Token", token }, { "Env", "Dev" }, { "PlayerID", RealmManager.MyApp.CurrentUser.Id } };
             var replyData = await RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.PlayerVerify, dataDic);
         }
         private void OnConnectGame(bool _success, bool _maintain) {
