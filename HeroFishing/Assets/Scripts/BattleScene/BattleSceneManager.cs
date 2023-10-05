@@ -16,9 +16,14 @@ namespace HeroFishing.Battle {
         [HeaderAttribute("==============Addressable Assets==============")]
         public AssetReference BattleUIAsset;
         public AssetReference SpellIndicatorAsset;
+        [HeaderAttribute("==============測試用設定==============")]
+        public int HeroID;
+        public string HeroSkin;
 
         [HeaderAttribute("==============設定==============")]
         LoadingProgress MyLoadingProgress;//讀取進度，讀取完會跑FinishInitLobby()
+
+
 
         public static BattleSceneManager Instance { get; private set; }
 
