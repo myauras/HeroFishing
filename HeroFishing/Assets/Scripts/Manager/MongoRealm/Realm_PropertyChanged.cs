@@ -19,6 +19,7 @@ namespace Service.Realms {
         public static void OnDataLoaded() {
             try {
                 GamePlayer.Instance.InitDBPlayerDocs();//初始化玩家DB資料
+                GamePlayer.Instance.InitDBGameSettingDcos();//初始化遊戲設定DB資料
                 RegisterRealmEvents();//註冊Realm事件    
                 GameManager.Instance.AddComponent<GameTimer>().Init();//建立GameTimer
             } catch (Exception _e) {
@@ -75,7 +76,7 @@ namespace Service.Realms {
         }
 
         /// <summary>
-        /// MyPlayer文件通知
+        /// 玩家文件通知
         /// </summary>
         static void RegisterPropertyChanges_MyPlayer() {
             var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);

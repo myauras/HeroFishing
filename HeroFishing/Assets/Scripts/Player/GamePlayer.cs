@@ -12,6 +12,7 @@ namespace HeroFishing.Main {
     public partial class GamePlayer : MyPlayer {
         public new static GamePlayer Instance { get; private set; }
         Dictionary<DBPlayerCol, IRealmObject> PlayerDatas = new Dictionary<DBPlayerCol, IRealmObject>();
+        Dictionary<DBGameSettingDoc, IRealmObject> DBGameSettingDatas = new Dictionary<DBGameSettingDoc, IRealmObject>();
         /// <summary>
         /// 登入後會先存裝置UID到DB，存好後AlreadSetDeviceUID會設為true，所以之後從DB取到的裝置的UID應該都跟目前的裝置一致，若不一致代表是有其他裝置登入同個帳號
         /// </summary>
@@ -29,19 +30,6 @@ namespace HeroFishing.Main {
         /// 初始化玩家自己的資料字典，有錯誤時返回false
         /// </summary>
         public bool InitDBPlayerDocs() {
-            //var query = RealmManager.MyRealm.All<DBPlayer>();
-            //var list = query.ToList();
-            //WriteLog.Log(list.Count);
-            //foreach (var p in list) {
-            //    WriteLog.Log(p);
-            //}
-
-            //var query2 = RealmManager.MyRealm.All<DBGameSetting>();
-            //var list2 = query2.ToList();
-            //WriteLog.Log(list2.Count);
-            //foreach (var p in list2) {
-            //    WriteLog.Log(p);
-            //}
 
             PlayerDatas.Clear();
             DBPlayer myPlayer = RealmManager.MyRealm.Find<DBPlayer>(RealmManager.MyApp.CurrentUser.Id);
@@ -60,5 +48,37 @@ namespace HeroFishing.Main {
             return (T)PlayerDatas[_col];
         }
 
+        /// <summary>
+        /// 初始化遊戲設定資料字典，有錯誤時返回false
+        /// </summary>
+        public bool InitDBGameSettingDcos() {
+            DBGameSettingDatas.Clear();
+            var settings = RealmManager.MyRealm.All<DBGameSetting>();
+            if (settings == null) {
+                WriteLog.LogError("InitDBDocs時，取得資料為null");
+                return false;
+            }
+            WriteLog.Log(settings.Count());
+            foreach (var setting in settings) {
+                if (MyEnum.TryParseEnum<DBGameSettingDoc>(setting.ID, out var _type)) {
+                    WriteLog.LogError("_type=" + setting.ID);
+                    WriteLog.Log("MatchmakerIP=" + setting.MatchmakerIP);
+                    WriteLog.Log("MatchmakerPort=" + setting.MatchmakerPort);
+                    WriteLog.Log("Maintain=" + setting.Maintain);
+                    WriteLog.Log("CreatedAt=" + setting.CreatedAt);
+                    WriteLog.Log("EnvVersion=" + setting.EnvVersion);
+                    WriteLog.Log("GameVersion=" + setting.GameVersion);
+                    DBGameSettingDatas[_type] = setting;
+                }
+            }
+            return true;
+        }
+        /// <summary>
+        /// 取得玩家自己的資料
+        /// </summary>
+        public T GetDBGameSettingDoc<T>(DBGameSettingDoc _col) {
+            if (!DBGameSettingDatas.ContainsKey(_col)) WriteLog.LogError("GetDBGameSettingDoc時，要取的資料為null");
+            return (T)DBGameSettingDatas[_col];
+        }
     }
 }

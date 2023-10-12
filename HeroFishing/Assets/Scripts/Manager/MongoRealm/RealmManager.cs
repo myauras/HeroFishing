@@ -16,6 +16,12 @@ namespace Service.Realms {
         playerHistory,
         playerState,
     }
+    /// <summary>
+    /// DB資料集合
+    /// </summary>
+    public enum DBCol {
+        gameSetting,
+    }
     public static partial class RealmManager {
         //環境版本對應Realm App ID
         static Dictionary<EnvVersion, string> REALM_APPID_DIC = new Dictionary<EnvVersion, string>() {
@@ -23,13 +29,13 @@ namespace Service.Realms {
             { EnvVersion.Test, "aurafortest-bikmm"},
             { EnvVersion.Release, "aurafortest-bikmm"},
         };
-        
+
         public static App MyApp { get; private set; }
         public static Realm MyRealm { get; private set; }
 
 
         public static void ClearApp() {
-            
+
             if (MyRealm != null) {
                 MyRealm.Dispose();
                 MyRealm = null;
