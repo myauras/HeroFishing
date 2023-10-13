@@ -30,7 +30,6 @@ namespace HeroFishing.Main {
         /// 初始化玩家自己的資料字典，有錯誤時返回false
         /// </summary>
         public bool InitDBPlayerDocs() {
-
             PlayerDatas.Clear();
             DBPlayer myPlayer = RealmManager.MyRealm.Find<DBPlayer>(RealmManager.MyApp.CurrentUser.Id);
             if (myPlayer == null) {
@@ -58,23 +57,15 @@ namespace HeroFishing.Main {
                 WriteLog.LogError("InitDBDocs時，取得資料為null");
                 return false;
             }
-            WriteLog.Log(settings.Count());
             foreach (var setting in settings) {
                 if (MyEnum.TryParseEnum<DBGameSettingDoc>(setting.ID, out var _type)) {
-                    WriteLog.LogError("_type=" + setting.ID);
-                    WriteLog.Log("MatchmakerIP=" + setting.MatchmakerIP);
-                    WriteLog.Log("MatchmakerPort=" + setting.MatchmakerPort);
-                    WriteLog.Log("Maintain=" + setting.Maintain);
-                    WriteLog.Log("CreatedAt=" + setting.CreatedAt);
-                    WriteLog.Log("EnvVersion=" + setting.EnvVersion);
-                    WriteLog.Log("GameVersion=" + setting.GameVersion);
                     DBGameSettingDatas[_type] = setting;
                 }
             }
             return true;
         }
         /// <summary>
-        /// 取得玩家自己的資料
+        /// 取得遊戲設定資料
         /// </summary>
         public T GetDBGameSettingDoc<T>(DBGameSettingDoc _col) {
             if (!DBGameSettingDatas.ContainsKey(_col)) WriteLog.LogError("GetDBGameSettingDoc時，要取的資料為null");

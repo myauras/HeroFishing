@@ -38,11 +38,7 @@ namespace HeroFishing.Main {
             InternetChecker.SetOnConnectedAction(OnConnected);
             InternetChecker.StartCheckInternet();
         }
-        public async void SocketConnectTest() {
-            GameConnector.Instance.Init();
-            var token = await RealmManager.GetValidAccessToken();
-            GameConnector.Instance.Run("34.80.92.225", 32680, token, OnConnectGame);
-        }
+
         public void RealmInitTest() {
             RealmManager.NewApp();
             //RealmManager.AnonymousSignUp();
@@ -54,8 +50,19 @@ namespace HeroFishing.Main {
             var dataDic = new Dictionary<string, object> { { "Token", token }, { "Env", "Dev" }, { "PlayerID", RealmManager.MyApp.CurrentUser.Id } };
             var replyData = await RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.PlayerVerify, dataDic);
         }
-        private void OnConnectGame(bool _success, bool _maintain) {
+        public async void SocketConnectTest() {
+            GameConnector.Instance.Init();
+            var gameSetting = GamePlayer.Instance.GetDBGameSettingDoc<DBGameSetting>(DBGameSettingDoc.GameState);
+            GameConnector.Instance.Run(gameSetting.MatchmakerIP, gameSetting.MatchmakerPort ?? 0, token, OnGameConnected);
+        }
+        private void OnGameConnected(bool _success, bool _maintain) {
             WriteLog.Log("isSuccess=" + _success);
+        }
+        private void CreateRoomTest() {
+            GameConnector.Instance.CreateRoom("mapID123", OnRoomCreated);
+        }
+        void OnRoomCreated(bool _success) {
+
         }
         public async void Signout() {
             await RealmManager.Signout();

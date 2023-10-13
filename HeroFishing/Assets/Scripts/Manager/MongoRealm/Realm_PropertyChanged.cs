@@ -73,6 +73,7 @@ namespace Service.Realms {
         public static void RegisterPropertyChanges() {
             WriteLog.LogColor("註冊Realm文件異動通知", WriteLog.LogType.Realm);
             RegisterPropertyChanges_MyPlayer();
+            RegisterPropertyChanges_GameSetting();
         }
 
         /// <summary>
@@ -85,7 +86,21 @@ namespace Service.Realms {
                     var propertyName = e.PropertyName;
                     var propertyValue = player.GetType().GetProperty(propertyName).GetValue(player);
                     GameStateManager.Instance.InGameCheckCanPlayGame();
-                    WriteLog.LogColorFormat("Changed field: {0}  Value: {1}", WriteLog.LogType.Realm, propertyName, propertyValue);
+                    WriteLog.LogColorFormat("{0}表 Changed field: {0}  Value: {1}", WriteLog.LogType.Realm, "player", propertyName, propertyValue);
+                };
+            }
+        }
+
+        /// <summary>
+        /// 遊戲設定通知
+        /// </summary>
+        static void RegisterPropertyChanges_GameSetting() {
+            var gameState = GamePlayer.Instance.GetDBGameSettingDoc<DBGameSetting>(DBGameSettingDoc.GameState);
+            if (gameState != null) {
+                gameState.PropertyChanged += (sender, e) => {
+                    var propertyName = e.PropertyName;
+                    var propertyValue = gameState.GetType().GetProperty(propertyName).GetValue(gameState);
+                    WriteLog.LogColorFormat("{0}表 Changed field: {0}  Value: {1}", WriteLog.LogType.Realm, "GameState", propertyName, propertyValue);
                 };
             }
         }

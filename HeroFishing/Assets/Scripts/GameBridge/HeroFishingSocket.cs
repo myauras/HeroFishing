@@ -1,12 +1,14 @@
 using DG.Tweening;
 using HeroFishing.Main;
 using LitJson;
+using NSubstitute;
 using Scoz.Func;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -29,7 +31,7 @@ namespace HeroFishing.Socket {
         }
 
         // 回呼
-        public event Action<bool, string> CreateRoomCallback;
+        public event Action<string,bool, string> CreateRoomCallback;
 
         //public static readonly DateTime SERVER_START_TIME = new DateTime(1970, 1, 1, 0 ,0, 0, DateTimeKind.Utc);
 
@@ -146,11 +148,11 @@ namespace HeroFishing.Socket {
             disconnectCallback?.Invoke();
         }
 
-        public void Login(string _token, Action<string,bool> _callback) {
+        public void Login(string _token,  Func<string,bool, Task> _callback) {
             WriteLog.LogColor("[HeroFishingSocket] Login", WriteLog.LogType.Connection);
             if (MatchmakerClient == null) {
                 WriteLog.LogError("MatchmakerClient is null");
-                _callback?.Invoke(null,false);
+                _callback?.Invoke(null,false);  
                 return;
             }
             CMDCallback.Clear();
@@ -175,24 +177,18 @@ namespace HeroFishing.Socket {
             MatchmakerClient.RegistOnDisconnect(OnLobbyDisConnect);
         }
 
-        public void CreateRoom(string _dbMapID, Action<bool, string> _cb) {
+        public void CreateRoom(string _dbMapID, Action<string,bool, string> _cb) {
             WriteLog.LogColor("[HeroFishingSocket] CreateRoom", WriteLog.LogType.Connection);
-            RegistCreateRoomCallback(_cb);
+            CreateRoomCallback = _cb;
             CREATEROOM cmdContent = new CREATEROOM(_dbMapID, "scoz");//建立封包內容
             SocketCMD<CREATEROOM> cmd = new SocketCMD<CREATEROOM>(cmdContent);//建立封包
             int id = MatchmakerClient.Send(cmd);//送出封包
             if (id < 0) {
-                _cb?.Invoke(false, "");
+                _cb?.Invoke(_dbMapID,false, "");
                 return;
             }
             //註冊回呼
             RegistCommandCallback(new Tuple<string, int>(SocketContent.ReplyType.CREATEROOM_REPLY.ToString(), -1), OnCreateRoom_Reply);
-        }
-        public void RegistCreateRoomCallback(Action<bool, string> callback) {
-            CreateRoomCallback = callback;
-        }
-        public void UnRegistCreateRoomCallback() {
-            CreateRoomCallback = null;
         }
         public void OnCreateRoom_Reply(string _msg) {
             WriteLog.LogColor("[MaJamSocket] OnWaitingReCreateRoom", WriteLog.LogType.Connection);
@@ -202,14 +198,14 @@ namespace HeroFishing.Socket {
             if (!string.IsNullOrEmpty(packet.ErrMsg)) {
                 WriteLog.LogError("Create Room Fail : " + packet.ErrMsg);
                 CreateRoomCallback?.Invoke(false, packet.ErrMsg);
-                UnRegistCreateRoomCallback();
+                CreateRoomCallback = null;
                 return;
             }
 
 
             GameRoomData.Instance.Init();//初始化房間資料
             CreateRoomCallback?.Invoke(true, string.Empty);
-            UnRegistCreateRoomCallback();
+            CreateRoomCallback = null;
         }
         public void Disconnect() {
             WriteLog.Log("[HeroFishingSocket] DisConnect");
