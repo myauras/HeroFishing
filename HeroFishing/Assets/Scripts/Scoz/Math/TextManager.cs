@@ -18,6 +18,15 @@ namespace Scoz.Func {
             result = System.Array.ConvertAll(resultStr, a => int.Parse(a));
             return result;
         }
+        /// <summary>
+        /// 字串以字元分割轉float[]
+        /// </summary>
+        public static float[] StringSplitToFloatArray(string _str, char _char) {
+            float[] result;
+            string[] resultStr = _str.Split(_char);
+            result = System.Array.ConvertAll(resultStr, a => float.Parse(a));
+            return result;
+        }
         public static List<int> StringSplitToIntList(string _str, char _char) {
             return StringSplitToIntArray(_str, _char).ToList();
         }

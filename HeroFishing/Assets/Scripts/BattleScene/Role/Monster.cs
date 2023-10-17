@@ -5,6 +5,7 @@ using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
+using static DG.DemiLib.External.DeHierarchyComponent;
 
 namespace HeroFishing.Battle {
     public class Monster : Role {
@@ -40,11 +41,27 @@ namespace HeroFishing.Battle {
 
         void HitEffect() {
             if (MySkinnedMaterial == null) return;
-            Color color = TextManager.ParseTextToColor32(GameSettingJsonData.GetStr(GameSetting.HitEffect_OutlineColor));
+            string spellID = "1_attack";
+            var spellData = HeroSpellJsonData.GetData(spellID);
+            //Color color = TextManager.ParseTextToColor32(GameSettingJsonData.GetStr(GameSetting.HitEffect_OutlineColor)); 已不使用Gamesetting的設定
+            //MySkinnedMaterial.SetFloat("_FresnelPower", GameSettingJsonData.GetFloat(GameSetting.HitEffect_FresnelPower));已不使用Gamesetting的設定
+
+            //設定怪物被擊中Shader效果
+            Color32 color = new Color32((byte)spellData.HitMonsterShaderSetting[0], (byte)spellData.HitMonsterShaderSetting[1], (byte)spellData.HitMonsterShaderSetting[2], (byte)spellData.HitMonsterShaderSetting[3]);
+            float hdrIntensity = spellData.HitMonsterShaderSetting[4]; // hdr color intensity設定
+            //設定HDR Color
+            Color32 hdrColor = new Color32(
+               (byte)(color.r * hdrIntensity),
+               (byte)(color.g * hdrIntensity),
+               (byte)(color.b * hdrIntensity),
+               color.a
+            );
             MySkinnedMaterial.SetVector("_OutlineColor", new Vector3(color.r, color.g, color.b));
-            MySkinnedMaterial.SetFloat("_FresnelPower", GameSettingJsonData.GetFloat(GameSetting.HitEffect_FresnelPower));
-            MySkinnedMaterial.SetFloat("_Intensity", 0);
-            DOTween.To(() => 1f, x => MySkinnedMaterial.SetFloat("_Intensity", x), 0f, GameSettingJsonData.GetFloat(GameSetting.HitEffect_DecaySec));
+            MySkinnedMaterial.SetFloat("_FresnelPower", spellData.HitMonsterShaderSetting[5]);
+            MySkinnedMaterial.SetFloat("_Opacity", spellData.HitMonsterShaderSetting[6]);
+            MySkinnedMaterial.SetFloat("_Smoothness", spellData.HitMonsterShaderSetting[7]);
+            MySkinnedMaterial.SetFloat("_Metallic", spellData.HitMonsterShaderSetting[8]);
+            DOTween.To(() => 1f, x => MySkinnedMaterial.SetFloat("_Opacity", x), 0f, GameSettingJsonData.GetFloat(GameSetting.HitEffect_DecaySec));
         }
         public void Die() {
             if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;

@@ -52,6 +52,7 @@ namespace HeroFishing.Main {
         public string[] Motions { get; private set; }
         public string Voice { get; private set; }
         public int PrefabID { get; private set; }
+        public float[] HitMonsterShaderSetting { get; private set; }
         static Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>> SpellDic = new Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>>();
 
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
@@ -105,6 +106,9 @@ namespace HeroFishing.Main {
                         else
                             WriteLog.LogErrorFormat("{0}表ID為{1}的PrefabID必須為數字 {2}", DataName, ID, item[key]);
                         break;
+                    case "HitMonsterShaderSetting":
+                        HitMonsterShaderSetting = TextManager.StringSplitToFloatArray(item[key].ToString(), ',');
+                        break;                        
                     default:
                         WriteLog.LogWarning(string.Format("{0}表有不明屬性:{1}", DataName, key));
                         break;
