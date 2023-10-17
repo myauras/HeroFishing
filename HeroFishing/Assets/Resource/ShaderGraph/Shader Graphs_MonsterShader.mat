@@ -7,14 +7,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_trail_m_01
-  m_Shader: {fileID: -6465566751694194690, guid: 1748263d550892f44ac09ac550a87484,
+  m_Name: Shader Graphs_MonsterShader
+  m_Shader: {fileID: -6465566751694194690, guid: 67b799bf9e0b02e4281ad8d3865c85ed,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -24,12 +24,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_35DCD328:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_9ADE22F:
-        m_Texture: {fileID: 2800000, guid: 416fd3e573a93fc4da7f1157c4f14b1f, type: 3}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: f13da2c2abb2bc642946baefffd007b7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -46,14 +42,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Vector1_23E530DB: -4
+    - _FresnelPower: 1.2
+    - _Intensity: 1
+    - _Metallic: 0
+    - _Opacity: 1
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Smoothness: -1.29
     m_Colors:
-    - Color_81F56A4E: {r: 5.992157, g: 5.992157, b: 5.992157, a: 1}
-    - Vector2_CF81FBAE: {r: 1, g: 1, b: 0, a: 0}
+    - _OutlineColor: {r: 63.396225, g: 11.297902, b: 3.887506, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &9177554213283696208
+--- !u!114 &1419016642681441972
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
