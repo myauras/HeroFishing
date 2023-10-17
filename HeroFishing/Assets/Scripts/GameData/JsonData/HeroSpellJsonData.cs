@@ -82,6 +82,7 @@ namespace HeroFishing.Main {
                         break;
                     case "SpellTypeValues":
                         SpellTypeValues = item[key].ToString().Split(',');
+                        if (SpellTypeValues == null || SpellTypeValues.Length == 0) WriteLog.LogErrorFormat("Hero");
                         break;
                     case "HitEffectType":
                         MyHitType = MyEnum.ParseEnum<HitType>(item[key].ToString());
