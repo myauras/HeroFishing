@@ -2,6 +2,7 @@ using HeroFishing.Main;
 using Scoz.Func;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 namespace HeroFishing.Battle {
     public class BattleManager : MonoBehaviour {
@@ -11,13 +12,14 @@ namespace HeroFishing.Battle {
         [SerializeField] public Transform MonsterParent;
 
         public MonsterScheduler MyMonsterScheduler { get; private set; }
-
+        public static float3 MonsterCollisionPosOffset { get; private set; }//因為怪物的位置是在地板 所以檢測碰撞半徑時以地板為圓心的話子彈會打不到 所以碰撞檢測時要將判定的圓心高度提高到子彈高度
 
 
         public void Init() {
             Instance = this;
             InitMonsterScheduler();
             InitPlayerHero();
+            MonsterCollisionPosOffset= new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
         }
         void InitPlayerHero() {
             GetHero(0).SetData(BattleSceneManager.Instance.HeroID, BattleSceneManager.Instance.HeroSkin);

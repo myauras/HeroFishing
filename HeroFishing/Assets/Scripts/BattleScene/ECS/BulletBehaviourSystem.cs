@@ -6,7 +6,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
-
+using UnityEngine.UIElements;
 
 namespace HeroFishing.Battle {
     [CreateAfter(typeof(MonsterBehaviourSystem))]
@@ -14,7 +14,8 @@ namespace HeroFishing.Battle {
     [UpdateAfter(typeof(BulletSpawnSystem))]
     public partial struct BulletBehaviourSystem : ISystem {
 
-        NativeArray<int2> OffsetGrids;
+        NativeArray<int2> OffsetGrids;//定義碰撞檢定9宮格
+
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
@@ -58,6 +59,7 @@ namespace HeroFishing.Battle {
                 Seed = seed,
                 GridData = gridData,
                 OffsetGrids = OffsetGrids,
+                MonsterCollisionPosOffset = BattleManager.MonsterCollisionPosOffset,
             }.ScheduleParallel();
 
 
@@ -70,6 +72,7 @@ namespace HeroFishing.Battle {
             [ReadOnly] public uint Seed;
             [ReadOnly] public MapGridData GridData;
             [ReadOnly] public NativeArray<int2> OffsetGrids;
+            [ReadOnly] public float3 MonsterCollisionPosOffset;
 
             public void Execute(ref BulletValue _bullet, in Entity _entity) {
 
@@ -91,7 +94,7 @@ namespace HeroFishing.Battle {
                         // 這裡放第一個找到的value要做的事情
                         do {
                             // 使用當前找到的value要做某些事情
-                            float dist = math.distance(monsterValue.Pos, _bullet.Position);
+                            float dist = math.distance(monsterValue.Pos+ MonsterCollisionPosOffset, _bullet.Position);
                             if (dist < (_bullet.Radius + monsterValue.Radius)) {//怪物在子彈的命中範圍內
 
                                 //本地端測試用，有機率擊殺怪物

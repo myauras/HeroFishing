@@ -40,7 +40,6 @@ namespace HeroFishing.Battle {
 
         public void OnUpdate(ref SystemState state) {
 
-
             var ECB = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (spellCom, spellEntity) in SystemAPI.Query<SpellCom>().WithEntityAccess()) {

@@ -29,4 +29,5 @@ public enum GameSetting
 	HitEffect_FresnelPower,
 	HitEffect_DecaySec,
 	DieEffect_DissolveDecaySec,
+	Bullet_PositionY,
 }
