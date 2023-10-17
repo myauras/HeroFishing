@@ -33,7 +33,7 @@ namespace HeroFishing.Battle {
             var pos = UIPosition.GetMouseWorldPointOnYZero(0);
             var dir = (pos - hero.transform.position).normalized;
             //設定技能
-            OnSetSpell(TmpHero.transform.position, dir);
+            OnSetSpell(TmpHero.transform.position + new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0), dir);//子彈高度固定設為1.19
         }
 
 
