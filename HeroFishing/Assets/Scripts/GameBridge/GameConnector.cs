@@ -27,25 +27,30 @@ namespace HeroFishing.Socket {
         const float CONNECT_TIMEOUT_SECS = 60.0f; //連線超時時間60秒
         int CurRetryTimes = 0; //目前重試次數
 
+
         event Action<bool, bool> OnConnectEvent; //連線Matchmaker(配房伺服器)回傳
         Action<bool> CreateRoomCB;//建立Matchgame(遊戲房)回傳
+        string TmpDBMapID;//暫時紀錄要建立或加入的DBMapID
 
         void Start() {
             DontDestroyOnLoad(this);
         }
 
         /// <summary>
-        ///  1. 從DB取ip, port, token並檢查目前Server狀態後傳入此function
+        ///  1. 從DB取ip, port, 檢查目前Server狀態後傳入此function
         ///  2. 連線進Matchmaker後會驗證token, 沒問題會回傳成功
         /// </summary>
-        public async void Run(string _ip, int _port, Action<bool, bool> _cb) {
+        public async Task Run(string _ip, int _port, Action<bool, bool> _cb) {
             WriteLog.LogColor("Run", WriteLog.LogType.Connection);
             OnConnectEvent = _cb;
-            OnConnectEvent += OnConnectToMatchmakerServer;
             CurRetryTimes = 0;
             HeroFishingSocket.GetInstance().RegistDisconnectCallback(OnDisConnect);
             await ConnectToMatchmakerServer(_ip, _port);
         }
+        /// <summary>
+        /// 1. 設定IP與Port並取Atlas Token 驗證送Serverf端(Matchmaker)驗證
+        /// 2. Server端驗證好會執行OnConnectEvent
+        /// </summary>
         async Task ConnectToMatchmakerServer(string _ip, int _port) {
             WriteLog.LogColor("ConnectToMatchmakerServer", WriteLog.LogType.Connection);
             HeroFishingSocket.GetInstance().SetServerIP(_ip, _port);
@@ -91,60 +96,37 @@ namespace HeroFishing.Socket {
         ///  3. 成功後會跟Matchmaker斷線並連到Matchgame(遊戲房) 並回傳連線成功
         /// </summary>
         public void CreateRoom(string _dbMapID, Action<bool> _cb) {
+            TmpDBMapID = _dbMapID;
             CreateRoomCB = _cb;
-            HeroFishingSocket.GetInstance().CreateRoom(_dbMapID, OnCreateRoom);
+            HeroFishingSocket.GetInstance().CreateRoom(TmpDBMapID, OnCreateRoom);
         }
 
-
-        void OnCreateRoom(string _dbMapID, bool isCreate, string errorMsg) {
-
+        /// <summary>
+        /// 建立房間結果回傳
+        /// </summary>
+        void OnCreateRoom(bool _isCreated, string _erroMsg) {
 
             // 建立房間失敗
-            if (!isCreate) {
+            if (!_isCreated) {
                 CurRetryTimes++;
-                if (CurRetryTimes >= MAX_RETRY_TIMES || errorMsg == "NOT_FOUR_PLAYER" || !InternetChecker.InternetConnected) {
-                    CreateRoomCB?.Invoke(isCreate);
+                if (CurRetryTimes >= MAX_RETRY_TIMES || _erroMsg == "NOT_FOUR_PLAYER" || !InternetChecker.InternetConnected) {
+                    CreateRoomCB?.Invoke(_isCreated);
                     PopupUI.ShowClickCancel(StringJsonData.GetUIString("ErrorCreateGame"), () => {
                     });
                 } else {
                     WriteLog.LogColor("[GameConnector] 建立房間失敗 再試1次", WriteLog.LogType.Connection);
                     // 再試一次
                     DG.Tweening.DOVirtual.DelayedCall(RETRY_INTERVAL_SECS, () => {
-                        HeroFishingSocket.GetInstance().CreateRoom(_dbMapID, OnCreateRoom);
+                        HeroFishingSocket.GetInstance().CreateRoom(TmpDBMapID, OnCreateRoom);
                     });
                 }
                 return;
             }
 
             // 建立房間成功
-            CreateRoomCB?.Invoke(isCreate);
+            WriteLog.LogColor("CreateRoom成功", WriteLog.LogType.Connection);
+            CreateRoomCB?.Invoke(_isCreated);
         }
 
-
-        void OnConnectRoom(bool isConnect) {
-            WriteLog.LogColorFormat("[GameConnector] OnConnectRoom isConnect={0}", WriteLog.LogType.Connection, isConnect);
-        }
-
-        public void JoinGame(string serverIp, int port, Action<bool> _cb) {
-            WriteLog.Log($"[GameConnector] JoinGame serverIp={serverIp} port={port}");
-        }
-
-        public void TryJoinLastRoom(Action<bool> _cb) {
-            WriteLog.Log($"[GameConnector] TryJoinLastRoom");
-
-        }
-
-
-
-        void OnConnectToMatchmakerServer(bool _success, bool _serverMaintain) {
-            WriteLog.Log($"[GameConnector] OnConnectToMatchmakerServer isSuccess={_success} isServerMatain={_serverMaintain}");
-        }
-
-        /// <summary>
-        /// 離開快速房
-        /// </summary>
-        public void LeaveQuickRoom() {
-            WriteLog.Log("[GameConnector] LeaveQuickRoom");
-        }
     }
 }

@@ -51,18 +51,18 @@ namespace HeroFishing.Main {
             var replyData = await RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.PlayerVerify, dataDic);
         }
         public async void SocketConnectTest() {
-            GameConnector.Instance.Init();
             var gameSetting = GamePlayer.Instance.GetDBGameSettingDoc<DBGameSetting>(DBGameSettingDoc.GameState);
-            GameConnector.Instance.Run(gameSetting.MatchmakerIP, gameSetting.MatchmakerPort ?? 0, token, OnGameConnected);
+            await GameConnector.Instance.Run(gameSetting.MatchmakerIP, gameSetting.MatchmakerPort ?? 0, OnGameConnected);
         }
         private void OnGameConnected(bool _success, bool _maintain) {
-            WriteLog.Log("isSuccess=" + _success);
+            WriteLog.Log("OnGameConnected isSuccess=" + _success);
         }
-        private void CreateRoomTest() {
-            GameConnector.Instance.CreateRoom("mapID123", OnRoomCreated);
+        public void CreateRoomTest() {
+            var gameSetting = GamePlayer.Instance.GetDBGameSettingDoc<DBGameSetting>(DBGameSettingDoc.GameState);
+            GameConnector.Instance.CreateRoom("Quick-1", OnRoomCreated);
         }
         void OnRoomCreated(bool _success) {
-
+            WriteLog.Log("OnRoomCreated is _success=" + _success);
         }
         public async void Signout() {
             await RealmManager.Signout();

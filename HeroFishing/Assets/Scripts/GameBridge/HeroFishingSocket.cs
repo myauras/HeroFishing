@@ -31,7 +31,7 @@ namespace HeroFishing.Socket {
         }
 
         // 回呼
-        public event Action<string,bool, string> CreateRoomCallback;
+        public event Action<bool, string> CreateRoomCallback;
 
         //public static readonly DateTime SERVER_START_TIME = new DateTime(1970, 1, 1, 0 ,0, 0, DateTimeKind.Utc);
 
@@ -177,14 +177,14 @@ namespace HeroFishing.Socket {
             MatchmakerClient.RegistOnDisconnect(OnLobbyDisConnect);
         }
 
-        public void CreateRoom(string _dbMapID, Action<string,bool, string> _cb) {
+        public void CreateRoom(string _dbMapID, Action<bool, string> _cb) {
             WriteLog.LogColor("[HeroFishingSocket] CreateRoom", WriteLog.LogType.Connection);
             CreateRoomCallback = _cb;
             CREATEROOM cmdContent = new CREATEROOM(_dbMapID, "scoz");//建立封包內容
             SocketCMD<CREATEROOM> cmd = new SocketCMD<CREATEROOM>(cmdContent);//建立封包
             int id = MatchmakerClient.Send(cmd);//送出封包
             if (id < 0) {
-                _cb?.Invoke(_dbMapID,false, "");
+                _cb?.Invoke(false, "");
                 return;
             }
             //註冊回呼
