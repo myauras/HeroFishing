@@ -36,7 +36,7 @@ namespace HeroFishing.Battle {
             var bulletRot = transform.rotation;
             string firePath = string.Format("Bullet/BulletFire{0}", SpellPrefabID);
             GameObjSpawner.SpawnParticleObjByPath(firePath, bulletPos, bulletRot, null, (go, handle) => {
-                AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源dd
+                AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
                 go.SetActive(false);
                 DOVirtual.DelayedCall(0.05f, () => {
                     go.SetActive(true);

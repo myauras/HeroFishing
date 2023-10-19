@@ -9,13 +9,6 @@ using Unity.Transforms;
 using UnityEngine;
 
 namespace HeroFishing.Battle {
-    public struct BulletValue : IComponentData {
-        public float Speed;
-        public float Radius;
-        public float3 Position;
-        public float3 Direction;
-        public uint StrIndex_SpellID;//紀錄子彈的技能ID
-    }
     /// <summary>
     /// 子彈參照元件，用於參照GameObject實例用
     /// </summary>
@@ -48,7 +41,7 @@ namespace HeroFishing.Battle {
                 if (bulletPrefab == null) continue;
                 var bulletGO = GameObject.Instantiate(bulletPrefab.gameObject);
 #if UNITY_EDITOR
-                bulletGO.name = "BulletProjectile" + spellCom.BulletPrefabID;
+                bulletGO.name = "BulletProjectile" + spellCom.SpellPrefabID;
                 //bulletGO.hideFlags |= HideFlags.HideAndDontSave;
 #else
 bulletGO.hideFlags |= HideFlags.HideAndDontSave;
@@ -68,7 +61,7 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                 //建立Entity
                 var entity = state.EntityManager.CreateEntity();
                 //設定子彈模型
-                bullet.SetData(spellCom.BulletPrefabID);
+                bullet.SetData(spellCom.SpellPrefabID);
                 //加入BulletValue
                 ECB.AddComponent(entity, new BulletValue() {
                     Position = spellCom.AttackerPos,
@@ -76,6 +69,7 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                     Radius = spellCom.Radius,
                     Direction = direction,
                     StrIndex_SpellID = spellCom.StrIndex_SpellID,
+                    SpellPrefabID = spellCom.SpellPrefabID,
                 });
                 //加入BulletInstance
                 ECB.AddComponent(entity, new BulletInstance {

@@ -93,7 +93,7 @@ namespace HeroFishing.Battle {
                     _entityManager.AddComponentData(entity, new SpellCom() {
                         PlayerID = 1,
                         StrIndex_SpellID = strIndex_SpellID,
-                        BulletPrefabID = TmpSpellData.PrefabID,
+                        SpellPrefabID = TmpSpellData.PrefabID,
                         AttackerPos = _attackPos,
                         Direction = _attackDir,
                         Speed = speed,
@@ -115,7 +115,7 @@ namespace HeroFishing.Battle {
                         _entityManager.AddComponentData(entity, new SpellCom() {
                             PlayerID = 1,
                             StrIndex_SpellID = strIndex_SpellID,
-                            BulletPrefabID = TmpSpellData.PrefabID,
+                            SpellPrefabID = TmpSpellData.PrefabID,
                             AttackerPos = _attackPos,
                             Direction = rotateQ * _attackDir,//使用四元數來旋轉本來的攻擊向量
                             Speed = speed,

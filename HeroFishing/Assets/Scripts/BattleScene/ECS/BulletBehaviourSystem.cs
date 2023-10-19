@@ -1,5 +1,6 @@
 ﻿using HeroFishing.Main;
 using Scoz.Func;
+using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -96,7 +97,7 @@ namespace HeroFishing.Battle {
                                 //本地端測試用，有機率擊殺怪物
                                 var random = new Unity.Mathematics.Random(Seed);
                                 float value = random.NextFloat(); // 產生一個0.0到1.0之間的浮點數
-                                if (value < 0.01f) {
+                                if (value < 0.5f) {
                                     //在怪物實體身上建立死亡標籤元件，讓其他系統知道要死亡後該做什麼
                                     ECB.AddComponent<MonsterDieTag>(3, monsterValue.MyEntity);
                                     //在怪物實體身上建立移除標籤元件
@@ -107,24 +108,15 @@ namespace HeroFishing.Battle {
                                     //在怪物實體身上建立被擊中的標籤元件，讓其他系統知道要處理被擊中後該做什麼
                                     var hitTag = new MonsterHitTag { MonsterID = monsterValue.MonsterID, StrIndex_SpellID = _bullet.StrIndex_SpellID };
                                     ECB.AddComponent(3, monsterValue.MyEntity, hitTag);
+
                                 }
 
                                 //加入子彈擊中特效標籤元件
-                                NativeArray<char> charArray = new NativeArray<char>();
-                                ECSStrManager.GetStr(_bullet.StrIndex_SpellID, out charArray);
-                                var spellData = HeroSpellJsonData.GetDataByNativeStrKey(charArray);
-                                charArray.Dispose();
-                                var monsterData = MonsterJsonData.GetData(monsterValue.MonsterID);
-                                if (spellData != null && monsterData != null && monsterData.HitEffectPos == MonsterJsonData.HitEffectPosType.HitPos) {
-                                    var bulletPos = _bullet.Position - new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY) / 2, 0);
-                                    var rotQuaternion = Quaternion.Euler(_bullet.Direction);
-                                    var rotFloat4 = new float4(rotQuaternion.x, rotQuaternion.y, rotQuaternion.z, rotQuaternion.w);
-                                    //在怪物實體身上建立要產生的標籤元件，讓其他系統知道要處理被擊中後該做什麼
-                                    var effectSpawnTag = new SpellParticleSpawnTag { PrefabID = spellData.PrefabID, Pos = bulletPos, Rot = rotFloat4 };
-                                    ECB.AddComponent(3, monsterValue.MyEntity, effectSpawnTag);
-                                }
+                                Entity effectEntity = ECB.CreateEntity(4);
+                                var effectSpawnTag = new HitParticleSpawnTag { Monster = monsterValue, SpellPrefabID = _bullet.SpellPrefabID, Bullet = _bullet };
+                                ECB.AddComponent(5, effectEntity, effectSpawnTag);
 
-                                ECB.DestroyEntity(4, _entity);//銷毀子彈
+                                ECB.DestroyEntity(6, _entity);//銷毀子彈
                             }
 
                         } while (GridData.GridMap.TryGetNextValue(out monsterValue, ref iterator)); // 如果該key還有其他值就繼續

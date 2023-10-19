@@ -60,7 +60,7 @@ namespace HeroFishing.Main {
                     case "SummonSkillID":
                         SummonSkillID = TextManager.StringSplitToIntArray(item[key].ToString(), ',');
                         break;
-                    case "HitEffectPosType":
+                    case "HitEffectPos":
                         HitEffectPos = MyEnum.ParseEnum<HitEffectPosType>(item[key].ToString());
                         break;
                     default:

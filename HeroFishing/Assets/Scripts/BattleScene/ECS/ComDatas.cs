@@ -3,7 +3,14 @@ using System;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
-
+public struct BulletValue : IComponentData {
+    public float Speed;
+    public float Radius;
+    public float3 Position;
+    public float3 Direction;
+    public uint StrIndex_SpellID;//紀錄子彈的技能ID
+    public int SpellPrefabID;//技能Prefab名稱
+}
 /// <summary>
 /// 怪物參照元件，用於參照GameObject實例用
 /// </summary>
@@ -52,8 +59,8 @@ public struct ParticleSpawnTag : IComponentData {
 /// <summary>
 /// 技能特效元件
 /// </summary>
-public struct SpellParticleSpawnTag : IComponentData {
-    public int PrefabID;
-    public float3 Pos;
-    public float4 Rot;
+public struct HitParticleSpawnTag : IComponentData {
+    public int SpellPrefabID;
+    public MonsterValue Monster;
+    public BulletValue Bullet;
 }
