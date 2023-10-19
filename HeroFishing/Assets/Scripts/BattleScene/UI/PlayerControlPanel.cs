@@ -82,6 +82,7 @@ namespace HeroFishing.Battle {
             Entity entity;
             //在ECS世界中建立一個施法
             EntityManager _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            var strIndex_SpellID = ECSStrManager.AddStr(TmpSpellData.ID);
             switch (TmpSpellData.MySpellType) {
                 case HeroSpellJsonData.SpellType.LineShot:
 
@@ -91,6 +92,7 @@ namespace HeroFishing.Battle {
                     entity = _entityManager.CreateEntity();
                     _entityManager.AddComponentData(entity, new SpellCom() {
                         PlayerID = 1,
+                        StrIndex_SpellID = strIndex_SpellID,
                         BulletPrefabID = TmpSpellData.PrefabID,
                         AttackerPos = _attackPos,
                         Direction = _attackDir,
@@ -112,6 +114,7 @@ namespace HeroFishing.Battle {
                         entity = _entityManager.CreateEntity();
                         _entityManager.AddComponentData(entity, new SpellCom() {
                             PlayerID = 1,
+                            StrIndex_SpellID = strIndex_SpellID,
                             BulletPrefabID = TmpSpellData.PrefabID,
                             AttackerPos = _attackPos,
                             Direction = rotateQ * _attackDir,//使用四元數來旋轉本來的攻擊向量

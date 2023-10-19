@@ -10,7 +10,7 @@ namespace Scoz.Func {
             if (EffectList != null) {
                 for (int i = 0; i < EffectList.Count; i++) {
                     if (EffectList[i].StartEmit) {
-                        GameObjSpawner.SpawnGameObjByAssetRef(EffectList[i].Particle, EffectList[i].Offset, EffectList[i].Roration, EffectList[i].TargetParent, null);
+                        GameObjSpawner.SpawnGameObjByAssetRef(EffectList[i].Particle, EffectList[i].Offset, Quaternion.Euler(EffectList[i].Roration), EffectList[i].TargetParent, null);
                     }
                 }
             }
@@ -23,7 +23,7 @@ namespace Scoz.Func {
             }
             for (int i = 0; i < EffectList.Count; i++) {
                 if (EffectList[i].Name == _effectKey) {
-                    GameObjSpawner.SpawnGameObjByAssetRef(EffectList[i].Particle, EffectList[i].Offset, EffectList[i].Roration, EffectList[i].TargetParent, null);
+                    GameObjSpawner.SpawnGameObjByAssetRef(EffectList[i].Particle, EffectList[i].Offset, Quaternion.Euler(EffectList[i].Roration), EffectList[i].TargetParent, null);
                     break;
                 }
             }

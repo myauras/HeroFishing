@@ -1,42 +1,12 @@
 using HeroFishing.Main;
 using Scoz.Func;
-using System;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Transforms;
 using UnityEngine;
 
 namespace HeroFishing.Battle {
-    /// <summary>
-    /// 資料元件
-    /// </summary>
-    public struct MonsterValue : IComponentData {
-        public Entity MyEntity;//把自己的Enity記錄起來，之後取的時候較快
-        public float Radius;
-        public float3 Pos;
-        public bool InField;//是否進入戰場，進入之後會改為true，並在怪物離開區域後會將InField為true的怪物移除
-    }
-    /// <summary>
-    /// 擊中標籤元件
-    /// </summary>
-    public struct MonsterHitTag : IComponentData { }
-    /// <summary>
-    /// 死亡標籤元件
-    /// </summary>
-    public struct MonsterDieTag : IComponentData { }
-    /// <summary>
-    /// 怪物參照元件，用於參照GameObject實例用
-    /// </summary>
-    public class MonsterInstance : IComponentData, IDisposable {
-        public GameObject GO;
-        public Transform Trans;
-        public Monster MyMonster;
-        public Vector3 Dir;
-        public void Dispose() {
-            UnityEngine.Object.DestroyImmediate(GO);
-        }
-    }
+
     public partial struct MonsterSpawnSystem : ISystem {
 
         [BurstCompile]
@@ -62,7 +32,7 @@ namespace HeroFishing.Battle {
                 monsterGO.name = monsterData.Ref;
                 //monsterGO.hideFlags |= HideFlags.HideAndDontSave;
 #else
-monsterGO.hideFlags |= HideFlags.HideAndDontSave;
+                monsterGO.hideFlags |= HideFlags.HideAndDontSave;
 #endif
                 var entity = state.EntityManager.CreateEntity();
                 state.EntityManager.AddComponentObject(entity, monsterGO.GetComponent<Transform>());
@@ -76,6 +46,7 @@ monsterGO.hideFlags |= HideFlags.HideAndDontSave;
                     dir = (routeData.TargetPos - routeData.SpawnPos).normalized;
                     dirQuaternion = Quaternion.LookRotation(dir);
                     state.EntityManager.AddComponentData(entity, new MonsterValue {
+                        MonsterID = monsterData.ID,
                         MyEntity = entity,
                         Radius = monsterData.Radius,
                         Pos = routeData.SpawnPos,

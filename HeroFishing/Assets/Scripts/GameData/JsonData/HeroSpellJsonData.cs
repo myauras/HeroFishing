@@ -4,6 +4,9 @@ using UnityEngine;
 using Scoz.Func;
 using LitJson;
 using Unity.Entities;
+using Unity.Collections;
+using Unity.Burst;
+using System.Linq;
 
 namespace HeroFishing.Main {
     public enum SpellName {
@@ -53,7 +56,8 @@ namespace HeroFishing.Main {
         public string Voice { get; private set; }
         public int PrefabID { get; private set; }
         public float[] HitMonsterShaderSetting { get; private set; }
-        static Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>> SpellDic = new Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>>();
+        static Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>> SpellDic = new Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>>();//使用英雄ID與技能名稱取資料的字典
+        static Dictionary<uint, HeroSpellJsonData> SpellDic_Hashkey = new Dictionary<uint, HeroSpellJsonData>();//使用hash key資料的字典(ECS的BurstCompile方法中會需要)
 
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
             DataName = _dataName;
@@ -108,12 +112,13 @@ namespace HeroFishing.Main {
                         break;
                     case "HitMonsterShaderSetting":
                         HitMonsterShaderSetting = TextManager.StringSplitToFloatArray(item[key].ToString(), ',');
-                        break;                        
+                        break;
                     default:
                         WriteLog.LogWarning(string.Format("{0}表有不明屬性:{1}", DataName, key));
                         break;
                 }
             }
+            SpellDic_Hashkey.Add(HashUtility.GenerateHash(ID), this);
             AddToSpellDic(ID, this);
         }
 
@@ -143,6 +148,16 @@ namespace HeroFishing.Main {
 
         public static HeroSpellJsonData GetData(string _id) {
             return GameDictionary.GetJsonData<HeroSpellJsonData>(DataName, _id);
+        }
+
+        /// <summary>
+        /// 使用hash key取資料(ECS的BurstCompile方法中會需要)
+        /// </summary>
+        [BurstCompile]
+        public static HeroSpellJsonData GetDataByNativeStrKey(NativeArray<char> _nativeArray) {
+            uint hash = HashUtility.GenerateHash(_nativeArray);
+            if (!SpellDic_Hashkey.ContainsKey(hash)) return null;
+            return SpellDic_Hashkey[hash];
         }
         public static Dictionary<SpellName, HeroSpellJsonData> GetSpellDic(int _heroID) {
             if (!SpellDic.ContainsKey(_heroID)) return null;

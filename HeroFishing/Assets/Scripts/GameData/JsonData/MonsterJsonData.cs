@@ -25,7 +25,11 @@ namespace HeroFishing.Main {
         public MonsterType MyMonsterType { get; private set; }
         public int[] DropIDs { get; private set; }
         public int[] SummonSkillID { get; private set; }
-
+        public enum HitEffectPosType {
+            HitPos,
+            Self,
+        }
+        public HitEffectPosType HitEffectPos = HitEffectPosType.HitPos;
 
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
             DataName = _dataName;
@@ -55,6 +59,9 @@ namespace HeroFishing.Main {
                         break;
                     case "SummonSkillID":
                         SummonSkillID = TextManager.StringSplitToIntArray(item[key].ToString(), ',');
+                        break;
+                    case "HitEffectPosType":
+                        HitEffectPos = MyEnum.ParseEnum<HitEffectPosType>(item[key].ToString());
                         break;
                     default:
                         //WriteLog.LogWarning(string.Format("{0}表有不明屬性:{1}", DataName, key));

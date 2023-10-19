@@ -14,6 +14,7 @@ namespace HeroFishing.Battle {
         public float Radius;
         public float3 Position;
         public float3 Direction;
+        public uint StrIndex_SpellID;//紀錄子彈的技能ID
     }
     /// <summary>
     /// 子彈參照元件，用於參照GameObject實例用
@@ -74,6 +75,7 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                     Speed = spellCom.Speed,
                     Radius = spellCom.Radius,
                     Direction = direction,
+                    StrIndex_SpellID = spellCom.StrIndex_SpellID,
                 });
                 //加入BulletInstance
                 ECB.AddComponent(entity, new BulletInstance {

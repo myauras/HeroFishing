@@ -14,10 +14,9 @@ namespace HeroFishing.Battle {
             state.RequireForUpdate<BulletValue>();
         }
         public void OnDestroy(ref SystemState state) {
-
         }
         public void OnUpdate(ref SystemState state) {
-            //遍歷所有怪物
+            //遍歷所有怪物            
             foreach (var (bulletValue, bulletInstance) in SystemAPI.Query<RefRO<BulletValue>, BulletInstance>()) {
                 bulletInstance.Trans.localPosition = bulletValue.ValueRO.Position;
             }

@@ -1,5 +1,6 @@
 using DG.Tweening;
 using HeroFishing.Main;
+using HeroFishing.Socket;
 using Scoz.Func;
 using System;
 using Unity.VisualScripting;
@@ -13,18 +14,13 @@ namespace HeroFishing.Battle {
         int SpellPrefabID;
 
         private void OnDestroy() {
-            LoadHitModel();
         }
-        void LoadHitModel() {
+        public void HitParticleEffect() {
             //載入Hit模型
-            var bulletPos = transform.position;
+            var bulletPos = transform.position - new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
             var bulletRot = transform.rotation;
-            string firePath = string.Format("Bullet/BulletHit{0}.prefab", SpellPrefabID);
-            AddressablesLoader.GetPrefabResourceByPath<GameObject>(firePath, (prefab, handle) => {
-                var go = Instantiate(prefab, null);
-                go.transform.position = bulletPos;
-                go.transform.rotation = bulletRot;
-                go.transform.localScale = prefab.transform.localScale;
+            string hitPath = string.Format("Bullet/BulletHit{0}", SpellPrefabID);
+            GameObjSpawner.SpawnParticleObjByPath(hitPath, bulletPos, bulletRot, null, (go, handle) => {
                 AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
             });
         }
@@ -34,28 +30,25 @@ namespace HeroFishing.Battle {
         }
         void LoadModel() {
             gameObject.SetActive(false);
+
             //載入Fire模型
             var bulletPos = transform.position;
             var bulletRot = transform.rotation;
-            string firePath = string.Format("Bullet/BulletFire{0}.prefab", SpellPrefabID);
-            AddressablesLoader.GetPrefabResourceByPath<GameObject>(firePath, (prefab, handle) => {
-                var go = Instantiate(prefab, null);
-                go.transform.position = bulletPos;
-                go.transform.rotation = bulletRot;
-                go.transform.localScale = prefab.transform.localScale;
-                AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
+            string firePath = string.Format("Bullet/BulletFire{0}", SpellPrefabID);
+            GameObjSpawner.SpawnParticleObjByPath(firePath, bulletPos, bulletRot, null, (go, handle) => {
+                AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源dd
+                go.SetActive(false);
+                DOVirtual.DelayedCall(0.05f, () => {
+                    go.SetActive(true);
+                });
             });
-
-            //載入Projectile模型
-            string projectilePath = string.Format("Bullet/BulletProjectile{0}.prefab", SpellPrefabID);
-            AddressablesLoader.GetPrefabResourceByPath<GameObject>(projectilePath, (prefab, handle) => {
-                var go = Instantiate(prefab, transform);
-                go.transform.localPosition = prefab.transform.localPosition;
-                go.transform.localRotation = prefab.transform.localRotation;
-                go.transform.localScale = prefab.transform.localScale;
+            ////載入Projectile模型
+            string projectilePath = string.Format("Bullet/BulletProjectile{0}", SpellPrefabID);
+            GameObjSpawner.SpawnParticleObjByPath(projectilePath, Vector3.zero, Quaternion.identity, transform, (go, handle) => {
                 AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
                 LoadDone();
             });
+
         }
 
         /// <summary>

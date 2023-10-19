@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Unity.Collections;
 
 namespace Scoz.Func {
     public static class StringExtention {
@@ -11,7 +12,7 @@ namespace Scoz.Func {
         }
 
         /// <summary>
-        /// 從yyyy-MM-dd-HH:mm:ss的字串格式轉為TimeDate(づ￣ 3￣)づ
+        /// 從yyyy-MM-dd-HH:mm:ss的字串格式轉為TimeDate
         /// </summary>
         public static DateTime GetTimeDateFromScozTimeStr(this string _timeStr) {
             return DateTime.ParseExact(_timeStr, "yyyy-MM-dd-HH:mm:ss", CultureInfo.InvariantCulture);
@@ -51,5 +52,19 @@ namespace Scoz.Func {
             }
             return _json;
         }
-    }
+        /// <summary>
+        /// 將string轉為NativeArray
+        /// </summary>
+        public static NativeArray<char> ToNativeCharArray(this string _str) {
+            if (string.IsNullOrEmpty(_str)) return new NativeArray<char>();
+            NativeArray<char> nativeArray = new NativeArray<char>(_str.Length, Allocator.Temp);
+            for (int i = 0; i < _str.Length; i++) {
+                nativeArray[i] = _str[i];
+            }
+            return nativeArray;
+        }
+
+
+
+}
 }

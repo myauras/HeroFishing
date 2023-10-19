@@ -34,21 +34,25 @@ namespace HeroFishing.Battle {
             });
         }
 
-
-        public void OnHit() {
-            HitEffect();
+        public void OnHit(string _spellID) {
+            var spellData = HeroSpellJsonData.GetData(_spellID);
+            if (spellData == null) return;
+            HitShaderEffect(spellData);
+            if (MyData.HitEffectPos == MonsterJsonData.HitEffectPosType.Self) {
+                HitParticleEffect(spellData);
+            }
         }
 
-        void HitEffect() {
+
+        void HitShaderEffect(HeroSpellJsonData _spellData) {
             if (MySkinnedMaterial == null) return;
-            string spellID = "1_attack";
-            var spellData = HeroSpellJsonData.GetData(spellID);
+
             //Color color = TextManager.ParseTextToColor32(GameSettingJsonData.GetStr(GameSetting.HitEffect_OutlineColor)); 已不使用Gamesetting的設定
             //MySkinnedMaterial.SetFloat("_FresnelPower", GameSettingJsonData.GetFloat(GameSetting.HitEffect_FresnelPower));已不使用Gamesetting的設定
 
             //設定怪物被擊中Shader效果
-            Color32 color = new Color32((byte)spellData.HitMonsterShaderSetting[0], (byte)spellData.HitMonsterShaderSetting[1], (byte)spellData.HitMonsterShaderSetting[2], (byte)spellData.HitMonsterShaderSetting[3]);
-            float hdrIntensity = spellData.HitMonsterShaderSetting[4]; // hdr color intensity設定
+            Color32 color = new Color32((byte)_spellData.HitMonsterShaderSetting[0], (byte)_spellData.HitMonsterShaderSetting[1], (byte)_spellData.HitMonsterShaderSetting[2], (byte)_spellData.HitMonsterShaderSetting[3]);
+            float hdrIntensity = _spellData.HitMonsterShaderSetting[4]; // hdr color intensity設定
             //設定HDR Color
             Color32 hdrColor = new Color32(
                (byte)(color.r * hdrIntensity),
@@ -57,12 +61,24 @@ namespace HeroFishing.Battle {
                color.a
             );
             MySkinnedMaterial.SetVector("_OutlineColor", new Vector3(color.r, color.g, color.b));
-            MySkinnedMaterial.SetFloat("_FresnelPower", spellData.HitMonsterShaderSetting[5]);
-            MySkinnedMaterial.SetFloat("_Opacity", spellData.HitMonsterShaderSetting[6]);
-            MySkinnedMaterial.SetFloat("_Smoothness", spellData.HitMonsterShaderSetting[7]);
-            MySkinnedMaterial.SetFloat("_Metallic", spellData.HitMonsterShaderSetting[8]);
+            MySkinnedMaterial.SetFloat("_FresnelPower", _spellData.HitMonsterShaderSetting[5]);
+            MySkinnedMaterial.SetFloat("_Opacity", _spellData.HitMonsterShaderSetting[6]);
+            MySkinnedMaterial.SetFloat("_Smoothness", _spellData.HitMonsterShaderSetting[7]);
+            MySkinnedMaterial.SetFloat("_Metallic", _spellData.HitMonsterShaderSetting[8]);
             DOTween.To(() => 1f, x => MySkinnedMaterial.SetFloat("_Opacity", x), 0f, GameSettingJsonData.GetFloat(GameSetting.HitEffect_DecaySec));
         }
+
+        public void HitParticleEffect(HeroSpellJsonData _spellData) {
+            //載入Hit模型
+            var pos = transform.position + new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY) / 2, 0);
+            var rot = transform.rotation;
+            string hitPath = string.Format("Bullet/BulletHit{0}.prefab", _spellData.PrefabID);
+            GameObjSpawner.SpawnParticleObjByPath(hitPath, pos, rot, null, (go, handle) => {
+                AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
+            });
+        }
+
+
         public void Die() {
             if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;
             SetAniTrigger("die");
