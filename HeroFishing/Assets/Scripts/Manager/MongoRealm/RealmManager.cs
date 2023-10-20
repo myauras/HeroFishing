@@ -15,6 +15,7 @@ namespace Service.Realms {
         player,
         playerHistory,
         playerState,
+        playerMatchgame,//遊戲房
     }
     /// <summary>
     /// DB資料集合

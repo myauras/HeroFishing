@@ -3,6 +3,7 @@ using HeroFishing.Main;
 using LitJson;
 using NSubstitute;
 using Scoz.Func;
+using Service.Realms;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -148,30 +149,30 @@ namespace HeroFishing.Socket {
             disconnectCallback?.Invoke();
         }
 
-        public void Login(string _token,  Func<string,bool, Task> _callback) {
+        public void Login(string _token, Func<string, bool, Task> _callback) {
             WriteLog.LogColor("[HeroFishingSocket] Login", WriteLog.LogType.Connection);
             if (MatchmakerClient == null) {
                 WriteLog.LogError("MatchmakerClient is null");
-                _callback?.Invoke(null,false);  
+                _callback?.Invoke(null, false);
                 return;
             }
             CMDCallback.Clear();
             MatchmakerClient.UnRegistOnDisconnect(OnLobbyDisConnect);
             MatchmakerClient.StartConnect((bool isConnect) => {
                 if (!isConnect) {
-                    _callback?.Invoke(_token,false);
+                    _callback?.Invoke(_token, false);
                     return;
                 }
                 SocketCMD<AUTH> command = new SocketCMD<AUTH>(new AUTH(_token));
 
                 int id = MatchmakerClient.Send(command);
                 if (id < 0) {
-                    _callback?.Invoke(null,false);
+                    _callback?.Invoke(null, false);
                     return;
                 }
                 RegistCommandCallback(new Tuple<string, int>(SocketContent.ReplyType.AUTH_REPLY.ToString(), id), (string msg) => {
                     SocketCMD<Auth_Reply> packet = LitJson.JsonMapper.ToObject<SocketCMD<Auth_Reply>>(msg);
-                    _callback?.Invoke(_token,packet.Content.IsAuth);
+                    _callback?.Invoke(_token, packet.Content.IsAuth);
                 });
             });
             MatchmakerClient.RegistOnDisconnect(OnLobbyDisConnect);
@@ -180,7 +181,7 @@ namespace HeroFishing.Socket {
         public void CreateRoom(string _dbMapID, Action<bool, string> _cb) {
             WriteLog.LogColor("[HeroFishingSocket] CreateRoom", WriteLog.LogType.Connection);
             CreateRoomCallback = _cb;
-            CREATEROOM cmdContent = new CREATEROOM(_dbMapID, "scoz");//建立封包內容
+            CREATEROOM cmdContent = new CREATEROOM(_dbMapID, RealmManager.MyApp.CurrentUser.Id);//建立封包內容
             SocketCMD<CREATEROOM> cmd = new SocketCMD<CREATEROOM>(cmdContent);//建立封包
             int id = MatchmakerClient.Send(cmd);//送出封包
             if (id < 0) {

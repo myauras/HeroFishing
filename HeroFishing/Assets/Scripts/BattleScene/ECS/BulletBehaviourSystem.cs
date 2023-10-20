@@ -59,8 +59,6 @@ namespace HeroFishing.Battle {
                 MonsterCollisionPosOffset = BattleManager.MonsterCollisionPosOffset,
             }.ScheduleParallel();
 
-
-
         }
         [BurstCompile]
         partial struct MoveJob : IJobEntity {
@@ -97,7 +95,7 @@ namespace HeroFishing.Battle {
                                 //本地端測試用，有機率擊殺怪物
                                 var random = new Unity.Mathematics.Random(Seed);
                                 float value = random.NextFloat(); // 產生一個0.0到1.0之間的浮點數
-                                if (value < 0.5f) {
+                                if (value < 0.01f) {
                                     //在怪物實體身上建立死亡標籤元件，讓其他系統知道要死亡後該做什麼
                                     ECB.AddComponent<MonsterDieTag>(3, monsterValue.MyEntity);
                                     //在怪物實體身上建立移除標籤元件

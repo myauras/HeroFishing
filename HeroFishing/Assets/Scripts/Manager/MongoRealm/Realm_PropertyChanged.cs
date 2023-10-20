@@ -80,6 +80,8 @@ namespace Service.Realms {
         /// 玩家文件通知
         /// </summary>
         static void RegisterPropertyChanges_MyPlayer() {
+
+            //玩家資料
             var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
             if (player != null) {
                 player.PropertyChanged += (sender, e) => {
@@ -89,6 +91,7 @@ namespace Service.Realms {
                     WriteLog.LogColorFormat("{0}表 Changed field: {0}  Value: {1}", WriteLog.LogType.Realm, "player", propertyName, propertyValue);
                 };
             }
+
         }
 
         /// <summary>
