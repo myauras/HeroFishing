@@ -28,17 +28,20 @@ namespace Scoz.Func {
             SceneManager.sceneLoaded += OnLevelFinishedLoading;
             DontDestroyOnLoad(gameObject);
             MyVolume = GetComponent<Volume>();
+
+            //初始化時先執行一次
+            OnLevelFinishedLoading(SceneManager.GetActiveScene(), LoadSceneMode.Single);
         }
         private void OnDestroy() {
             SceneManager.sceneLoaded -= OnLevelFinishedLoading;
         }
         void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
+            Debug.Log(_scene.name);
             if (MyBloomSettingDic == null || MyBloomSettingDic.Count == 0) return;
             MyVolume.enabled = GamePlayer.Instance.PostProcessing;
             if (!GamePlayer.Instance.PostProcessing)//沒開後製效果就不用處理後續
                 return;
             SetBloom(_scene);
-
         }
         public void RefreshSetting() {
             if (!Instance) return;
