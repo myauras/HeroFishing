@@ -8,6 +8,7 @@ using System;
 using MongoDB.Bson;
 
 namespace Service.Realms {
+
     /// <summary>
     /// DB玩家資料集合
     /// </summary>
@@ -17,11 +18,21 @@ namespace Service.Realms {
         playerState,
         playerMatchgame,//遊戲房
     }
+
     /// <summary>
-    /// DB資料集合
+    /// DB遊戲資料集合
     /// </summary>
-    public enum DBCol {
-        gameSetting,
+    public enum DBGameCol {
+        matchgame,
+    }
+    /// <summary>
+    ///  DB遊戲設定DOC名稱
+    /// </summary>
+    public enum DBGameSettingDoc {
+        Timer,
+        Address,
+        GameState,
+        ScheduledInGameNotification,
     }
     public static partial class RealmManager {
         //環境版本對應Realm App ID

@@ -63,6 +63,7 @@ namespace HeroFishing.Main {
         }
         void OnRoomCreated(bool _success) {
             WriteLog.Log("OnRoomCreated is _success=" + _success);
+
         }
         public async void Signout() {
             await RealmManager.Signout();

@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using Realms;
 using MongoDB.Bson;
 
-public enum DBGameSettingDoc {
-    Timer,
-    Address,
-    GameState,
-    ScheduledInGameNotification,
-}
-
 [MapTo("gameSetting")]
 public partial class DBGameSetting : IRealmObject {
     [Required]

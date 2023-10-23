@@ -4,13 +4,17 @@ using UnityEngine;
 namespace HeroFishing.Socket {
     public class CreateRoom_Reply : SocketContent {
         /// <summary>
+        /// 創房者ID
+        /// </summary>
+        public string CreaterID { get; private set; }
+        /// <summary>
         /// 房內玩家ID
         /// </summary>
         public string[] PlayerIDs { get; private set; }
         /// <summary>
         /// 地圖ID
         /// </summary>
-        public string MapID { get; private set; }
+        public string DBMapID { get; private set; }
         /// <summary>
         /// 遊戲ServerIP
         /// </summary>

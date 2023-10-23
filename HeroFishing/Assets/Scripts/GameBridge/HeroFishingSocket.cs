@@ -107,7 +107,7 @@ namespace HeroFishing.Socket {
             try {
                 SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(message);
                 //LitJson.JsonData obj = LitJson.JsonMapper.ToObject(message);
-                WriteLog.LogColorFormat("Recieve Command: {0}", WriteLog.LogType.Connection, data.CMD);
+                WriteLog.LogColorFormat("Recieve Command: {0}   PackID: {1}", WriteLog.LogType.Connection, data.CMD, data.PackID);
                 Tuple<string, int> commandID = new Tuple<string, int>(data.CMD, data.PackID);
                 if (CMDCallback.TryGetValue(commandID, out Action<string> _cb)) {
                     CMDCallback.Remove(commandID);
@@ -140,17 +140,17 @@ namespace HeroFishing.Socket {
         }
 
         private void OnLobbyDisConnect() {
-            WriteLog.LogColor("[HeroFishingSocket] OnLobbyDisConnect", WriteLog.LogType.Connection);
+            WriteLog.LogColor("OnLobbyDisConnect", WriteLog.LogType.Connection);
             disconnectCallback?.Invoke();
         }
 
         private void OnGameDisConnect() {
-            WriteLog.LogColor("[HeroFishingSocket] OnGameDisConnect", WriteLog.LogType.Connection);
+            WriteLog.LogColor("OnGameDisConnect", WriteLog.LogType.Connection);
             disconnectCallback?.Invoke();
         }
 
         public void Login(string _token, Func<string, bool, Task> _callback) {
-            WriteLog.LogColor("[HeroFishingSocket] Login", WriteLog.LogType.Connection);
+            WriteLog.LogColor("Login", WriteLog.LogType.Connection);
             if (MatchmakerClient == null) {
                 WriteLog.LogError("MatchmakerClient is null");
                 _callback?.Invoke(null, false);
@@ -179,7 +179,7 @@ namespace HeroFishing.Socket {
         }
 
         public void CreateRoom(string _dbMapID, Action<bool, string> _cb) {
-            WriteLog.LogColor("[HeroFishingSocket] CreateRoom", WriteLog.LogType.Connection);
+            WriteLog.LogColor("CreateRoom", WriteLog.LogType.Connection);
             CreateRoomCallback = _cb;
             CREATEROOM cmdContent = new CREATEROOM(_dbMapID, RealmManager.MyApp.CurrentUser.Id);//建立封包內容
             SocketCMD<CREATEROOM> cmd = new SocketCMD<CREATEROOM>(cmdContent);//建立封包
@@ -189,10 +189,11 @@ namespace HeroFishing.Socket {
                 return;
             }
             //註冊回呼
-            RegistCommandCallback(new Tuple<string, int>(SocketContent.ReplyType.CREATEROOM_REPLY.ToString(), -1), OnCreateRoom_Reply);
+            WriteLog.LogColor("註冊回呼", WriteLog.LogType.Connection);
+            RegistCommandCallback(new Tuple<string, int>(SocketContent.ReplyType.CREATEROOM_REPLY.ToString(), id), OnCreateRoom_Reply);
         }
         public void OnCreateRoom_Reply(string _msg) {
-            WriteLog.LogColor("[MaJamSocket] OnWaitingReCreateRoom", WriteLog.LogType.Connection);
+            WriteLog.LogColor("OnCreateRoom_Reply", WriteLog.LogType.Connection);
             var packet = LitJson.JsonMapper.ToObject<SocketCMD<CreateRoom_Reply>>(_msg);
 
             //有錯誤
@@ -203,13 +204,12 @@ namespace HeroFishing.Socket {
                 return;
             }
 
-
-            GameRoomData.Instance.Init();//初始化房間資料
+            AllocatedRoom.Instance.Init(packet.Content.DBMapID, packet.Content.CreaterID, packet.Content.GameServerIP, packet.Content.GameServerPort, packet.Content.GameServerName);//初始化房間資料
             CreateRoomCallback?.Invoke(true, string.Empty);
             CreateRoomCallback = null;
         }
         public void Disconnect() {
-            WriteLog.Log("[HeroFishingSocket] DisConnect");
+            WriteLog.Log("DisConnect");
         }
 
         public int GetPing() {
@@ -260,7 +260,7 @@ namespace HeroFishing.Socket {
         }
 
         public void RegistDisconnectCallback(Action callback) {
-            WriteLog.LogColor("[HeroFishingSocket] RegistDisconnectCallback", WriteLog.LogType.Connection);
+            WriteLog.LogColor("RegistDisconnectCallback", WriteLog.LogType.Connection);
             disconnectCallback += callback;
         }
     }

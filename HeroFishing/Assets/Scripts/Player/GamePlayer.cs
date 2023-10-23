@@ -11,8 +11,9 @@ namespace HeroFishing.Main {
 
     public partial class GamePlayer : MyPlayer {
         public new static GamePlayer Instance { get; private set; }
-        Dictionary<DBPlayerCol, IRealmObject> PlayerDatas = new Dictionary<DBPlayerCol, IRealmObject>();
+        Dictionary<DBPlayerCol, IRealmObject> DBPlayerDatas = new Dictionary<DBPlayerCol, IRealmObject>();
         Dictionary<DBGameSettingDoc, IRealmObject> DBGameSettingDatas = new Dictionary<DBGameSettingDoc, IRealmObject>();
+        Dictionary<DBGameCol, List<IRealmObject>> DBGameDatas = new Dictionary<DBGameCol, List<IRealmObject>>();
         /// <summary>
         /// 登入後會先存裝置UID到DB，存好後AlreadSetDeviceUID會設為true，所以之後從DB取到的裝置的UID應該都跟目前的裝置一致，若不一致代表是有其他裝置登入同個帳號
         /// </summary>
@@ -30,21 +31,21 @@ namespace HeroFishing.Main {
         /// 初始化玩家自己的資料字典，有錯誤時返回false
         /// </summary>
         public bool InitDBPlayerDocs() {
-            PlayerDatas.Clear();
+            DBPlayerDatas.Clear();
             DBPlayer myPlayer = RealmManager.MyRealm.Find<DBPlayer>(RealmManager.MyApp.CurrentUser.Id);
             if (myPlayer == null) {
                 WriteLog.LogError("InitDBPlayerDatas時，取得myPlayer為null");
                 return false;
             }
-            PlayerDatas.Add(DBPlayerCol.player, myPlayer);
+            DBPlayerDatas.Add(DBPlayerCol.player, myPlayer);
             return true;
         }
         /// <summary>
         /// 取得玩家自己的資料
         /// </summary>
         public T GetDBPlayerDoc<T>(DBPlayerCol _col) {
-            if (!PlayerDatas.ContainsKey(_col)) WriteLog.LogError("GetDBPlayerData時，要取的資料為null");
-            return (T)PlayerDatas[_col];
+            if (!DBPlayerDatas.ContainsKey(_col)) WriteLog.LogError("GetDBPlayerData時，要取的資料為null");
+            return (T)DBPlayerDatas[_col];
         }
 
         /// <summary>
@@ -71,5 +72,13 @@ namespace HeroFishing.Main {
             if (!DBGameSettingDatas.ContainsKey(_col)) WriteLog.LogError("GetDBGameSettingDoc時，要取的資料為null");
             return (T)DBGameSettingDatas[_col];
         }
+
+        /// <summary>
+        /// 取得遊戲資料
+        /// </summary>
+        //public T GetDBGameDoc<T>(DBGameCol _col) {
+        //    if (!DBGameDatas.ContainsKey(_col)) WriteLog.LogError("GetDBGameDoc時，要取的資料為null");
+        //    return (T)DBGameDatas[_col];
+        //}
     }
 }

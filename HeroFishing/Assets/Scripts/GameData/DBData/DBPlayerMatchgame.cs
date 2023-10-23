@@ -4,36 +4,24 @@ using Realms;
 using MongoDB.Bson;
 using Service.Realms;
 
-[MapTo("playerMatchgame")]
+[MapTo("matchgame")]
 public partial class DBPlayerMatchgame : IRealmObject {
-    [Required]
     [MapTo("_id")]
+    [Required]
     [PrimaryKey]
     public string ID { get; private set; }
     [MapTo("createdAt")]
     public DateTimeOffset CreatedAt { get; private set; }
     [Required]
-    [MapTo("authType")]
-    public string AuthType { get; private set; }
-    [MapTo("ban")]
-    public bool Ban { get; private set; }
+    [MapTo("dbMapID")]
+    public string DBMapID { get; private set; }
+    [MapTo("playerIDs")]
     [Required]
-    [MapTo("deviceUID")]
-    public string DeviceUID { get; private set; }
-    [MapTo("lastSigninAt")]
-    public DateTimeOffset LastSigninAt { get; private set; }
-    [MapTo("lastSignoutAt")]
-    public DateTimeOffset LastSignoutAt { get; private set; }
+    public IList<string> PlayerIDs { get; }
+    [MapTo("ip")]
     [Required]
-    [MapTo("onlineState")]
-    public string OnlineState { get; private set; }
-    [MapTo("point")]
-    public long Point { get; private set; }
-
-    public void SetDeviceUID(string _deviceUID) {
-        RealmManager.MyRealm.WriteAsync(() => {
-            DeviceUID = _deviceUID;
-        });
-    }
+    public string IP { get; private set; }
+    [MapTo("port")]
+    public int Port { get; set; }
 
 }
