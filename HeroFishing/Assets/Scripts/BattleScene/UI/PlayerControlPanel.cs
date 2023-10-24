@@ -33,7 +33,7 @@ namespace HeroFishing.Battle {
             var pos = UIPosition.GetMouseWorldPointOnYZero(0);
             var dir = (pos - hero.transform.position).normalized;
             //設定技能
-            OnSetSpell(TmpHero.transform.position + new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0), dir);//子彈高度固定設為1.19
+            OnSetSpell(TmpHero.transform.position, dir);
         }
 
 
@@ -72,6 +72,7 @@ namespace HeroFishing.Battle {
             TmpHero.PlaySpellMotion(TmpSpellData.SpellName);
             TmpHero.FaceDir(Quaternion.LookRotation(_attackDir));
             //設定ECS施法資料
+            _attackerPos += new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);//子彈高度固定調整
             SetECSSpellData(_attackerPos, _attackDir);
         }
 
