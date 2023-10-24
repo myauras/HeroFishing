@@ -95,26 +95,40 @@ namespace Service.Realms {
         /// </summary>
         static async Task SetConfiguration() {
             WriteLog.LogColorFormat("開始註冊Realm設定檔...", WriteLog.LogType.Realm);
-            var config = new FlexibleSyncConfiguration(MyApp.CurrentUser) {
-                PopulateInitialSubscriptions = (realm) => {
-                    //註冊玩家自己的player資料
-                    var players = realm.All<DBPlayer>().Where(i => i.ID == MyApp.CurrentUser.Id);
-                    realm.Subscriptions.Add(players, new SubscriptionOptions() { Name = "MyPlayer" });
-                    //註冊GameSetting資料
-                    var gameSettings = realm.All<DBGameSetting>();
-                    realm.Subscriptions.Add(gameSettings, new SubscriptionOptions() { Name = "GameSetting" });
-                }
-            };
+
+
 
             try {
-                MyRealm = await Realm.GetInstanceAsync(config);
-                //await MyRealm.SyncSession.WaitForDownloadAsync();
+                var config = new FlexibleSyncConfiguration(MyApp.CurrentUser) {
+                    PopulateInitialSubscriptions = (realm) => {
+                        //註冊Matchgame資料
+                        var dbMatchgames = realm.All<DBMatchgame>();
+                        realm.Subscriptions.Add(dbMatchgames, new SubscriptionOptions() { Name = "MyMatchgame" });
+                        //註冊Map資料
+                        var dbMaps = realm.All<DBMap>();
+                        realm.Subscriptions.Add(dbMaps, new SubscriptionOptions() { Name = "Map" });
+                        //註冊玩家自己的player資料
+                        var players = realm.All<DBPlayer>().Where(i => i.ID == MyApp.CurrentUser.Id);
+                        realm.Subscriptions.Add(players, new SubscriptionOptions() { Name = "MyPlayer" });
+                        //註冊GameSetting資料
+                        var gameSettings = realm.All<DBGameSetting>();
+                        realm.Subscriptions.Add(gameSettings, new SubscriptionOptions() { Name = "GameSetting" });
+                    }
+                };
+
+                try {
+                    MyRealm = await Realm.GetInstanceAsync(config);
+                    await MyRealm.SyncSession.WaitForDownloadAsync();
+                } catch (Exception _e) {
+                    WriteLog.LogError("Realm 使用config來GetInstanceAsync時發生錯誤: " + _e);
+                    WriteLog.LogError("Realm設定檔註冊失敗");
+                    return;
+                }
+                WriteLog.LogColorFormat("Realm設定檔註冊完成", WriteLog.LogType.Realm);
+
             } catch (Exception _e) {
-                WriteLog.LogError("Realm 使用config來GetInstanceAsync時發生錯誤: " + _e);
-                WriteLog.LogError("Realm設定檔註冊失敗");
-                return;
+                WriteLog.LogError("Realm設定檔錯誤: " + _e);
             }
-            WriteLog.LogColorFormat("Realm設定檔註冊完成", WriteLog.LogType.Realm);
         }
 
         public static async Task Signout() {

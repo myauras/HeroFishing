@@ -5,7 +5,7 @@ using MongoDB.Bson;
 using Service.Realms;
 
 [MapTo("matchgame")]
-public partial class DBPlayerMatchgame : IRealmObject {
+public partial class DBMatchgame : IRealmObject {
     [MapTo("_id")]
     [Required]
     [PrimaryKey]

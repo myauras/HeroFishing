@@ -8,25 +8,29 @@ namespace HeroFishing.Socket {
         /// </summary>
         public string CreaterID { get; private set; }
         /// <summary>
-        /// 房內玩家ID
+        /// 房間內的所有PlayerID
         /// </summary>
         public string[] PlayerIDs { get; private set; }
         /// <summary>
-        /// 地圖ID
+        /// DB地圖ID
         /// </summary>
         public string DBMapID { get; private set; }
         /// <summary>
-        /// 遊戲ServerIP
+        /// DBMatchgame的ID(由Matchmaker產生，格視為[玩家ID]_[累加數字]_[日期時間])
         /// </summary>
-        public string GameServerIP { get; private set; }
+        public string DBMatchgameID { get; private set; }
         /// <summary>
-        /// 遊戲ServerPort
+        /// Matchmaker派發Matchgame的IP
         /// </summary>
-        public int GameServerPort { get; private set; }
+        public string IP { get; private set; }
         /// <summary>
-        /// 遊戲Server名稱
+        /// Matchmaker派發Matchgame的Port
         /// </summary>
-        public string GameServerName { get; private set; }
+        public int Port { get; private set; }
+        /// <summary>
+        /// Matchmaker派發Matchgame的Pod名稱
+        /// </summary>
+        public string PodName { get; private set; }
 
 
         public CreateRoom_Reply() {

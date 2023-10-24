@@ -204,7 +204,8 @@ namespace HeroFishing.Socket {
                 return;
             }
 
-            AllocatedRoom.Instance.Init(packet.Content.DBMapID, packet.Content.CreaterID, packet.Content.GameServerIP, packet.Content.GameServerPort, packet.Content.GameServerName);//初始化房間資料
+            //玩家目前所在遊戲房間的資料
+            AllocatedRoom.Instance.Init(packet.Content.CreaterID, packet.Content.PlayerIDs, packet.Content.DBMapID, packet.Content.DBMatchgameID, packet.Content.IP, packet.Content.Port, packet.Content.PodName);
             CreateRoomCallback?.Invoke(true, string.Empty);
             CreateRoomCallback = null;
         }

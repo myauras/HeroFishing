@@ -16,17 +16,22 @@ namespace HeroFishing.Main {
                 return instance;
             }
         }
-
+        /// <summary>
+        /// 創房者ID
+        /// </summary>
+        public string CreaterID { get; private set; }
+        /// <summary>
+        /// 房間內的所有PlayerID
+        /// </summary>
+        public string[] PlayerIDs { get; private set; }
         /// <summary>
         /// DB地圖ID
         /// </summary>
         public string DBMapID { get; private set; }
-
         /// <summary>
-        /// 房主ID或排隊玩家ID
+        /// DBMatchgame的ID(由Matchmaker產生，格視為[玩家ID]_[累加數字]_[日期時間])
         /// </summary>
-        public string CreaterID { get; private set; }
-
+        public string DBMatchgameID { get; private set; }
         /// <summary>
         ///  Matchmaker派發Matchgame的IP
         /// </summary>
@@ -42,14 +47,17 @@ namespace HeroFishing.Main {
         /// </summary>
         public string PodName { get; private set; }
 
-        public void Init(string _dbMapID, string _createID, string _ip, int _port, string _podName) {
-
-            DBMapID = _dbMapID;
+        /// <summary>
+        /// 初始化玩家目前所在遊戲房間的資料，CreateRoom後會從Matchmaker回傳取得資料
+        /// </summary>
+        public void Init(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _ip, int _port, string _podName) {
             CreaterID = _createID;
+            PlayerIDs = _playerIDs;
+            DBMapID = _dbMapID;
+            DBMatchgameID = _dbMatchgameID;
             IP = _ip;
             Port = _port;
             PodName = _podName;
-
             WriteLog.LogColorFormat("設定被分配的房間資料: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));
         }
     }

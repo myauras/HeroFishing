@@ -44,7 +44,7 @@ namespace HeroFishing.Main {
         /// 取得玩家自己的資料
         /// </summary>
         public T GetDBPlayerDoc<T>(DBPlayerCol _col) {
-            if (!DBPlayerDatas.ContainsKey(_col)) WriteLog.LogError("GetDBPlayerData時，要取的資料為null");
+            if (!DBPlayerDatas.ContainsKey(_col)) { WriteLog.LogError("GetDBPlayerData時，要取的資料為null"); return default(T); }
             return (T)DBPlayerDatas[_col];
         }
 
@@ -69,7 +69,7 @@ namespace HeroFishing.Main {
         /// 取得遊戲設定資料
         /// </summary>
         public T GetDBGameSettingDoc<T>(DBGameSettingDoc _col) {
-            if (!DBGameSettingDatas.ContainsKey(_col)) WriteLog.LogError("GetDBGameSettingDoc時，要取的資料為null");
+            if (!DBGameSettingDatas.ContainsKey(_col)) { WriteLog.LogError("GetDBGameSettingDoc時，要取的資料為null"); return default(T); }
             return (T)DBGameSettingDatas[_col];
         }
 

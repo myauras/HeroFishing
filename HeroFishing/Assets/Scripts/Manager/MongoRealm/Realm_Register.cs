@@ -3,6 +3,7 @@ using Realms;
 using Realms.Sync;
 using Scoz.Func;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
@@ -12,6 +13,8 @@ using UnityEngine;
 namespace Service.Realms {
 
     public static partial class RealmManager {
+
+        static Dictionary<string, IDisposable> Registers = new Dictionary<string, IDisposable>();
 
         /// <summary>
         /// 玩家資料已經取到後執行
@@ -33,6 +36,16 @@ namespace Service.Realms {
         static void RegisterRealmEvents() {
             RegisterConnectionStateChanges();
             RegisterPropertyChanges();
+        }
+        /// <summary>
+        /// 取消註冊所有Realm事件
+        /// </summary>
+        static void UnregisterAllRealmEvents() {
+            WriteLog.LogColor("取消註冊RealmEvent", WriteLog.LogType.Realm);
+            foreach (var i in Registers.Values) {
+                i.Dispose();
+            }
+            Registers.Clear();
         }
 
         /// <summary>
@@ -71,16 +84,17 @@ namespace Service.Realms {
         /// 註冊Realm文件異動通知
         /// </summary>
         public static void RegisterPropertyChanges() {
-            WriteLog.LogColor("註冊Realm文件異動通知", WriteLog.LogType.Realm);
+            WriteLog.LogColor("註冊MongoDB異動事件", WriteLog.LogType.Realm);
             RegisterPropertyChanges_MyPlayer();
             RegisterPropertyChanges_GameSetting();
+            RegisterPropertyChanges_Matchgame();
+            DeviceManager.AddOnApplicationQuitAction(UnregisterAllRealmEvents);
         }
 
         /// <summary>
-        /// 玩家文件通知
+        /// 註冊玩家文件通知
         /// </summary>
         static void RegisterPropertyChanges_MyPlayer() {
-
             //玩家資料
             var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
             if (player != null) {
@@ -95,7 +109,7 @@ namespace Service.Realms {
         }
 
         /// <summary>
-        /// 遊戲設定通知
+        /// 註冊遊戲設定通知
         /// </summary>
         static void RegisterPropertyChanges_GameSetting() {
             var gameState = GamePlayer.Instance.GetDBGameSettingDoc<DBGameSetting>(DBGameSettingDoc.GameState);
@@ -107,5 +121,40 @@ namespace Service.Realms {
                 };
             }
         }
+
+        /// <summary>
+        /// 註冊Matchgame資料異動通知
+        /// </summary>
+        static void RegisterPropertyChanges_Matchgame() {
+            var dbMatchgames = MyRealm.All<DBMatchgame>();//DBMatchgame在PopulateInitialSubscriptions中只取有自己在內的遊戲房所以直接用All不用再篩選
+            WriteLog.LogColor("文件數量:" + dbMatchgames.Count(), WriteLog.LogType.Realm);
+            var token_dbMatchgames = dbMatchgames.SubscribeForNotifications((sender, changes) => {
+                //※官方提到要按刪除->插入->修改的順序處理文件避免意外的錯誤發生
+
+
+
+                //第一次註冊通知事件時觸發
+                if (changes == null) {
+                    return;
+                }
+                //刪除
+                foreach (var i in changes.DeletedIndices) {
+                }
+                //插入
+                foreach (var i in changes.InsertedIndices) {
+                    DBMatchgame item = dbMatchgames.ElementAt(i);
+                    WriteLog.Log("房間創好了: " + DebugUtils.ObjToStr(item));
+                }
+                //修改
+                foreach (var i in changes.NewModifiedIndices) {
+                }
+                //Collection清空(對Collection下Clear()指令時)
+                if (changes.IsCleared) {
+                }
+
+            });
+            Registers.Add("DBMatchgame", token_dbMatchgames);
+        }
+
     }
 }
