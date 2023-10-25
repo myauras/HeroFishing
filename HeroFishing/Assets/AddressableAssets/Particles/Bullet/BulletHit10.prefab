@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1869280100355666350}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.09, y: 0.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6209,22 +6209,22 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 0.69803923, b: 0.427451, a: 0}
-        key2: {r: 1, g: 0.4017429, b: 0.3160377, a: 0}
-        key3: {r: 0.084905684, g: 0.048460305, b: 0.048460305, a: 0}
+        key1: {r: 1, g: 0.6880671, b: 0.33490568, a: 0}
+        key2: {r: 0.4339623, g: 0.051800154, b: 0, a: 0}
+        key3: {r: 0.4339623, g: 0.051800154, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 5590
-        ctime1: 25058
-        ctime2: 65535
-        ctime3: 42598
+        ctime0: 2120
+        ctime1: 16769
+        ctime2: 55898
+        ctime3: 65535
         ctime4: 0
         ctime5: 0
         ctime6: 0
         ctime7: 0
-        atime0: 0
+        atime0: 14649
         atime1: 65535
         atime2: 0
         atime3: 0
@@ -9951,7 +9951,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.69865304, b: 0.4292453, a: 1}
+      maxColor: {r: 1, g: 0.8034699, b: 0.6273585, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -10015,7 +10015,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 8
+      scalar: 6
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -11095,16 +11095,16 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 0.084905684, g: 0.037320357, b: 0.025231406, a: 0}
-        key2: {r: 1, g: 1, b: 1, a: 0}
+        key1: {r: 1, g: 0.7014953, b: 0.3820755, a: 0}
+        key2: {r: 0.41509432, g: 0.0019579967, b: 0.006316791, a: 0}
         key3: {r: 0.084905684, g: 0.048460305, b: 0.048460305, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 0
-        ctime1: 42983
-        ctime2: 40092
+        ctime0: 5783
+        ctime1: 21010
+        ctime2: 65535
         ctime3: 42598
         ctime4: 0
         ctime5: 0
@@ -11120,7 +11120,7 @@ ParticleSystem:
         atime7: 0
         m_Mode: 0
         m_ColorSpace: 0
-        m_NumColorKeys: 2
+        m_NumColorKeys: 3
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
@@ -14583,7 +14583,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_RenderMode: 4
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -14595,7 +14595,7 @@ ParticleSystemRenderer:
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_ShadowBias: 0
-  m_RenderAlignment: 0
+  m_RenderAlignment: 3
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
   m_UseCustomVertexStreams: 0
@@ -15982,7 +15982,7 @@ ParticleSystem:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
         key1: {r: 1, g: 0.7014953, b: 0.3820755, a: 0}
-        key2: {r: 0.13207549, g: 0.066716984, b: 0.05046281, a: 0}
+        key2: {r: 0.41509432, g: 0.0019579967, b: 0.006316791, a: 0}
         key3: {r: 0.084905684, g: 0.048460305, b: 0.048460305, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -15990,7 +15990,7 @@ ParticleSystem:
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 5783
         ctime1: 21010
-        ctime2: 41056
+        ctime2: 44140
         ctime3: 42598
         ctime4: 0
         ctime5: 0
@@ -16006,7 +16006,7 @@ ParticleSystem:
         atime7: 0
         m_Mode: 0
         m_ColorSpace: 0
-        m_NumColorKeys: 3
+        m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
@@ -19481,7 +19481,7 @@ ParticleSystemRenderer:
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_ShadowBias: 0
-  m_RenderAlignment: 0
+  m_RenderAlignment: 3
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
   m_UseCustomVertexStreams: 0
@@ -24609,7 +24609,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.5693483, b: 0.3443396, a: 1}
+      maxColor: {r: 1, g: 0.6627451, b: 0.3443396, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -25762,15 +25762,15 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 0.97060305}
-        key1: {r: 1, g: 0.55425537, b: 0.33490568, a: 1}
+        key1: {r: 0.6886792, g: 0.14780617, b: 0.08770915, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 0
-        ctime1: 65535
+        ctime0: 6168
+        ctime1: 55127
         ctime2: 0
         ctime3: 0
         ctime4: 0
