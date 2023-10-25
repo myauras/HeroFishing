@@ -126,7 +126,7 @@ namespace Service.Realms {
         /// 註冊Matchgame資料異動通知
         /// </summary>
         static void RegisterPropertyChanges_Matchgame() {
-            var dbMatchgames = MyRealm.All<DBMatchgame>();//DBMatchgame在PopulateInitialSubscriptions中只取有自己在內的遊戲房所以直接用All不用再篩選
+            var dbMatchgames = MyRealm.All<DBMatchgame>();
             WriteLog.LogColor("文件數量:" + dbMatchgames.Count(), WriteLog.LogType.Realm);
             var token_dbMatchgames = dbMatchgames.SubscribeForNotifications((sender, changes) => {
                 //※官方提到要按刪除->插入->修改的順序處理文件避免意外的錯誤發生
@@ -143,7 +143,9 @@ namespace Service.Realms {
                 //插入
                 foreach (var i in changes.InsertedIndices) {
                     DBMatchgame item = dbMatchgames.ElementAt(i);
-                    WriteLog.Log("房間創好了: " + DebugUtils.ObjToStr(item));
+                    var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.player);
+                    if (dbPlayer != null && item.ID == dbPlayer.InMatchgameID)
+                        WriteLog.Log("房間創好了: " + DebugUtils.ObjToStr(item));
                 }
                 //修改
                 foreach (var i in changes.NewModifiedIndices) {

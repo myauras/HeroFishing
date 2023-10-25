@@ -47,20 +47,31 @@ namespace Service.Realms {
 
 
         public static void ClearApp() {
-
-            if (MyRealm != null) {
-                MyRealm.Dispose();
-                MyRealm = null;
+            try {
+                WriteLog.LogColor("ClearApp", WriteLog.LogType.Realm);
+                if (MyRealm != null) {
+                    MyRealm.Dispose();
+                    MyRealm = null;
+                }
+                if (MyApp != null) MyApp = null;
+            } catch (Exception _e) {
+                WriteLog.LogErrorFormat("ClearApp發生錯誤: ", _e);
             }
-            if (MyApp != null) MyApp = null;
+
         }
         /// <summary>
         /// 最初Realm初始化要先New一個Ream App
         /// </summary>
         public static App NewApp() {
-            MyApp = App.Create(REALM_APPID_DIC[GameManager.CurVersion]); // 創建 Realm App
-            DeviceManager.AddOnApplicationQuitAction(() => { ClearApp(); });
-            return MyApp;
+            try {
+                WriteLog.LogColorFormat("NewApp AppID:{0}", WriteLog.LogType.Realm, REALM_APPID_DIC[GameManager.CurVersion]);
+                MyApp = App.Create(REALM_APPID_DIC[GameManager.CurVersion]); // 創建 Realm App
+                DeviceManager.AddOnApplicationQuitAction(() => { ClearApp(); });
+                return MyApp;
+            } catch (Exception _e) {
+                WriteLog.LogErrorFormat("ClearApp發生錯誤: ", _e);
+                return null;
+            }
         }
 
 

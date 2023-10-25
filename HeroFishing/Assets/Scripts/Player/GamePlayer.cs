@@ -32,19 +32,29 @@ namespace HeroFishing.Main {
         /// </summary>
         public bool InitDBPlayerDocs() {
             DBPlayerDatas.Clear();
-            DBPlayer myPlayer = RealmManager.MyRealm.Find<DBPlayer>(RealmManager.MyApp.CurrentUser.Id);
-            if (myPlayer == null) {
-                WriteLog.LogError("InitDBPlayerDatas時，取得myPlayer為null");
+            // DBPlayer
+            var dbPlayer = RealmManager.MyRealm.Find<DBPlayer>(RealmManager.MyApp.CurrentUser.Id);
+            if (dbPlayer == null) {
+                WriteLog.LogError("InitDBPlayerDatas時，取得DBPlayer為null");
                 return false;
             }
-            DBPlayerDatas.Add(DBPlayerCol.player, myPlayer);
+            DBPlayerDatas.Add(DBPlayerCol.player, dbPlayer);
+
+            // DBPlayerState
+            var dbPlayerState = RealmManager.MyRealm.Find<DBPlayerState>(RealmManager.MyApp.CurrentUser.Id);
+            if (dbPlayerState == null) {
+                WriteLog.LogError("InitDBPlayerDatas時，取得DBPlayerState為null");
+                return false;
+            }
+            DBPlayerDatas.Add(DBPlayerCol.playerState, dbPlayerState);
+
             return true;
         }
         /// <summary>
         /// 取得玩家自己的資料
         /// </summary>
         public T GetDBPlayerDoc<T>(DBPlayerCol _col) {
-            if (!DBPlayerDatas.ContainsKey(_col)) { WriteLog.LogError("GetDBPlayerData時，要取的資料為null"); return default(T); }
+            if (!DBPlayerDatas.ContainsKey(_col)) { WriteLog.LogError("GetDBPlayerData時，要取的資料為null，可能是InitDBPlayerDocs沒有初始化到該資料或是該資料不存在DB中"); return default(T); }
             return (T)DBPlayerDatas[_col];
         }
 
@@ -69,7 +79,7 @@ namespace HeroFishing.Main {
         /// 取得遊戲設定資料
         /// </summary>
         public T GetDBGameSettingDoc<T>(DBGameSettingDoc _col) {
-            if (!DBGameSettingDatas.ContainsKey(_col)) { WriteLog.LogError("GetDBGameSettingDoc時，要取的資料為null"); return default(T); }
+            if (!DBGameSettingDatas.ContainsKey(_col)) { WriteLog.LogError("GetDBGameSettingDoc時，要取的資料為null，可能是InitDBGameSettingDcos沒有初始化到該資料或是該資料不存在DB中"); return default(T); }
             return (T)DBGameSettingDatas[_col];
         }
 

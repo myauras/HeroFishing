@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using Scoz.Func;
+using Service.Realms;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -59,6 +61,11 @@ namespace HeroFishing.Main {
             Port = _port;
             PodName = _podName;
             WriteLog.LogColorFormat("設定被分配的房間資料: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));
+
+            var dbPlayerState = GamePlayer.Instance.GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.playerState);
+            if (dbPlayerState == null) return;
+            dbPlayerState.SetInMatchgameID(DBMatchgameID).Forget();
+
         }
     }
 }

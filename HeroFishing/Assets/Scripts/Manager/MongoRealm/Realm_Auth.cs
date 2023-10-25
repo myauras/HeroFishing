@@ -9,6 +9,7 @@ using System.Linq;
 using System;
 using static UnityEditor.Progress;
 using Cysharp.Threading.Tasks;
+using HeroFishing.Main;
 
 namespace Service.Realms {
     public static partial class RealmManager {
@@ -19,6 +20,7 @@ namespace Service.Realms {
         public static async Task AnonymousSignup() {
             if (MyApp == null) { WriteLog.LogError("尚未建立Realm App"); return; }
             try {
+                WriteLog.LogColorFormat("MyApp={0}     Credentials.Anonymous()={1}", WriteLog.LogType.Realm, MyApp, Credentials.Anonymous());
                 await MyApp.LogInAsync(Credentials.Anonymous());
             } catch (Exception _e) {
                 WriteLog.LogError("在AnonymousSignup時MyApp.LogInAsync發生錯誤: " + _e);
@@ -101,20 +103,29 @@ namespace Service.Realms {
             try {
                 var config = new FlexibleSyncConfiguration(MyApp.CurrentUser) {
                     PopulateInitialSubscriptions = (realm) => {
-                        //註冊Matchgame資料
-                        var dbMatchgames = realm.All<DBMatchgame>();
-                        realm.Subscriptions.Add(dbMatchgames, new SubscriptionOptions() { Name = "MyMatchgame" });
+                        //※常見的取不到資料錯誤排除方向
+                        //1. DB沒資料或名稱定義錯誤
+                        //2. collection rule沒設定對
+                        //3. collection sechma沒設定對(schema只要有一個欄位本地跟Atlas不一致就會娶不到資料)
+                        //4. 查看在Atlas中查看LOG有沒有錯誤
+
+                        //Realm對LINQ有限制，有使用到LINQ建議看官方文件: https://www.mongodb.com/docs/realm-sdks/dotnet/latest/linqsupport.html
                         //註冊Map資料
                         var dbMaps = realm.All<DBMap>();
                         realm.Subscriptions.Add(dbMaps, new SubscriptionOptions() { Name = "Map" });
                         //註冊玩家自己的player資料
-                        var players = realm.All<DBPlayer>().Where(i => i.ID == MyApp.CurrentUser.Id);
-                        realm.Subscriptions.Add(players, new SubscriptionOptions() { Name = "MyPlayer" });
+                        var dbPlayer = realm.All<DBPlayer>().Where(i => i.ID == MyApp.CurrentUser.Id);
+                        realm.Subscriptions.Add(dbPlayer, new SubscriptionOptions() { Name = "MyPlayer" });
+                        //註冊玩家自己的playerState資料
+                        var dbPlayerState = realm.All<DBPlayerState>().Where(i => i.ID == MyApp.CurrentUser.Id);
+                        realm.Subscriptions.Add(dbPlayerState, new SubscriptionOptions() { Name = "MyPlayerState" });
                         //註冊GameSetting資料
                         var gameSettings = realm.All<DBGameSetting>();
                         realm.Subscriptions.Add(gameSettings, new SubscriptionOptions() { Name = "GameSetting" });
+
                     }
                 };
+
 
                 try {
                     MyRealm = await Realm.GetInstanceAsync(config);

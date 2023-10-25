@@ -48,6 +48,8 @@ namespace Scoz.Func {
                 var dbSettings = RealmManager.MyRealm.All<DBGameSetting>();//DBMatchgame在PopulateInitialSubscriptions中只取有自己在內的遊戲房所以直接用All不用再篩選
                 WriteLog.LogColor("文件數量:" + dbSettings.Count(), WriteLog.LogType.Realm);
 
+                var dbPlayerState = RealmManager.MyRealm.All<DBPlayerState>();
+                WriteLog.LogColor("文件數量:" + dbPlayerState.Count(), WriteLog.LogType.Realm);
             }
         }
 
