@@ -29,9 +29,12 @@ namespace HeroFishing.Socket {
     /// Socket封包的內容
     /// </summary>
     public class SocketContent {
-        public enum ReplyType {
+        public enum Matchmaker_Reply {
             AUTH_REPLY,
             CREATEROOM_REPLY,
+        }
+        public enum Matchgame_Reply {
+            AUTH_REPLY,
         }
     }
 }

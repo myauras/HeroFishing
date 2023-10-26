@@ -41,7 +41,7 @@ namespace HeroFishing.Socket {
                     _callback?.Invoke(null, false);
                     return;
                 }
-                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.ReplyType.AUTH_REPLY.ToString(), id), (string msg) => {
+                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.Matchmaker_Reply.AUTH_REPLY.ToString(), id), (string msg) => {
                     SocketCMD<AUTH_REPLY> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_REPLY>>(msg);
                     _callback?.Invoke(_realmToken, packet.Content.IsAuth);
                 });
@@ -61,7 +61,7 @@ namespace HeroFishing.Socket {
             }
             //註冊回呼
             WriteLog.LogColor("註冊回呼", WriteLog.LogType.Connection);
-            RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.ReplyType.CREATEROOM_REPLY.ToString(), id), OnCreateMatchmakerRoom_Reply);
+            RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.Matchmaker_Reply.CREATEROOM_REPLY.ToString(), id), OnCreateMatchmakerRoom_Reply);
         }
         public void OnCreateMatchmakerRoom_Reply(string _msg) {
             WriteLog.LogColor("OnCreateMatchmakerRoom_Reply", WriteLog.LogType.Connection);

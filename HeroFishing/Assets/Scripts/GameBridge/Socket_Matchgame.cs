@@ -1,18 +1,9 @@
-using DG.Tweening;
 using HeroFishing.Main;
 using HeroFishing.Socket.Matchgame;
-using LitJson;
-using NSubstitute;
 using Scoz.Func;
-using Service.Realms;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Socket {
     public partial class HeroFishingSocket {
@@ -46,22 +37,25 @@ namespace HeroFishing.Socket {
             }
             TCP_MatchgameClient = new GameObject("TCP_MatchgameClient").AddComponent<TcpClient>();
             TCP_MatchgameClient.Init(_ip, _port);
+            TCP_MatchgameClient.OnReceiveMsg += OnRecieveTCPMsg;
             if (UDP_MatchgameClient != null) {
                 UDP_MatchgameClient.Close();
                 WriteLog.LogColor($"JoinMatchgame時 TCP_MatchgameClient不為null, 關閉 {TCP_MatchgameClient}", WriteLog.LogType.Connection);
             }
             UDP_MatchgameClient = new GameObject("TCP_MatchgameClient").AddComponent<UdpSocket>();
             UDP_MatchgameClient.Init(_ip, _port);
-            TCP_MatchgameClient.OnReceiveMsg += OnRecieveTCPMsg;
+
 
             TCP_MatchgameClient.StartConnect((bool connected) => {
+
+                WriteLog.LogColor($"TCP_MatchgameClient connection: {connected}", WriteLog.LogType.Connection);
                 if (!connected) {
                     _ac?.Invoke(false);
                     return;
                 }
-                if (TCP_MatchmakerClient != null) {
-                    TCP_MatchmakerClient.OnReceiveMsg -= OnRecieveTCPMsg;
-                    TCP_MatchmakerClient.Close();
+                if (TCP_MatchgameClient != null) {
+                    TCP_MatchgameClient.OnReceiveMsg -= OnRecieveTCPMsg;
+                    TCP_MatchgameClient.Close();
                     WriteLog.LogColor($"JoinMatchgame時 TCP_MatchmakerClient不為null, 關閉 {TCP_MatchmakerClient}", WriteLog.LogType.Connection);
                 }
                 SocketCMD<AUTH> cmd = new SocketCMD<AUTH>(new AUTH(_realmToken));
@@ -71,12 +65,14 @@ namespace HeroFishing.Socket {
                     _ac?.Invoke(false);
                     return;
                 }
-                RegistrMatchgameCommandCB(new Tuple<string, int>("ReAuth", id), (string msg) => {
+                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.Matchgame_Reply.AUTH_REPLY.ToString(), id), (string msg) => {
                     SocketCMD<AUTH_REPLY> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_REPLY>>(msg);
+                    Debug.LogError("cc");
                     _ac?.Invoke(packet.Content.IsAuth);
                     if (packet.Content.IsAuth) {
-                        UDP_MatchgameConnToken = packet.Content.ConnToken;
                         try {
+                            UDP_MatchgameConnToken = packet.Content.ConnToken;
+                            WriteLog.LogColor($"Matchgame auth success! UDP_MatchgameConnToken: {UDP_MatchgameConnToken}", WriteLog.LogType.Connection);
                             UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
                                 WriteLog.LogColor($"UDP Is connected: {connected}", WriteLog.LogType.Connection);
                                 if (connected)

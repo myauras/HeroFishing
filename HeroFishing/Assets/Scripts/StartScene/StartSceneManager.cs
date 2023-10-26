@@ -63,7 +63,7 @@ namespace HeroFishing.Main {
             });
         }
         public void OnMatchgameCreated() {
-            WriteLog.Log("OnMatchgameCreated");
+            WriteLog.LogColor("OnMatchgameCreated", WriteLog.LogType.Connection);
             JoinMatchgame();
         }
         public void JoinMatchgame() {
@@ -83,7 +83,10 @@ namespace HeroFishing.Main {
             var dbMatchgame = GamePlayer.Instance.GetMatchGame();
             if (dbMatchgame == null) { WriteLog.LogError("JoinMatchgame失敗，dbMatchgame is null"); return; }
             GameConnector.Instance.JoinMatchgame(dbMatchgame.IP, dbMatchgame.Port, joinSuccess => {
-                WriteLog.LogColor("JoinMatchgame 成功", WriteLog.LogType.Connection);
+                if (joinSuccess)
+                    WriteLog.LogColor("JoinMatchgame 成功", WriteLog.LogType.Connection);
+                else
+                    WriteLog.LogError("JoinMatchgame 失敗");
             }).Forget();
         }
         public async void Signout() {
