@@ -52,18 +52,39 @@ namespace HeroFishing.Main {
         }
         public async void SocketConnectTest() {
             var gameSetting = GamePlayer.Instance.GetDBGameSettingDoc<DBGameSetting>(DBGameSettingDoc.GameState);
-            await GameConnector.Instance.Run(gameSetting.MatchmakerIP, gameSetting.MatchmakerPort ?? 0, OnGameConnected);
-        }
-        private void OnGameConnected(bool _success, bool _maintain) {
-            WriteLog.Log("OnGameConnected isSuccess=" + _success);
+            await GameConnector.Instance.Run(gameSetting.MatchmakerIP, gameSetting.MatchmakerPort ?? 0, (success, maintain) => {
+                WriteLog.Log("OnMatchmakerConnected isSuccess=" + success);
+            });
         }
         public void CreateRoomTest() {
             var gameSetting = GamePlayer.Instance.GetDBGameSettingDoc<DBGameSetting>(DBGameSettingDoc.GameState);
-            GameConnector.Instance.CreateRoom("Quick-1", OnRoomCreated);
+            GameConnector.Instance.CreateRoom("Quick-1", success => {
+                WriteLog.Log("OnRoomCreated is _success=" + success);
+            });
         }
-        void OnRoomCreated(bool _success) {
-            WriteLog.Log("OnRoomCreated is _success=" + _success);
-
+        public void OnMatchgameCreated() {
+            WriteLog.Log("OnMatchgameCreated");
+            JoinMatchgame();
+        }
+        public void JoinMatchgame() {
+            // 顯示載入遊玩房間資料中
+            PopupUI.ShowLoading("Joining Matchgame");
+            Action<bool> OnConnect = (bool connected) => {
+                PopupUI.HideLoading();
+                if (!connected) {
+                    PopupUI.ShowClickCancel("Join Matchgame failed", () => {
+                    });
+                    return;
+                }
+                WriteLog.Log("在這裡寫跳戰場Scene");
+                //PopupUI.InitSceneTransitionProgress("MaJamUILoaded");
+                //PopupUI.CallTransition(MyScene.MaJamScene);
+            };
+            var dbMatchgame = GamePlayer.Instance.GetMatchGame();
+            if (dbMatchgame == null) { WriteLog.LogError("JoinMatchgame失敗，dbMatchgame is null"); return; }
+            GameConnector.Instance.JoinMatchgame(dbMatchgame.IP, dbMatchgame.Port, joinSuccess => {
+                WriteLog.LogColor("JoinMatchgame 成功", WriteLog.LogType.Connection);
+            }).Forget();
         }
         public async void Signout() {
             await RealmManager.Signout();

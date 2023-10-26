@@ -1,4 +1,5 @@
-﻿using HeroFishing.Main;
+﻿using Cysharp.Threading.Tasks;
+using HeroFishing.Main;
 using Newtonsoft.Json.Linq;
 using Scoz.Func;
 using Service.Realms;
@@ -44,7 +45,6 @@ namespace HeroFishing.Socket {
             WriteLog.LogColor("Run", WriteLog.LogType.Connection);
             OnConnectEvent = _cb;
             CurRetryTimes = 0;
-            HeroFishingSocket.GetInstance().RegistDisconnectCallback(OnDisConnect);
             await ConnectToMatchmakerServer(_ip, _port);
         }
         /// <summary>
@@ -53,9 +53,9 @@ namespace HeroFishing.Socket {
         /// </summary>
         async Task ConnectToMatchmakerServer(string _ip, int _port) {
             WriteLog.LogColor("ConnectToMatchmakerServer", WriteLog.LogType.Connection);
-            HeroFishingSocket.GetInstance().SetServerIP(_ip, _port);
+            HeroFishingSocket.GetInstance().NewMatchmakerTCPClient(_ip, _port);
             var token = await RealmManager.GetValidAccessToken();
-            HeroFishingSocket.GetInstance().Login(token, OnLoginToMatchmakerServer);
+            HeroFishingSocket.GetInstance().LoginToMatchmaker(token, OnLoginToMatchmakerServer);
         }
         /// <summary>
         /// 登入配對伺服器成功時執行
@@ -68,12 +68,12 @@ namespace HeroFishing.Socket {
                 CurRetryTimes++;
                 if (CurRetryTimes >= MAX_RETRY_TIMES || !InternetChecker.InternetConnected) {
                     OnConnectEvent?.Invoke(false, false);
-                    WriteLog.LogColorFormat("嘗試連線{0}次都失敗，糟糕了><", WriteLog.LogType.Connection, CurRetryTimes, RETRY_INTERVAL_SECS);
+                    WriteLog.LogColorFormat("嘗試連線{0}次都失敗，糟糕了", WriteLog.LogType.Connection, CurRetryTimes, RETRY_INTERVAL_SECS);
                 } else {
                     WriteLog.LogColorFormat("第{0}次連線失敗，{0}秒後嘗試重連", WriteLog.LogType.Connection, CurRetryTimes, RETRY_INTERVAL_SECS);
                     //連線失敗有可能是TOKEN過期 刷Token後再連
                     var token = await RealmManager.GetValidAccessToken();
-                    HeroFishingSocket.GetInstance().Login(_token, OnLoginToMatchmakerServer);
+                    HeroFishingSocket.GetInstance().LoginToMatchmaker(_token, OnLoginToMatchmakerServer);
                 }
                 return;
             }
@@ -98,7 +98,7 @@ namespace HeroFishing.Socket {
         public void CreateRoom(string _dbMapID, Action<bool> _cb) {
             TmpDBMapID = _dbMapID;
             CreateRoomCB = _cb;
-            HeroFishingSocket.GetInstance().CreateRoom(TmpDBMapID, OnCreateRoom);
+            HeroFishingSocket.GetInstance().CreateMatchmakerRoom(TmpDBMapID, OnCreateRoom);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace HeroFishing.Socket {
                     WriteLog.LogColor("[GameConnector] 建立房間失敗 再試1次", WriteLog.LogType.Connection);
                     // 再試一次
                     DG.Tweening.DOVirtual.DelayedCall(RETRY_INTERVAL_SECS, () => {
-                        HeroFishingSocket.GetInstance().CreateRoom(TmpDBMapID, OnCreateRoom);
+                        HeroFishingSocket.GetInstance().CreateMatchmakerRoom(TmpDBMapID, OnCreateRoom);
                     });
                 }
                 return;
@@ -127,6 +127,17 @@ namespace HeroFishing.Socket {
             WriteLog.LogColor("CreateRoom成功", WriteLog.LogType.Connection);
             CreateRoomCB?.Invoke(_isCreated);
         }
+
+        /// <summary>
+        /// 加入Matchmage
+        /// </summary>
+        public async UniTask JoinMatchgame(string _ip, int _port, Action<bool> _cb) {
+            WriteLog.LogColor($"Join Matchgame Ip: {_ip}   Port: {_port}", WriteLog.LogType.Connection);
+            var realmToken = await RealmManager.GetValidAccessToken();
+            if (string.IsNullOrEmpty(AllocatedRoom.Instance.IP) || AllocatedRoom.Instance.Port == 0) { WriteLog.LogError("JoinMatchgame失敗，AllocatedRoom的IP或Port為null"); return; }
+            HeroFishingSocket.GetInstance().JoinMatchgame(realmToken, AllocatedRoom.Instance.IP, AllocatedRoom.Instance.Port, _cb);
+        }
+
 
     }
 }

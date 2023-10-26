@@ -64,6 +64,7 @@ namespace Service.Realms {
         /// </summary>
         public static App NewApp() {
             try {
+                ClearApp();//在NewApp前先Clear，在Unity非Runtime中登出後，Runtime中登入時不Clear會有機率報錯誤(Cannot access a disposed object)
                 WriteLog.LogColorFormat("NewApp AppID:{0}", WriteLog.LogType.Realm, REALM_APPID_DIC[GameManager.CurVersion]);
                 MyApp = App.Create(REALM_APPID_DIC[GameManager.CurVersion]); // 創建 Realm App
                 DeviceManager.AddOnApplicationQuitAction(() => { ClearApp(); });

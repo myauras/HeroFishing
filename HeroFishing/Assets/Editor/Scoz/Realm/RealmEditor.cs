@@ -16,16 +16,14 @@ public class RealmEditor : MonoBehaviour {
         try {
             Debug.Log("開始登出Realm...");
 
-            // 新增超時機制
             var task = RealmManager.MyApp.CurrentUser.LogOutAsync();
-            var delay = Task.Delay(TimeSpan.FromSeconds(3));
+            var delay = Task.Delay(TimeSpan.FromSeconds(2));//超時處理
             await Task.WhenAny(task, delay).ConfigureAwait(false);
 
             //if (delay.IsCompleted) {
             //    Debug.Log("登出操作超時");
             //}
 
-            RealmManager.ClearApp();
             Debug.Log("登出Realm完成!");
             //await UniTask.SwitchToMainThread();
             //AssetDatabase.Refresh();

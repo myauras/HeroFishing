@@ -127,11 +127,8 @@ namespace Service.Realms {
         /// </summary>
         static void RegisterPropertyChanges_Matchgame() {
             var dbMatchgames = MyRealm.All<DBMatchgame>();
-            WriteLog.LogColor("文件數量:" + dbMatchgames.Count(), WriteLog.LogType.Realm);
             var token_dbMatchgames = dbMatchgames.SubscribeForNotifications((sender, changes) => {
                 //※官方提到要按刪除->插入->修改的順序處理文件避免意外的錯誤發生
-
-
 
                 //第一次註冊通知事件時觸發
                 if (changes == null) {
@@ -143,9 +140,9 @@ namespace Service.Realms {
                 //插入
                 foreach (var i in changes.InsertedIndices) {
                     DBMatchgame item = dbMatchgames.ElementAt(i);
-                    var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.player);
+                    var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.playerState);
                     if (dbPlayer != null && item.ID == dbPlayer.InMatchgameID)
-                        WriteLog.Log("房間創好了: " + DebugUtils.ObjToStr(item));
+                        StartSceneManager.Instance.OnMatchgameCreated();
                 }
                 //修改
                 foreach (var i in changes.NewModifiedIndices) {

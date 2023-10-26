@@ -3,6 +3,7 @@ using Scoz.Func;
 using Service.Realms;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace HeroFishing.Main {
@@ -50,9 +51,9 @@ namespace HeroFishing.Main {
         public string PodName { get; private set; }
 
         /// <summary>
-        /// 初始化玩家目前所在遊戲房間的資料，CreateRoom後會從Matchmaker回傳取得資料
+        /// 設定被Matchmaker分配到的房間資料，CreateRoom後會從Matchmaker回傳取得資料
         /// </summary>
-        public void Init(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _ip, int _port, string _podName) {
+        public void InitRoom(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _ip, int _port, string _podName) {
             CreaterID = _createID;
             PlayerIDs = _playerIDs;
             DBMapID = _dbMapID;
@@ -60,12 +61,28 @@ namespace HeroFishing.Main {
             IP = _ip;
             Port = _port;
             PodName = _podName;
-            WriteLog.LogColorFormat("設定被分配的房間資料: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));
+            WriteLog.LogColorFormat("設定被Matchmaker分配到的房間資料: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));
 
             var dbPlayerState = GamePlayer.Instance.GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.playerState);
             if (dbPlayerState == null) return;
             dbPlayerState.SetInMatchgameID(DBMatchgameID).Forget();
+        }
+        /// <summary>
+        /// 清空配對房間(AllocatedRoom)資訊
+        /// </summary>
+        public void ClearRoom() {
+            CreaterID = null;
+            PlayerIDs = null;
+            DBMapID = null;
+            DBMatchgameID = null;
+            IP = null;
+            Port = 0;
+            PodName = null;
+            WriteLog.LogColorFormat("清空配對房間(AllocatedRoom)資訊: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));
 
+            var dbPlayerState = GamePlayer.Instance.GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.playerState);
+            if (dbPlayerState == null) return;
+            dbPlayerState.SetInMatchgameID(null).Forget();
         }
     }
 }

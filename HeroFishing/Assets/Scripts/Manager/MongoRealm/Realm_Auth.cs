@@ -17,16 +17,16 @@ namespace Service.Realms {
         /// <summary>
         /// 匿名註冊
         /// </summary>
-        public static async Task AnonymousSignup() {
+        public static async UniTask AnonymousSignup() {
             if (MyApp == null) { WriteLog.LogError("尚未建立Realm App"); return; }
             try {
-                WriteLog.LogColorFormat("MyApp={0}     Credentials.Anonymous()={1}", WriteLog.LogType.Realm, MyApp, Credentials.Anonymous());
                 await MyApp.LogInAsync(Credentials.Anonymous());
             } catch (Exception _e) {
                 WriteLog.LogError("在AnonymousSignup時MyApp.LogInAsync發生錯誤: " + _e);
             }
             await OnSignin();
         }
+
         /// <summary>
         /// 信箱密碼註冊
         /// </summary>
@@ -109,7 +109,10 @@ namespace Service.Realms {
                         //3. collection sechma沒設定對(schema只要有一個欄位本地跟Atlas不一致就會娶不到資料)
                         //4. 查看在Atlas中查看LOG有沒有錯誤
 
-                        //Realm對LINQ有限制，有使用到LINQ建議看官方文件: https://www.mongodb.com/docs/realm-sdks/dotnet/latest/linqsupport.html
+                        //Realm對LINQ有限制，有使用到LINQ可以參考官方文件: https://www.mongodb.com/docs/realm-sdks/dotnet/latest/linqsupport.html
+                        //可以使用 string-based query syntax  可以參考官方文件: https://www.mongodb.com/docs/realm/realm-query-language/#collection-operators
+                        //string-based query syntax 範例 var dbMatchgames  = realm.All<DBMatchgame>().Filter("ANY PlayerIDs == $0", myUserId);
+
                         //註冊Map資料
                         var dbMaps = realm.All<DBMap>();
                         realm.Subscriptions.Add(dbMaps, new SubscriptionOptions() { Name = "Map" });

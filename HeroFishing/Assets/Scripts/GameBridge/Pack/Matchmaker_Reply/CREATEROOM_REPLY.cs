@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace HeroFishing.Socket {
-    public class CreateRoom_Reply : SocketContent {
+namespace HeroFishing.Socket.Matchmaker {
+    public class CREATEROOM_REPLY : SocketContent {
         /// <summary>
         /// 創房者ID
         /// </summary>
@@ -33,7 +33,7 @@ namespace HeroFishing.Socket {
         public string PodName { get; private set; }
 
 
-        public CreateRoom_Reply() {
+        public CREATEROOM_REPLY() {
         }
     }
 }

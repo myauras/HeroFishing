@@ -20,6 +20,7 @@ public partial class DBPlayerState : IRealmObject {
     [MapTo("inMatchgameID")]
     [Required]
     public string InMatchgameID { get; private set; }
+
     public void SetLastUpdateAt(DateTimeOffset _lastUpdateAt) {
         RealmManager.MyRealm.WriteAsync(() => {
             LastUpdateAt = _lastUpdateAt;
@@ -35,7 +36,7 @@ public partial class DBPlayerState : IRealmObject {
             InMatchgameID = _matchgameID;
         });
         if (!string.IsNullOrEmpty(InMatchgameID)) {
-            RealmManager.Subscribe_Matchgame();
+            await RealmManager.Subscribe_Matchgame();
         } else {
             RealmManager.Unsubscribe_Matchgame();
         }
