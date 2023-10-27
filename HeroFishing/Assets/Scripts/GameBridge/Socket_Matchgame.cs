@@ -53,10 +53,10 @@ namespace HeroFishing.Socket {
                     _ac?.Invoke(false);
                     return;
                 }
-                if (TCP_MatchgameClient != null) {
-                    TCP_MatchgameClient.OnReceiveMsg -= OnRecieveTCPMsg;
-                    TCP_MatchgameClient.Close();
-                    WriteLog.LogColor($"JoinMatchgame時 TCP_MatchmakerClient不為null, 關閉 {TCP_MatchmakerClient}", WriteLog.LogType.Connection);
+                if (TCP_MatchmakerClient != null) {
+                    TCP_MatchmakerClient.OnReceiveMsg -= OnRecieveTCPMsg;
+                    TCP_MatchmakerClient.Close();
+                    WriteLog.LogColor($"JoinMatchgame成功後 TCP_MatchmakerClient不需要了關閉 {TCP_MatchmakerClient}", WriteLog.LogType.Connection);
                 }
                 SocketCMD<AUTH> cmd = new SocketCMD<AUTH>(new AUTH(_realmToken));
 

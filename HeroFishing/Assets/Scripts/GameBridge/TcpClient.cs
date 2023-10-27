@@ -14,8 +14,8 @@ namespace HeroFishing.Socket {
         public event Action<string> OnReceiveMsg;
 
         private System.Net.Sockets.Socket socket;
-        private string IP;
-        private int Port;
+        string IP { get; set; }
+        int Port { get; set; }
         private Thread thread_connect;
         private Thread thread_receive;
 
@@ -117,6 +117,8 @@ namespace HeroFishing.Socket {
 
         private void Thread_Connect() {
             try {
+                WriteLog.LogColor("IP=" + IP, WriteLog.LogType.Connection);
+                WriteLog.LogColor("Port=" + Port, WriteLog.LogType.Connection);
                 socket.Connect(IPAddress.Parse(IP), Port);
 
                 WriteLog.LogColor("Tcp connect success", WriteLog.LogType.Connection);
