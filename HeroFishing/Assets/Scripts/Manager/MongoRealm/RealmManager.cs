@@ -37,9 +37,9 @@ namespace Service.Realms {
     public static partial class RealmManager {
         //環境版本對應Realm App ID
         static Dictionary<EnvVersion, string> REALM_APPID_DIC = new Dictionary<EnvVersion, string>() {
-            { EnvVersion.Dev, "aurafortest-bikmm"},
-            { EnvVersion.Test, "aurafortest-bikmm"},
-            { EnvVersion.Release, "aurafortest-bikmm"},
+            { EnvVersion.Dev, "app-herofishing-pvxuj"},
+            { EnvVersion.Test, "app-herofishing-pvxuj"},
+            { EnvVersion.Release, "app-herofishing-pvxuj"},
         };
 
         public static App MyApp { get; private set; }
