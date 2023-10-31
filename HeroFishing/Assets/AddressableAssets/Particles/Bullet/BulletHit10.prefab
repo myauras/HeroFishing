@@ -10173,7 +10173,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotationX:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -10226,7 +10226,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotationY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -10279,8 +10279,8 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotation:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0
+      minMaxState: 3
+      scalar: -6.283185
       minScalar: 6.283185
       maxCurve:
         serializedVersion: 2
@@ -11161,7 +11161,7 @@ ParticleSystem:
     frameOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 0.9999
       minScalar: 0.9999
       maxCurve:
         serializedVersion: 2
@@ -11268,7 +11268,7 @@ ParticleSystem:
     tilesX: 2
     tilesY: 2
     animationType: 1
-    rowIndex: 0
+    rowIndex: 1
     cycles: 1
     uvChannelMask: -1
     rowMode: 0
@@ -14563,7 +14563,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 67dde41a2909fc1418e0ea2ffa3b7e97, type: 2}
+  - {fileID: 2100000, guid: 01450ae79a443a34a8c7f4fac5361c40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14901,7 +14901,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.5
+      scalar: 5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -19469,7 +19469,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_RenderMode: 4
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -19481,7 +19481,7 @@ ParticleSystemRenderer:
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_ShadowBias: 0
-  m_RenderAlignment: 3
+  m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
   m_UseCustomVertexStreams: 0
@@ -19787,8 +19787,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.8
-      minScalar: 1.5
+      scalar: 2
+      minScalar: 4
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -19946,8 +19946,8 @@ ParticleSystem:
     startRotationX:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 6.283185
-      minScalar: -6.283185
+      scalar: 0
+      minScalar: 0
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -19999,8 +19999,8 @@ ParticleSystem:
     startRotationY:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 6.283185
-      minScalar: -6.283185
+      scalar: 0
+      minScalar: 0
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -20107,7 +20107,7 @@ ParticleSystem:
     maxNumParticles: 5
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
-    rotation3D: 0
+    rotation3D: 1
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
@@ -20866,7 +20866,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
+        key0: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
         key1: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 0}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
@@ -24356,7 +24356,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_RenderMode: 0
+  m_RenderMode: 4
   m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -24367,7 +24367,7 @@ ParticleSystemRenderer:
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_ShadowBias: 0
-  m_RenderAlignment: 0
+  m_RenderAlignment: 3
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
   m_UseCustomVertexStreams: 0
@@ -24377,7 +24377,7 @@ ParticleSystemRenderer:
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
   m_VertexStreams: 00010304
-  m_Mesh: {fileID: -6121790600078595038, guid: bef7d716d1bc669469db21338e9f842e, type: 3}
+  m_Mesh: {fileID: 8796430784299249946, guid: 0786edb183fef4642b8f88fe2c78b360, type: 3}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
