@@ -7,14 +7,14 @@ namespace Scoz.Editor {
     public class UploadBundle {
         const string DIALOG_MESSAGE = "上傳資源包到Google Storage，請確認以下：\n\n1. 已安裝GoogleCloud工具，並完成初始化\n2. 已加入環境變數\n3. 已登入有權限的帳號\n\n環境: {0}\nBundle包版號: {1}\n";
         static Dictionary<EnvVersion, string> GOOGLE_PROJECT_DIC = new Dictionary<EnvVersion, string>() {
-            { EnvVersion.Dev, "aurafortest"},
-            { EnvVersion.Test, "aurafortest"},
-            { EnvVersion.Release, "aurafortest"},
+            { EnvVersion.Dev, "herofishing-dev"},
+            { EnvVersion.Test, "herofishing-test"},
+            { EnvVersion.Release, "herofishing-release"},
         };
         public static Dictionary<EnvVersion, string> GOOGLE_STORAGE_PATH_DIC = new Dictionary<EnvVersion, string>() {
-            { EnvVersion.Dev, "aurafortest_bundle_dev"},
-            { EnvVersion.Test, "aurafortest_bundle_dev"},
-            { EnvVersion.Release, "aurafortest_bundle_dev"},
+            { EnvVersion.Dev, "herofishing_bundle_dev"},
+            { EnvVersion.Test, "herofishing_bundle_test"},
+            { EnvVersion.Release, "herofishing_bundle_release"},
         };
         [MenuItem("Scoz/UploadBundle/Dev")]
         public static void UploadBundleToDev() {

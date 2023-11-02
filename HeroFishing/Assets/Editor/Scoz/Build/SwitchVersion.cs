@@ -51,9 +51,9 @@ namespace Scoz.Editor {
         };
 
         static Dictionary<EnvVersion, string> PACKAGE_NAME_DIC = new Dictionary<EnvVersion, string>() {
-            { EnvVersion.Dev, "com.auro.herofishingdev"},
-            { EnvVersion.Test, "com.auro.herofishingtest"},
-            { EnvVersion.Release, "com.auro.herofishingrelease"},
+            { EnvVersion.Dev, "com.aura.herofishingdev"},
+            { EnvVersion.Test, "com.aura.herofishingtest"},
+            { EnvVersion.Release, "com.aura.herofishingrelease"},
         };
 
 
