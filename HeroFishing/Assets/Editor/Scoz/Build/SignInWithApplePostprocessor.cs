@@ -1,5 +1,5 @@
 #if UNITY_IOS || UNITY_TVOS
-using AppleAuth.Editor;
+//using AppleAuth.Editor;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
@@ -20,7 +20,7 @@ namespace Scoz.Editor {
             var project = new PBXProject();
             project.ReadFromString(System.IO.File.ReadAllText(projectPath));
             var manager = new ProjectCapabilityManager(projectPath, "Entitlements.entitlements", null, project.GetUnityMainTargetGuid());
-            manager.AddSignInWithAppleWithCompatibility(project.GetUnityFrameworkTargetGuid());
+            //manager.AddSignInWithAppleWithCompatibility(project.GetUnityFrameworkTargetGuid());
             manager.WriteToFile();
 #else
             var manager = new ProjectCapabilityManager(projectPath, "Entitlements.entitlements", PBXProject.GetUnityTargetName());

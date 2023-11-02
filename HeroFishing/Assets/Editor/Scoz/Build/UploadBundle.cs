@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEditor;
 using Scoz.Func;
+using UnityEngine;
+
 namespace Scoz.Editor {
     public class UploadBundle {
         const string DIALOG_MESSAGE = "上傳資源包到Google Storage，請確認以下：\n\n1. 已安裝GoogleCloud工具，並完成初始化\n2. 已加入環境變數\n3. 已登入有權限的帳號\n\n環境: {0}\nBundle包版號: {1}\n";
