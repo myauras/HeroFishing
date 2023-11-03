@@ -47,7 +47,8 @@ namespace HeroFishing.Battle {
             var spellData = HeroSpellJsonData.GetSpell(TmpHero.MyData.ID, spellName);
             if (spellData == null) { WriteLog.LogErrorFormat("玩家英雄的 {0} 不存在", spellName); return; }
             TmpSpellData = spellData;
-            OriginPos = UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
+            OriginPos = TmpHero.transform.position;
+            //OriginPos = UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
             SpellIndicator.Instance.ShowIndicator(TmpSpellData);
             IsSkillMode = true;
         }
