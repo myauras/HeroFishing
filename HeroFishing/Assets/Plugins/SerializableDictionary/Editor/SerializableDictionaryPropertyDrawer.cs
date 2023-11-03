@@ -259,13 +259,17 @@ public class SerializableDictionaryPropertyDrawer : PropertyDrawer
 		EditorGUI.PropertyField(keyPosition, keyProperty, GUIContent.none, true);
 
 		float valuePropertyHeight = EditorGUI.GetPropertyHeight(valueProperty);
+		linePosition.x += keyPosition.width;
+		linePosition.width -= keyPosition.width;
 		var valuePosition = linePosition;
 		valuePosition.height = valuePropertyHeight;
-		EditorGUI.PropertyField(valuePosition, valueProperty, GUIContent.none, true);
+		//EditorGUIUtility.labelWidth = 0.1f;
+		var emptyContent = new GUIContent(GUIContent.none);
+		EditorGUI.PropertyField(valuePosition, valueProperty, emptyContent, true);
 
 		EditorGUIUtility.labelWidth = labelWidth;
 
-		return Mathf.Max(keyPropertyHeight, valuePropertyHeight);
+		return Mathf.Max(EditorGUIUtility.singleLineHeight, (Mathf.Max(keyPropertyHeight, valuePropertyHeight)));
 	}
 
 	static bool CanPropertyBeExpanded(SerializedProperty property)
