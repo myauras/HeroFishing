@@ -28,7 +28,7 @@ namespace HeroFishing.Battle {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<BulletSpawnSys>();
-            state.RequireForUpdate<SpellCom>();
+            state.RequireForUpdate<BulletCom>();
             ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
@@ -36,7 +36,7 @@ namespace HeroFishing.Battle {
 
             var ECB = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
-            foreach (var (spellCom, spellEntity) in SystemAPI.Query<SpellCom>().WithEntityAccess()) {
+            foreach (var (spellCom, spellEntity) in SystemAPI.Query<BulletCom>().WithEntityAccess()) {
                 var bulletPrefab = ResourcePreSetter.Instance.BulletPrefab;
                 if (bulletPrefab == null) continue;
                 var bulletGO = GameObject.Instantiate(bulletPrefab.gameObject);

@@ -78,58 +78,74 @@ namespace HeroFishing.Battle {
         }
 
         void SetECSSpellData(Vector3 _attackPos, Vector3 _attackDir) {
-            float radius;
-            float speed;
-            float lifeTime;
-            Entity entity;
             //在ECS世界中建立一個施法
-            EntityManager _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            var strIndex_SpellID = ECSStrManager.AddStr(TmpSpellData.ID);
             switch (TmpSpellData.MySpellType) {
-                case HeroSpellJsonData.SpellType.LineShot:
+                //case HeroSpellJsonData.SpellType.LineShot:
 
-                    radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
-                    speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
-                    lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);
-                    entity = _entityManager.CreateEntity();
-                    _entityManager.AddComponentData(entity, new SpellCom() {
-                        PlayerID = 1,
-                        StrIndex_SpellID = strIndex_SpellID,
-                        SpellPrefabID = TmpSpellData.PrefabID,
-                        AttackerPos = _attackPos,
-                        Direction = _attackDir,
-                        Speed = speed,
-                        Radius = radius,
-                        LifeTime = lifeTime,
-                    });
-                    break;
-                case HeroSpellJsonData.SpellType.SpreadLineShot:
-                    radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
-                    speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
-                    lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);
-                    float intervalAngle = float.Parse(TmpSpellData.SpellTypeValues[3]);//射散間隔角度
-                    int spreadLineCount = int.Parse(TmpSpellData.SpellTypeValues[4]);//射散數量
+                //    radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
+                //    speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
+                //    lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);
+                //    entity = _entityManager.CreateEntity();
+                //    _entityManager.AddComponentData(entity, new SpellCom() {
+                //        PlayerID = 1,
+                //        StrIndex_SpellID = strIndex_SpellID,
+                //        SpellPrefabID = TmpSpellData.PrefabID,
+                //        AttackerPos = _attackPos,
+                //        Direction = _attackDir,
+                //        Speed = speed,
+                //        Radius = radius,
+                //        LifeTime = lifeTime,
+                //    });
+                //    break;
+                case HeroSpellJsonData.SpellType.Bullet:
+
+                    float intervalAngle = float.Parse(TmpSpellData.SpellTypeValues[6]);//射散間隔角度
+                    int spreadLineCount = int.Parse(TmpSpellData.SpellTypeValues[7]);//射散數量
+
+                    if(spreadLineCount < 2)
+                    {
+                        CreateBulletEntity(TmpSpellData, _attackPos, _attackDir);
+                        return;
+                    }
+
                     float startAngle = -intervalAngle * (spreadLineCount - 1) / 2.0f;//設定第一個指標的角度
                     for (int i = 0; i < spreadLineCount; i++) {
                         float curAngle = startAngle + intervalAngle * i;
                         Quaternion rotateQ = Quaternion.Euler(new Vector3(0, curAngle, 0));//旋轉X度的四元數
-                        entity = _entityManager.CreateEntity();
-                        _entityManager.AddComponentData(entity, new SpellCom() {
-                            PlayerID = 1,
-                            StrIndex_SpellID = strIndex_SpellID,
-                            SpellPrefabID = TmpSpellData.PrefabID,
-                            AttackerPos = _attackPos,
-                            Direction = rotateQ * _attackDir,//使用四元數來旋轉本來的攻擊向量
-                            Speed = speed,
-                            Radius = radius,
-                            LifeTime = lifeTime,
-                        });
+                        CreateBulletEntity(TmpSpellData, _attackPos, rotateQ * _attackDir);
                     }
 
                     break;
 
             }
 
+        }
+
+        void CreateBulletEntity(HeroSpellJsonData data, Vector3 attackerPos, Vector3 direction)
+        {
+            EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            Entity entity = entityManager.CreateEntity();
+            var strIndex_SpellID = ECSStrManager.AddStr(TmpSpellData.ID);
+
+            bool isPiercing = bool.Parse(TmpSpellData.SpellTypeValues[0]);
+            int maxPiercingCount = int.Parse(TmpSpellData.SpellTypeValues[1]);
+            float radius = float.Parse(TmpSpellData.SpellTypeValues[3]);
+            float speed = float.Parse(TmpSpellData.SpellTypeValues[4]);
+            float lifeTime = float.Parse(TmpSpellData.SpellTypeValues[5]);
+
+            entityManager.AddComponentData(entity, new BulletCom()
+            {
+                PlayerID = 1,
+                StrIndex_SpellID = strIndex_SpellID,
+                SpellPrefabID = TmpSpellData.PrefabID,
+                AttackerPos = attackerPos,
+                Direction = direction,
+                Speed = speed,
+                Radius = radius,
+                LifeTime = lifeTime,
+                Piercing = isPiercing,
+                MaxPiercingCount = maxPiercingCount
+            });
         }
 
     }

@@ -69,27 +69,29 @@ namespace HeroFishing.Battle {
             HideIndicators();
             TmpSpellData = _spellData;
             switch (TmpSpellData.MySpellType) {
-                case SpellType.LineShot:
-                    GetAvailableIndicator(IndicatorType.Line, go => {
-                        var mr = go.GetComponentInChildren<MeshRenderer>();
-                        var mat = mr.material;
-                        mat.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[0])));
-                        mr.transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[1]), mr.transform.localScale.y, mr.transform.localScale.z);
-                        go.transform.localRotation = Quaternion.identity;
-                    });
-                    break;
-                case SpellType.SpreadLineShot:
-                    float intervalAngle = float.Parse(TmpSpellData.SpellTypeValues[3]);//射散間隔角度
-                    int spreadLineCount = int.Parse(TmpSpellData.SpellTypeValues[4]);//射散數量
+                //case SpellType.LineShot:
+                //    GetAvailableIndicator(IndicatorType.Line, go => {
+                //        var mr = go.GetComponentInChildren<MeshRenderer>();
+                //        var mat = mr.material;
+                //        mat.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[0])));
+                //        mr.transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[1]), mr.transform.localScale.y, mr.transform.localScale.z);
+                //        go.transform.localRotation = Quaternion.identity;
+                //    });
+                //    break;
+                case SpellType.Bullet:
+                    float intervalAngle = float.Parse(TmpSpellData.SpellTypeValues[6]);//射散間隔角度
+                    int spreadLineCount = int.Parse(TmpSpellData.SpellTypeValues[7]);//射散數量
 
                     float startAngle = -intervalAngle * (spreadLineCount - 1) / 2.0f;//設定第一個指標的角度
-                    for (int i = 0; i < spreadLineCount; i++) {
+                    for (int i = 0; i < spreadLineCount; i++)
+                    {
                         float curAngle = startAngle + intervalAngle * i;
-                        GetAvailableIndicator(IndicatorType.Line, go => {
+                        GetAvailableIndicator(IndicatorType.Line, go =>
+                        {
                             var mr = go.GetComponentInChildren<MeshRenderer>();
                             var mat = mr.material;
-                            mat.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[0])));
-                            mr.transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[1]), mr.transform.localScale.y, mr.transform.localScale.z);
+                            mat.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[2])));
+                            mr.transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[3]), mr.transform.localScale.y, mr.transform.localScale.z);
                             go.transform.localRotation = Quaternion.Euler(new Vector3(0, curAngle, 0));
                         });
                     }

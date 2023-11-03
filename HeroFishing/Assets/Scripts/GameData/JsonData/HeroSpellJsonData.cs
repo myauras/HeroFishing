@@ -17,12 +17,19 @@ namespace HeroFishing.Main {
     }
     public class HeroSpellJsonData : MyJsonData {
 
+        public enum ShapeType
+        {
+            Circle,
+            Line
+        }
 
         public enum SpellType {
-            LineShot,//(直線飛射)： [指示物長度, 子彈寬度, 子彈速度, 生命週期]
-            SpreadLineShot,//(錐形直線飛射)：[指示物長度, 子彈寬度, 子彈速度, 散射間隔角度, 散射數量, 生命週期]
-            LineRange,//(直線飛射穿透)：[指示物長度, 子彈寬度, 子彈速度, 生命週期]
-            LineRangeInstant,//(直線立即範圍)：[指示物長度, 子彈寬度, 生命週期]
+            Bullet,
+            Area
+            //LineShot,//(直線飛射)： [指示物長度, 子彈寬度, 子彈速度, 生命週期]
+            //SpreadLineShot,//(錐形直線飛射)：[指示物長度, 子彈寬度, 子彈速度, 散射間隔角度, 散射數量, 生命週期]
+            //LineRange,//(直線飛射穿透)：[指示物長度, 子彈寬度, 子彈速度, 生命週期]
+            //LineRangeInstant,//(直線立即範圍)：[指示物長度, 子彈寬度, 生命週期]
         }
         public enum HitType {
             None,
