@@ -19,8 +19,7 @@ public partial class DBMap : IRealmObject {
     [MapTo("enable")]
     public bool Enable { get; set; }
     [MapTo("jsonMapID")]
-    [Required]
-    public string JsonMapID { get; set; }
+    public int JsonMapID { get; set; }
     [MapTo("matchType")]
     [Required]
     public string MatchType { get; set; }

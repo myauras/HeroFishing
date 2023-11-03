@@ -128,15 +128,15 @@ namespace Service.Realms {
                 };
 
 
+
                 try {
                     MyRealm = await Realm.GetInstanceAsync(config);
-                    await MyRealm.SyncSession.WaitForDownloadAsync();
+                    WriteLog.LogColorFormat("Realm設定檔註冊完成", WriteLog.LogType.Realm);
                 } catch (Exception _e) {
                     WriteLog.LogError("Realm 使用config來GetInstanceAsync時發生錯誤: " + _e);
                     WriteLog.LogError("Realm設定檔註冊失敗");
                     return;
                 }
-                WriteLog.LogColorFormat("Realm設定檔註冊完成", WriteLog.LogType.Realm);
 
             } catch (Exception _e) {
                 WriteLog.LogError("Realm設定檔錯誤: " + _e);
