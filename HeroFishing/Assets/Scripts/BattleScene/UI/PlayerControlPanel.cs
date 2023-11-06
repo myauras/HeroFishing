@@ -48,6 +48,8 @@ namespace HeroFishing.Battle {
             if (spellData == null) { WriteLog.LogErrorFormat("玩家英雄的 {0} 不存在", spellName); return; }
             TmpSpellData = spellData;
             OriginPos = TmpHero.transform.position;
+            if (TmpSpellData.MyUseType == HeroSpellJsonData.UseType.Mov)
+                SpellIndicator.Instance.MoveIndicator(UIPosition.GetMouseWorldPointOnYZero(0));
             //OriginPos = UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
             SpellIndicator.Instance.ShowIndicator(TmpSpellData);
             IsSkillMode = true;
@@ -56,9 +58,15 @@ namespace HeroFishing.Battle {
         //施放技能-拖曳
         public void OnDrag() {
             if (!IsSkillMode) return;
-            TmpSpellDir = (UIPosition.GetMouseWorldPointOnYZero(0) - OriginPos).normalized;
-            float angle = Mathf.Atan2(TmpSpellDir.x, TmpSpellDir.z) * Mathf.Rad2Deg;
-            SpellIndicator.Instance.RotateLineIndicator(Quaternion.Euler(0, angle, 0));
+            if (TmpSpellData.MyUseType == HeroSpellJsonData.UseType.None) return;
+            if (TmpSpellData.MyUseType == HeroSpellJsonData.UseType.Rot) {
+                TmpSpellDir = (UIPosition.GetMouseWorldPointOnYZero(0) - OriginPos).normalized;
+                float angle = Mathf.Atan2(TmpSpellDir.x, TmpSpellDir.z) * Mathf.Rad2Deg;
+                SpellIndicator.Instance.RotateLineIndicator(Quaternion.Euler(0, angle, 0));
+            }
+            else {
+                SpellIndicator.Instance.MoveIndicator(UIPosition.GetMouseWorldPointOnYZero(0));
+            }
         }
         //施放技能-放開
         public void OnPointerUp() {
@@ -80,6 +88,9 @@ namespace HeroFishing.Battle {
         void SetECSSpellData(Vector3 _attackPos, Vector3 _attackDir) {
             //在ECS世界中建立一個施法
             switch (TmpSpellData.MySpellType) {
+                case HeroSpellJsonData.SpellType.Area:
+                    CreateAreaEntity(TmpSpellData, _attackPos, UIPosition.GetMouseWorldPointOnYZero(0));
+                    break;
                 //case HeroSpellJsonData.SpellType.LineShot:
 
                 //    radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
@@ -137,7 +148,7 @@ namespace HeroFishing.Battle {
             {
                 PlayerID = 1,
                 StrIndex_SpellID = strIndex_SpellID,
-                SpellPrefabID = TmpSpellData.PrefabID,
+                SpellPrefabID = data.PrefabID,
                 AttackerPos = attackerPos,
                 Direction = direction,
                 Speed = speed,
@@ -148,5 +159,28 @@ namespace HeroFishing.Battle {
             });
         }
 
+        void CreateAreaEntity(HeroSpellJsonData data, Vector3 attackerPos, Vector3 position) {
+            EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            Entity entity = entityManager.CreateEntity();
+            var strIndex_SpellID = ECSStrManager.AddStr(TmpSpellData.ID);
+
+            var areaValues = new Vector2(float.Parse(data.SpellTypeValues[1]), float.Parse(data.SpellTypeValues[2]));
+            var shapeType = MyEnum.ParseEnum<AreaValue.ShapeType>(data.SpellTypeValues[0]);
+            var lifeTime = float.Parse(data.SpellTypeValues[4]);
+            var waveCount = int.Parse(data.SpellTypeValues[5]);
+
+            entityManager.AddComponentData(entity, new AreaCom() {
+                PlayerID = 1,
+                StrIndex_SpellID = strIndex_SpellID,
+                SpellPrefabID = data.PrefabID,
+                AttackerPos = attackerPos,
+                AreaPos = position,
+                AreaValues = areaValues,
+                ShapeType = shapeType,
+                LifeTime = lifeTime,
+                WaveCount = waveCount
+            });
+            Debug.Log("create");
+        }
     }
 }

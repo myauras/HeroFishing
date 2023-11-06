@@ -69,6 +69,20 @@ namespace HeroFishing.Battle {
             HideIndicators();
             TmpSpellData = _spellData;
             switch (TmpSpellData.MySpellType) {
+                case SpellType.Area:
+
+                    var ShapeType = Enum.Parse<AreaValue.ShapeType>(TmpSpellData.SpellTypeValues[0]);
+                    if (ShapeType == AreaValue.ShapeType.Circle) {
+                        GetAvailableIndicator(IndicatorType.Circle, go => {
+
+                        });
+                    }
+                    else {
+                        GetAvailableIndicator(IndicatorType.Line, go => {
+
+                        });
+                    }
+                    break;
                 //case SpellType.LineShot:
                 //    GetAvailableIndicator(IndicatorType.Line, go => {
                 //        var mr = go.GetComponentInChildren<MeshRenderer>();
@@ -83,11 +97,9 @@ namespace HeroFishing.Battle {
                     int spreadLineCount = int.Parse(TmpSpellData.SpellTypeValues[7]);//射散數量
 
                     float startAngle = -intervalAngle * (spreadLineCount - 1) / 2.0f;//設定第一個指標的角度
-                    for (int i = 0; i < spreadLineCount; i++)
-                    {
+                    for (int i = 0; i < spreadLineCount; i++) {
                         float curAngle = startAngle + intervalAngle * i;
-                        GetAvailableIndicator(IndicatorType.Line, go =>
-                        {
+                        GetAvailableIndicator(IndicatorType.Line, go => {
                             var mr = go.GetComponentInChildren<MeshRenderer>();
                             var mat = mr.material;
                             mat.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[2])));
@@ -103,6 +115,8 @@ namespace HeroFishing.Battle {
         public void RotateLineIndicator(Quaternion _rotation) {
             transform.localRotation = _rotation;
         }
-
+        public void MoveIndicator(Vector3 _position) {
+            transform.localPosition = _position;
+        }
     }
 }

@@ -17,9 +17,19 @@ public struct BulletValue : IComponentData {
 
 //子彈擊中怪物buffer
 [InternalBufferCapacity(16)]
-public struct HitInfoBuffer : IBufferElementData
-{
+public struct HitInfoBuffer : IBufferElementData {
     public Entity MonsterEntity;
+}
+
+public struct AreaValue : IComponentData {
+    public enum ShapeType { Circle, Line }
+    public ShapeType Type;
+    public float2 AreaValues;
+    public float3 AreaPos;
+    public float3 AttackerPos;
+    public uint StrIndex_SpellID;
+    public int SpellPrefabID;
+    public int WaveCount;
 }
 
 /// <summary>

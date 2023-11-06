@@ -17,12 +17,6 @@ namespace HeroFishing.Main {
     }
     public class HeroSpellJsonData : MyJsonData {
 
-        public enum ShapeType
-        {
-            Circle,
-            Line
-        }
-
         public enum SpellType {
             Bullet,
             Area
@@ -30,6 +24,9 @@ namespace HeroFishing.Main {
             //SpreadLineShot,//(錐形直線飛射)：[指示物長度, 子彈寬度, 子彈速度, 散射間隔角度, 散射數量, 生命週期]
             //LineRange,//(直線飛射穿透)：[指示物長度, 子彈寬度, 子彈速度, 生命週期]
             //LineRangeInstant,//(直線立即範圍)：[指示物長度, 子彈寬度, 生命週期]
+        }
+        public enum UseType {
+            None, Mov, Rot
         }
         public enum HitType {
             None,
@@ -55,6 +52,7 @@ namespace HeroFishing.Main {
         public int Cost { get; private set; }
         public int Waves { get; private set; }
         public SpellType MySpellType { get; private set; }
+        public UseType MyUseType { get; private set; }
         public string[] SpellTypeValues { get; private set; }
         public HitType MyHitType { get; private set; }
         public string[] HitTypeValues { get; private set; }
@@ -90,6 +88,9 @@ namespace HeroFishing.Main {
                         break;
                     case "SpellType":
                         MySpellType = MyEnum.ParseEnum<SpellType>(item[key].ToString());
+                        break;
+                    case "UseType":
+                        MyUseType = MyEnum.ParseEnum<UseType>(item[key].ToString());
                         break;
                     case "SpellTypeValues":
                         SpellTypeValues = item[key].ToString().Split(',');

@@ -22,7 +22,7 @@ public struct AreaCom : IComponentData
     public int PlayerID;//玩家ID
     public uint StrIndex_SpellID;//ECSStringManager的技能ID索引
     public int SpellPrefabID;//Prefab名稱
-    public HeroSpellJsonData.ShapeType ShapeType;//範圍形狀，Line或者Circle
+    public AreaValue.ShapeType ShapeType;//範圍形狀，Line或者Circle
     public float2 AreaValues;//範圍的數值，Line情況x為長度，y為寬度; Circle情況x為半徑，y為扇形角度
     public float3 AreaPos;//範圍位置
     public float3 AttackerPos;//攻擊者位置
