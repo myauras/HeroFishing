@@ -14,7 +14,7 @@ namespace HeroFishing.Battle {
     public partial struct BulletBehaviourSystem : ISystem {
 
         NativeArray<int2> OffsetGrids;//定義碰撞檢定9宮格
-
+        [ReadOnly] public BufferLookup<HitInfoBuffer> BulletHitInfoLookup;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
@@ -48,7 +48,7 @@ namespace HeroFishing.Battle {
             uint seed = (uint)(deltaTime * 1000000f);
             //取得網格資料
             var gridData = SystemAPI.GetSingleton<MapGridData>();
-
+            BulletHitInfoLookup = state.GetBufferLookup<HitInfoBuffer>(false);
 
             new MoveJob {
                 ECB = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
@@ -57,6 +57,7 @@ namespace HeroFishing.Battle {
                 GridData = gridData,
                 OffsetGrids = OffsetGrids,
                 MonsterCollisionPosOffset = BattleManager.MonsterCollisionPosOffset,
+                BulletHitInfoLookup = BulletHitInfoLookup
             }.ScheduleParallel();
 
         }
@@ -68,6 +69,7 @@ namespace HeroFishing.Battle {
             [ReadOnly] public MapGridData GridData;
             [ReadOnly] public NativeArray<int2> OffsetGrids;
             [ReadOnly] public float3 MonsterCollisionPosOffset;
+            [ReadOnly] public BufferLookup<HitInfoBuffer> BulletHitInfoLookup;
 
             public void Execute(ref BulletValue _bullet, in Entity _entity) {
 
@@ -79,8 +81,6 @@ namespace HeroFishing.Battle {
                     (int)(_bullet.Position.z / GridData.CellSize)
                 );
 
-
-
                 foreach (var offset in OffsetGrids) {
                     int2 gridToCheck = gridIndex + offset;
 
@@ -91,10 +91,26 @@ namespace HeroFishing.Battle {
                             // 使用當前找到的value要做某些事情
                             float dist = math.distance(monsterValue.Pos + MonsterCollisionPosOffset, _bullet.Position);
                             if (dist < (_bullet.Radius + monsterValue.Radius)) {//怪物在子彈的命中範圍內
-
+                                //檢查怪物是否已被子彈命中
+                                bool alreayHit = false;
+                                if (BulletHitInfoLookup.TryGetBuffer(_entity, out var buffer)) {
+                                    for (int i = 0; i < buffer.Length; i++) {
+                                        if (buffer[i].MonsterEntity == monsterValue.MyEntity) {
+                                            alreayHit = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                //已觸發過傷害，跳轉至下個怪物
+                                if (alreayHit) continue;
+                                //未觸發過傷害，加入怪物群裡
+                                else ECB.AddBuffer<HitInfoBuffer>(1, _entity)
+                                        .Add(new HitInfoBuffer { MonsterEntity = monsterValue.MyEntity });
+                                _bullet.PiercingCount++;
                                 //本地端測試用，有機率擊殺怪物
                                 var random = new Unity.Mathematics.Random(Seed);
                                 float value = random.NextFloat(); // 產生一個0.0到1.0之間的浮點數
+
                                 if (value < 0.01f) {
                                     //在怪物實體身上建立死亡標籤元件，讓其他系統知道要死亡後該做什麼
                                     ECB.AddComponent<MonsterDieTag>(3, monsterValue.MyEntity);
@@ -102,11 +118,12 @@ namespace HeroFishing.Battle {
                                     var autoDestroyTag = new AutoDestroyTag { LifeTime = 6 };
                                     ECB.AddComponent(3, monsterValue.MyEntity, autoDestroyTag);
                                     //目前不實做將死亡怪物從網格中移除，因為MonsterBehaviourSystem中每幀都會清空網格資料，所以各別移除就沒那麼需要
-                                } else {
+                                }
+                                else {
                                     //在怪物實體身上建立被擊中的標籤元件，讓其他系統知道要處理被擊中後該做什麼
                                     var hitTag = new MonsterHitTag { MonsterID = monsterValue.MonsterID, StrIndex_SpellID = _bullet.StrIndex_SpellID };
                                     ECB.AddComponent(3, monsterValue.MyEntity, hitTag);
-
+                                    Debug.Log($"Hit: {monsterValue.MonsterID} grid:({gridToCheck.x}, {gridToCheck.y})");
                                 }
 
                                 //加入子彈擊中特效標籤元件
@@ -114,7 +131,10 @@ namespace HeroFishing.Battle {
                                 var effectSpawnTag = new HitParticleSpawnTag { Monster = monsterValue, SpellPrefabID = _bullet.SpellPrefabID, Bullet = _bullet };
                                 ECB.AddComponent(5, effectEntity, effectSpawnTag);
 
-                                ECB.DestroyEntity(6, _entity);//銷毀子彈
+                                if (!_bullet.Piercing || _bullet.PiercingCount >= _bullet.MaxPiercingCount) {
+                                    ECB.DestroyEntity(6, _entity);//銷毀子彈
+                                }
+
                             }
 
                         } while (GridData.GridMap.TryGetNextValue(out monsterValue, ref iterator)); // 如果該key還有其他值就繼續

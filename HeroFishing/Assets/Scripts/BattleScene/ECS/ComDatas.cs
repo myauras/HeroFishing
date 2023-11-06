@@ -10,7 +10,18 @@ public struct BulletValue : IComponentData {
     public float3 Direction;
     public uint StrIndex_SpellID;//紀錄子彈的技能ID
     public int SpellPrefabID;//技能Prefab名稱
+    public bool Piercing;
+    public int MaxPiercingCount;
+    public int PiercingCount;
 }
+
+//子彈擊中怪物buffer
+[InternalBufferCapacity(16)]
+public struct HitInfoBuffer : IBufferElementData
+{
+    public Entity MonsterEntity;
+}
+
 /// <summary>
 /// 怪物參照元件，用於參照GameObject實例用
 /// </summary>

@@ -70,6 +70,9 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                     Direction = direction,
                     StrIndex_SpellID = spellCom.StrIndex_SpellID,
                     SpellPrefabID = spellCom.SpellPrefabID,
+                    Piercing = spellCom.Piercing,
+                    MaxPiercingCount = spellCom.MaxPiercingCount,
+                    PiercingCount = 0,
                 });
                 //加入BulletInstance
                 ECB.AddComponent(entity, new BulletInstance {
