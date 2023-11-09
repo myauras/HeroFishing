@@ -70,13 +70,20 @@ namespace HeroFishing.Socket {
                     CMDCallback.Remove(commandID);
                     _cb?.Invoke(_msg);
                 } else {
-                    SocketContent.Matchmaker_Reply cmdType;
+                    SocketContent.CMDType cmdType;
                     if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
                         WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
                         return;
                     }
                     switch (cmdType) {
-                        case SocketContent.Matchmaker_Reply.CREATEROOM_REPLY:
+                        case SocketContent.CMDType.AUTH_REPLY:
+                            WriteLog.LogColor("AUTH_REPLY", WriteLog.LogType.Connection);
+                            break;
+                        case SocketContent.CMDType.CREATEROOM_REPLY:
+                            WriteLog.LogColor("CREATEROOM_REPLY", WriteLog.LogType.Connection);
+                            break;
+                        case SocketContent.CMDType.SPAWN:
+                            WriteLog.LogColor("SPAWN", WriteLog.LogType.Connection);
                             break;
                     }
                 }
