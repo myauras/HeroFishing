@@ -65,7 +65,7 @@ namespace HeroFishing.Socket {
                     _ac?.Invoke(false);
                     return;
                 }
-                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.Matchgame_Reply.AUTH_REPLY.ToString(), id), (string msg) => {
+                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.CMDType.AUTH_REPLY.ToString(), id), (string msg) => {
                     SocketCMD<AUTH_REPLY> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_REPLY>>(msg);
                     _ac?.Invoke(packet.Content.IsAuth);
                     if (packet.Content.IsAuth) {
