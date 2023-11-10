@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace HeroFishing.Socket.Matchmaker {
     public class CREATEROOM_REPLY : SocketContent {
+        //class名稱就是封包的CMD名稱
+
         /// <summary>
         /// 創房者ID
         /// </summary>

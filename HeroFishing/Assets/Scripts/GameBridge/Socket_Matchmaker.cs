@@ -1,10 +1,13 @@
 using HeroFishing.Main;
 using HeroFishing.Socket.Matchmaker;
+using LitJson;
 using Scoz.Func;
 using Service.Realms;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 namespace HeroFishing.Socket {
     public partial class HeroFishingSocket {
         public event Action<bool, string> CreateRoomCallback;
@@ -15,7 +18,7 @@ namespace HeroFishing.Socket {
                 TCP_MatchmakerClient.Close();
             TCP_MatchmakerClient = new GameObject("MatchmakerSocket").AddComponent<TcpClient>();
             TCP_MatchmakerClient.Init(_ip, _port);
-            TCP_MatchmakerClient.OnReceiveMsg += OnRecieveTCPMsg;
+            TCP_MatchmakerClient.OnReceiveMsg += OnRecieveMatchmakerTCPMsg;
         }
         private void OnMatchmakerDisconnect() {
             WriteLog.LogColor("OnMatchmakerDisconnect", WriteLog.LogType.Connection);
@@ -41,7 +44,7 @@ namespace HeroFishing.Socket {
                     _callback?.Invoke(null, false);
                     return;
                 }
-                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.CMDType.AUTH_REPLY.ToString(), id), (string msg) => {
+                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMDType.AUTH_REPLY.ToString(), id), (string msg) => {
                     SocketCMD<AUTH_REPLY> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_REPLY>>(msg);
                     _callback?.Invoke(_realmToken, packet.Content.IsAuth);
                 });
@@ -61,7 +64,7 @@ namespace HeroFishing.Socket {
             }
             //註冊回呼
             WriteLog.LogColor("註冊回呼", WriteLog.LogType.Connection);
-            RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.CMDType.CREATEROOM_REPLY.ToString(), id), OnCreateMatchmakerRoom_Reply);
+            RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMDType.CREATEROOM_REPLY.ToString(), id), OnCreateMatchmakerRoom_Reply);
         }
         public void OnCreateMatchmakerRoom_Reply(string _msg) {
             WriteLog.LogColor("OnCreateMatchmakerRoom_Reply", WriteLog.LogType.Connection);
@@ -79,6 +82,38 @@ namespace HeroFishing.Socket {
             AllocatedRoom.Instance.InitRoom(packet.Content.CreaterID, packet.Content.PlayerIDs, packet.Content.DBMapID, packet.Content.DBMatchgameID, packet.Content.IP, packet.Content.Port, packet.Content.PodName);
             CreateRoomCallback?.Invoke(true, string.Empty);
             CreateRoomCallback = null;
+        }
+
+        private void OnRecieveMatchmakerTCPMsg(string _msg) {
+            try {
+                SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
+                WriteLog.LogColorFormat("Recieve Command: {0}   PackID: {1}", WriteLog.LogType.Connection, data.CMD, data.PackID);
+                Tuple<string, int> commandID = new Tuple<string, int>(data.CMD, data.PackID);
+                if (CMDCallback.TryGetValue(commandID, out Action<string> _cb)) {
+                    CMDCallback.Remove(commandID);
+                    _cb?.Invoke(_msg);
+                } else {
+                    SocketContent.MatchmakerCMDType cmdType;
+                    if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
+                        WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
+                        return;
+                    }
+                    switch (cmdType) {
+                        case SocketContent.MatchmakerCMDType.AUTH_REPLY:
+                            WriteLog.LogColor("AUTH_REPLY", WriteLog.LogType.Connection);
+                            break;
+                        case SocketContent.MatchmakerCMDType.CREATEROOM_REPLY:
+                            WriteLog.LogColor("CREATEROOM_REPLY", WriteLog.LogType.Connection);
+                            break;
+                    }
+                }
+            } catch (Exception e) {
+                WriteLog.LogError("Parse收到的封包時出錯 : " + e.ToString());
+                if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) {
+                    WriteLog.LogErrorFormat("不在{0}就釋放資源: ", MyScene.BattleScene, e.ToString());
+                    Release();
+                }
+            }
         }
 
 

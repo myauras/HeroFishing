@@ -1,12 +1,19 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 namespace HeroFishing.Socket.Matchgame {
     public class SPAWN : SocketContent {
+        //class名稱就是封包的CMD名稱
+
         /// <summary>
-        /// 怪物JsonID
+        /// 是否為Boss生怪
         /// </summary>
-        public int MonsterID { get; private set; }
+        public bool IsBoss { get; private set; }
+        /// <summary>
+        /// 怪物JsonIDs
+        /// </summary>
+        public int[] MonsterIDs { get; private set; }
         /// <summary>
         /// 路徑JsonID
         /// </summary>
