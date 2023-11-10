@@ -4,14 +4,13 @@ using UnityEngine;
 using Scoz.Func;
 using UnityEngine.UI;
 using System;
-using HeroFishing.Main;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
-namespace MaJamPachinko.Main {
+namespace HeroFishing.Main {
 
     public class MapItem : MonoBehaviour, IItem {
         [SerializeField] Text NameText;
         [SerializeField] Image MapImg;
+        [SerializeField] Button EnterBtn;
 
         public bool IsActive { get; set; }
 
@@ -31,6 +30,10 @@ namespace MaJamPachinko.Main {
             AddressablesLoader.GetSpriteAtlas("MapUI", atlas => {
                 MapImg.sprite = atlas.GetSprite(MyJsonMap.Ref);
             });
+        }
+
+        public void OnClick() {
+
         }
     }
 }
