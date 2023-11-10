@@ -15,7 +15,7 @@ namespace HeroFishing.Battle {
     public partial struct BulletCollisionSystem : ISystem {
 
         NativeArray<int2> OffsetGrids;//定義碰撞檢定9宮格
-
+        [ReadOnly] BufferLookup<HitInfoBuffer> HitInfoLookup;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
@@ -33,6 +33,7 @@ namespace HeroFishing.Battle {
             OffsetGrids[7] = new int2(-1, 0);// 左
             OffsetGrids[8] = new int2(-1, 1);// 左上
 
+            HitInfoLookup = state.GetBufferLookup<HitInfoBuffer>(false);
         }
         [BurstCompile]
         public void OnDestroy(ref SystemState state) {
@@ -44,20 +45,24 @@ namespace HeroFishing.Battle {
 
             var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
             float deltaTime = SystemAPI.Time.DeltaTime;
+            double elapsedTime = SystemAPI.Time.ElapsedTime;
 
 
             uint seed = (uint)(deltaTime * 1000000f);
             //取得網格資料
             var gridData = SystemAPI.GetSingleton<MapGridData>();
 
+            HitInfoLookup.Update(ref state);
 
             new MoveJob {
                 ECB = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
                 DeltaTime = deltaTime,
+                ElapsedTime = elapsedTime,
                 Seed = seed,
                 GridData = gridData,
                 OffsetGrids = OffsetGrids,
                 MonsterCollisionPosOffset = BattleManager.MonsterCollisionPosOffset,
+                HitInfoLookup = HitInfoLookup
             }.ScheduleParallel();
 
         }
@@ -65,10 +70,12 @@ namespace HeroFishing.Battle {
         partial struct MoveJob : IJobEntity {
             public EntityCommandBuffer.ParallelWriter ECB;
             [ReadOnly] public float DeltaTime;
+            [ReadOnly] public double ElapsedTime;
             [ReadOnly] public uint Seed;
             [ReadOnly] public MapGridData GridData;
             [ReadOnly] public NativeArray<int2> OffsetGrids;
             [ReadOnly] public float3 MonsterCollisionPosOffset;
+            [ReadOnly] public BufferLookup<HitInfoBuffer> HitInfoLookup;
 
             public void Execute(ref CollisionData _collisionData, ref MoveData _moveData, in Entity _entity) {
 
@@ -92,6 +99,17 @@ namespace HeroFishing.Battle {
                             // 使用當前找到的value要做某些事情
                             float dist = math.distance(monsterValue.Pos + MonsterCollisionPosOffset, _moveData.Position);
                             if (dist < (_collisionData.Radius + monsterValue.Radius)) {//怪物在子彈的命中範圍內
+                                //多少時間算重新碰撞，若沒有Waves則為0.5秒，有的話計算LifeTime會產生的Wave數
+                                double checkTime = _collisionData.Waves <= 0 ? 0.5 : (double)(_collisionData.LifeTime / _collisionData.Waves);
+                                //確認是否已經打過
+                                if (CheckAlreayHitMonster(_entity, monsterValue.MyEntity, checkTime)) continue;
+
+                                if (!HitInfoLookup.HasBuffer(_entity)) {
+                                    ECB.AddBuffer<HitInfoBuffer>(1, _entity)
+                                        .Add(new HitInfoBuffer { MonsterEntity = monsterValue.MyEntity, HitTime = ElapsedTime });
+                                }
+                                else
+                                    ECB.AppendToBuffer(1, _entity, new HitInfoBuffer { MonsterEntity = monsterValue.MyEntity, HitTime = ElapsedTime });
 
                                 //本地端測試用，有機率擊殺怪物
                                 var random = new Unity.Mathematics.Random(Seed);
@@ -126,6 +144,21 @@ namespace HeroFishing.Battle {
                 }
 
 
+            }
+
+            private bool CheckAlreayHitMonster(Entity bullet, Entity Monster, double time) {
+                if (HitInfoLookup.TryGetBuffer(bullet, out DynamicBuffer<HitInfoBuffer> buffer)) {
+                    //Debug.Log("buffer length: " + buffer.Length);
+                    //Debug.Log(Monster.Index + "_" + Monster.Version);
+                    for (int i = 0; i < buffer.Length; i++) {
+
+                        //Debug.Log($"current time: {ElapsedTime} Prev Hit Time: {buffer[i].HitTime}");
+                        if (buffer[i].MonsterEntity == Monster && ElapsedTime - buffer[i].HitTime < time) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             }
         }
 

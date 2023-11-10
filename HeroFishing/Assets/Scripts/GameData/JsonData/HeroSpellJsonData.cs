@@ -47,6 +47,7 @@ namespace HeroFishing.Main {
         public float CD { get; private set; }
         public int Cost { get; private set; }
         public int Waves { get; private set; }
+        public bool DestroyOnCollision { get; private set; }
         public SpellType MySpellType { get; private set; }
         public string[] SpellTypeValues { get; private set; }
         public HitType MyHitType { get; private set; }
@@ -80,6 +81,9 @@ namespace HeroFishing.Main {
                         break;
                     case "Waves":
                         Waves = int.Parse(item[key].ToString());
+                        break;
+                    case "DestroyOnCollision":
+                        DestroyOnCollision = bool.Parse(item[key].ToString());
                         break;
                     case "SpellType":
                         MySpellType = MyEnum.ParseEnum<SpellType>(item[key].ToString());

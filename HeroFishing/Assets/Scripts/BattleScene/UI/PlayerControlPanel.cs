@@ -101,7 +101,7 @@ namespace HeroFishing.Battle {
                         Speed = speed,
                         Radius = radius,
                         LifeTime = lifeTime,
-                        DestoryOnCollision = false,
+                        DestoryOnCollision = TmpSpellData.DestroyOnCollision,
                         Waves = TmpSpellData.Waves
                     });
                     break;
@@ -125,7 +125,7 @@ namespace HeroFishing.Battle {
                             Speed = speed,
                             Radius = radius,
                             LifeTime = lifeTime,
-                            DestoryOnCollision = true,
+                            DestoryOnCollision = TmpSpellData.DestroyOnCollision,
                             Waves = TmpSpellData.Waves
                         });
                     }

@@ -49,6 +49,7 @@ public struct CollisionData : IComponentData {
     public uint StrIndex_SpellID;
     public int SpellPrefabID;
     public float Radius;
+    public float LifeTime;
     public int Waves;
     public bool Destroy;
 }
@@ -56,6 +57,7 @@ public struct CollisionData : IComponentData {
 [InternalBufferCapacity(16)]
 public struct HitInfoBuffer : IBufferElementData {
     public Entity MonsterEntity;
+    public double HitTime;
 }
 
 /// <summary>

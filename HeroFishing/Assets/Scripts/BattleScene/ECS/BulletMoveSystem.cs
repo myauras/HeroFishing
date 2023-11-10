@@ -19,7 +19,6 @@ namespace HeroFishing.Battle {
             //遍歷所有怪物            
             foreach (var (moveData, bulletInstance) in SystemAPI.Query<RefRW<MoveData>, BulletInstance>()) {
                 moveData.ValueRW.Position = moveData.ValueRO.Position + moveData.ValueRO.Direction * moveData.ValueRO.Speed * SystemAPI.Time.DeltaTime;
-                UnityEngine.Debug.Log(moveData.ValueRO.Position);
                 bulletInstance.Trans.localPosition = moveData.ValueRO.Position;
             }
         }
