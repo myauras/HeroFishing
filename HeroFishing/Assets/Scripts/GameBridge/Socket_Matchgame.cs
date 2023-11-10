@@ -1,9 +1,12 @@
+using HeroFishing.Battle;
 using HeroFishing.Main;
 using HeroFishing.Socket.Matchgame;
+using LitJson;
 using Scoz.Func;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Socket {
     public partial class HeroFishingSocket {
@@ -37,7 +40,7 @@ namespace HeroFishing.Socket {
             }
             TCP_MatchgameClient = new GameObject("TCP_MatchgameClient").AddComponent<TcpClient>();
             TCP_MatchgameClient.Init(_ip, _port);
-            TCP_MatchgameClient.OnReceiveMsg += OnRecieveTCPMsg;
+            TCP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameTCPMsg;
             if (UDP_MatchgameClient != null) {
                 UDP_MatchgameClient.Close();
                 WriteLog.LogColor($"JoinMatchgame時 TCP_MatchgameClient不為null, 關閉 {TCP_MatchgameClient}", WriteLog.LogType.Connection);
@@ -54,7 +57,7 @@ namespace HeroFishing.Socket {
                     return;
                 }
                 if (TCP_MatchmakerClient != null) {
-                    TCP_MatchmakerClient.OnReceiveMsg -= OnRecieveTCPMsg;
+                    TCP_MatchmakerClient.OnReceiveMsg -= OnRecieveMatchmakerTCPMsg;
                     TCP_MatchmakerClient.Close();
                     WriteLog.LogColor($"JoinMatchgame成功後 TCP_MatchmakerClient不需要了關閉 {TCP_MatchmakerClient}", WriteLog.LogType.Connection);
                 }
@@ -65,7 +68,7 @@ namespace HeroFishing.Socket {
                     _ac?.Invoke(false);
                     return;
                 }
-                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.CMDType.AUTH_REPLY.ToString(), id), (string msg) => {
+                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchgameCMDType.AUTH_REPLY.ToString(), id), (string msg) => {
                     SocketCMD<AUTH_REPLY> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_REPLY>>(msg);
                     _ac?.Invoke(packet.Content.IsAuth);
                     if (packet.Content.IsAuth) {
@@ -123,5 +126,60 @@ namespace HeroFishing.Socket {
                 this.MatchgameDisconnect();
             }
         }
+
+        private void OnRecieveMatchgameTCPMsg(string _msg) {
+            //if (UDP_MatchgameClient != null)
+            //    UDP_MatchgameClient.ResetTimer();
+            //var matchgame = GamePlayer.Instance.GetMatchGame();
+            //if (matchgame != null) {
+            //    UDP_MatchgameClient = new GameObject("UDP_MatchgameClient").AddComponent<UdpSocket>();
+            //    UDP_MatchgameClient.Init(matchgame.IP, matchgame.Port);
+            //    try {
+            //        UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool isConnect) => {
+            //            if (isConnect)
+            //                UDP_MatchgameClient.OnReceiveMsg += OnMatchgameUDPConnCheck;
+            //        });
+            //        UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
+            //    } catch (Exception e) {
+            //        WriteLog.LogError("UDP error " + e.ToString());
+            //    }
+            //}
+            try {
+
+                WriteLog.LogColorFormat("收到Server端資訊: {0}", WriteLog.LogType.Connection, _msg);
+                SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
+                Tuple<string, int> commandID = new Tuple<string, int>(data.CMD, data.PackID);
+                if (CMDCallback.TryGetValue(commandID, out Action<string> _cb)) {
+                    CMDCallback.Remove(commandID);
+                    _cb?.Invoke(_msg);
+                } else {
+                    SocketContent.MatchgameCMDType cmdType;
+                    if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
+                        WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
+                        return;
+                    }
+                    switch (cmdType) {
+                        case SocketContent.MatchgameCMDType.SPAWN:
+                            var packet = LitJson.JsonMapper.ToObject<SocketCMD<SPAWN>>(_msg);
+                            HandleSPAWN(packet);
+                            break;
+                    }
+                }
+            } catch (Exception e) {
+                WriteLog.LogError("Parse收到的封包時出錯 : " + e.ToString());
+                if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) {
+                    WriteLog.LogErrorFormat("不在{0}就釋放資源: ", MyScene.BattleScene, e.ToString());
+                    Release();
+                }
+            }
+        }
+
+        void HandleSPAWN(SocketCMD<SPAWN> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            if (BattleManager.Instance == null || BattleManager.Instance.MyMonsterScheduler == null) return;
+            BattleManager.Instance.MyMonsterScheduler.EnqueueMonster(_packet.Content.MonsterIDs, _packet.Content.RouteID, _packet.Content.IsBoss);
+
+        }
+
     }
 }

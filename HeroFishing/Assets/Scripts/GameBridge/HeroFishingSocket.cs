@@ -45,60 +45,6 @@ namespace HeroFishing.Socket {
         }
 
 
-        private void OnRecieveTCPMsg(string _msg) {
-            //if (UDP_MatchgameClient != null)
-            //    UDP_MatchgameClient.ResetTimer();
-            //var matchgame = GamePlayer.Instance.GetMatchGame();
-            //if (matchgame != null) {
-            //    UDP_MatchgameClient = new GameObject("UDP_MatchgameClient").AddComponent<UdpSocket>();
-            //    UDP_MatchgameClient.Init(matchgame.IP, matchgame.Port);
-            //    try {
-            //        UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool isConnect) => {
-            //            if (isConnect)
-            //                UDP_MatchgameClient.OnReceiveMsg += OnMatchgameUDPConnCheck;
-            //        });
-            //        UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
-            //    } catch (Exception e) {
-            //        WriteLog.LogError("UDP error " + e.ToString());
-            //    }
-            //}
-            try {
-                SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
-                WriteLog.LogColorFormat("Recieve Command: {0}   PackID: {1}", WriteLog.LogType.Connection, data.CMD, data.PackID);
-                Tuple<string, int> commandID = new Tuple<string, int>(data.CMD, data.PackID);
-                if (CMDCallback.TryGetValue(commandID, out Action<string> _cb)) {
-                    CMDCallback.Remove(commandID);
-                    _cb?.Invoke(_msg);
-                } else {
-                    SocketContent.CMDType cmdType;
-                    if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
-                        WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
-                        return;
-                    }
-                    switch (cmdType) {
-                        case SocketContent.CMDType.AUTH_REPLY:
-                            WriteLog.LogColor("AUTH_REPLY", WriteLog.LogType.Connection);
-                            break;
-                        case SocketContent.CMDType.CREATEROOM_REPLY:
-                            WriteLog.LogColor("CREATEROOM_REPLY", WriteLog.LogType.Connection);
-                            break;
-                        case SocketContent.CMDType.SPAWN:
-                            WriteLog.LogColor("SPAWN", WriteLog.LogType.Connection);
-                            break;
-                    }
-                }
-            } catch (Exception e) {
-                WriteLog.LogError("Parse Recieve Message with Error : " + e.ToString());
-                if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) {
-                    Release();
-                }
-            }
-        }
-
-
-
-
-
 
     }
 }
