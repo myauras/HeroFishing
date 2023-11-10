@@ -92,13 +92,10 @@ namespace HeroFishing.Battle {
         /// ECS那邊出怪後會從排程中移除
         /// </summary>
         public ScheduledSpawn DequeueMonster() {
-            WriteLog.Log("DequeueMonster1");
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return null; }
             if (!SpawnMonsterQueue.Any()) return null;
-            WriteLog.Log("DequeueMonster2");
             var spawn = SpawnMonsterQueue.Dequeue();
             if (spawn.IsBooss) BossExist = true;
-            WriteLog.Log("DequeueMonster3");
             return spawn;
         }
 
