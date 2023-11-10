@@ -3,6 +3,7 @@ using Unity.Entities;
 using Scoz.Func;
 using UnityEngine.EventSystems;
 using HeroFishing.Main;
+using Unity.Mathematics;
 
 namespace HeroFishing.Battle {
     public class PlayerControlPanel : MonoBehaviour {
@@ -91,15 +92,17 @@ namespace HeroFishing.Battle {
                     speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
                     lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);
                     entity = _entityManager.CreateEntity();
-                    _entityManager.AddComponentData(entity, new SpellCom() {
+                    _entityManager.AddComponentData(entity, new SpellData() {
                         PlayerID = 1,
                         StrIndex_SpellID = strIndex_SpellID,
                         SpellPrefabID = TmpSpellData.PrefabID,
-                        AttackerPos = _attackPos,
-                        Direction = _attackDir,
+                        InitPosition = _attackPos,
+                        InitRotation = quaternion.LookRotationSafe(_attackDir, math.up()),
                         Speed = speed,
                         Radius = radius,
                         LifeTime = lifeTime,
+                        DestoryOnCollision = false,
+                        Waves = TmpSpellData.Waves
                     });
                     break;
                 case HeroSpellJsonData.SpellType.SpreadLineShot:
@@ -113,15 +116,17 @@ namespace HeroFishing.Battle {
                         float curAngle = startAngle + intervalAngle * i;
                         Quaternion rotateQ = Quaternion.Euler(new Vector3(0, curAngle, 0));//旋轉X度的四元數
                         entity = _entityManager.CreateEntity();
-                        _entityManager.AddComponentData(entity, new SpellCom() {
+                        _entityManager.AddComponentData(entity, new SpellData() {
                             PlayerID = 1,
                             StrIndex_SpellID = strIndex_SpellID,
                             SpellPrefabID = TmpSpellData.PrefabID,
-                            AttackerPos = _attackPos,
-                            Direction = rotateQ * _attackDir,//使用四元數來旋轉本來的攻擊向量
+                            InitPosition = _attackPos,
+                            InitRotation = quaternion.LookRotationSafe(rotateQ * _attackDir, math.up()),//使用四元數來旋轉本來的攻擊向量
                             Speed = speed,
                             Radius = radius,
                             LifeTime = lifeTime,
+                            DestoryOnCollision = true,
+                            Waves = TmpSpellData.Waves
                         });
                     }
 

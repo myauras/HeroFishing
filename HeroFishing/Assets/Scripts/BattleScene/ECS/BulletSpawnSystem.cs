@@ -6,20 +6,10 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace HeroFishing.Battle {
-    /// <summary>
-    /// 子彈參照元件，用於參照GameObject實例用
-    /// </summary>
-    public class BulletInstance : IComponentData, IDisposable {
-        public Transform Trans;
-        public Bullet MyBullet;
-        public Vector3 Dir;
-        public void Dispose() {
-            UnityEngine.Object.Destroy(Trans.gameObject);
-        }
-    }
     public partial struct BulletSpawnSystem : ISystem {
 
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
@@ -28,7 +18,7 @@ namespace HeroFishing.Battle {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<BulletSpawnSys>();
-            state.RequireForUpdate<SpellCom>();
+            state.RequireForUpdate<SpellData>();
             ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
@@ -36,12 +26,12 @@ namespace HeroFishing.Battle {
 
             var ECB = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
-            foreach (var (spellCom, spellEntity) in SystemAPI.Query<SpellCom>().WithEntityAccess()) {
+            foreach (var (spellData, spellEntity) in SystemAPI.Query<SpellData>().WithEntityAccess()) {
                 var bulletPrefab = ResourcePreSetter.Instance.BulletPrefab;
                 if (bulletPrefab == null) continue;
                 var bulletGO = GameObject.Instantiate(bulletPrefab.gameObject);
 #if UNITY_EDITOR
-                bulletGO.name = "BulletProjectile" + spellCom.SpellPrefabID;
+                bulletGO.name = "BulletProjectile" + spellData.SpellPrefabID;
                 //bulletGO.hideFlags |= HideFlags.HideAndDontSave;
 #else
 bulletGO.hideFlags |= HideFlags.HideAndDontSave;
@@ -52,34 +42,52 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                     continue;
                 }
 
-                float3 direction = spellCom.Direction;
-                quaternion bulletQuaternion = quaternion.LookRotation(spellCom.Direction, math.up());
+                //float3 direction = spellData.Direction;
+                //quaternion bulletQuaternion = quaternion.LookRotation(spellData.r, math.up());
                 //設定子彈Gameobject的Transfrom
-                bulletGO.transform.localPosition = spellCom.AttackerPos;
-                bulletGO.transform.localRotation = bulletQuaternion;
+                bulletGO.transform.localPosition = spellData.InitPosition;
+                bulletGO.transform.localRotation = spellData.InitRotation;
 
                 //建立Entity
                 var entity = state.EntityManager.CreateEntity();
                 //設定子彈模型
-                bullet.SetData(spellCom.SpellPrefabID);
-                //加入BulletValue
-                ECB.AddComponent(entity, new BulletValue() {
-                    Position = spellCom.AttackerPos,
-                    Speed = spellCom.Speed,
-                    Radius = spellCom.Radius,
-                    Direction = direction,
-                    StrIndex_SpellID = spellCom.StrIndex_SpellID,
-                    SpellPrefabID = spellCom.SpellPrefabID,
+                bullet.SetData(spellData.SpellPrefabID);
+                Debug.Log(math.forward(spellData.InitRotation));
+                //設定移動
+                if (spellData.Speed > 0) {
+                    ECB.AddComponent(entity, new MoveData {
+                        Speed = spellData.Speed,
+                        Position = spellData.InitPosition,
+                        Direction = math.forward(spellData.InitRotation)
+                    });
+                }
+                //設定碰撞
+                ECB.AddComponent(entity, new CollisionData {
+                    PlayerID = spellData.PlayerID,
+                    StrIndex_SpellID = spellData.StrIndex_SpellID,
+                    SpellPrefabID = spellData.SpellPrefabID,
+                    Radius = spellData.Radius,
+                    Waves = spellData.Waves,
+                    Destroy = spellData.DestoryOnCollision
                 });
+                ////加入BulletValue
+                //ECB.AddComponent(entity, new BulletValue() {
+                //    Position = spellData.AttackerPos,
+                //    Speed = spellData.Speed,
+                //    Radius = spellData.Radius,
+                //    Direction = direction,
+                //    StrIndex_SpellID = spellData.StrIndex_SpellID,
+                //    SpellPrefabID = spellData.SpellPrefabID,
+                //});
                 //加入BulletInstance
                 ECB.AddComponent(entity, new BulletInstance {
                     Trans = bulletGO.transform,
                     MyBullet = bullet,
-                    Dir = direction,
+                    GO = bulletGO
                 });
                 //加入自動銷毀Tag
                 ECB.AddComponent(entity, new AutoDestroyTag {
-                    LifeTime = spellCom.LifeTime,
+                    LifeTime = spellData.LifeTime,
                     ExistTime = 0,
                 });
 

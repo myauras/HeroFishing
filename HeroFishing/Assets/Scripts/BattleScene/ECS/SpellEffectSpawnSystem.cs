@@ -30,10 +30,12 @@ namespace HeroFishing.Battle {
                 var monsterData = MonsterJsonData.GetData(particleSpawn.Monster.MonsterID);
                 if (monsterData == null) continue;
                 string hitPath = string.Format("Bullet/BulletHit{0}", particleSpawn.SpellPrefabID);
-                var rotQuaternion = Quaternion.Euler(particleSpawn.Bullet.Direction);
+                var rotQuaternion =
+                    //Quaternion.Euler(particleSpawn.HitDir);
+                    quaternion.LookRotationSafe(particleSpawn.HitDir, math.up());
                 switch (monsterData.HitEffectPos) {
                     case MonsterJsonData.HitEffectPosType.HitPos:
-                        GameObjSpawner.SpawnParticleObjByPath(hitPath, particleSpawn.Bullet.Position, rotQuaternion, null, null);
+                        GameObjSpawner.SpawnParticleObjByPath(hitPath, particleSpawn.HitPos, rotQuaternion, null, null);
                         break;
                     case MonsterJsonData.HitEffectPosType.Self:
                         GameObjSpawner.SpawnParticleObjByPath(hitPath, particleSpawn.Monster.Pos + new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY) / 2, 0), rotQuaternion, null, null);

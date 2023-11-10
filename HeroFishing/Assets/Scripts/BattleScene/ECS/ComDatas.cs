@@ -11,6 +11,53 @@ public struct BulletValue : IComponentData {
     public uint StrIndex_SpellID;//紀錄子彈的技能ID
     public int SpellPrefabID;//技能Prefab名稱
 }
+
+/// <summary>
+/// 子彈參照元件，用於參照GameObject實例用
+/// </summary>
+public class BulletInstance : IComponentData, IDisposable {
+    public GameObject GO;
+    public Transform Trans;
+    public Bullet MyBullet;
+    public void Dispose() {
+        UnityEngine.Object.Destroy(GO);
+    }
+}
+
+public struct SpellData : IComponentData {
+    public int PlayerID;
+    public uint StrIndex_SpellID;
+    public int SpellPrefabID;
+    public float3 InitPosition;
+    public quaternion InitRotation;
+    public float Speed;
+    public float Radius;
+    public float LifeTime;
+    public int Waves;
+    public bool DestoryOnCollision;
+}
+
+
+public struct MoveData : IComponentData {
+    public float Speed;
+    public float3 Position;
+    public float3 Direction;
+}
+
+public struct CollisionData : IComponentData {
+    public int PlayerID;
+    public uint StrIndex_SpellID;
+    public int SpellPrefabID;
+    public float Radius;
+    public int Waves;
+    public bool Destroy;
+}
+
+[InternalBufferCapacity(16)]
+public struct HitInfoBuffer : IBufferElementData {
+    public Entity MonsterEntity;
+}
+
 /// <summary>
 /// 怪物參照元件，用於參照GameObject實例用
 /// </summary>
@@ -62,5 +109,6 @@ public struct ParticleSpawnTag : IComponentData {
 public struct HitParticleSpawnTag : IComponentData {
     public int SpellPrefabID;
     public MonsterValue Monster;
-    public BulletValue Bullet;
+    public float3 HitPos;
+    public float3 HitDir;
 }

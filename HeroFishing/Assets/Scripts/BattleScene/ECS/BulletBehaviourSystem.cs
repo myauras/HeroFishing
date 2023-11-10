@@ -11,14 +11,15 @@ namespace HeroFishing.Battle {
     [CreateAfter(typeof(MonsterBehaviourSystem))]
     [UpdateAfter(typeof(MonsterBehaviourSystem))]
     [UpdateAfter(typeof(BulletSpawnSystem))]
-    public partial struct BulletBehaviourSystem : ISystem {
+    [UpdateAfter(typeof(BulletMoveSystem))]
+    public partial struct BulletCollisionSystem : ISystem {
 
         NativeArray<int2> OffsetGrids;//定義碰撞檢定9宮格
 
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-            state.RequireForUpdate<BulletValue>();
+            state.RequireForUpdate<CollisionData>();
 
             // 定義一個範圍來檢查子彈所在和周圍的網格
             OffsetGrids = new NativeArray<int2>(9, Allocator.Persistent);
@@ -69,14 +70,14 @@ namespace HeroFishing.Battle {
             [ReadOnly] public NativeArray<int2> OffsetGrids;
             [ReadOnly] public float3 MonsterCollisionPosOffset;
 
-            public void Execute(ref BulletValue _bullet, in Entity _entity) {
+            public void Execute(ref CollisionData _collisionData, ref MoveData _moveData, in Entity _entity) {
 
-                _bullet.Position += (_bullet.Speed * _bullet.Direction) * DeltaTime;
+                //_bullet.Position += (_bullet.Speed * _bullet.Direction) * DeltaTime;
 
                 // 計算子彈的網格索引
                 int2 gridIndex = new int2(
-                    (int)(_bullet.Position.x / GridData.CellSize),
-                    (int)(_bullet.Position.z / GridData.CellSize)
+                    (int)(_moveData.Position.x / GridData.CellSize),
+                    (int)(_moveData.Position.z / GridData.CellSize)
                 );
 
 
@@ -89,8 +90,8 @@ namespace HeroFishing.Battle {
                         // 這裡放第一個找到的value要做的事情
                         do {
                             // 使用當前找到的value要做某些事情
-                            float dist = math.distance(monsterValue.Pos + MonsterCollisionPosOffset, _bullet.Position);
-                            if (dist < (_bullet.Radius + monsterValue.Radius)) {//怪物在子彈的命中範圍內
+                            float dist = math.distance(monsterValue.Pos + MonsterCollisionPosOffset, _moveData.Position);
+                            if (dist < (_collisionData.Radius + monsterValue.Radius)) {//怪物在子彈的命中範圍內
 
                                 //本地端測試用，有機率擊殺怪物
                                 var random = new Unity.Mathematics.Random(Seed);
@@ -102,19 +103,21 @@ namespace HeroFishing.Battle {
                                     var autoDestroyTag = new AutoDestroyTag { LifeTime = 6 };
                                     ECB.AddComponent(3, monsterValue.MyEntity, autoDestroyTag);
                                     //目前不實做將死亡怪物從網格中移除，因為MonsterBehaviourSystem中每幀都會清空網格資料，所以各別移除就沒那麼需要
-                                } else {
+                                }
+                                else {
                                     //在怪物實體身上建立被擊中的標籤元件，讓其他系統知道要處理被擊中後該做什麼
-                                    var hitTag = new MonsterHitTag { MonsterID = monsterValue.MonsterID, StrIndex_SpellID = _bullet.StrIndex_SpellID };
+                                    var hitTag = new MonsterHitTag { MonsterID = monsterValue.MonsterID, StrIndex_SpellID = _collisionData.StrIndex_SpellID };
                                     ECB.AddComponent(3, monsterValue.MyEntity, hitTag);
 
                                 }
 
                                 //加入子彈擊中特效標籤元件
                                 Entity effectEntity = ECB.CreateEntity(4);
-                                var effectSpawnTag = new HitParticleSpawnTag { Monster = monsterValue, SpellPrefabID = _bullet.SpellPrefabID, Bullet = _bullet };
+                                var effectSpawnTag = new HitParticleSpawnTag { Monster = monsterValue, SpellPrefabID = _collisionData.SpellPrefabID, HitPos = _moveData.Position, HitDir = _moveData.Direction };
                                 ECB.AddComponent(5, effectEntity, effectSpawnTag);
 
-                                ECB.DestroyEntity(6, _entity);//銷毀子彈
+                                if (_collisionData.Destroy)
+                                    ECB.DestroyEntity(6, _entity);//銷毀子彈
                             }
 
                         } while (GridData.GridMap.TryGetNextValue(out monsterValue, ref iterator)); // 如果該key還有其他值就繼續
