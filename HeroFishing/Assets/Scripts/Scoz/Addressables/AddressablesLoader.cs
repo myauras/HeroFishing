@@ -118,7 +118,7 @@ namespace Scoz.Func {
             if (_path == "")
                 return;
 
-            _path = string.Format("Assets/AddressableAssets/Atlas/{0}.spriteatlas", _path);
+            _path = string.Format("Assets/AddressableAssets/Atlas/{0}.spriteatlasv2", _path);
             if (SpriteAtlasDic.ContainsKey(_path))
                 return;
             else {
@@ -144,7 +144,7 @@ namespace Scoz.Func {
                 _cb?.Invoke(null);
                 return;
             }
-            _path = string.Format("Assets/AddressableAssets/Atlas/{0}.spriteatlas", _path);
+            _path = string.Format("Assets/AddressableAssets/Atlas/{0}.spriteatlasv2", _path);
 
             if (SpriteAtlasDic.ContainsKey(_path)) {
                 _cb?.Invoke(SpriteAtlasDic[_path]);

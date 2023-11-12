@@ -34,6 +34,7 @@ namespace HeroFishing.Main {
         public override void Init() {
             base.Init();
             MyMapUI.Init();
+            MyMapUI.LoadItemAsset();
             SwitchUI(LobbyUIs.Lobby);
             Instance = this;
         }
@@ -52,6 +53,7 @@ namespace HeroFishing.Main {
                     break;
                 case LobbyUIs.Map:
                     MyMapUI.SetActive(true);
+                    MyMapUI.SpawnItems();
                     _cb?.Invoke();
                     LastPopupUI = MyMapUI;
                     break;

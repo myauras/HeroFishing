@@ -4,11 +4,12 @@ using UnityEngine;
 using Scoz.Func;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 namespace HeroFishing.Main {
 
     public class MapItem : MonoBehaviour, IItem {
-        [SerializeField] Text NameText;
+        [SerializeField] TextMeshProUGUI NameText;
         [SerializeField] Image MapImg;
         [SerializeField] Button EnterBtn;
 

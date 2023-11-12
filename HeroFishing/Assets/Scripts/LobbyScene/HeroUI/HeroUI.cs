@@ -11,34 +11,34 @@ namespace HeroFishing.Main {
 
 
 
-    public class MapUI : ItemSpawner_Remote<MapItem> {
+    public class HeroUI : ItemSpawner_Remote<HeroItem> {
 
         [SerializeField] ScrollRect MyScrollRect;
         [SerializeField] TextMeshProUGUI TitleText;
+        public HeroJsonData.RoleCategory CurFilter { get; private set; } = HeroJsonData.RoleCategory.LOL;
 
         public override void RefreshText() {
             base.RefreshText();
-            TitleText.text = StringJsonData.GetUIString("MapUITitle");
+            TitleText.text = StringJsonData.GetUIString("HeroUITitle");
         }
 
         public void SpawnItems() {
             if (!LoadItemFinished) {
-                WriteLog.LogError("MapItem尚未載入完成");
+                WriteLog.LogError("HeroItem尚未載入完成");
                 return;
             }
             InActiveAllItem();
-            var query = RealmManager.MyRealm.All<DBMap>();
-            if (query == null || query.Count() == 0) return;
-            var dbMaps = query.Where(a => a.Enable == true).ToList();
-            dbMaps = dbMaps.OrderByDescending(a => a.Priority).ToList();
-            for (int i = 0; i < dbMaps.Count(); i++) {
+            var heroJsonDic = GameDictionary.GetIntKeyJsonDic<HeroJsonData>("Hero");
+            if (heroJsonDic == null || heroJsonDic.Count == 0) return;
+            var heroJsons = heroJsonDic.Values.ToList();
+            for (int i = 0; i < heroJsons.Count; i++) {
                 if (i < ItemList.Count) {
-                    ItemList[i].Init(dbMaps[i]);
+                    ItemList[i].Init(heroJsons[i]);
                     ItemList[i].IsActive = true;
                     ItemList[i].gameObject.SetActive(true);
                 } else {
-                    MapItem item = Spawn();
-                    item.Init(dbMaps[i]);
+                    HeroItem item = Spawn();
+                    item.Init(heroJsons[i]);
                 }
             }
             MyScrollRect.verticalNormalizedPosition = 1;//至頂
@@ -48,7 +48,7 @@ namespace HeroFishing.Main {
             base.SetActive(_bool);
         }
         public void OnCloseUIClick() {
-            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Lobby);
+            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Map);
         }
     }
 

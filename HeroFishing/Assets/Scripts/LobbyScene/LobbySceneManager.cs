@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Scoz.Func;
 using Service.Realms;
 using System;
@@ -31,9 +32,17 @@ namespace HeroFishing.Main {
                 if (RealmManager.MyApp.CurrentUser == null) {//玩家尚未登入
                     WriteLog.LogError("玩家尚未登入Realm");
                 } else {//已經登入，就開始載包
-                    GameManager.StartDownloadAddressable(() => {
-                        InitLobby();
+
+                    PopupUI_Local.ShowLoading(StringJsonData.GetUIString("Loading"));
+                    UniTask.Void(async () => {
+                        await RealmManager.OnSignin();
+                        RealmManager.OnDataLoaded();
+                        PopupUI_Local.HideLoading();
+                        GameManager.StartDownloadAddressable(() => {
+                            InitLobby();
+                        });
                     });
+
                 }
 
             }
