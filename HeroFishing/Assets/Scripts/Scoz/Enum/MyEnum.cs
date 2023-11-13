@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using UnityEditor;
 
 namespace Scoz.Func {
     public static class MyEnum {
@@ -21,6 +22,15 @@ namespace Scoz.Func {
             _t = default(T);
             WriteLog.LogErrorFormat("傳入字串:{0} 無法轉為 {1} Enum", _value, typeof(T));
             return false;
+        }
+        public static bool TryParseEnum<T>(int _value, out T _t) where T : struct {
+            if (!Enum.IsDefined(typeof(T), _value)) {
+                WriteLog.LogErrorFormat("傳入Int:{0} 無法轉為 {1} Enum", _value, typeof(T));
+                _t = default(T);
+                return false;
+            }
+            _t = (T)Enum.ToObject(typeof(T), _value);
+            return true;
         }
         public static bool IsTypeOfEnum<T>(string _value) where T : struct {
             if (Enum.TryParse(_value, out T t)) {

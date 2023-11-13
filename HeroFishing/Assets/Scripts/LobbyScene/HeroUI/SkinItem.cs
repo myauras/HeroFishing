@@ -24,7 +24,7 @@ namespace HeroFishing.Main {
 
 
         void RefreshItem() {
-            AddressablesLoader.GetSpriteAtlas("SkinIconUI", atlas => {
+            AddressablesLoader.GetSpriteAtlas("HeroSkinIcon", atlas => {
                 SkinIconImg.sprite = atlas.GetSprite(MyJsonSkin.ID);
             });
         }

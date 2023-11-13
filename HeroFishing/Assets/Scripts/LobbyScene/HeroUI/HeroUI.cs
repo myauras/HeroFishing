@@ -6,25 +6,46 @@ using UnityEngine.UI;
 using System.Linq;
 using Service.Realms;
 using TMPro;
+using System;
 
 namespace HeroFishing.Main {
 
 
 
-    public class HeroUI : ItemSpawner_Remote<HeroItem> {
+    public class HeroUI : ItemSpawner_Remote<HeroIconItem> {
 
         [SerializeField] ScrollRect MyScrollRect;
         [SerializeField] TextMeshProUGUI TitleText;
-        public HeroJsonData.RoleCategory CurFilter { get; private set; } = HeroJsonData.RoleCategory.LOL;
+        [SerializeField] SpellPanel MySpellPanel;
+        [SerializeField] SkinPanel MySkinPanel;
+        HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.LOL;
+        HeroJsonData CurHero;
+
+        public override void LoadItemAsset(Action _cb = null) {
+            base.LoadItemAsset(_cb);
+            MySpellPanel.Init();
+            MySkinPanel.Init();
+            MySkinPanel.LoadItemAsset(null);
+        }
 
         public override void RefreshText() {
             base.RefreshText();
             TitleText.text = StringJsonData.GetUIString("HeroUITitle");
         }
+        public void SwitchCategory(int _categoryIndex) {
+            HeroJsonData.RoleCategory changeToCategory;
+            if (!MyEnum.TryParseEnum(_categoryIndex, out changeToCategory)) {
+                WriteLog.LogErrorFormat("ÈåØË™§ÁöÑÂÇ≥ÂÖ•ÂÄº_categoryIndex: {0}", _categoryIndex);
+                return;
+            }
+            CurCategory = changeToCategory;
+            SpawnItems();
+            SwitchHero(GetFirstHero());
+        }
 
         public void SpawnItems() {
             if (!LoadItemFinished) {
-                WriteLog.LogError("HeroItem©|•º∏¸§Jßπ¶®");
+                WriteLog.LogError("HeroItemÂ∞öÊú™ËºâÂÖ•ÂÆåÊàê");
                 return;
             }
             InActiveAllItem();
@@ -37,18 +58,36 @@ namespace HeroFishing.Main {
                     ItemList[i].IsActive = true;
                     ItemList[i].gameObject.SetActive(true);
                 } else {
-                    HeroItem item = Spawn();
+                    HeroIconItem item = Spawn();
                     item.Init(heroJsons[i]);
                 }
             }
-            MyScrollRect.verticalNormalizedPosition = 1;//¶‹≥ª
+            Filter();
+        }
+        HeroJsonData GetFirstHero() {
+            for (int i = 0; i < ItemList.Count; i++) {
+                if (ItemList[i].IsActive == false) continue;
+                return ItemList[i].MyJsonHero;
+            }
+            return null;
+        }
+        void Filter() {
+            for (int i = 0; i < ItemList.Count; i++) {
+                if (ItemList[i].IsActive == false) continue;
+                ItemList[i].gameObject.SetActive(CurCategory == ItemList[i].MyJsonHero.MyRoleCategory);
+                ItemList[i].IsActive = CurCategory == ItemList[i].MyJsonHero.MyRoleCategory;
+            }
+            MyScrollRect.verticalNormalizedPosition = 1;//Ëá≥È†Ç
         }
 
-        public override void SetActive(bool _bool) {
-            base.SetActive(_bool);
-        }
         public void OnCloseUIClick() {
             LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Map);
+        }
+        public void SwitchHero(HeroJsonData _heroJsonData) {
+            if (_heroJsonData == null) return;
+            CurHero = _heroJsonData;
+            MySpellPanel.SetHero(CurHero.ID);
+            MySkinPanel.SetHero(CurHero.ID);
         }
     }
 

@@ -1,72 +1,91 @@
 using UnityEngine;
 using Scoz.Func;
 using System;
-
+using System.Collections.Generic;
 
 namespace HeroFishing.Main {
 
     public class LobbySceneUI : BaseUI {
 
         public enum LobbyUIs {
-            Lobby,//¹w³]¤¶­±
-            Map,//¦a¹Ï¤¶­±
+            Lobby,//é è¨­ä»‹é¢
+            Map,//åœ°åœ–ä»‹é¢
+            Hero,//è‹±é›„ä»‹é¢
         }
+        public Dictionary<LobbyUIs, BaseUI> UIs = new Dictionary<LobbyUIs, BaseUI>();
         public LobbyUIs CurUI { get; private set; } = LobbyUIs.Lobby;
-        public BaseUI LastPopupUI { get; private set; }//¬ö¿ı¤W¦¸ªº¼u¥X¤¶­±(¤Á¤¶­±®É­nÃö³¬¤W¦¸ªº¼u¥X¤¶­±)
+        public BaseUI LastPopupUI { get; private set; }//ç´€éŒ„ä¸Šæ¬¡çš„å½ˆå‡ºä»‹é¢(åˆ‡ä»‹é¢æ™‚è¦é—œé–‰ä¸Šæ¬¡çš„å½ˆå‡ºä»‹é¢)
 
-        static bool FirstEnterLobby = true;//²Ä¤@¦¸¶i¤J¤jÆU«á·|³]©w¦^false ¥Î¨Ó§PÂ_¬O§_²Ä¤@¦¸¶i¤J¤jÆU¦Ó°µ§PÂ_
+        static bool FirstEnterLobby = true;//ç¬¬ä¸€æ¬¡é€²å…¥å¤§å»³å¾Œæœƒè¨­å®šå›false ç”¨ä¾†åˆ¤æ–·æ˜¯å¦ç¬¬ä¸€æ¬¡é€²å…¥å¤§å»³è€Œåšåˆ¤æ–·
 
 
-        //¶i¹CÀ¸´N­nªì©l¤ÆªºUI©ñ³o¸Ì(·|¼W¥[³õ´º¤Á´«®ÉªºÅª¨ú®É¶¡)
+        //é€²éŠæˆ²å°±è¦åˆå§‹åŒ–çš„UIæ”¾é€™è£¡(æœƒå¢åŠ å ´æ™¯åˆ‡æ›æ™‚çš„è®€å–æ™‚é–“)
         [SerializeField] MapUI MyMapUI;
+        [SerializeField] HeroUI MyHeroUI;
 
 
         public static LobbySceneUI Instance { get; private set; }
 
 
-        ////¶i¹CÀ¸¤£¥ıªì©l¤Æ¡Aµ¥¨ì­n¥Î®É¤~ªì©l¤ÆªºUI©ñ³o¸Ì
+        ////é€²éŠæˆ²ä¸å…ˆåˆå§‹åŒ–ï¼Œç­‰åˆ°è¦ç”¨æ™‚æ‰åˆå§‹åŒ–çš„UIæ”¾é€™è£¡
         //[SerializeField] AssetReference BattleUIAsset;
-        ////«á²£¥ÍªºUI¤÷¼h
+        ////å¾Œç”¢ç”Ÿçš„UIçˆ¶å±¤
         //[SerializeField] Transform BattleUIParent;
-        ////«á²£¥ÍªºUI¹êÅé
+        ////å¾Œç”¢ç”Ÿçš„UIå¯¦é«”
         //BattleUI MyBattleUI;
 
         public override void Init() {
             base.Init();
+
+            //åˆå§‹åŒ–UIs
             MyMapUI.Init();
             MyMapUI.LoadItemAsset();
+            UIs.Add(LobbyUIs.Map, MyMapUI);
+            MyHeroUI.Init();
+            MyHeroUI.LoadItemAsset();
+            UIs.Add(LobbyUIs.Hero, MyHeroUI);
+
             SwitchUI(LobbyUIs.Lobby);
             Instance = this;
+        }
+
+        void CloseUIExcept(LobbyUIs _exceptUI) {
+            foreach (var key in UIs.Keys) {
+                UIs[key].SetActive(key == _exceptUI);
+            }
         }
 
         public void SwitchUI(LobbyUIs _ui, Action _cb = null) {
 
             if (LastPopupUI != null)
-                LastPopupUI.SetActive(false);//Ãö³¬¼u¥X¤¶­±
-            //PlayerInfoUI.GetInstance<PlayerInfoUI>()?.SetActive(false);//©Ò¦³¤¶­±¹w³]³£¤£·|¶}±Ò¸ê°T¬É­±
+                LastPopupUI.SetActive(false);//é—œé–‰å½ˆå‡ºä»‹é¢
+
+            CloseUIExcept(_ui);//æ‰“é–‹ç›®æ¨™UIé—œé–‰å…¶ä»–UI
 
             switch (_ui) {
-                case LobbyUIs.Lobby://¥»¨Ó¦b¨ä¥L¤¶­±®É¡A¥i¥H¶Ç¤JLobby¨ÓÃö³¬¼u¥X¤¶­±¨ÃÅã¥Ü¦^¹w³]¤¶­±
-                    MyMapUI.SetActive(false);
+                case LobbyUIs.Lobby://æœ¬ä¾†åœ¨å…¶ä»–ä»‹é¢æ™‚ï¼Œå¯ä»¥å‚³å…¥Lobbyä¾†é—œé–‰å½ˆå‡ºä»‹é¢ä¸¦é¡¯ç¤ºå›é è¨­ä»‹é¢
                     _cb?.Invoke();
                     LastPopupUI = null;
                     break;
                 case LobbyUIs.Map:
-                    MyMapUI.SetActive(true);
                     MyMapUI.SpawnItems();
                     _cb?.Invoke();
                     LastPopupUI = MyMapUI;
+                    break;
+                case LobbyUIs.Hero:
+                    MyHeroUI.SwitchCategory(0);
+                    LastPopupUI = MyHeroUI;
                     break;
 
                     //case AdventureUIs.Battle:
                     //    MyCreateRoleUI.SetActive(false);
                     //    MyBattleUI?.SetActive(true);
-                    //    //§PÂ_¬O§_¤w¸g¸ü¤J¹L¦¹UI¡A­YÁÙ¨S¸ü¹L´N¸õÅª¨ú¤¤¨Ã¶}©l¸ü¤J
+                    //    //åˆ¤æ–·æ˜¯å¦å·²ç¶“è¼‰å…¥éæ­¤UIï¼Œè‹¥é‚„æ²’è¼‰éå°±è·³è®€å–ä¸­ä¸¦é–‹å§‹è¼‰å…¥
                     //    if (MyBattleUI != null) {
                     //        MyBattleUI.SetBattle();
                     //        _cb?.Invoke();
                     //    } else {
-                    //        LoadAssets(_ui, _cb);//Åª¨ú¤¶­±
+                    //        LoadAssets(_ui, _cb);//è®€å–ä»‹é¢
                     //    }
                     //    LastPopupUI = MyBattleUI;
 
@@ -81,7 +100,7 @@ namespace HeroFishing.Main {
         //    switch (_ui) {
         //        case AdventureUIs.Battle:
         //            PopupUI.ShowLoading(StringData.GetUIString("WaitForLoadingUI"));
-        //            //ªì©l¤ÆUI
+        //            //åˆå§‹åŒ–UI
         //            AddressablesLoader.GetPrefabByRef(BattleUIAsset, (prefab, handle) => {
         //                PopupUI.HideLoading();
         //                GameObject go = Instantiate(prefab);
@@ -90,14 +109,14 @@ namespace HeroFishing.Main {
         //                RectTransform rect = go.GetComponent<RectTransform>();
         //                go.transform.localPosition = prefab.transform.localPosition;
         //                go.transform.localScale = prefab.transform.localScale;
-        //                rect.offsetMin = Vector2.zero;//Left¡BBottom
-        //                rect.offsetMax = Vector2.zero;//Right¡BTop
+        //                rect.offsetMin = Vector2.zero;//Leftã€Bottom
+        //                rect.offsetMax = Vector2.zero;//Rightã€Top
 
         //                MyBattleUI = go.GetComponent<BattleUI>();
         //                MyBattleUI.Init();
         //                MyBattleUI.SetBattle();
         //                _cb?.Invoke();
-        //            }, () => { WriteLog.LogError("¸ü¤JBattleUIAsset¥¢±Ñ"); });
+        //            }, () => { WriteLog.LogError("è¼‰å…¥BattleUIAssetå¤±æ•—"); });
         //            break;
         //    }
         //}

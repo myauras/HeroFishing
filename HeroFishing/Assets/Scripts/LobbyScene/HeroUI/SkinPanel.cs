@@ -11,22 +11,21 @@ namespace HeroFishing.Main {
 
 
 
-    public class SkinUI : ItemSpawner_Remote<SkinItem> {
+    public class SkinPanel : ItemSpawner_Remote<SkinItem> {
 
         [SerializeField] ScrollRect MyScrollRect;
 
         public override void RefreshText() {
             base.RefreshText();
         }
-
-        public void SpawnItems(int _heroID) {
+        public void SetHero(int _heroID) {
             if (!LoadItemFinished) {
-                WriteLog.LogError("SkinItem©|¥¼¸ü¤J§¹¦¨");
+                WriteLog.LogError("SkinItemå°šæœªè¼‰å…¥å®Œæˆ");
                 return;
             }
             InActiveAllItem();
             var skinDic = HeroSkinJsonData.GetSkinDic(_heroID);
-            if (skinDic == null && skinDic.Count == 0) return;
+            if (skinDic == null || skinDic.Count == 0) return;
             var skinJsons = skinDic.Values.ToList();
             for (int i = 0; i < skinJsons.Count; i++) {
                 if (i < ItemList.Count) {
@@ -38,7 +37,7 @@ namespace HeroFishing.Main {
                     item.Init(skinJsons[i]);
                 }
             }
-            MyScrollRect.verticalNormalizedPosition = 1;//¦Ü³»
+            MyScrollRect.verticalNormalizedPosition = 1;//è‡³é ‚
         }
 
     }
