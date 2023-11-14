@@ -61,6 +61,7 @@ namespace HeroFishing.Main {
         /// 設定被Matchmaker分配到的房間資料，CreateRoom後會從Matchmaker回傳取得此資料
         /// </summary>
         public void InitRoom(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _ip, int _port, string _podName) {
+
             CreaterID = _createID;
             PlayerIDs = _playerIDs;
             DBMapID = _dbMapID;
@@ -74,9 +75,15 @@ namespace HeroFishing.Main {
             if (dbPlayerState == null) return;
             dbPlayerState.SetInMatchgameID(DBMatchgameID).Forget();
         }
+        /// <summary>
+        /// 設定房間內玩家的索引, 也就是玩家的座位, 一進房間後就不會更動
+        /// </summary>
+        public void SetPlayerIndex(int _playerIndex) {
+            Index = _playerIndex;
+        }
 
         /// <summary>
-        /// 設定玩家內目前使用的英雄IDs, 玩家加進Matchgame後回從Matchgame回傳取得此資料, 索引就是玩家的座位, 一進房間後就不會更動 所以HeroIDs[0]就是在座位0玩家的英雄ID
+        /// 設定房間內目前使用的英雄IDs, 玩家加進Matchgame後回從Matchgame回傳取得此資料, 索引就是玩家的座位, 一進房間後就不會更動 所以HeroIDs[0]就是在座位0玩家的英雄ID
         /// </summary>
         public void SetHeroID(int _index, int _id) {
             if (HeroIDs == null || HeroIDs.Length == 0)

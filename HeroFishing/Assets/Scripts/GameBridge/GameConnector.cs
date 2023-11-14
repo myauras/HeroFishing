@@ -130,11 +130,17 @@ namespace HeroFishing.Socket {
         /// <summary>
         /// 加入Matchmage
         /// </summary>
-        public async UniTask JoinMatchgame(string _ip, int _port, Action<bool> _cb) {
-            WriteLog.LogColor($"Join Matchgame Ip: {_ip}   Port: {_port}", WriteLog.LogType.Connection);
+        public async UniTask JoinMatchgame(Action<bool> _cb) {
             var realmToken = await RealmManager.GetValidAccessToken();
             if (string.IsNullOrEmpty(AllocatedRoom.Instance.IP) || AllocatedRoom.Instance.Port == 0) { WriteLog.LogError("JoinMatchgame失敗，AllocatedRoom的IP或Port為null"); return; }
             HeroFishingSocket.GetInstance().JoinMatchgame(realmToken, AllocatedRoom.Instance.IP, AllocatedRoom.Instance.Port, _cb);
+        }
+
+        /// <summary>
+        /// 設定使用英雄ID
+        /// </summary>
+        public void SetHeroID(int _index, int _heroID) {
+            HeroFishingSocket.GetInstance().SetHero(_index, _heroID);
         }
 
 
