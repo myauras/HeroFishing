@@ -36,7 +36,6 @@ namespace HeroFishing.Main {
         }
 
         public void SwitchSpell(SpellName _spellName) {
-            WriteLog.Log(_spellName);
             if (_spellName == SpellName.attack) return;
             CurSpell = HeroSpellJsonData.GetSpell(CurHeroID, _spellName);
             RefreshText();
