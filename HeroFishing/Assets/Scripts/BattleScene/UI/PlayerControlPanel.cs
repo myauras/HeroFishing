@@ -7,7 +7,8 @@ using Unity.Mathematics;
 
 namespace HeroFishing.Battle {
     public class PlayerControlPanel : MonoBehaviour {
-
+        [SerializeField]
+        bool LockAttack = false;
 
         bool IsSkillMode = false;
         Vector3 OriginPos;
@@ -48,7 +49,9 @@ namespace HeroFishing.Battle {
             var spellData = HeroSpellJsonData.GetSpell(TmpHero.MyData.ID, spellName);
             if (spellData == null) { WriteLog.LogErrorFormat("玩家英雄的 {0} 不存在", spellName); return; }
             TmpSpellData = spellData;
-            OriginPos = UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
+            OriginPos =
+                //UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
+                TmpHero.transform.position;
             SpellIndicator.Instance.ShowIndicator(TmpSpellData);
             IsSkillMode = true;
         }
@@ -78,61 +81,64 @@ namespace HeroFishing.Battle {
         }
 
         void SetECSSpellData(Vector3 _attackPos, Vector3 _attackDir) {
-            float radius;
-            float speed;
-            float lifeTime;
-            Entity entity;
+            //float radius;
+            //float speed;
+            //float lifeTime;
+            //Entity entity;
             //在ECS世界中建立一個施法
-            EntityManager _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            var strIndex_SpellID = ECSStrManager.AddStr(TmpSpellData.ID);
-            switch (TmpSpellData.MySpellType) {
-                case HeroSpellJsonData.SpellType.LineShot:
+            //EntityManager _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            if (TmpSpellData.Spell == null) return;
+            var spell = TmpSpellData.Spell;
+            spell.Play(_attackPos, _attackDir);
+            //var strIndex_SpellID = ECSStrManager.AddStr(TmpSpellData.ID);
+            //switch (TmpSpellData.MySpellType) {
+            //    case HeroSpellJsonData.SpellType.LineShot:
 
-                    radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
-                    speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
-                    lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);
-                    entity = _entityManager.CreateEntity();
-                    _entityManager.AddComponentData(entity, new SpellData() {
-                        PlayerID = 1,
-                        StrIndex_SpellID = strIndex_SpellID,
-                        SpellPrefabID = TmpSpellData.PrefabID,
-                        InitPosition = _attackPos,
-                        InitRotation = quaternion.LookRotationSafe(_attackDir, math.up()),
-                        Speed = speed,
-                        Radius = radius,
-                        LifeTime = lifeTime,
-                        DestoryOnCollision = TmpSpellData.DestroyOnCollision,
-                        Waves = TmpSpellData.Waves
-                    });
-                    break;
-                case HeroSpellJsonData.SpellType.SpreadLineShot:
-                    radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
-                    speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
-                    lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);
-                    float intervalAngle = float.Parse(TmpSpellData.SpellTypeValues[3]);//射散間隔角度
-                    int spreadLineCount = int.Parse(TmpSpellData.SpellTypeValues[4]);//射散數量
-                    float startAngle = -intervalAngle * (spreadLineCount - 1) / 2.0f;//設定第一個指標的角度
-                    for (int i = 0; i < spreadLineCount; i++) {
-                        float curAngle = startAngle + intervalAngle * i;
-                        Quaternion rotateQ = Quaternion.Euler(new Vector3(0, curAngle, 0));//旋轉X度的四元數
-                        entity = _entityManager.CreateEntity();
-                        _entityManager.AddComponentData(entity, new SpellData() {
-                            PlayerID = 1,
-                            StrIndex_SpellID = strIndex_SpellID,
-                            SpellPrefabID = TmpSpellData.PrefabID,
-                            InitPosition = _attackPos,
-                            InitRotation = quaternion.LookRotationSafe(rotateQ * _attackDir, math.up()),//使用四元數來旋轉本來的攻擊向量
-                            Speed = speed,
-                            Radius = radius,
-                            LifeTime = lifeTime,
-                            DestoryOnCollision = TmpSpellData.DestroyOnCollision,
-                            Waves = TmpSpellData.Waves
-                        });
-                    }
+            //        radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
+            //        speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
+            //        lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);
+            //        entity = _entityManager.CreateEntity();
+            //        _entityManager.AddComponentData(entity, new SpellData() {
+            //            PlayerID = 1,
+            //            StrIndex_SpellID = strIndex_SpellID,
+            //            SpellPrefabID = TmpSpellData.PrefabID,
+            //            InitPosition = _attackPos,
+            //            InitRotation = quaternion.LookRotationSafe(_attackDir, math.up()),
+            //            Speed = speed,
+            //            Radius = radius,
+            //            LifeTime = lifeTime,
+            //            DestoryOnCollision = TmpSpellData.DestroyOnCollision,
+            //            Waves = TmpSpellData.Waves,
+            //        });
+            //        break;
+            //    case HeroSpellJsonData.SpellType.SpreadLineShot:
+            //        radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
+            //        speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
+            //        lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);
+            //        float intervalAngle = float.Parse(TmpSpellData.SpellTypeValues[3]);//射散間隔角度
+            //        int spreadLineCount = int.Parse(TmpSpellData.SpellTypeValues[4]);//射散數量
+            //        float startAngle = -intervalAngle * (spreadLineCount - 1) / 2.0f;//設定第一個指標的角度
+            //        for (int i = 0; i < spreadLineCount; i++) {
+            //            float curAngle = startAngle + intervalAngle * i;
+            //            Quaternion rotateQ = Quaternion.Euler(new Vector3(0, curAngle, 0));//旋轉X度的四元數
+            //            entity = _entityManager.CreateEntity();
+            //            _entityManager.AddComponentData(entity, new SpellData() {
+            //                PlayerID = 1,
+            //                StrIndex_SpellID = strIndex_SpellID,
+            //                SpellPrefabID = TmpSpellData.PrefabID,
+            //                InitPosition = _attackPos,
+            //                InitRotation = quaternion.LookRotationSafe(rotateQ * _attackDir, math.up()),//使用四元數來旋轉本來的攻擊向量
+            //                Speed = speed,
+            //                Radius = radius,
+            //                LifeTime = lifeTime,
+            //                DestoryOnCollision = TmpSpellData.DestroyOnCollision,
+            //                Waves = TmpSpellData.Waves
+            //            });
+            //        }
 
-                    break;
+            //        break;
 
-            }
+            //}
 
         }
 

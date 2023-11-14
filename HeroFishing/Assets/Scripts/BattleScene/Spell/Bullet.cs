@@ -3,6 +3,7 @@ using HeroFishing.Main;
 using HeroFishing.Socket;
 using Scoz.Func;
 using System;
+using Unity.Entities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -15,22 +16,25 @@ namespace HeroFishing.Battle {
 
         private void OnDestroy() {
         }
-        public void HitParticleEffect() {
-            //載入Hit模型
-            var bulletPos = transform.position - new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
-            var bulletRot = transform.rotation;
-            string hitPath = string.Format("Bullet/BulletHit{0}", SpellPrefabID);
-            GameObjSpawner.SpawnParticleObjByPath(hitPath, bulletPos, bulletRot, null, (go, handle) => {
-                AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
-            });
-        }
-        public void SetData(int _spellPrefabID) {
-            SpellPrefabID = _spellPrefabID;
-            LoadModel();
-        }
-        void LoadModel() {
-            gameObject.SetActive(false);
 
+        //public void HitParticleEffect() {
+        //    //載入Hit模型
+        //    var bulletPos = transform.position - new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
+        //    var bulletRot = transform.rotation;
+        //    string hitPath = string.Format("Bullet/BulletHit{0}", SpellPrefabID);
+        //    GameObjSpawner.SpawnParticleObjByPath(hitPath, bulletPos, bulletRot, null, (go, handle) => {
+        //        AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
+        //    });
+        //}
+        public void SetData(int _spellPrefabID, bool ignoreFireModel) {
+            SpellPrefabID = _spellPrefabID;
+            gameObject.SetActive(false);
+            if (!ignoreFireModel)
+                LoadFireModel();
+            LoadProjetileModel();
+        }
+
+        void LoadFireModel() {
             //載入Fire模型
             var bulletPos = transform.position;
             var bulletRot = transform.rotation;
@@ -41,7 +45,16 @@ namespace HeroFishing.Battle {
                 DOVirtual.DelayedCall(0.05f, () => {
                     go.SetActive(true);
                 });
+                DOVirtual.DelayedCall(3f, () => {
+                    if (go != null)
+                        Destroy(go);
+                });
             });
+        }
+
+        void LoadProjetileModel() {
+
+            
             ////載入Projectile模型
             string projectilePath = string.Format("Bullet/BulletProjectile{0}", SpellPrefabID);
             GameObjSpawner.SpawnParticleObjByPath(projectilePath, Vector3.zero, Quaternion.identity, transform, (go, handle) => {

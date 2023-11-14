@@ -51,13 +51,14 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                 //建立Entity
                 var entity = state.EntityManager.CreateEntity();
                 //設定子彈模型
-                bullet.SetData(spellData.SpellPrefabID);
+                bullet.SetData(spellData.SpellPrefabID, spellData.IgnoreFireModel);
                 //設定移動
                 if (spellData.Speed > 0) {
                     ECB.AddComponent(entity, new MoveData {
                         Speed = spellData.Speed,
                         Position = spellData.InitPosition,
-                        Direction = math.forward(spellData.InitRotation)
+                        Direction = math.forward(spellData.InitRotation),
+                        TargetMonster = spellData.TargetMonster,
                     });
                 }
                 //設定碰撞
@@ -68,7 +69,8 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                     Radius = spellData.Radius,
                     Waves = spellData.Waves,
                     Destroy = spellData.DestoryOnCollision,
-                    LifeTime = spellData.LifeTime
+                    LifeTime = spellData.LifeTime,
+                    EnableBulletHit = spellData.EnableBulletHit,
                 });
                 ////加入BulletValue
                 //ECB.AddComponent(entity, new BulletValue() {

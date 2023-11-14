@@ -96,6 +96,11 @@ namespace HeroFishing.Battle {
                     if (GridData.GridMap.TryGetFirstValue(gridToCheck, out monsterValue, out var iterator)) {
                         // 這裡放第一個找到的value要做的事情
                         do {
+                            if (!monsterValue.InField) {
+                                continue;
+                            }
+                            // 如果已經指定目標，則除目標外的怪物都不碰撞
+                            if (_moveData.TargetMonster.MyEntity != Entity.Null && _moveData.TargetMonster.MyEntity != monsterValue.MyEntity) continue;
                             // 使用當前找到的value要做某些事情
                             float dist = math.distance(monsterValue.Pos + MonsterCollisionPosOffset, _moveData.Position);
                             if (dist < (_collisionData.Radius + monsterValue.Radius)) {//怪物在子彈的命中範圍內
@@ -104,6 +109,7 @@ namespace HeroFishing.Battle {
                                 //確認是否已經打過
                                 if (CheckAlreayHitMonster(_entity, monsterValue.MyEntity, checkTime)) continue;
 
+                                //如果lookup裡面還沒有子彈資訊，AddBuffer新增資訊。如果已經有資訊，AppendToBuffer將新資訊放在後面。
                                 if (!HitInfoLookup.HasBuffer(_entity)) {
                                     ECB.AddBuffer<HitInfoBuffer>(1, _entity)
                                         .Add(new HitInfoBuffer { MonsterEntity = monsterValue.MyEntity, HitTime = ElapsedTime });
@@ -126,7 +132,6 @@ namespace HeroFishing.Battle {
                                     //在怪物實體身上建立被擊中的標籤元件，讓其他系統知道要處理被擊中後該做什麼
                                     var hitTag = new MonsterHitTag { MonsterID = monsterValue.MonsterID, StrIndex_SpellID = _collisionData.StrIndex_SpellID };
                                     ECB.AddComponent(3, monsterValue.MyEntity, hitTag);
-
                                 }
 
                                 //加入子彈擊中特效標籤元件
@@ -134,8 +139,20 @@ namespace HeroFishing.Battle {
                                 var effectSpawnTag = new HitParticleSpawnTag { Monster = monsterValue, SpellPrefabID = _collisionData.SpellPrefabID, HitPos = _moveData.Position, HitDir = _moveData.Direction };
                                 ECB.AddComponent(5, effectEntity, effectSpawnTag);
 
+                                //加入擊中tag
+                                if (_collisionData.EnableBulletHit) {
+                                    Entity hitEntity = ECB.CreateEntity(6);
+                                    var bulletHitTag = new BulletHitTag {
+                                        Monster = monsterValue,
+                                        StrIndex_SpellID = _collisionData.StrIndex_SpellID,
+                                        HitPosition = monsterValue.Pos + MonsterCollisionPosOffset,
+                                        HitDirection = _moveData.Direction
+                                    };
+                                    ECB.AddComponent(7, hitEntity, bulletHitTag);
+                                }
+
                                 if (_collisionData.Destroy)
-                                    ECB.DestroyEntity(6, _entity);//銷毀子彈
+                                    ECB.DestroyEntity(8, _entity);//銷毀子彈
                             }
 
                         } while (GridData.GridMap.TryGetNextValue(out monsterValue, ref iterator)); // 如果該key還有其他值就繼續

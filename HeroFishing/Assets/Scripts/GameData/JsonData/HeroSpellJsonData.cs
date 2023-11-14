@@ -16,7 +16,7 @@ namespace HeroFishing.Main {
         spell3,
     }
     public class HeroSpellJsonData : MyJsonData {
-
+        public SpellBase Spell;
 
         public enum SpellType {
             LineShot,//(直線飛射)： [指示物長度, 子彈寬度, 子彈速度, 生命週期]
@@ -122,8 +122,13 @@ namespace HeroFishing.Main {
                 }
             }
             AddToSpellDic(ID, this);
+            BuildSpell();
         }
 
+        private void BuildSpell() {
+            var builder = new SpellBuilder(this);
+            Spell = builder.Build();
+        }
 
         static void AddToSpellDic(string _id, HeroSpellJsonData _data) {
             string[] strs = _id.Split('_');
