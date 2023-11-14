@@ -48,6 +48,7 @@ namespace HeroFishing.Main {
             return GameDictionary.GetJsonData<HeroJsonData>(DataName, id);
         }
 
+
         protected override void ResetStaticData() {
         }
     }

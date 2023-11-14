@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using Scoz.Func;
+using Service.Realms;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,27 +28,23 @@ namespace HeroFishing.Main {
             } else {
                 //建立遊戲管理者
                 GameManager.CreateNewInstance();
+                RealmManager.NewApp();
+                if (RealmManager.MyApp.CurrentUser == null) {//玩家尚未登入
+                    WriteLog.LogError("玩家尚未登入Realm");
+                } else {//已經登入，就開始載包
 
-                //以下繞過正式流程
-                //載資源包
-                GameManager.StartDownloadAddressable(() => {
-                    InitLobby();
-                });
+                    PopupUI_Local.ShowLoading(StringJsonData.GetUIString("Loading"));
+                    UniTask.Void(async () => {
+                        await RealmManager.OnSignin();
+                        RealmManager.OnDataLoaded();
+                        PopupUI_Local.HideLoading();
+                        GameManager.StartDownloadAddressable(() => {
+                            InitLobby();
+                        });
+                    });
 
-                //FirebaseManager.Init(success => {
-                //    if (success) {
-                //        if (FirebaseManager.MyUser == null)//還沒在StartScene註冊帳戶就直接從其他Scene登入會報錯誤(通常還沒註冊帳戶就不會有玩家資料直接進遊戲會有問題)
-                //            WriteLog.LogError("尚未註冊Firebase帳戶");
+                }
 
-                //        //讀取Firestore資料
-                //        FirebaseManager.LoadDatas(() => {
-                //            //載資源包
-                //            GameManager.StartDownloadAddressable(() => {
-                //                InitLobby();
-                //            });
-                //        });
-                //    }
-                //});
             }
         }
 
@@ -74,23 +72,24 @@ namespace HeroFishing.Main {
             }
         }
         void SpawnAddressableAssets() {
-            //MyLoadingProgress.AddLoadingProgress("LobbyUI");//新增讀取中項目
+            MyLoadingProgress.AddLoadingProgress("LobbyUI");//新增讀取中項目
 
-            //DateTime now = DateTime.Now;
-            ////初始化UI
-            //Addressables.LoadAssetAsync<GameObject>(LobbyUIAsset).Completed += handle => {
-            //    WriteLog.LogFormat("載入LobbyUI花費: {0}秒", (DateTime.Now - now).TotalSeconds);
-            //    HandleList.Add(handle);
-            //    GameObject go = Instantiate(handle.Result);
-            //    go.transform.SetParent(MyCanvas.transform);
-            //    go.transform.localPosition = handle.Result.transform.localPosition;
-            //    go.transform.localScale = handle.Result.transform.localScale;
-            //    RectTransform rect = go.GetComponent<RectTransform>();
-            //    rect.offsetMin = Vector2.zero;//Left、Bottom
-            //    rect.offsetMax = Vector2.zero;//Right、Top
-            //    go.GetComponent<LobbyUI>().Init();
-            //    MyLoadingProgress.FinishProgress("LobbyUI");//完成讀取UI
-            //};
+            DateTime now = DateTime.Now;
+            //初始化ui            
+            AddressablesLoader.GetPrefabByRef(LobbyUIAsset, (prefab, handle) => {
+                WriteLog.LogFormat("載入LobbyUIAsset花費: {0}秒", (DateTime.Now - now).TotalSeconds);
+                HandleList.Add(handle);
+                GameObject go = Instantiate(prefab);
+                go.transform.SetParent(MyCanvas.transform);
+                go.transform.localPosition = prefab.transform.localPosition;
+                go.transform.localScale = prefab.transform.localScale;
+                RectTransform rect = go.GetComponent<RectTransform>();
+                rect.offsetMin = Vector2.zero;//left、bottom
+                rect.offsetMax = Vector2.zero;//right、top
+                go.GetComponent<LobbySceneUI>().Init();
+                MyLoadingProgress.FinishProgress("LobbyUI");//完成讀取ui
+
+            });
         }
 
 

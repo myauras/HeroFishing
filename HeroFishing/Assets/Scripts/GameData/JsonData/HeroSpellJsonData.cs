@@ -10,10 +10,10 @@ using System.Linq;
 
 namespace HeroFishing.Main {
     public enum SpellName {
-        attack,
-        spell1,
-        spell2,
-        spell3,
+        attack = 0,
+        spell1 = 1,
+        spell2 = 2,
+        spell3 = 3,
     }
     public class HeroSpellJsonData : MyJsonData {
         public SpellBase Spell;
@@ -169,8 +169,8 @@ namespace HeroFishing.Main {
             return SpellDic[_heroID];
         }
         public static HeroSpellJsonData GetSpell(int _heroID, SpellName _spellName) {
-            if (!SpellDic.ContainsKey(_heroID)) return null;
-            if (!SpellDic[_heroID].ContainsKey(_spellName)) return null;
+            if (!SpellDic.ContainsKey(_heroID)) { WriteLog.LogErrorFormat("GetSpell失敗,  SpellDic不包含此英雄ID: {0}", _heroID); return null; }
+            if (!SpellDic[_heroID].ContainsKey(_spellName)) { WriteLog.LogErrorFormat("GetSpell失敗,  SpellDic不包含此技能ID: {0}", _spellName); return null; }
             return SpellDic[_heroID][_spellName];
         }
 

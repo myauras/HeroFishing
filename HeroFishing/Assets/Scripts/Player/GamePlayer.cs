@@ -14,6 +14,7 @@ namespace HeroFishing.Main {
         public new static GamePlayer Instance { get; private set; }
         Dictionary<DBPlayerCol, IRealmObject> DBPlayerDatas = new Dictionary<DBPlayerCol, IRealmObject>();
         Dictionary<DBGameSettingDoc, IRealmObject> DBGameSettingDatas = new Dictionary<DBGameSettingDoc, IRealmObject>();
+
         /// <summary>
         /// 登入後會先存裝置UID到DB，存好後AlreadSetDeviceUID會設為true，所以之後從DB取到的裝置的UID應該都跟目前的裝置一致，若不一致代表是有其他裝置登入同個帳號
         /// </summary>

@@ -13,7 +13,7 @@ namespace Scoz.Func {
         public List<T> ItemList = new List<T>();
         public bool LoadItemFinished { get; private set; } = false;
         public bool AssetLoaded { get; private set; } = false;
-        public void LoadItemAsset(Action _cb = null) {
+        public virtual void LoadItemAsset(Action _cb = null) {
             if (AssetLoaded) {
                 _cb?.Invoke();
                 return;

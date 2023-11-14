@@ -84,7 +84,7 @@ namespace HeroFishing.Battle {
         public void EnqueueMonster(int[] _monsterIDs, int _routeID, bool _isBoss) {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
             var spawn = new ScheduledSpawn(_monsterIDs, _routeID, _isBoss);
-            //WriteLog.Log(DebugUtils.ObjToStr(spawn));
+            WriteLog.Log(DebugUtils.ObjToStr(spawn));
             SpawnMonsterQueue.Enqueue(spawn);//加入排程
         }
 
@@ -92,13 +92,10 @@ namespace HeroFishing.Battle {
         /// ECS那邊出怪後會從排程中移除
         /// </summary>
         public ScheduledSpawn DequeueMonster() {
-            //WriteLog.Log("DequeueMonster1");
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return null; }
             if (!SpawnMonsterQueue.Any()) return null;
-            //WriteLog.Log("DequeueMonster2");
             var spawn = SpawnMonsterQueue.Dequeue();
             if (spawn.IsBooss) BossExist = true;
-            //WriteLog.Log("DequeueMonster3");
             return spawn;
         }
 

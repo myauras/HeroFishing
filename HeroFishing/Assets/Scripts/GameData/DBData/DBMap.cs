@@ -23,9 +23,6 @@ public partial class DBMap : IRealmObject {
     [MapTo("matchType")]
     [Required]
     public string MatchType { get; set; }
-    [MapTo("prefabID")]
-    [Required]
-    public string PrefabID { get; set; }
     [MapTo("priority")]
     public int Priority { get; set; }
 
