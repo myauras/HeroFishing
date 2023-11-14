@@ -28,6 +28,7 @@ public struct SpellData : IComponentData {
     public int PlayerID;
     public uint StrIndex_SpellID;
     public int SpellPrefabID;
+    public int SubSpellPrefabID;
     public float3 InitPosition;
     public quaternion InitRotation;
     public float Speed;
@@ -52,9 +53,12 @@ public struct ChainHitData : IComponentData {
     public MonsterValue OnHitMonster;
     public MonsterValue NearestMonster;
     public float3 HitPosition;
+    public float3 HitDirection;
     public float TriggerRange;
+    public float Angle;
     public float Radius;
     public int SpellPrefabID;
+    public int SubSpellPrefabID;
     public float Speed;
     public float LifeTime;
 }
@@ -75,6 +79,11 @@ public struct CollisionData : IComponentData {
     public int Waves;
     public bool Destroy;
     public bool EnableBulletHit;
+}
+
+[InternalBufferCapacity(16)]
+public struct MonsterBuffer : IBufferElementData {
+    public MonsterValue Monster;
 }
 
 [InternalBufferCapacity(16)]

@@ -56,6 +56,7 @@ namespace HeroFishing.Main {
         public string[] Motions { get; private set; }
         public string Voice { get; private set; }
         public int PrefabID { get; private set; }
+        public int SubPrefabID { get; private set; }
         public float[] HitMonsterShaderSetting { get; private set; }
         static Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>> SpellDic = new Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>>();//使用英雄ID與技能名稱取資料的字典
 
@@ -112,6 +113,12 @@ namespace HeroFishing.Main {
                             PrefabID = _id;
                         else
                             WriteLog.LogErrorFormat("{0}表ID為{1}的PrefabID必須為數字 {2}", DataName, ID, item[key]);
+                        break;
+                    case "SubPrefabID":
+                        if (int.TryParse(item[key].ToString(), out _id))
+                            SubPrefabID = _id;
+                        else
+                            WriteLog.LogErrorFormat("{0}表ID為{1}的SubPrefabID必須為數字 {2}", DataName, ID, item[key]);
                         break;
                     case "HitMonsterShaderSetting":
                         HitMonsterShaderSetting = TextManager.StringSplitToFloatArray(item[key].ToString(), ',');

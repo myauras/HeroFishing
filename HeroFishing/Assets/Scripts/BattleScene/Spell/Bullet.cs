@@ -13,6 +13,7 @@ namespace HeroFishing.Battle {
     public class Bullet : MonoBehaviour {
 
         int SpellPrefabID;
+        int SubSpellPrefabID;
 
         private void OnDestroy() {
         }
@@ -26,8 +27,9 @@ namespace HeroFishing.Battle {
         //        AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
         //    });
         //}
-        public void SetData(int _spellPrefabID, bool ignoreFireModel) {
+        public void SetData(int _spellPrefabID, int _subSpellPrefabID, bool ignoreFireModel) {
             SpellPrefabID = _spellPrefabID;
+            SubSpellPrefabID = _subSpellPrefabID;
             gameObject.SetActive(false);
             if (!ignoreFireModel)
                 LoadFireModel();
@@ -54,9 +56,12 @@ namespace HeroFishing.Battle {
 
         void LoadProjetileModel() {
 
-            
+            string projectilePath;
             ////載入Projectile模型
-            string projectilePath = string.Format("Bullet/BulletProjectile{0}", SpellPrefabID);
+            if (SubSpellPrefabID == 0)
+                projectilePath = string.Format("Bullet/BulletProjectile{0}", SpellPrefabID);
+            else
+                projectilePath = string.Format("Bullet/BulletProjectile{0}_{1}", SpellPrefabID, SubSpellPrefabID);
             GameObjSpawner.SpawnParticleObjByPath(projectilePath, Vector3.zero, Quaternion.identity, transform, (go, handle) => {
                 AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
                 LoadDone();

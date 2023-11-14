@@ -10,16 +10,14 @@ public class SpellChainHit : SpellHitBase {
     private HeroSpellJsonData _data;
 
     private float _triggerRange;
-    public float TriggerRange => _triggerRange;
 
     private float _radius;
-    public float Radius => _radius;
 
     private float _speed;
-    public float Speed => _speed;
 
     private float _lifeTime;
-    public float LifeTime => _lifeTime;
+
+    private float _angle;
 
     public SpellChainHit(HeroSpellJsonData data) {
         _data = data;
@@ -29,6 +27,7 @@ public class SpellChainHit : SpellHitBase {
         _radius = float.Parse(values[1]);
         _speed = float.Parse(values[2]);
         _lifeTime = float.Parse(values[3]);
+        _angle = float.Parse(values[4]);
     }
 
     public override void OnHit(EntityCommandBuffer.ParallelWriter writer, BulletHitTag hitTag) {
@@ -37,10 +36,13 @@ public class SpellChainHit : SpellHitBase {
         writer.AddComponent(entity.Index, entity, new ChainHitData {
             StrIndex_SpellID = hitTag.StrIndex_SpellID,
             HitPosition = hitTag.HitPosition,
+            HitDirection = hitTag.HitDirection,
             OnHitMonster = hitTag.Monster,
             TriggerRange = _triggerRange,
+            Angle = _angle,
             Radius = _radius,
             SpellPrefabID = _data.PrefabID,
+            SubSpellPrefabID = _data.SubPrefabID,
             Speed = _speed,
             LifeTime = _lifeTime
         });

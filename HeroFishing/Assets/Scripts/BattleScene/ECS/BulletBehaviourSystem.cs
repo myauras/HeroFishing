@@ -51,7 +51,7 @@ namespace HeroFishing.Battle {
             uint seed = (uint)(deltaTime * 1000000f);
             //取得網格資料
             var gridData = SystemAPI.GetSingleton<MapGridData>();
-
+            var storageInfoLookup = state.GetEntityStorageInfoLookup();
             HitInfoLookup.Update(ref state);
 
             new MoveJob {
@@ -62,7 +62,8 @@ namespace HeroFishing.Battle {
                 GridData = gridData,
                 OffsetGrids = OffsetGrids,
                 MonsterCollisionPosOffset = BattleManager.MonsterCollisionPosOffset,
-                HitInfoLookup = HitInfoLookup
+                HitInfoLookup = HitInfoLookup,
+                StorageInfoLookup = storageInfoLookup,
             }.ScheduleParallel();
 
         }
@@ -76,9 +77,21 @@ namespace HeroFishing.Battle {
             [ReadOnly] public NativeArray<int2> OffsetGrids;
             [ReadOnly] public float3 MonsterCollisionPosOffset;
             [ReadOnly] public BufferLookup<HitInfoBuffer> HitInfoLookup;
+            [ReadOnly] public EntityStorageInfoLookup StorageInfoLookup;
 
             public void Execute(ref CollisionData _collisionData, ref MoveData _moveData, in Entity _entity) {
-
+                // 計算移動，如果有目標則朝著目標，沒有的話走直線
+                bool hasTargetMonster = StorageInfoLookup.Exists(_moveData.TargetMonster.MyEntity);
+                if (!hasTargetMonster) {
+                    _moveData.Position = _moveData.Position + _moveData.Direction * _moveData.Speed * DeltaTime;
+                }
+                else {
+                    var targetPos = _moveData.TargetMonster.Pos;
+                    var direction = math.normalize(targetPos - _moveData.Position);
+                    direction.y = 0;
+                    _moveData.Direction = direction;
+                    _moveData.Position = _moveData.Position + _moveData.Direction * _moveData.Speed * DeltaTime;
+                }
                 //_bullet.Position += (_bullet.Speed * _bullet.Direction) * DeltaTime;
 
                 // 計算子彈的網格索引
@@ -87,6 +100,11 @@ namespace HeroFishing.Battle {
                     (int)(_moveData.Position.z / GridData.CellSize)
                 );
 
+                // 如果目標不在區域範圍了，直接銷毀子彈
+                if (hasTargetMonster && !_moveData.TargetMonster.InField) {
+                    ECB.DestroyEntity(8, _entity);
+                    return;
+                }
 
 
                 foreach (var offset in OffsetGrids) {
@@ -96,11 +114,11 @@ namespace HeroFishing.Battle {
                     if (GridData.GridMap.TryGetFirstValue(gridToCheck, out monsterValue, out var iterator)) {
                         // 這裡放第一個找到的value要做的事情
                         do {
-                            if (!monsterValue.InField) {
+
+                            // 如果已經指定目標，則除目標外的怪物都不碰撞
+                            if (hasTargetMonster && _moveData.TargetMonster.MyEntity != monsterValue.MyEntity) {
                                 continue;
                             }
-                            // 如果已經指定目標，則除目標外的怪物都不碰撞
-                            if (_moveData.TargetMonster.MyEntity != Entity.Null && _moveData.TargetMonster.MyEntity != monsterValue.MyEntity) continue;
                             // 使用當前找到的value要做某些事情
                             float dist = math.distance(monsterValue.Pos + MonsterCollisionPosOffset, _moveData.Position);
                             if (dist < (_collisionData.Radius + monsterValue.Radius)) {//怪物在子彈的命中範圍內

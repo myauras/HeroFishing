@@ -51,7 +51,7 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                 //建立Entity
                 var entity = state.EntityManager.CreateEntity();
                 //設定子彈模型
-                bullet.SetData(spellData.SpellPrefabID, spellData.IgnoreFireModel);
+                bullet.SetData(spellData.SpellPrefabID, spellData.SubSpellPrefabID, spellData.IgnoreFireModel);
                 //設定移動
                 if (spellData.Speed > 0) {
                     ECB.AddComponent(entity, new MoveData {
