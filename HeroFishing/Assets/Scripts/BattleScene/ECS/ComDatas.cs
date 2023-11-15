@@ -54,6 +54,7 @@ public struct ChainHitData : IComponentData {
     public MonsterValue NearestMonster;
     public float3 HitPosition;
     public float3 HitDirection;
+    public int MaxChainCount;
     public float TriggerRange;
     public float Angle;
     public float Radius;
@@ -82,8 +83,13 @@ public struct CollisionData : IComponentData {
 }
 
 [InternalBufferCapacity(16)]
-public struct MonsterBuffer : IBufferElementData {
+public struct MonsterBuffer : IBufferElementData, IComparable<MonsterBuffer> {
     public MonsterValue Monster;
+    public float Distance;
+
+    public int CompareTo(MonsterBuffer other) {
+        return (int)(Distance - other.Distance);
+    }
 }
 
 [InternalBufferCapacity(16)]

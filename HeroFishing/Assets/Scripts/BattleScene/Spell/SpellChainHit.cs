@@ -19,6 +19,8 @@ public class SpellChainHit : SpellHitBase {
 
     private float _angle;
 
+    private int _maxChainCount;
+
     public SpellChainHit(HeroSpellJsonData data) {
         _data = data;
 
@@ -28,15 +30,20 @@ public class SpellChainHit : SpellHitBase {
         _speed = float.Parse(values[2]);
         _lifeTime = float.Parse(values[3]);
         _angle = float.Parse(values[4]);
+        _maxChainCount = int.Parse(values[5]);
     }
 
     public override void OnHit(EntityCommandBuffer.ParallelWriter writer, BulletHitTag hitTag) {
         var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        var monsterID = hitTag.Monster.MonsterID;
+        var monsterData = MonsterJsonData.GetData(monsterID);
+        var position = hitTag.HitPosition + new float3(0, monsterData.Radius, 0);
         Entity entity = entityManager.CreateEntity();
         writer.AddComponent(entity.Index, entity, new ChainHitData {
             StrIndex_SpellID = hitTag.StrIndex_SpellID,
-            HitPosition = hitTag.HitPosition,
+            HitPosition = position,
             HitDirection = hitTag.HitDirection,
+            MaxChainCount = _maxChainCount,
             OnHitMonster = hitTag.Monster,
             TriggerRange = _triggerRange,
             Angle = _angle,

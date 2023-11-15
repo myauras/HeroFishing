@@ -163,7 +163,7 @@ namespace HeroFishing.Battle {
                                     var bulletHitTag = new BulletHitTag {
                                         Monster = monsterValue,
                                         StrIndex_SpellID = _collisionData.StrIndex_SpellID,
-                                        HitPosition = monsterValue.Pos + MonsterCollisionPosOffset,
+                                        HitPosition = monsterValue.Pos,
                                         HitDirection = _moveData.Direction
                                     };
                                     ECB.AddComponent(7, hitEntity, bulletHitTag);
