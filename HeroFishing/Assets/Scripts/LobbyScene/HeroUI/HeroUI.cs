@@ -7,11 +7,10 @@ using System.Linq;
 using Service.Realms;
 using TMPro;
 using System;
+using HeroFishing.Socket;
+using Cysharp.Threading.Tasks;
 
 namespace HeroFishing.Main {
-
-
-
     public class HeroUI : ItemSpawner_Remote<HeroIconItem> {
 
         [SerializeField] ScrollRect MyScrollRect;
@@ -20,6 +19,7 @@ namespace HeroFishing.Main {
         [SerializeField] SkinPanel MySkinPanel;
         HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.LOL;
         HeroJsonData CurHero;
+        HeroSkinJsonData CurHeroSkin;
 
         public override void LoadItemAsset(Action _cb = null) {
             base.LoadItemAsset(_cb);
@@ -86,8 +86,32 @@ namespace HeroFishing.Main {
         public void SwitchHero(HeroJsonData _heroJsonData) {
             if (_heroJsonData == null) return;
             CurHero = _heroJsonData;
+            //切換英雄後會自動選到第一個技能
             MySpellPanel.SetHero(CurHero.ID);
+            //切換英雄後會自動選到第一個Skin
             MySkinPanel.SetHero(CurHero.ID);
+            var firstSkin = HeroSkinJsonData.GetSkinDic(CurHero.ID).First().Value;
+            SwitchHeroSkin(firstSkin);
+        }
+        public void SwitchHeroSkin(HeroSkinJsonData _heroSkinJsonData) {
+            CurHeroSkin = _heroSkinJsonData;
+        }
+        public void OnBattleStartClick() {
+            if (CurHero == null) return;
+            var mapUI = MapUI.GetInstance<MapUI>();
+            if (mapUI == null) return;
+            //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
+            PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
+            GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnResult).Forget();
+        }
+        void OnConnResult(bool _success) {
+            PopupUI.HideLoading();
+            if (!_success) {
+                WriteLog.LogError("連線失敗");
+                return;
+            }
+            AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
+            GameConnector.Instance.SetHero(AllocatedRoom.Instance.Index, CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID
         }
     }
 

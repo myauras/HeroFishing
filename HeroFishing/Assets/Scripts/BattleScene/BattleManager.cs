@@ -22,7 +22,10 @@ namespace HeroFishing.Battle {
             MonsterCollisionPosOffset = new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
         }
         void InitPlayerHero() {
-            GetHero(0).SetData(BattleSceneManager.Instance.HeroID, BattleSceneManager.Instance.HeroSkin);
+            if (AllocatedRoom.Instance == null) //測試流程
+                GetHero(0).SetData(BattleSceneManager.Instance.HeroID, BattleSceneManager.Instance.HeroSkin);
+            else
+                GetHero(0).SetData(AllocatedRoom.Instance.MyHeroID, BattleSceneManager.Instance.HeroSkin);
         }
         void InitMonsterScheduler() {
             MyMonsterScheduler = new MonsterScheduler();

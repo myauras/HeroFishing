@@ -6,6 +6,7 @@ using UnityEngine.AddressableAssets;
 using System;
 using HeroFishing.Main;
 using UnityEngine.Rendering.Universal;
+using HeroFishing.Socket;
 
 namespace Scoz.Func {
     public enum DataLoad {
@@ -118,6 +119,8 @@ namespace Scoz.Func {
             gameObject.AddComponent<CamManager>().Init();
             //建立UniTaskManager
             gameObject.AddComponent<UniTaskManager>().Init();
+            //建立GameConnector
+            gameObject.AddComponent<GameConnector>().Init();
             //Permission請求
 #if UNITY_ANDROID
             gameObject.AddComponent<AndroidPermission>().RequestLaunchPermissions();

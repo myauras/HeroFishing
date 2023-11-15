@@ -53,6 +53,18 @@ namespace HeroFishing.Main {
         /// </summary>
         public int[] HeroIDs { get; private set; }
         /// <summary>
+        /// 玩家自己使用英雄的ID
+        /// </summary>
+        public int MyHeroID { get; private set; }
+        /// <summary>
+        /// 房間內的英雄SkinIDs, 索引就是玩家的座位, 一進房間後就不會更動 所以HeroSkinIDs[0]就是在座位0玩家的英雄SkinID
+        /// </summary>
+        public string[] HeroSkinIDs { get; private set; }
+        /// <summary>
+        /// 玩家自己使用英雄Skin的ID
+        /// </summary>
+        public string MyHeroSkinID { get; private set; }
+        /// <summary>
         /// 玩家自己在房間的索引(座位))
         /// </summary>
         public int Index { get; private set; }
@@ -83,17 +95,35 @@ namespace HeroFishing.Main {
         }
 
         /// <summary>
-        /// 設定房間內目前使用的英雄IDs, 玩家加進Matchgame後回從Matchgame回傳取得此資料, 索引就是玩家的座位, 一進房間後就不會更動 所以HeroIDs[0]就是在座位0玩家的英雄ID
+        /// 指定房間內某位玩家目前使用的英雄ID與SkinID
         /// </summary>
-        public void SetHeroID(int _index, int _id) {
+        public void SetHero(int _index, int _id, string _skinID) {
             if (HeroIDs == null || HeroIDs.Length == 0)
                 HeroIDs = new int[4];
+            if (HeroSkinIDs == null || HeroSkinIDs.Length == 0)
+                HeroSkinIDs = new string[4];
             if (_index < 0 || _index > HeroIDs.Length) {
                 WriteLog.LogErrorFormat("傳入的英雄索引錯誤: {0}", _index);
                 return;
             }
             HeroIDs[_index] = _id;
+            HeroSkinIDs[_index] = _skinID;
         }
+        /// <summary>
+        /// Matchgame回傳各玩家使用英雄IDs時回傳
+        /// </summary>
+        public void SetHeros(int[] _heroIDs, string[] _heroSkinIDs) {
+            if (_heroIDs != null) HeroIDs = _heroIDs;
+            if (_heroSkinIDs != null) HeroSkinIDs = _heroSkinIDs;
+        }
+        /// <summary>
+        /// 指定玩家自己的英雄ID
+        /// </summary>
+        public void SetMyHero(int _id, string _heroSkinID) {
+            MyHeroID = _id;
+            MyHeroSkinID = _heroSkinID;
+        }
+
         /// <summary>
         /// 清空配對房間(AllocatedRoom)資訊
         /// </summary>

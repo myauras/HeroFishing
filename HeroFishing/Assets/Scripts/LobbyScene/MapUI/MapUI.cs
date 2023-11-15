@@ -16,6 +16,8 @@ namespace HeroFishing.Main {
         [SerializeField] ScrollRect MyScrollRect;
         [SerializeField] TextMeshProUGUI TitleText;
 
+        public DBMap SelectedDBMap { get; private set; }
+
         public override void RefreshText() {
             base.RefreshText();
             TitleText.text = StringJsonData.GetUIString("MapUITitle");
@@ -23,7 +25,7 @@ namespace HeroFishing.Main {
 
         public void SpawnItems() {
             if (!LoadItemFinished) {
-                WriteLog.LogError("MapItem©|•º∏¸§Jßπ¶®");
+                WriteLog.LogError("MapItemÂ∞öÊú™ËºâÂÖ•ÂÆåÊàê");
                 return;
             }
             InActiveAllItem();
@@ -41,7 +43,7 @@ namespace HeroFishing.Main {
                     item.Init(dbMaps[i]);
                 }
             }
-            MyScrollRect.verticalNormalizedPosition = 1;//¶‹≥ª
+            MyScrollRect.verticalNormalizedPosition = 1;//Ëá≥È†Ç
         }
 
         public override void SetActive(bool _bool) {
@@ -49,6 +51,12 @@ namespace HeroFishing.Main {
         }
         public void OnCloseUIClick() {
             LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Lobby);
+        }
+
+        public void SelectMap(DBMap _dbMap) {
+            if (_dbMap == null) return;
+            SelectedDBMap = _dbMap;
+            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
         }
     }
 

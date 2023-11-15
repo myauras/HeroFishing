@@ -1,4 +1,5 @@
 using HeroFishing.Main;
+using HeroFishing.Socket;
 using Realms;
 using Realms.Sync;
 using Scoz.Func;
@@ -143,7 +144,7 @@ namespace Service.Realms {
                     DBMatchgame item = dbMatchgames.ElementAt(i);
                     var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.playerState);
                     if (dbPlayer != null && item.ID == dbPlayer.InMatchgameID)
-                        StartSceneManager.Instance.OnMatchgameCreated();
+                        GameConnector.Instance.ConnToMatchgame();
                 }
                 //修改
                 foreach (var i in changes.NewModifiedIndices) {

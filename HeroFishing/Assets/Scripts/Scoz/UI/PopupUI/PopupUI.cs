@@ -88,19 +88,21 @@ namespace Scoz.Func {
         [HeaderAttribute("==============讀取彈窗==============")]
         [SerializeField] GameObject LoadingGo = null;
         [SerializeField] Text LoadingText = null;
-        static float LoadingMaxTime = 30;
         static int LoadingCoroutineID;
         static string LoadingTimeOutStr;
 
         void InitLoading() {
             LoadingGo.SetActive(false);
-            LoadingMaxTime = GameSettingJsonData.GetFloat(GameSetting.LoadingMaxTime);
         }
-        public static void ShowLoading(string _text, float _maxLoadingTime = 0, string _loadingTimeOutStr = "") {
+        /// <summary>
+        /// 顯示Loading介面, _maxLoadingTime不傳入預設是看GameSetting表(預設999)
+        /// </summary>
+        /// <param name="_text"></param>
+        /// <param name="_maxLoadingTime"></param>
+        /// <param name="_loadingTimeOutStr"></param>
+        public static void ShowLoading(string _text, float _maxLoadingTime = 999, string _loadingTimeOutStr = "") {
             if (!Instance)
                 return;
-            if (_maxLoadingTime == 0)
-                _maxLoadingTime = LoadingMaxTime;
             GameManager.UnloadUnusedAssets();//趁Loading時偷偷將null資源釋放
             Instance.LoadingGo.SetActive(true);
             Instance.LoadingText.text = _text;

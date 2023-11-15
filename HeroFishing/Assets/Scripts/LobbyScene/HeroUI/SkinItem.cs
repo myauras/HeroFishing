@@ -30,7 +30,7 @@ namespace HeroFishing.Main {
         }
 
         public void OnClick() {
-
+            HeroUI.GetInstance<HeroUI>()?.SwitchHeroSkin(MyJsonSkin);
         }
     }
 }
