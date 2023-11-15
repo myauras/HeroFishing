@@ -100,6 +100,7 @@ namespace HeroFishing.Main {
             if (CurHero == null) return;
             var mapUI = MapUI.GetInstance<MapUI>();
             if (mapUI == null) return;
+            AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
             //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
             PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
             GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnResult).Forget();
@@ -110,7 +111,6 @@ namespace HeroFishing.Main {
                 WriteLog.LogError("連線失敗");
                 return;
             }
-            AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
             GameConnector.Instance.SetHero(AllocatedRoom.Instance.Index, CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID
         }
     }
