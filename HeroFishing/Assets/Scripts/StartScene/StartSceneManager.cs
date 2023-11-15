@@ -82,12 +82,16 @@ namespace HeroFishing.Main {
             };
             var dbMatchgame = GamePlayer.Instance.GetMatchGame();
             if (dbMatchgame == null) { WriteLog.LogError("JoinMatchgame失敗，dbMatchgame is null"); return; }
-            GameConnector.Instance.JoinMatchgame(dbMatchgame.IP, dbMatchgame.Port, joinSuccess => {
+            GameConnector.Instance.JoinMatchgame(joinSuccess => {
                 if (joinSuccess)
                     WriteLog.LogColor("JoinMatchgame 成功", WriteLog.LogType.Connection);
                 else
                     WriteLog.LogError("JoinMatchgame 失敗");
             }).Forget();
+        }
+
+        public void SetHeroID(int _heroID) {
+            GameConnector.Instance.SetHeroID(AllocatedRoom.Instance.Index, _heroID);
         }
         public async void Signout() {
             await RealmManager.Signout();

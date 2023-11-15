@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Realms;
 using MongoDB.Bson;
 using Service.Realms;
+using Scoz.Func;
 
 [MapTo("matchgame")]
 public partial class DBMatchgame : IRealmObject {

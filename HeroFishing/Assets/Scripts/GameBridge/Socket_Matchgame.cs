@@ -73,8 +73,12 @@ namespace HeroFishing.Socket {
                     _ac?.Invoke(packet.Content.IsAuth);
                     if (packet.Content.IsAuth) {
                         try {
-                            UDP_MatchgameConnToken = packet.Content.ConnToken;
+                            //取得Matchgame Auth的回傳結果 UDP socket的ConnToken與遊戲房間的座位索引
                             WriteLog.LogColor($"Matchgame auth success! UDP_MatchgameConnToken: {UDP_MatchgameConnToken}", WriteLog.LogType.Connection);
+                            UDP_MatchgameConnToken = packet.Content.ConnToken;
+                            AllocatedRoom.Instance.SetPlayerIndex(packet.Content.Index);
+
+                            //取得ConnToken後就能進行UDP socket連線
                             UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
                                 WriteLog.LogColor($"UDP Is connected: {connected}", WriteLog.LogType.Connection);
                                 if (connected)
@@ -126,7 +130,10 @@ namespace HeroFishing.Socket {
                 this.MatchgameDisconnect();
             }
         }
-
+        public void SetHero(int _index, int _heroID) {
+            SocketCMD<ACTION_SETHERO> cmd = new SocketCMD<ACTION_SETHERO>(new ACTION_SETHERO(_index, _heroID));
+            TCP_MatchgameClient.Send(cmd);
+        }
         private void OnRecieveMatchgameTCPMsg(string _msg) {
             //if (UDP_MatchgameClient != null)
             //    UDP_MatchgameClient.ResetTimer();
@@ -160,8 +167,12 @@ namespace HeroFishing.Socket {
                     }
                     switch (cmdType) {
                         case SocketContent.MatchgameCMDType.SPAWN:
-                            var packet = LitJson.JsonMapper.ToObject<SocketCMD<SPAWN>>(_msg);
-                            HandleSPAWN(packet);
+                            var spawnPacket = LitJson.JsonMapper.ToObject<SocketCMD<SPAWN>>(_msg);
+                            HandleSPAWN(spawnPacket);
+                            break;
+                        case SocketContent.MatchgameCMDType.ACTION_SETHERO_REPLY:
+                            var setHeroPacket = LitJson.JsonMapper.ToObject<SocketCMD<ACTION_SETHERO_REPLY>>(_msg);
+                            HandleSETHERO(setHeroPacket);
                             break;
                     }
                 }
@@ -178,7 +189,11 @@ namespace HeroFishing.Socket {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             if (BattleManager.Instance == null || BattleManager.Instance.MyMonsterScheduler == null) return;
             BattleManager.Instance.MyMonsterScheduler.EnqueueMonster(_packet.Content.MonsterIDs, _packet.Content.RouteID, _packet.Content.IsBoss);
+        }
 
+        void HandleSETHERO(SocketCMD<ACTION_SETHERO_REPLY> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            if (BattleManager.Instance == null || BattleManager.Instance.MyMonsterScheduler == null) return;
         }
 
     }

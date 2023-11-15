@@ -121,9 +121,15 @@ namespace HeroFishing.Main {
         //    }
         //}
 
+        public void GoBattle() {
+            PopupUI.InitSceneTransitionProgress(1);
+            PopupUI.CallSceneTransition(MyScene.BattleScene);
+        }
+
         public void OnMapBtnClick() {
             SwitchUI(LobbyUIs.Map);
         }
+
 
 
 

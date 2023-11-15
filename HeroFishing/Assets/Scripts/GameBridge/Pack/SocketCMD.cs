@@ -36,6 +36,7 @@ namespace HeroFishing.Socket {
         }
         public enum MatchgameCMDType {
             AUTH_REPLY,
+            ACTION_SETHERO_REPLY,
             SPAWN,
         }
     }
