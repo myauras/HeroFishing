@@ -80,6 +80,13 @@ namespace HeroFishing.Battle {
             [ReadOnly] public EntityStorageInfoLookup StorageInfoLookup;
 
             public void Execute(ref CollisionData _collisionData, ref MoveData _moveData, in Entity _entity) {
+                _collisionData.Timer += DeltaTime;
+                // 時間在delay內，或碰撞時間外就return
+                if (_collisionData.Timer < _collisionData.Delay ||
+                    _collisionData.Timer > _collisionData.CollisionTime + _collisionData.Delay) {
+                    return;
+                }
+
                 // 計算移動，如果有目標則朝著目標，沒有的話走直線
                 bool hasTargetMonster = StorageInfoLookup.Exists(_moveData.TargetMonster.MyEntity);
                 if (!hasTargetMonster) {
@@ -90,7 +97,7 @@ namespace HeroFishing.Battle {
                     var direction = math.normalize(targetPos - _moveData.Position);
                     direction.y = 0;
                     _moveData.Direction = direction;
-                    _moveData.Position = _moveData.Position + _moveData.Direction * _moveData.Speed * DeltaTime;
+                    _moveData.Position += _moveData.Direction * _moveData.Speed * DeltaTime;
                 }
                 //_bullet.Position += (_bullet.Speed * _bullet.Direction) * DeltaTime;
 
@@ -123,7 +130,7 @@ namespace HeroFishing.Battle {
                             float dist = math.distance(monsterValue.Pos + MonsterCollisionPosOffset, _moveData.Position);
                             if (dist < (_collisionData.Radius + monsterValue.Radius)) {//怪物在子彈的命中範圍內
                                 //多少時間算重新碰撞，若沒有Waves則為0.5秒，有的話計算LifeTime會產生的Wave數
-                                double checkTime = _collisionData.Waves <= 0 ? 0.5 : (double)(_collisionData.LifeTime / _collisionData.Waves);
+                                double checkTime = _collisionData.Waves <= 0 ? 0.5 : (double)(_collisionData.CollisionTime / _collisionData.Waves);
                                 //確認是否已經打過
                                 if (CheckAlreayHitMonster(_entity, monsterValue.MyEntity, checkTime)) continue;
 

@@ -6,14 +6,21 @@ using System;
 using Unity.Entities;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Battle {
+    public struct BulletInit {
+        public Vector3 FirePosition;
+        public int PrefabID;
+        public int SubPrefabID;
+        public bool IgnoreFireModel;
+        public float Delay;
+    }
     public class Bullet : MonoBehaviour {
 
         int SpellPrefabID;
         int SubSpellPrefabID;
+        Vector3 FirePosition;
+        float Delay;
 
         private void OnDestroy() {
         }
@@ -27,18 +34,24 @@ namespace HeroFishing.Battle {
         //        AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
         //    });
         //}
-        public void SetData(int _spellPrefabID, int _subSpellPrefabID, bool ignoreFireModel) {
-            SpellPrefabID = _spellPrefabID;
-            SubSpellPrefabID = _subSpellPrefabID;
+        public void Create(BulletInit bulletInit) {
+            SpellPrefabID = bulletInit.PrefabID;
+            SubSpellPrefabID = bulletInit.SubPrefabID;
+            FirePosition = bulletInit.FirePosition;
+            Delay = bulletInit.Delay;
             gameObject.SetActive(false);
-            if (!ignoreFireModel)
+            if (!bulletInit.IgnoreFireModel)
                 LoadFireModel();
-            LoadProjetileModel();
+            if (Delay > 0) {
+                DOVirtual.DelayedCall(Delay, LoadProjetileModel);
+            }
+            else
+                LoadProjetileModel();
         }
 
         void LoadFireModel() {
             //載入Fire模型
-            var bulletPos = transform.position;
+            var bulletPos = FirePosition;
             var bulletRot = transform.rotation;
             string firePath = string.Format("Bullet/BulletFire{0}", SpellPrefabID);
             GameObjSpawner.SpawnParticleObjByPath(firePath, bulletPos, bulletRot, null, (go, handle) => {

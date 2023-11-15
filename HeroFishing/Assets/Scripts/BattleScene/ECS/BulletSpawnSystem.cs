@@ -47,20 +47,31 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                 //設定子彈Gameobject的Transfrom
                 bulletGO.transform.localPosition = spellData.InitPosition;
                 bulletGO.transform.localRotation = spellData.InitRotation;
+                if (spellData.BulletScale != 0)
+                    bulletGO.transform.localScale *= spellData.BulletScale;
 
                 //建立Entity
                 var entity = state.EntityManager.CreateEntity();
+
+                var firePosition = math.all(spellData.FirPosition == float3.zero) ? spellData.InitPosition : spellData.FirPosition;
                 //設定子彈模型
-                bullet.SetData(spellData.SpellPrefabID, spellData.SubSpellPrefabID, spellData.IgnoreFireModel);
+                bullet.Create(new BulletInit {
+                    PrefabID = spellData.SpellPrefabID,
+                    SubPrefabID = spellData.SubSpellPrefabID,
+                    IgnoreFireModel = spellData.IgnoreFireModel,
+                    FirePosition = firePosition,
+                    Delay = spellData.BulletDelay
+                });
+
                 //設定移動
-                if (spellData.Speed > 0) {
-                    ECB.AddComponent(entity, new MoveData {
-                        Speed = spellData.Speed,
-                        Position = spellData.InitPosition,
-                        Direction = math.forward(spellData.InitRotation),
-                        TargetMonster = spellData.TargetMonster,
-                    });
-                }
+                ECB.AddComponent(entity, new MoveData {
+                    Speed = spellData.Speed,
+                    Position = spellData.InitPosition,
+                    Direction = math.forward(spellData.InitRotation),
+                    TargetMonster = spellData.TargetMonster,
+                });
+
+                float collisionTime = spellData.CollisionTime == 0 ? spellData.LifeTime : spellData.CollisionTime;
                 //設定碰撞
                 ECB.AddComponent(entity, new CollisionData {
                     PlayerID = spellData.PlayerID,
@@ -69,8 +80,9 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                     Radius = spellData.Radius,
                     Waves = spellData.Waves,
                     Destroy = spellData.DestoryOnCollision,
-                    LifeTime = spellData.LifeTime,
+                    CollisionTime = collisionTime,
                     EnableBulletHit = spellData.EnableBulletHit,
+                    Delay = spellData.CollisionDelay,
                 });
                 ////加入BulletValue
                 //ECB.AddComponent(entity, new BulletValue() {

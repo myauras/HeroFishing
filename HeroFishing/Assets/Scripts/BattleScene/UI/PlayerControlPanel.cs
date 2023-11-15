@@ -11,10 +11,11 @@ namespace HeroFishing.Battle {
         bool LockAttack = false;
 
         bool IsSkillMode = false;
-        Vector3 OriginPos;
+        //Vector3 OriginPos;
         HeroSpellJsonData TmpSpellData;
         Hero TmpHero;
         Vector3 TmpSpellDir;
+        Vector3 TmpSpellPos;
 
         private void Update() {
             AttackDetect();
@@ -49,9 +50,9 @@ namespace HeroFishing.Battle {
             var spellData = HeroSpellJsonData.GetSpell(TmpHero.MyData.ID, spellName);
             if (spellData == null) { WriteLog.LogErrorFormat("玩家英雄的 {0} 不存在", spellName); return; }
             TmpSpellData = spellData;
-            OriginPos =
-                //UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
-                TmpHero.transform.position;
+            //OriginPos =
+            //    //UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
+            //    TmpHero.transform.position;
             SpellIndicator.Instance.ShowIndicator(TmpSpellData);
             IsSkillMode = true;
         }
@@ -59,58 +60,44 @@ namespace HeroFishing.Battle {
         //施放技能-拖曳
         public void OnDrag() {
             if (!IsSkillMode) return;
-            TmpSpellDir = (UIPosition.GetMouseWorldPointOnYZero(0) - OriginPos).normalized;
-            float angle = Mathf.Atan2(TmpSpellDir.x, TmpSpellDir.z) * Mathf.Rad2Deg;
-            SpellIndicator.Instance.RotateLineIndicator(Quaternion.Euler(0, angle, 0));
+            TmpSpellPos = UIPosition.GetMouseWorldPointOnYZero(0);
+            TmpSpellDir = (TmpSpellPos - TmpHero.transform.position).normalized;
+            TmpHero.FaceDir(Quaternion.LookRotation(TmpSpellDir));
+
+            if (TmpSpellData.MyDragType == HeroSpellJsonData.DragType.Rot) {
+                float angle = Mathf.Atan2(TmpSpellDir.x, TmpSpellDir.z) * Mathf.Rad2Deg;
+                SpellIndicator.Instance.RotateIndicator(Quaternion.Euler(0, angle, 0));
+            }
+            else {
+                SpellIndicator.Instance.MoveIndicator(TmpSpellPos);
+            }
         }
         //施放技能-放開
         public void OnPointerUp() {
             if (!IsSkillMode) return;
             IsSkillMode = false;
             SpellIndicator.Instance.Hide();
+            // 回到原位，否則旋轉的Indicator會有錯誤
+            SpellIndicator.Instance.MoveIndicator(TmpHero.transform.position);
+
+            var position = TmpSpellData.MyDragType == HeroSpellJsonData.DragType.Rot ? TmpHero.transform.position : TmpSpellPos;
+            
             //設定技能
-            OnSetSpell(TmpHero.transform.position, TmpSpellDir);
+            OnSetSpell(position, TmpSpellDir);
         }
         public void OnSetSpell(Vector3 _attackerPos, Vector3 _attackDir) {
             //播放腳色動作(targetPos - TmpHero.transform.position).normalized
             TmpHero.PlaySpellMotion(TmpSpellData.SpellName);
             TmpHero.FaceDir(Quaternion.LookRotation(_attackDir));
             //設定ECS施法資料
-            _attackerPos += new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);//子彈高度固定調整
             SetECSSpellData(_attackerPos, _attackDir);
         }
 
         void SetECSSpellData(Vector3 _attackPos, Vector3 _attackDir) {
-            //float radius;
-            //float speed;
-            //float lifeTime;
-            //Entity entity;
-            //在ECS世界中建立一個施法
-            //EntityManager _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             if (TmpSpellData.Spell == null) return;
             var spell = TmpSpellData.Spell;
-            spell.Play(_attackPos, _attackDir);
-            //var strIndex_SpellID = ECSStrManager.AddStr(TmpSpellData.ID);
+            spell.Play(_attackPos, TmpHero.transform.position, _attackDir);
             //switch (TmpSpellData.MySpellType) {
-            //    case HeroSpellJsonData.SpellType.LineShot:
-
-            //        radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
-            //        speed = float.Parse(TmpSpellData.SpellTypeValues[2]);
-            //        lifeTime = float.Parse(TmpSpellData.SpellTypeValues[3]);
-            //        entity = _entityManager.CreateEntity();
-            //        _entityManager.AddComponentData(entity, new SpellData() {
-            //            PlayerID = 1,
-            //            StrIndex_SpellID = strIndex_SpellID,
-            //            SpellPrefabID = TmpSpellData.PrefabID,
-            //            InitPosition = _attackPos,
-            //            InitRotation = quaternion.LookRotationSafe(_attackDir, math.up()),
-            //            Speed = speed,
-            //            Radius = radius,
-            //            LifeTime = lifeTime,
-            //            DestoryOnCollision = TmpSpellData.DestroyOnCollision,
-            //            Waves = TmpSpellData.Waves,
-            //        });
-            //        break;
             //    case HeroSpellJsonData.SpellType.SpreadLineShot:
             //        radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
             //        speed = float.Parse(TmpSpellData.SpellTypeValues[2]);

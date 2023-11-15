@@ -68,39 +68,49 @@ namespace HeroFishing.Battle {
             Show();
             HideIndicators();
             TmpSpellData = _spellData;
-            switch (TmpSpellData.MySpellType) {
-                case SpellType.LineShot:
-                    GetAvailableIndicator(IndicatorType.Line, go => {
-                        var mr = go.GetComponentInChildren<MeshRenderer>();
-                        var mat = mr.material;
-                        mat.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[0])));
-                        mr.transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[1]), mr.transform.localScale.y, mr.transform.localScale.z);
-                        go.transform.localRotation = Quaternion.identity;
-                    });
-                    break;
-                case SpellType.SpreadLineShot:
-                    float intervalAngle = float.Parse(TmpSpellData.SpellTypeValues[3]);//射散間隔角度
-                    int spreadLineCount = int.Parse(TmpSpellData.SpellTypeValues[4]);//射散數量
-
-                    float startAngle = -intervalAngle * (spreadLineCount - 1) / 2.0f;//設定第一個指標的角度
-                    for (int i = 0; i < spreadLineCount; i++) {
-                        float curAngle = startAngle + intervalAngle * i;
-                        GetAvailableIndicator(IndicatorType.Line, go => {
-                            var mr = go.GetComponentInChildren<MeshRenderer>();
-                            var mat = mr.material;
-                            mat.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[0])));
-                            mr.transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[1]), mr.transform.localScale.y, mr.transform.localScale.z);
-                            go.transform.localRotation = Quaternion.Euler(new Vector3(0, curAngle, 0));
-                        });
-                    }
-
-
-                    break;
+            if (TmpSpellData.Spell.IndicatorCount > 1) {
+                for (int i = 0; i < TmpSpellData.Spell.IndicatorCount; i++) {
+                    GetAvailableIndicator(TmpSpellData.Spell.SpellIndicatorType, TmpSpellData.Spell.IndicatorCallback);
+                }
             }
+            else
+                GetAvailableIndicator(TmpSpellData.Spell.SpellIndicatorType, TmpSpellData.Spell.IndicatorCallback);
+            //switch (TmpSpellData.MySpellType) {
+            //    case SpellType.LineShot:
+            //        GetAvailableIndicator(IndicatorType.Line, go => {
+            //            var mr = go.GetComponentInChildren<MeshRenderer>();
+            //            var mat = mr.material;
+            //            mat.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[0])));
+            //            mr.transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[1]), mr.transform.localScale.y, mr.transform.localScale.z);
+            //            go.transform.localRotation = Quaternion.identity;
+            //        });
+            //        break;
+            //    case SpellType.SpreadLineShot:
+            //        float intervalAngle = float.Parse(TmpSpellData.SpellTypeValues[3]);//射散間隔角度
+            //        int spreadLineCount = int.Parse(TmpSpellData.SpellTypeValues[4]);//射散數量
+
+            //        float startAngle = -intervalAngle * (spreadLineCount - 1) / 2.0f;//設定第一個指標的角度
+            //        for (int i = 0; i < spreadLineCount; i++) {
+            //            float curAngle = startAngle + intervalAngle * i;
+            //            GetAvailableIndicator(IndicatorType.Line, go => {
+            //                var mr = go.GetComponentInChildren<MeshRenderer>();
+            //                var mat = mr.material;
+            //                mat.SetTextureOffset("_MainTex", new Vector2(0, -float.Parse(TmpSpellData.SpellTypeValues[0])));
+            //                mr.transform.localScale = new Vector3(float.Parse(TmpSpellData.SpellTypeValues[1]), mr.transform.localScale.y, mr.transform.localScale.z);
+            //                go.transform.localRotation = Quaternion.Euler(new Vector3(0, curAngle, 0));
+            //            });
+            //        }
+
+
+            //        break;
+            //}
         }
-        public void RotateLineIndicator(Quaternion _rotation) {
+        public void RotateIndicator(Quaternion _rotation) {
             transform.localRotation = _rotation;
         }
 
+        public void MoveIndicator(Vector3 _position) {
+            transform.localPosition = _position;
+        }
     }
 }

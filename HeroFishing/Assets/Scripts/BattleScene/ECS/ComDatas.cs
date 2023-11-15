@@ -30,10 +30,15 @@ public struct SpellData : IComponentData {
     public int SpellPrefabID;
     public int SubSpellPrefabID;
     public float3 InitPosition;
+    public float3 FirPosition;
     public quaternion InitRotation;
     public float Speed;
     public float Radius;
     public float LifeTime;
+    public float BulletScale;
+    public float BulletDelay;
+    public float CollisionDelay;
+    public float CollisionTime;
     public int Waves;
     public bool DestoryOnCollision;
     public bool IgnoreFireModel;
@@ -76,7 +81,9 @@ public struct CollisionData : IComponentData {
     public uint StrIndex_SpellID;
     public int SpellPrefabID;
     public float Radius;
-    public float LifeTime;
+    public float CollisionTime;
+    public float Delay;
+    public float Timer;
     public int Waves;
     public bool Destroy;
     public bool EnableBulletHit;

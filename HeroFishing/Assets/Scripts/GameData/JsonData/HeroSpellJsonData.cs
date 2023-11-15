@@ -21,9 +21,15 @@ namespace HeroFishing.Main {
         public enum SpellType {
             LineShot,//(直線飛射)： [指示物長度, 子彈寬度, 子彈速度, 生命週期]
             SpreadLineShot,//(錐形直線飛射)：[指示物長度, 子彈寬度, 子彈速度, 散射間隔角度, 散射數量, 生命週期]
-            LineRange,//(直線飛射穿透)：[指示物長度, 子彈寬度, 子彈速度, 生命週期]
-            LineRangeInstant,//(直線立即範圍)：[指示物長度, 子彈寬度, 生命週期]
+            CircleArea,
+            //LineRange,//(直線飛射穿透)：[指示物長度, 子彈寬度, 子彈速度, 生命週期]
+            //LineRangeInstant,//(直線立即範圍)：[指示物長度, 子彈寬度, 生命週期]
         }
+
+        public enum DragType {
+            Rot, Mov
+        }
+
         public enum HitType {
             None,
             Chain,
@@ -47,6 +53,7 @@ namespace HeroFishing.Main {
         public float CD { get; private set; }
         public int Cost { get; private set; }
         public int Waves { get; private set; }
+        public DragType MyDragType { get; private set; }
         public bool DestroyOnCollision { get; private set; }
         public SpellType MySpellType { get; private set; }
         public string[] SpellTypeValues { get; private set; }
@@ -82,6 +89,9 @@ namespace HeroFishing.Main {
                         break;
                     case "Waves":
                         Waves = int.Parse(item[key].ToString());
+                        break;
+                    case "DragType":
+                        MyDragType = MyEnum.ParseEnum<DragType>(item[key].ToString());
                         break;
                     case "DestroyOnCollision":
                         DestroyOnCollision = bool.Parse(item[key].ToString());

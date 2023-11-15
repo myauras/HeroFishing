@@ -5,8 +5,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-public class SpellBuilder
-{
+public class SpellBuilder {
     public HeroSpellJsonData Data;
 
     public SpellBuilder(HeroSpellJsonData data) {
@@ -21,19 +20,27 @@ public class SpellBuilder
                 break;
         }
 
+        SpellBase spell = null;
         switch (Data.MySpellType) {
             case HeroSpellJsonData.SpellType.LineShot:
-                var spell = new LineShotSpell(Data);
-                spell.Hit = hit;
-                return spell;
+                spell = new LineShotSpell(Data);
+                break;
             case HeroSpellJsonData.SpellType.SpreadLineShot:
                 return null;
-            case HeroSpellJsonData.SpellType.LineRange:
-                return null;
-            case HeroSpellJsonData.SpellType.LineRangeInstant:
-                return null;
+            case HeroSpellJsonData.SpellType.CircleArea:
+                spell = new CircleAreaSpell(Data);
+                break;
+                //case HeroSpellJsonData.SpellType.LineRange:
+                //    return null;
+                //case HeroSpellJsonData.SpellType.LineRangeInstant:
+                //    return null;
         }
-        WriteLog.LogError("spell is not fetch any type");
-        return null;
+
+        if (spell == null) {
+            WriteLog.LogError("spell is not fetch any type");
+            return null;
+        }
+        spell.Hit = hit;
+        return spell;
     }
 }
