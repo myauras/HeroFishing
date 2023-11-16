@@ -7,5 +7,5 @@ public abstract class SpellHitBase
 {
     public int VariableCount { get; }
 
-    public abstract void OnHit(EntityCommandBuffer.ParallelWriter writer, BulletHitTag hitTag);
+    public abstract void OnHit(EntityCommandBuffer.ParallelWriter writer, SpellHitTag hitTag);
 }

@@ -19,7 +19,7 @@ namespace HeroFishing.Battle {
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-            state.RequireForUpdate<CollisionData>();
+            state.RequireForUpdate<BulletCollisionData>();
 
             // 定義一個範圍來檢查子彈所在和周圍的網格
             OffsetGrids = new NativeArray<int2>(9, Allocator.Persistent);
@@ -41,8 +41,6 @@ namespace HeroFishing.Battle {
         }
 
         public void OnUpdate(ref SystemState state) {
-
-
             var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
             float deltaTime = SystemAPI.Time.DeltaTime;
             double elapsedTime = SystemAPI.Time.ElapsedTime;
@@ -79,18 +77,12 @@ namespace HeroFishing.Battle {
             [ReadOnly] public BufferLookup<HitInfoBuffer> HitInfoLookup;
             [ReadOnly] public EntityStorageInfoLookup StorageInfoLookup;
 
-            public void Execute(ref CollisionData _collisionData, ref MoveData _moveData, in Entity _entity) {
-                _collisionData.Timer += DeltaTime;
-                // 時間在delay內，或碰撞時間外就return
-                if (_collisionData.Timer < _collisionData.Delay ||
-                    _collisionData.Timer > _collisionData.CollisionTime + _collisionData.Delay) {
-                    return;
-                }
+            public void Execute(ref BulletCollisionData _collisionData, ref MoveData _moveData, in Entity _entity) {
 
                 // 計算移動，如果有目標則朝著目標，沒有的話走直線
                 bool hasTargetMonster = StorageInfoLookup.Exists(_moveData.TargetMonster.MyEntity);
                 if (!hasTargetMonster) {
-                    _moveData.Position = _moveData.Position + _moveData.Direction * _moveData.Speed * DeltaTime;
+                    _moveData.Position += _moveData.Direction * _moveData.Speed * DeltaTime;
                 }
                 else {
                     var targetPos = _moveData.TargetMonster.Pos;
@@ -129,18 +121,20 @@ namespace HeroFishing.Battle {
                             // 使用當前找到的value要做某些事情
                             float dist = math.distance(monsterValue.Pos + MonsterCollisionPosOffset, _moveData.Position);
                             if (dist < (_collisionData.Radius + monsterValue.Radius)) {//怪物在子彈的命中範圍內
-                                //多少時間算重新碰撞，若沒有Waves則為0.5秒，有的話計算LifeTime會產生的Wave數
-                                double checkTime = _collisionData.Waves <= 0 ? 0.5 : (double)(_collisionData.CollisionTime / _collisionData.Waves);
+
+                                double checkTime = 0.5;
                                 //確認是否已經打過
                                 if (CheckAlreayHitMonster(_entity, monsterValue.MyEntity, checkTime)) continue;
 
                                 //如果lookup裡面還沒有子彈資訊，AddBuffer新增資訊。如果已經有資訊，AppendToBuffer將新資訊放在後面。
-                                if (!HitInfoLookup.HasBuffer(_entity)) {
-                                    ECB.AddBuffer<HitInfoBuffer>(1, _entity)
-                                        .Add(new HitInfoBuffer { MonsterEntity = monsterValue.MyEntity, HitTime = ElapsedTime });
+                                if (!_collisionData.Destroy) {
+                                    if (!HitInfoLookup.HasBuffer(_entity)) {
+                                        ECB.AddBuffer<HitInfoBuffer>(1, _entity)
+                                            .Add(new HitInfoBuffer { MonsterEntity = monsterValue.MyEntity, HitTime = ElapsedTime });
+                                    }
+                                    else
+                                        ECB.AppendToBuffer(1, _entity, new HitInfoBuffer { MonsterEntity = monsterValue.MyEntity, HitTime = ElapsedTime });
                                 }
-                                else
-                                    ECB.AppendToBuffer(1, _entity, new HitInfoBuffer { MonsterEntity = monsterValue.MyEntity, HitTime = ElapsedTime });
 
                                 //本地端測試用，有機率擊殺怪物
                                 var random = new Unity.Mathematics.Random(Seed);
@@ -167,7 +161,7 @@ namespace HeroFishing.Battle {
                                 //加入擊中tag
                                 if (_collisionData.EnableBulletHit) {
                                     Entity hitEntity = ECB.CreateEntity(6);
-                                    var bulletHitTag = new BulletHitTag {
+                                    var bulletHitTag = new SpellHitTag {
                                         Monster = monsterValue,
                                         StrIndex_SpellID = _collisionData.StrIndex_SpellID,
                                         HitPosition = monsterValue.Pos,
@@ -182,20 +176,13 @@ namespace HeroFishing.Battle {
 
                         } while (GridData.GridMap.TryGetNextValue(out monsterValue, ref iterator)); // 如果該key還有其他值就繼續
                     }
-
                 }
-
-
             }
 
-            private bool CheckAlreayHitMonster(Entity bullet, Entity Monster, double time) {
+            private bool CheckAlreayHitMonster(Entity bullet, Entity monster, double time) {
                 if (HitInfoLookup.TryGetBuffer(bullet, out DynamicBuffer<HitInfoBuffer> buffer)) {
-                    //Debug.Log("buffer length: " + buffer.Length);
-                    //Debug.Log(Monster.Index + "_" + Monster.Version);
                     for (int i = 0; i < buffer.Length; i++) {
-
-                        //Debug.Log($"current time: {ElapsedTime} Prev Hit Time: {buffer[i].HitTime}");
-                        if (buffer[i].MonsterEntity == Monster && ElapsedTime - buffer[i].HitTime < time) {
+                        if (buffer[i].MonsterEntity == monster && ElapsedTime - buffer[i].HitTime < time) {
                             return true;
                         }
                     }
@@ -203,12 +190,5 @@ namespace HeroFishing.Battle {
                 return false;
             }
         }
-
-
-
     }
-
-
-
-
 }

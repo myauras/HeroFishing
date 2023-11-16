@@ -76,19 +76,22 @@ public partial struct ChainHitSystem : ISystem {
                     var spellEntity = state.EntityManager.CreateEntity();
                     var direction = monsterBuffer.Monster.Pos - hitData.OnHitMonster.Pos;
                     var position = hitData.HitPosition;
-                    writer.AddComponent(0, spellEntity, new SpellData {
-                        PlayerID = 1,
-                        InitPosition = position,
-                        InitRotation = quaternion.LookRotationSafe(direction, math.up()),
-                        DestoryOnCollision = true,
+                    var spawnData = new SpellSpawnData {
                         SpellPrefabID = hitData.SpellPrefabID,
                         SubSpellPrefabID = hitData.SubSpellPrefabID,
+                        InitPosition = position,
+                        InitDirection = direction,
+                        IgnoreFireModel = true
+                    };
+
+                    writer.AddComponent(0, spellEntity, new SpellBulletData {
+                        PlayerID = 1,
+                        SpawnData = spawnData,
+                        DestroyOnCollision = true,
                         StrIndex_SpellID = hitData.StrIndex_SpellID,
                         Speed = hitData.Speed,
                         LifeTime = hitData.LifeTime,
                         Radius = hitData.Radius,
-                        Waves = 0,
-                        IgnoreFireModel = true,
                         EnableBulletHit = false,
                         TargetMonster = monsterBuffer.Monster
                     });

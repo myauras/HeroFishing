@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using HeroFishing.Battle;
+using Scoz.Func;
 using System;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -19,34 +21,73 @@ public class BulletInstance : IComponentData, IDisposable {
     public GameObject GO;
     public Transform Trans;
     public Bullet MyBullet;
-    public void Dispose() {
-        UnityEngine.Object.Destroy(GO);
+    public async void Dispose() {
+        await UniTask.WaitUntil(() => MyBullet.IsLoaded);
+        if (GO != null)
+            UnityEngine.Object.Destroy(GO);
     }
 }
 
-public struct SpellData : IComponentData {
-    public int PlayerID;
-    public uint StrIndex_SpellID;
+public struct SpellSpawnData {
     public int SpellPrefabID;
     public int SubSpellPrefabID;
     public float3 InitPosition;
-    public float3 FirPosition;
-    public quaternion InitRotation;
+    public float3 FirePosition;
+    public float3 InitDirection;
+    public float ProjectileScale;
+    public float ProjectileDelay;
+    public bool IgnoreFireModel;
+}
+
+public struct SpellBulletData : IComponentData {
+    public int PlayerID;
+    public uint StrIndex_SpellID;
+    public SpellSpawnData SpawnData;
     public float Speed;
     public float Radius;
     public float LifeTime;
-    public float BulletScale;
-    public float BulletDelay;
-    public float CollisionDelay;
-    public float CollisionTime;
-    public int Waves;
-    public bool DestoryOnCollision;
-    public bool IgnoreFireModel;
+    public bool DestroyOnCollision;
     public bool EnableBulletHit;
     public MonsterValue TargetMonster;
 }
 
-public struct BulletHitTag : IComponentData {
+public struct SpellAreaData : IComponentData {
+    public int PlayerID;
+    public uint StrIndex_SpellID;
+    public SpellSpawnData SpawnData;
+    public float Radius;
+    public float LifeTime;
+    public float CollisionDelay;
+    public float CollisionTime;
+    public float CollisionAngle;
+    public int Waves;
+}
+
+//public struct SpellData : IComponentData {
+//    public int PlayerID;
+//    public uint StrIndex_SpellID;
+//    public int SpellPrefabID;
+//    public int SubSpellPrefabID;
+//    public float3 InitPosition;
+//    public float3 FirPosition;
+//    public quaternion InitRotation;
+//    public float Speed;
+//    public float Radius;
+//    public float LifeTime;
+//    public float ProjectileScale;
+//    public float ProjectileDelay;
+//    public float CollisionDelay;
+//    public float CollisionTime;
+//    public float CollisionAngle;
+//    public int Waves;
+//    public bool DestoryOnCollision;
+//    public bool IgnoreFireModel;
+//    public bool EnableBulletHit;
+//    public MonsterValue TargetMonster;
+//}
+
+public struct SpellHitTag : IComponentData {
+    public int PlayerID;
     public uint StrIndex_SpellID;
     public MonsterValue Monster;
     public float3 HitPosition;
@@ -54,6 +95,7 @@ public struct BulletHitTag : IComponentData {
 }
 
 public struct ChainHitData : IComponentData {
+    public int PlayerID;
     public uint StrIndex_SpellID;
     public MonsterValue OnHitMonster;
     public MonsterValue NearestMonster;
@@ -76,17 +118,27 @@ public struct MoveData : IComponentData {
     public float3 Direction;
 }
 
-public struct CollisionData : IComponentData {
+public struct BulletCollisionData : IComponentData {
     public int PlayerID;
     public uint StrIndex_SpellID;
     public int SpellPrefabID;
     public float Radius;
-    public float CollisionTime;
-    public float Delay;
-    public float Timer;
-    public int Waves;
     public bool Destroy;
     public bool EnableBulletHit;
+}
+
+public struct AreaCollisionData : IComponentData {
+    public int PlayerID;
+    public uint StrIndex_SpellID;
+    public int SpellPrefabID;
+    public float3 Position;
+    public float3 Direction;
+    public float Radius;
+    public float Delay;
+    public float CollisionTime;
+    public float Timer;
+    public float Angle;
+    public int Waves;
 }
 
 [InternalBufferCapacity(16)]
@@ -103,6 +155,7 @@ public struct MonsterBuffer : IBufferElementData, IComparable<MonsterBuffer> {
 public struct HitInfoBuffer : IBufferElementData {
     public Entity MonsterEntity;
     public double HitTime;
+    public int HitCount;
 }
 
 /// <summary>

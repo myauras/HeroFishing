@@ -33,7 +33,7 @@ public class SpellChainHit : SpellHitBase {
         _maxChainCount = int.Parse(values[5]);
     }
 
-    public override void OnHit(EntityCommandBuffer.ParallelWriter writer, BulletHitTag hitTag) {
+    public override void OnHit(EntityCommandBuffer.ParallelWriter writer, SpellHitTag hitTag) {
         var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         var monsterID = hitTag.Monster.MonsterID;
         var monsterData = MonsterJsonData.GetData(monsterID);

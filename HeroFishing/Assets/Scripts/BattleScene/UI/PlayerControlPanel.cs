@@ -25,6 +25,7 @@ namespace HeroFishing.Battle {
             if (!Input.GetMouseButtonDown(0)) return;
             if (IsSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
+            if (BattleManager.Instance == null) return;
             var hero = BattleManager.Instance.GetHero(0);
             if (hero == null) { WriteLog.LogError("玩家英雄不存在"); return; }
             TmpHero = hero;

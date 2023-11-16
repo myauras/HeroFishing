@@ -22,6 +22,8 @@ namespace HeroFishing.Battle {
         Vector3 FirePosition;
         float Delay;
 
+        public bool IsLoaded { get; private set; }
+
         private void OnDestroy() {
         }
 
@@ -68,7 +70,6 @@ namespace HeroFishing.Battle {
         }
 
         void LoadProjetileModel() {
-
             string projectilePath;
             ////載入Projectile模型
             if (SubSpellPrefabID == 0)
@@ -79,13 +80,14 @@ namespace HeroFishing.Battle {
                 AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
                 LoadDone();
             });
-
+            
         }
 
         /// <summary>
         /// 模型都載入完才呼叫並顯示物件
         /// </summary>
         protected virtual void LoadDone() {
+            IsLoaded = true;
             gameObject.SetActive(true);
         }
 

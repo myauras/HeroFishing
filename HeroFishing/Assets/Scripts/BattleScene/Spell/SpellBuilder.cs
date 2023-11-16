@@ -30,6 +30,9 @@ public class SpellBuilder {
             case HeroSpellJsonData.SpellType.CircleArea:
                 spell = new CircleAreaSpell(Data);
                 break;
+            case HeroSpellJsonData.SpellType.SectorArea:
+                spell = new SectorAreaSpell(Data);
+                break;
                 //case HeroSpellJsonData.SpellType.LineRange:
                 //    return null;
                 //case HeroSpellJsonData.SpellType.LineRangeInstant:
