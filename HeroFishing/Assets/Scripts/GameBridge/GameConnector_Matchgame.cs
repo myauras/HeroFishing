@@ -17,8 +17,14 @@ namespace HeroFishing.Socket {
         /// <summary>
         /// 設定使用英雄ID
         /// </summary>
-        public void SetHero(int _index, int _heroID, string _heroSkinID) {
-            HeroFishingSocket.GetInstance().SetHero(_index, _heroID, _heroSkinID);
+        public void SetHero(int _heroID, string _heroSkinID) {
+            HeroFishingSocket.GetInstance().SetHero(_heroID, _heroSkinID);
+        }
+        /// <summary>
+        /// 離開遊戲房
+        /// </summary>
+        public void LeaveRoom() {
+            HeroFishingSocket.GetInstance().Leave();
         }
     }
 }

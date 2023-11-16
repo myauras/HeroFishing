@@ -99,7 +99,7 @@ namespace HeroFishing.Socket {
             // 建立房間成功
             WriteLog.LogColor("建立房間成功", WriteLog.LogType.Connection);
             //設定玩家目前所在遊戲房間的資料並開始偵聽DBMatchgame(偵聽到DBMatchgame好後會自動去連Matchgame socket)
-            AllocatedRoom.Instance.InitRoom(_reply.CreaterID, _reply.PlayerIDs, _reply.DBMapID, _reply.DBMatchgameID, _reply.IP, _reply.Port, _reply.PodName);
+            AllocatedRoom.Instance.SetRoom(_reply.CreaterID, _reply.PlayerIDs, _reply.DBMapID, _reply.DBMatchgameID, _reply.IP, _reply.Port, _reply.PodName);
         }
 
         /// <summary>
@@ -115,7 +115,6 @@ namespace HeroFishing.Socket {
             }
             JoinMatchgame().Forget(); //開始連線到Matchgame
             //跳轉到BattleScene
-            PopupUI.InitSceneTransitionProgress("ConnToMatchgame");
             PopupUI.CallSceneTransition(MyScene.BattleScene);
         }
         /// <summary>
@@ -132,7 +131,6 @@ namespace HeroFishing.Socket {
                 OnConnToMatchgameCB?.Invoke(success);
                 if (success) {
                     WriteLog.LogColor("JoinMatchgame success!", WriteLog.LogType.Connection);
-                    //PopupUI.FinishSceneTransitionProgress("ConnToMatchgame");
                 } else WriteLog.LogError("JoinMatchgame failed");
             });
         }

@@ -84,7 +84,7 @@ namespace HeroFishing.Battle {
         public void EnqueueMonster(int[] _monsterIDs, int _routeID, bool _isBoss) {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
             var spawn = new ScheduledSpawn(_monsterIDs, _routeID, _isBoss);
-            WriteLog.Log(DebugUtils.ObjToStr(spawn));
+            //WriteLog.Log(DebugUtils.ObjToStr(spawn));
             SpawnMonsterQueue.Enqueue(spawn);//加入排程
         }
 

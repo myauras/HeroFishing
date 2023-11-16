@@ -10,14 +10,7 @@ namespace HeroFishing.Main {
     /// 玩家目前所在遊戲房間的資料，CreateRoom後會從Matchmaker回傳取得資料
     /// </summary>
     public class AllocatedRoom {
-        private static AllocatedRoom instance = null;
-        public static AllocatedRoom Instance {
-            get {
-                if (instance == null)
-                    instance = new AllocatedRoom();
-                return instance;
-            }
-        }
+        public static AllocatedRoom Instance { get; private set; }
         /// <summary>
         /// 創房者ID
         /// </summary>
@@ -68,12 +61,14 @@ namespace HeroFishing.Main {
         /// 玩家自己在房間的索引(座位))
         /// </summary>
         public int Index { get; private set; }
+        public static void Init() {
+            Instance = new AllocatedRoom();
+        }
 
         /// <summary>
         /// 設定被Matchmaker分配到的房間資料，CreateRoom後會從Matchmaker回傳取得此資料
         /// </summary>
-        public void InitRoom(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _ip, int _port, string _podName) {
-
+        public void SetRoom(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _ip, int _port, string _podName) {
             CreaterID = _createID;
             PlayerIDs = _playerIDs;
             DBMapID = _dbMapID;

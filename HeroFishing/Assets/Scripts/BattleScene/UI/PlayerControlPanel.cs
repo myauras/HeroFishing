@@ -3,6 +3,7 @@ using Unity.Entities;
 using Scoz.Func;
 using UnityEngine.EventSystems;
 using HeroFishing.Main;
+using HeroFishing.Socket;
 
 namespace HeroFishing.Battle {
     public class PlayerControlPanel : MonoBehaviour {
@@ -16,6 +17,11 @@ namespace HeroFishing.Battle {
 
         private void Update() {
             AttackDetect();
+        }
+        public void OnLeaveBtnClick() {
+            GameConnector.Instance.LeaveRoom();
+            //跳轉到LobbyScene
+            PopupUI.CallSceneTransition(MyScene.LobbyScene);
         }
         //普通攻擊
         void AttackDetect() {

@@ -130,8 +130,12 @@ namespace HeroFishing.Socket {
                 this.MatchgameDisconnect();
             }
         }
-        public void SetHero(int _index, int _heroID, string _heroSkinID) {
-            SocketCMD<ACTION_SETHERO> cmd = new SocketCMD<ACTION_SETHERO>(new ACTION_SETHERO(_index, _heroID, _heroSkinID));
+        public void SetHero(int _heroID, string _heroSkinID) {
+            SocketCMD<ACTION_SETHERO> cmd = new SocketCMD<ACTION_SETHERO>(new ACTION_SETHERO(_heroID, _heroSkinID));
+            TCP_MatchgameClient.Send(cmd);
+        }
+        public void Leave() {
+            SocketCMD<ACTION_LEAVE> cmd = new SocketCMD<ACTION_LEAVE>(new ACTION_LEAVE());
             TCP_MatchgameClient.Send(cmd);
         }
         private void OnRecieveMatchgameTCPMsg(string _msg) {
