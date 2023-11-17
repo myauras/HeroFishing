@@ -93,6 +93,13 @@ namespace HeroFishing.Battle {
             TmpHero.FaceDir(Quaternion.LookRotation(_attackDir));
             //設定ECS施法資料
             SetECSSpellData(_attackerPos, _attackDir);
+
+            if (TmpSpellData.SpellName == SpellName.spell3) {
+                CamManager.ShakeCam(CamManager.CamNames.Battle,
+                    GameSettingJsonData.GetFloat(GameSetting.CamShake_Spell3_AmplitudeGain),
+                    GameSettingJsonData.GetFloat(GameSetting.CamShake_Spell3_FrequencyGain),
+                    GameSettingJsonData.GetFloat(GameSetting.CamShake_Sepll3_Duration));
+            }
         }
 
         void SetECSSpellData(Vector3 _attackPos, Vector3 _attackDir) {
