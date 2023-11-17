@@ -4,6 +4,7 @@ using Scoz.Func;
 using UnityEngine.EventSystems;
 using HeroFishing.Main;
 using Unity.Mathematics;
+using HeroFishing.Socket;
 
 namespace HeroFishing.Battle {
     public class PlayerControlPanel : MonoBehaviour {
@@ -69,8 +70,7 @@ namespace HeroFishing.Battle {
             if (TmpSpellData.MyDragType == HeroSpellJsonData.DragType.Rot) {
                 float angle = Mathf.Atan2(TmpSpellDir.x, TmpSpellDir.z) * Mathf.Rad2Deg;
                 SpellIndicator.Instance.RotateIndicator(Quaternion.Euler(0, angle, 0));
-            }
-            else {
+            } else {
                 SpellIndicator.Instance.MoveIndicator(TmpSpellPos);
             }
         }
@@ -136,6 +136,11 @@ namespace HeroFishing.Battle {
 
             //}
 
+        }
+
+        public void OnLeaveBtnClick() {
+            GameConnector.Instance.LeaveRoom();
+            PopupUI.CallSceneTransition(MyScene.LobbyScene);
         }
 
     }
