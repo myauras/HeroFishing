@@ -16,14 +16,21 @@ namespace HeroFishing.Main {
         spell3 = 3,
     }
     public class HeroSpellJsonData : MyJsonData {
-
+        public SpellBase Spell;
 
         public enum SpellType {
             LineShot,//(直線飛射)： [指示物長度, 子彈寬度, 子彈速度, 生命週期]
             SpreadLineShot,//(錐形直線飛射)：[指示物長度, 子彈寬度, 子彈速度, 散射間隔角度, 散射數量, 生命週期]
-            LineRange,//(直線飛射穿透)：[指示物長度, 子彈寬度, 子彈速度, 生命週期]
-            LineRangeInstant,//(直線立即範圍)：[指示物長度, 子彈寬度, 生命週期]
+            CircleArea,
+            SectorArea,
+            //LineRange,//(直線飛射穿透)：[指示物長度, 子彈寬度, 子彈速度, 生命週期]
+            //LineRangeInstant,//(直線立即範圍)：[指示物長度, 子彈寬度, 生命週期]
         }
+
+        public enum DragType {
+            Rot, Mov
+        }
+
         public enum HitType {
             None,
             Chain,
@@ -47,6 +54,8 @@ namespace HeroFishing.Main {
         public float CD { get; private set; }
         public int Cost { get; private set; }
         public int Waves { get; private set; }
+        public DragType MyDragType { get; private set; }
+        public bool DestroyOnCollision { get; private set; }
         public SpellType MySpellType { get; private set; }
         public string[] SpellTypeValues { get; private set; }
         public HitType MyHitType { get; private set; }
@@ -55,6 +64,7 @@ namespace HeroFishing.Main {
         public string[] Motions { get; private set; }
         public string Voice { get; private set; }
         public int PrefabID { get; private set; }
+        public int SubPrefabID { get; private set; }
         public float[] HitMonsterShaderSetting { get; private set; }
         static Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>> SpellDic = new Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>>();//使用英雄ID與技能名稱取資料的字典
 
@@ -80,6 +90,12 @@ namespace HeroFishing.Main {
                         break;
                     case "Waves":
                         Waves = int.Parse(item[key].ToString());
+                        break;
+                    case "DragType":
+                        MyDragType = MyEnum.ParseEnum<DragType>(item[key].ToString());
+                        break;
+                    case "DestroyOnCollision":
+                        DestroyOnCollision = bool.Parse(item[key].ToString());
                         break;
                     case "SpellType":
                         MySpellType = MyEnum.ParseEnum<SpellType>(item[key].ToString());
@@ -109,6 +125,12 @@ namespace HeroFishing.Main {
                         else
                             WriteLog.LogErrorFormat("{0}表ID為{1}的PrefabID必須為數字 {2}", DataName, ID, item[key]);
                         break;
+                    case "SubPrefabID":
+                        if (int.TryParse(item[key].ToString(), out _id))
+                            SubPrefabID = _id;
+                        else
+                            WriteLog.LogErrorFormat("{0}表ID為{1}的SubPrefabID必須為數字 {2}", DataName, ID, item[key]);
+                        break;
                     case "HitMonsterShaderSetting":
                         HitMonsterShaderSetting = TextManager.StringSplitToFloatArray(item[key].ToString(), ',');
                         break;
@@ -118,8 +140,13 @@ namespace HeroFishing.Main {
                 }
             }
             AddToSpellDic(ID, this);
+            BuildSpell();
         }
 
+        private void BuildSpell() {
+            var builder = new SpellBuilder(this);
+            Spell = builder.Build();
+        }
 
         static void AddToSpellDic(string _id, HeroSpellJsonData _data) {
             string[] strs = _id.Split('_');

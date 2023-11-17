@@ -252,8 +252,7 @@ Transform:
   m_LocalPosition: {x: 1.84, y: 9, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1673734018}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 46.9, y: 0, z: 0}
 --- !u!114 &36935437
@@ -5789,7 +5788,6 @@ MonoBehaviour:
   MyHeros:
   - {fileID: 643103369}
   MonsterParent: {fileID: 422263882}
-  LocoMonsterScheduler: 0
 --- !u!1 &1673734017
 GameObject:
   m_ObjectHideFlags: 0
@@ -5815,13 +5813,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1673734017}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.39794865, y: -0, z: -0, w: 0.9174077}
+  m_LocalPosition: {x: 1.84, y: 9, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1498754586}
-  m_Father: {fileID: 36935436}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1673734019
 MonoBehaviour:
@@ -6091,6 +6089,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2218747002821073611, guid: 674725a37054f4e438148c3309671aac,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 936
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021841221477594153, guid: 674725a37054f4e438148c3309671aac,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5448519196397791096, guid: 674725a37054f4e438148c3309671aac,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5665564989570562366, guid: 674725a37054f4e438148c3309671aac,
         type: 3}
       propertyPath: m_Name
@@ -6110,6 +6123,7 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1673734018}
   - {fileID: 36935436}
   - {fileID: 737157467}
   - {fileID: 2078545553}

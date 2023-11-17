@@ -6,20 +6,10 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace HeroFishing.Battle {
-    /// <summary>
-    /// 子彈參照元件，用於參照GameObject實例用
-    /// </summary>
-    public class BulletInstance : IComponentData, IDisposable {
-        public Transform Trans;
-        public Bullet MyBullet;
-        public Vector3 Dir;
-        public void Dispose() {
-            UnityEngine.Object.Destroy(Trans.gameObject);
-        }
-    }
     public partial struct BulletSpawnSystem : ISystem {
 
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
@@ -28,7 +18,8 @@ namespace HeroFishing.Battle {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<BulletSpawnSys>();
-            state.RequireForUpdate<SpellCom>();
+            var query = SystemAPI.QueryBuilder().WithAny<SpellBulletData, SpellAreaData>().Build();
+            state.RequireForUpdate(query);
             ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
@@ -36,50 +27,41 @@ namespace HeroFishing.Battle {
 
             var ECB = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
-            foreach (var (spellCom, spellEntity) in SystemAPI.Query<SpellCom>().WithEntityAccess()) {
-                var bulletPrefab = ResourcePreSetter.Instance.BulletPrefab;
-                if (bulletPrefab == null) continue;
-                var bulletGO = GameObject.Instantiate(bulletPrefab.gameObject);
-#if UNITY_EDITOR
-                bulletGO.name = "BulletProjectile" + spellCom.SpellPrefabID;
-                //bulletGO.hideFlags |= HideFlags.HideAndDontSave;
-#else
-bulletGO.hideFlags |= HideFlags.HideAndDontSave;
-#endif
-                var bullet = bulletGO.GetComponent<Bullet>();
-                if (bullet == null) {
-                    WriteLog.LogErrorFormat("子彈{0}身上沒有掛Bullet Component", bulletPrefab.name);
-                    continue;
-                }
+            // 創建 Bullet 技能
+            foreach (var (spellData, spellEntity) in SystemAPI.Query<SpellBulletData>().WithEntityAccess()) {
 
-                float3 direction = spellCom.Direction;
-                quaternion bulletQuaternion = quaternion.LookRotation(spellCom.Direction, math.up());
-                //設定子彈Gameobject的Transfrom
-                bulletGO.transform.localPosition = spellCom.AttackerPos;
-                bulletGO.transform.localRotation = bulletQuaternion;
+                if (!CreateBulletInstance(spellData.SpawnData, out Bullet bullet)) continue;
 
                 //建立Entity
                 var entity = state.EntityManager.CreateEntity();
-                //設定子彈模型
-                bullet.SetData(spellCom.SpellPrefabID);
-                //加入BulletValue
-                ECB.AddComponent(entity, new BulletValue() {
-                    Position = spellCom.AttackerPos,
-                    Speed = spellCom.Speed,
-                    Radius = spellCom.Radius,
-                    Direction = direction,
-                    StrIndex_SpellID = spellCom.StrIndex_SpellID,
-                    SpellPrefabID = spellCom.SpellPrefabID,
+
+                //設定移動
+                ECB.AddComponent(entity, new MoveData {
+                    Speed = spellData.Speed,
+                    Position = spellData.SpawnData.InitPosition,
+                    Direction = spellData.SpawnData.InitDirection,
+                    TargetMonster = spellData.TargetMonster,
+                });
+
+                //float collisionTime = spellData.CollisionTime == 0 ? spellData.LifeTime : spellData.CollisionTime;
+                //設定碰撞
+                ECB.AddComponent(entity, new BulletCollisionData {
+                    PlayerID = spellData.PlayerID,
+                    StrIndex_SpellID = spellData.StrIndex_SpellID,
+                    SpellPrefabID = spellData.SpawnData.SpellPrefabID,
+                    Radius = spellData.Radius,
+                    Destroy = spellData.DestroyOnCollision,
+                    EnableBulletHit = spellData.EnableBulletHit,
                 });
                 //加入BulletInstance
                 ECB.AddComponent(entity, new BulletInstance {
-                    Trans = bulletGO.transform,
+                    Trans = bullet.transform,
                     MyBullet = bullet,
-                    Dir = direction,
+                    GO = bullet.gameObject
                 });
                 //加入自動銷毀Tag
                 ECB.AddComponent(entity, new AutoDestroyTag {
-                    LifeTime = spellCom.LifeTime,
+                    LifeTime = spellData.LifeTime,
                     ExistTime = 0,
                 });
 
@@ -87,6 +69,43 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                 ECB.DestroyEntity(spellEntity);
             }
 
+            // 創建 Area 技能
+            foreach (var (spellData, spellEntity) in SystemAPI.Query<SpellAreaData>().WithEntityAccess()) {
+                if (!CreateBulletInstance(spellData.SpawnData, out Bullet bullet)) continue;
+
+                //建立Entity
+                var entity = state.EntityManager.CreateEntity();
+
+                float collisionTime = spellData.CollisionTime == 0 ? spellData.LifeTime : spellData.CollisionTime;
+                //設定碰撞
+                ECB.AddComponent(entity, new AreaCollisionData {
+                    PlayerID = spellData.PlayerID,
+                    StrIndex_SpellID = spellData.StrIndex_SpellID,
+                    Position = spellData.SpawnData.InitPosition,
+                    Direction = spellData.SpawnData.InitDirection,
+                    SpellPrefabID = spellData.SpawnData.SpellPrefabID,
+                    Waves = spellData.Waves,
+                    CollisionTime = collisionTime,
+                    Delay = spellData.CollisionDelay,
+                    Timer = 0,
+                    Angle = spellData.CollisionAngle,
+                    Radius = spellData.Radius
+                });
+                //加入BulletInstance
+                ECB.AddComponent(entity, new BulletInstance {
+                    Trans = bullet.transform,
+                    MyBullet = bullet,
+                    GO = bullet.gameObject
+                });
+                //加入自動銷毀Tag
+                ECB.AddComponent(entity, new AutoDestroyTag {
+                    LifeTime = spellData.LifeTime,
+                    ExistTime = 0,
+                });
+
+                //移除施法
+                ECB.DestroyEntity(spellEntity);
+            }
 
 
             //var job = new SpawnJob {
@@ -100,6 +119,41 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
 
         }
 
+        private bool CreateBulletInstance(SpellSpawnData spawnData, out Bullet bullet) {
+            bullet = null;
+            var bulletPrefab = ResourcePreSetter.Instance.BulletPrefab;
+            if (bulletPrefab == null) return false;
+            var bulletGO = GameObject.Instantiate(bulletPrefab.gameObject);
+#if UNITY_EDITOR
+            bulletGO.name = "BulletProjectile" + spawnData.SpellPrefabID;
+            //bulletGO.hideFlags |= HideFlags.HideAndDontSave;
+#else
+bulletGO.hideFlags |= HideFlags.HideAndDontSave;
+#endif
+            bullet = bulletGO.GetComponent<Bullet>();
+            if (bullet == null) {
+                WriteLog.LogErrorFormat("子彈{0}身上沒有掛Bullet Component", bulletPrefab.name);
+                return false;
+            }
+
+            //設定子彈Gameobject的Transfrom
+            bulletGO.transform.SetLocalPositionAndRotation(spawnData.InitPosition,
+                quaternion.LookRotationSafe(spawnData.InitDirection, math.up()));
+            if (spawnData.ProjectileScale != 0)
+                bulletGO.transform.localScale *= spawnData.ProjectileScale;
+
+            var firePosition = math.all(spawnData.FirePosition == float3.zero) ? spawnData.InitPosition : spawnData.FirePosition;
+
+            //設定子彈模型
+            bullet.Create(new BulletInit {
+                PrefabID = spawnData.SpellPrefabID,
+                SubPrefabID = spawnData.SubSpellPrefabID,
+                IgnoreFireModel = spawnData.IgnoreFireModel,
+                FirePosition = firePosition,
+                Delay = spawnData.ProjectileDelay
+            });
+            return true;
+        }
 
         //[BurstCompile]
         //partial struct SpawnJob : IJobEntity {

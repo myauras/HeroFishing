@@ -1,0 +1,14 @@
+using Unity.Entities;
+using UnityEngine;
+
+public class #SCRIPTNAME# : MonoBehaviour
+{
+    class Baker : Baker<#SCRIPTNAME#>
+    {
+        public override void Bake(#SCRIPTNAME# #SCRIPTNAME_LOWER#)
+        {
+            #NOTRIM#
+        }
+    }
+}
+
