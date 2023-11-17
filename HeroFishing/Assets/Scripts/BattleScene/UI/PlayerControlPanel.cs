@@ -16,6 +16,7 @@ namespace HeroFishing.Battle {
         Hero TmpHero;
         Vector3 TmpSpellDir;
         Vector3 TmpSpellPos;
+        Vector3 OriginPos;
 
         private void Update() {
             AttackDetect();
@@ -51,8 +52,7 @@ namespace HeroFishing.Battle {
             var spellData = HeroSpellJsonData.GetSpell(TmpHero.MyData.ID, spellName);
             if (spellData == null) { WriteLog.LogErrorFormat("玩家英雄的 {0} 不存在", spellName); return; }
             TmpSpellData = spellData;
-            //OriginPos =
-            //    //UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
+            OriginPos = UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
             //    TmpHero.transform.position;
             SpellIndicator.Instance.ShowIndicator(TmpSpellData);
             IsSkillMode = true;
@@ -61,8 +61,9 @@ namespace HeroFishing.Battle {
         //施放技能-拖曳
         public void OnDrag() {
             if (!IsSkillMode) return;
-            TmpSpellPos = UIPosition.GetMouseWorldPointOnYZero(0);
-            TmpSpellDir = (TmpSpellPos - TmpHero.transform.position).normalized;
+            var mousePos = UIPosition.GetMouseWorldPointOnYZero(0);
+            TmpSpellPos = (mousePos - OriginPos) * 2f + TmpHero.transform.position;
+            TmpSpellDir = (mousePos - OriginPos).normalized;
             TmpHero.FaceDir(Quaternion.LookRotation(TmpSpellDir));
 
             if (TmpSpellData.MyDragType == HeroSpellJsonData.DragType.Rot) {
@@ -82,7 +83,7 @@ namespace HeroFishing.Battle {
             SpellIndicator.Instance.MoveIndicator(TmpHero.transform.position);
 
             var position = TmpSpellData.MyDragType == HeroSpellJsonData.DragType.Rot ? TmpHero.transform.position : TmpSpellPos;
-            
+
             //設定技能
             OnSetSpell(position, TmpSpellDir);
         }
