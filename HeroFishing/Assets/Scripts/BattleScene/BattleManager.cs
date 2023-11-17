@@ -24,7 +24,7 @@ namespace HeroFishing.Battle {
             if (AllocatedRoom.Instance == null) //測試流程
                 GetHero(0).SetData(BattleSceneManager.Instance.HeroID, BattleSceneManager.Instance.HeroSkin);
             else
-                GetHero(0).SetData(AllocatedRoom.Instance.MyHeroID, BattleSceneManager.Instance.HeroSkin);
+                GetHero(0).SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
         }
         void InitMonsterScheduler() {
             MyMonsterScheduler = new MonsterScheduler();

@@ -21,12 +21,23 @@ namespace HeroFishing.Main {
         HeroJsonData CurHero;
         HeroSkinJsonData CurHeroSkin;
 
+        LoadingProgress MyLoadingProgress;
+
         public override void LoadItemAsset(Action _cb = null) {
             base.LoadItemAsset(_cb);
             MySpellPanel.Init();
             MySkinPanel.Init();
-            MySkinPanel.LoadItemAsset(null);
+            MyLoadingProgress = new LoadingProgress(() => { SwitchCategory(0); }); //子UI都都載入完成再執行SwitchCategory
+            MyLoadingProgress.AddLoadingProgress("Hero", "Skin");
+            MySkinPanel.LoadItemAsset(() => { MyLoadingProgress.FinishProgress("Skin"); });
+
         }
+
+        public override void OnLoadItemFinished() {
+            base.OnLoadItemFinished();
+            MyLoadingProgress.FinishProgress("Hero");
+        }
+
 
         public override void RefreshText() {
             base.RefreshText();
@@ -113,6 +124,7 @@ namespace HeroFishing.Main {
                 return;
             }
             GameConnector.Instance.SetHero(CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID
+
         }
     }
 

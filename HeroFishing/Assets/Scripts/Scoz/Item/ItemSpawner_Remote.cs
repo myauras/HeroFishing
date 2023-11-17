@@ -26,7 +26,10 @@ namespace Scoz.Func {
                     WriteLog.LogErrorFormat("取不到Component: {0} ", typeof(T).Name);
                 LoadItemFinished = true;
                 _cb?.Invoke();
+                OnLoadItemFinished();
             };
+        }
+        public virtual void OnLoadItemFinished() {
         }
         public T Spawn() {
             if (ItemPrefab == null) {
