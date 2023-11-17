@@ -3,6 +3,7 @@ using Scoz.Func;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -30,6 +31,7 @@ namespace HeroFishing.Battle {
 
         void Start() {
             Instance = this;
+
             if (GameManager.IsInit) {
                 InitBattleScene();
             } else {
@@ -57,6 +59,10 @@ namespace HeroFishing.Battle {
                 //    }
                 //});
             }
+        }
+
+        public void OnDestroy() {
+            Instance = null;
         }
 
 
@@ -118,9 +124,6 @@ namespace HeroFishing.Battle {
             PopupUI.FinishSceneTransitionProgress("BattleUILoaded");
 
 
-        }
-        private void OnDestroy() {
-            Instance = null;
         }
     }
 }

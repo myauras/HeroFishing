@@ -178,6 +178,10 @@ namespace HeroFishing.Socket {
                             var setHeroPacket = LitJson.JsonMapper.ToObject<SocketCMD<ACTION_SETHERO_REPLY>>(_msg);
                             HandleSETHERO(setHeroPacket);
                             break;
+                        case SocketContent.MatchgameCMDType.UPDATE_PLAYER_REPLY:
+                            var updatePlaeyrPacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATE_PLAYER_REPLY>>(_msg);
+                            HandleUpdatePlayer(updatePlaeyrPacket);
+                            break;
                     }
                 }
             } catch (Exception e) {
@@ -196,6 +200,10 @@ namespace HeroFishing.Socket {
         }
 
         void HandleSETHERO(SocketCMD<ACTION_SETHERO_REPLY> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            if (BattleManager.Instance == null || BattleManager.Instance.MyMonsterScheduler == null) return;
+        }
+        void HandleUpdatePlayer(SocketCMD<UPDATE_PLAYER_REPLY> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             if (BattleManager.Instance == null || BattleManager.Instance.MyMonsterScheduler == null) return;
         }
