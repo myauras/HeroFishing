@@ -54,7 +54,7 @@ public class SectorAreaSpell : SpellBase {
 
     public override void IndicatorCallback(GameObject go) {
         var renderer = go.GetComponentInChildren<Renderer>();
-        renderer.transform.localScale = Vector3.one * _radius;
+        renderer.transform.localScale = Vector3.one * _radius * 2;
         var mat = renderer.material;
         mat.SetFloat("_Angle", _angle);
     }
