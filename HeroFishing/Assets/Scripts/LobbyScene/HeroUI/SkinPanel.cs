@@ -40,6 +40,8 @@ namespace HeroFishing.Main {
             MyScrollRect.verticalNormalizedPosition = 1;//至頂
         }
 
+
+
     }
 
 

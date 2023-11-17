@@ -7,7 +7,6 @@ public enum GameSetting
 	PostProcessing,
 	Vibration,
 	UnloadUnusedAssetsCD,
-	LoadingMaxTime,
 	NameMaxWeight,
 	ENAndNumWeight,
 	OtherWeight,

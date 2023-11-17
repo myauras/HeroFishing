@@ -9,12 +9,7 @@ using TMPro;
 using Unity.Entities.UniversalDelegates;
 
 namespace HeroFishing.Main {
-
-
-
     public class SpellPanel : BaseUI {
-
-
 
         [SerializeField] SpellIconItem[] SpellItems = new SpellIconItem[3];
         [SerializeField] TextMeshProUGUI NameText;

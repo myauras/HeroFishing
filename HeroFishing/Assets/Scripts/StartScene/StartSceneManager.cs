@@ -50,49 +50,6 @@ namespace HeroFishing.Main {
             var dataDic = new Dictionary<string, object> { { "Token", token }, { "Env", "Dev" }, { "PlayerID", RealmManager.MyApp.CurrentUser.Id } };
             var replyData = await RealmManager.CallAtlasFunc(RealmManager.AtlasFunc.PlayerVerify, dataDic);
         }
-        public async void SocketConnectTest() {
-            var gameSetting = GamePlayer.Instance.GetDBGameSettingDoc<DBGameSetting>(DBGameSettingDoc.GameState);
-            await GameConnector.Instance.Run(gameSetting.MatchmakerIP, gameSetting.MatchmakerPort ?? 0, (success, maintain) => {
-                WriteLog.Log("OnMatchmakerConnected isSuccess=" + success);
-            });
-        }
-        public void CreateRoomTest() {
-            var gameSetting = GamePlayer.Instance.GetDBGameSettingDoc<DBGameSetting>(DBGameSettingDoc.GameState);
-            GameConnector.Instance.CreateRoom("Quick-1", success => {
-                WriteLog.Log("OnRoomCreated is _success=" + success);
-            });
-        }
-        public void OnMatchgameCreated() {
-            WriteLog.LogColor("OnMatchgameCreated", WriteLog.LogType.Connection);
-            JoinMatchgame();
-        }
-        public void JoinMatchgame() {
-            // 顯示載入遊玩房間資料中
-            PopupUI.ShowLoading("Joining Matchgame");
-            Action<bool> OnConnect = (bool connected) => {
-                PopupUI.HideLoading();
-                if (!connected) {
-                    PopupUI.ShowClickCancel("Join Matchgame failed", () => {
-                    });
-                    return;
-                }
-                WriteLog.Log("在這裡寫跳戰場Scene");
-                //PopupUI.InitSceneTransitionProgress("MaJamUILoaded");
-                //PopupUI.CallTransition(MyScene.MaJamScene);
-            };
-            var dbMatchgame = GamePlayer.Instance.GetMatchGame();
-            if (dbMatchgame == null) { WriteLog.LogError("JoinMatchgame失敗，dbMatchgame is null"); return; }
-            GameConnector.Instance.JoinMatchgame(joinSuccess => {
-                if (joinSuccess)
-                    WriteLog.LogColor("JoinMatchgame 成功", WriteLog.LogType.Connection);
-                else
-                    WriteLog.LogError("JoinMatchgame 失敗");
-            }).Forget();
-        }
-
-        public void SetHeroID(int _heroID) {
-            GameConnector.Instance.SetHeroID(AllocatedRoom.Instance.Index, _heroID);
-        }
         public async void Signout() {
             await RealmManager.Signout();
             //RealmManager.AnonymousSignUp();

@@ -34,7 +34,7 @@ namespace HeroFishing.Main {
         }
 
         public void OnClick() {
-            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
+            MapUI.GetInstance<MapUI>()?.SelectMap(MyDBMap);
         }
     }
 }

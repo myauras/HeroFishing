@@ -18,8 +18,7 @@ namespace HeroFishing.Main {
         }
         public string Prefab { get; private set; }
         public string Texture { get; private set; }
-        static Dictionary<int, Dictionary<string, HeroSkinJsonData>> SkinDic = new Dictionary<int, Dictionary<string, HeroSkinJsonData>>();
-
+        static Dictionary<int, SortedDictionary<string, HeroSkinJsonData>> SkinDic = new Dictionary<int, SortedDictionary<string, HeroSkinJsonData>>();
 
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
             DataName = _dataName;
@@ -53,7 +52,7 @@ namespace HeroFishing.Main {
                         WriteLog.LogErrorFormat("重複的SkinID: {0}", strs[1]);
                     SkinDic[_heroID][strs[1]] = _data;
                 } else {
-                    SkinDic.Add(_heroID, new Dictionary<string, HeroSkinJsonData>() { { strs[1], _data } });
+                    SkinDic.Add(_heroID, new SortedDictionary<string, HeroSkinJsonData>() { { strs[1], _data } });
                 }
             }
         }
@@ -61,7 +60,7 @@ namespace HeroFishing.Main {
         public static HeroSkinJsonData GetData(string _id) {
             return GameDictionary.GetJsonData<HeroSkinJsonData>(DataName, _id);
         }
-        public static Dictionary<string, HeroSkinJsonData> GetSkinDic(int _heroID) {
+        public static SortedDictionary<string, HeroSkinJsonData> GetSkinDic(int _heroID) {
             if (!SkinDic.ContainsKey(_heroID)) return null;
             return SkinDic[_heroID];
         }
