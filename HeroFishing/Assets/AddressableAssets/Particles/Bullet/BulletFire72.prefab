@@ -19445,7 +19445,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1152064617102594192}
-  - component: {fileID: 987373635162063569}
+  - component: {fileID: 3607385994502065073}
   m_Layer: 0
   m_Name: BulletFire72
   m_TagString: Untagged
@@ -19477,7 +19477,7 @@ Transform:
   - {fileID: 1502401544313823935}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &987373635162063569
+--- !u!95 &3607385994502065073
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -19487,7 +19487,7 @@ Animator:
   m_GameObject: {fileID: 2511295583492137040}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 737f4f8d5fe2381499408668a044e0c8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 39435d1b678fb0a49bbcb69191f7780c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -19997,8 +19997,8 @@ ParticleSystem:
     startRotationY:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.3962634
-      minScalar: 1.7453293
+      scalar: 1.5707963
+      minScalar: 0
       maxCurve:
         serializedVersion: 2
         m_Curve:
