@@ -15,12 +15,25 @@ namespace HeroFishing.Battle {
         public bool IgnoreFireModel;
         public float Delay;
     }
+
+#if UNITY_EDITOR
+    public struct BulletGizmoData {
+        public Vector3 Position;
+        public Vector3 Direction;
+        public float Radius;
+        public float Angle;
+    }
+#endif
     public class Bullet : MonoBehaviour {
 
         int SpellPrefabID;
         int SubSpellPrefabID;
         Vector3 FirePosition;
         float Delay;
+
+#if UNITY_EDITOR
+        BulletGizmoData gizmoData;
+#endif
 
         public bool IsLoaded { get; private set; }
 
@@ -91,6 +104,26 @@ namespace HeroFishing.Battle {
             gameObject.SetActive(true);
         }
 
+#if UNITY_EDITOR
+        public void SetGizmoData(BulletGizmoData gizmoData) {
+            this.gizmoData = gizmoData;
+        }
+
+        private void OnDrawGizmos() {
+            Gizmos.color = Color.yellow;
+            UnityEditor.Handles.color = Color.yellow;
+            if (gizmoData.Angle > 0 && gizmoData.Direction != Vector3.zero) {
+                Vector3 fromDir = Quaternion.AngleAxis(-gizmoData.Angle / 2, Vector3.up) * gizmoData.Direction;
+                gizmoData.Position.y += 0.1f;                
+                UnityEditor.Handles.DrawWireArc(gizmoData.Position, Vector3.up, fromDir, gizmoData.Angle, gizmoData.Radius);
+                Gizmos.DrawRay(gizmoData.Position, fromDir * gizmoData.Radius);
+                Gizmos.DrawRay(gizmoData.Position, Quaternion.AngleAxis(gizmoData.Angle, Vector3.up) * fromDir * gizmoData.Radius);
+            }
+            else {
+                Gizmos.DrawWireSphere(gizmoData.Position, gizmoData.Radius);
+            }
+        }
+#endif
     }
 
 }
