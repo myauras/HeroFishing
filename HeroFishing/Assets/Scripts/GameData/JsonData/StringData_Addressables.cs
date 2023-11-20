@@ -11,7 +11,7 @@ namespace Scoz.Func {
         public static void GetStringDic_Remote(string _dataName, Action<Dictionary<string, StringJsonData>> _cb) {
             GameDictionary.AddLoadingKey(_dataName);
             Dictionary<string, StringJsonData> dic = new Dictionary<string, StringJsonData>();
-            Addressables.LoadAssetAsync<TextAsset>(string.Format("Assets/AddressableAssets/Json/{0}.json", _dataName)).Completed += handle => {
+            Addressables.LoadAssetAsync<TextAsset>(string.Format("Assets/AddressableAssets/Jsons/{0}.json", _dataName)).Completed += handle => {
                 string jsonStr = handle.Result.text;
                 JsonData jd = JsonMapper.ToObject(jsonStr);
                 JsonData items = jd[_dataName];

@@ -26,7 +26,7 @@ namespace Scoz.Func {
 
             GameDictionary.AddLoadingKey(_dataName);
             try {
-                Addressables.LoadAssetAsync<TextAsset>(string.Format("Assets/AddressableAssets/Json/{0}.json", _dataName)).Completed += handle => {
+                Addressables.LoadAssetAsync<TextAsset>(string.Format("Assets/AddressableAssets/Jsons/{0}.json", _dataName)).Completed += handle => {
                     string jsonStr = handle.Result.text;
                     JsonData jd = JsonMapper.ToObject(jsonStr);
                     JsonData items = jd[_dataName];
@@ -61,7 +61,7 @@ namespace Scoz.Func {
         public static void SetDataStringKey_Remote<T>(string _dataName, Action<string, Dictionary<string, MyJsonData>> _cb) where T : MyJsonData, new() {
             GameDictionary.AddLoadingKey(_dataName);
             try {
-                Addressables.LoadAssetAsync<TextAsset>(string.Format("Assets/AddressableAssets/Json/{0}.json", _dataName)).Completed += handle => {
+                Addressables.LoadAssetAsync<TextAsset>(string.Format("Assets/AddressableAssets/Jsons/{0}.json", _dataName)).Completed += handle => {
                     string jsonStr = handle.Result.text;
                     JsonData jd = JsonMapper.ToObject(jsonStr);
                     JsonData items = jd[_dataName];
