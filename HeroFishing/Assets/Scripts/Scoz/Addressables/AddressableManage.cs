@@ -29,8 +29,6 @@ namespace Scoz.Func {
         Action FinishedAction = null;
 
         static HashSet<AsyncOperationHandle> ResourcesToReleaseWhileChangingScene = new HashSet<AsyncOperationHandle>();//加入到此清單的資源Handle會在切場景時一起釋放
-
-        const float TryReDownloadCD = 8;//嘗試重新call Addressables.DownloadDependenciesAsync的冷卻秒數(載入卡住時重新呼叫下載)
         void Awake() {
             BG.SetActive(false);
             ShowDownloadUI(false);
@@ -120,6 +118,19 @@ namespace Scoz.Func {
         }
 
         IEnumerator LoadAssets() {
+            //取Bundle包大小
+            AsyncOperationHandle<long> getDownloadSize2 = Addressables.GetDownloadSizeAsync(Keys);
+            yield return getDownloadSize2;
+            long totalSize2 = getDownloadSize2.Result;
+            WriteLog.Log("等待 totalSize: " + totalSize2);
+            var handle = Addressables.LoadAssetAsync<TextAsset>("Json");
+            yield return handle;  // 如果在協程中
+            WriteLog.Log(handle.Status);
+            Addressables.LoadAssetAsync<TextAsset>("Assets/AddressableAssets/Jsons/String.json").Completed += handle => {
+                WriteLog.Log(handle.Result);
+            };
+
+
             PopupUI_Local.HideLoading();//開始抓到bundle包就取消loading
             yield return new WaitForSeconds(0.1f);
 
@@ -155,7 +166,6 @@ namespace Scoz.Func {
             AsyncOperationHandle curDownloading = new AsyncOperationHandle();
             curDownloading = Addressables.DownloadDependenciesAsync(Keys, Addressables.MergeMode.Union);
             bool downloading = true;
-            float tryReDownloadCD = TryReDownloadCD;//嘗試重新call Addressables.DownloadDependenciesAsync的冷卻秒數(載入卡住時重新呼叫下載)
             while (downloading) {
                 float curDownloadPercent = curDownloading.GetDownloadStatus().Percent;
                 long curDownloadSize = (long)(curDownloadPercent * _totalSize);
@@ -164,25 +174,34 @@ namespace Scoz.Func {
                 ProgressImg.fillAmount = curDownloadPercent;
                 ProgressText.text = string.Format(StringJsonData.GetUIString("AssetUpdating"), MyMath.BytesToMB(curDownloadSize).ToString("0.00"), MyMath.BytesToMB(_totalSize).ToString("0.00"));
                 //完成後跳出迴圈
-                if (curDownloading.GetDownloadStatus().IsDone)
+                if (curDownloading.GetDownloadStatus().IsDone) {
+                    WriteLog.Log("下載資源包完成");
+                    yield return Addressables.InitializeAsync();
+                    WriteLog.Log("InitializeAsync完成");
                     downloading = false;
-                yield return new WaitForSeconds(0.1f);
-                tryReDownloadCD -= 0.1f;
-                if (tryReDownloadCD <= 0) {
-                    tryReDownloadCD = TryReDownloadCD;
-                    curDownloading = Addressables.DownloadDependenciesAsync(Keys, Addressables.MergeMode.Union);
                 }
 
+                yield return new WaitForSeconds(0.1f);
+
             }
+            //取Bundle包大小
+            //AsyncOperationHandle<long> getDownloadSize = Addressables.GetDownloadSizeAsync(Keys);
+            //yield return getDownloadSize;
+            //long totalSize = getDownloadSize.Result;
+            //WriteLog.Log("等待 totalSize: " + totalSize);
+            //var handle = Addressables.LoadAssetAsync<TextAsset>("Json");
+            //yield return handle;  // 如果在協程中
+            //WriteLog.Log(handle.Status);
+            //Addressables.LoadAssetAsync<TextAsset>("Assets/AddressableAssets/Jsons/String.json").Completed += handle => {
+            //    WriteLog.Log(handle.Result);
+            //};
             OnFinishedDownload();
         }
 
         void OnFinishedDownload() {
-            FinishedAction?.Invoke();
-            MyScene scene = MyEnum.ParseEnum<MyScene>(SceneManager.GetActiveScene().name);
             ShowDownloadUI(false);
             WriteLog.LogColorFormat("LoadAsset-Finished", WriteLog.LogType.Addressable);
-
+            FinishedAction?.Invoke();
 
         }
         public static void PreLoadToMemory(Action _ac = null) {
@@ -296,7 +315,6 @@ namespace Scoz.Func {
 
         }
         IEnumerator DownloadingAddressable(List<string> _keys, long _totalSize, bool _showBG, Action<bool> _cb) {
-            float tryReDownloadCD = TryReDownloadCD;//嘗試重新call Addressables.DownloadDependenciesAsync的冷卻秒數(載入卡住時重新呼叫下載)
             AsyncOperationHandle curDownloading = new AsyncOperationHandle();
             curDownloading = Addressables.DownloadDependenciesAsync(_keys, Addressables.MergeMode.Union);
             bool downloading = true;
@@ -313,11 +331,6 @@ namespace Scoz.Func {
                 if (curDownloading.GetDownloadStatus().IsDone)
                     downloading = false;
                 yield return new WaitForSeconds(0.1f);
-                tryReDownloadCD -= 0.1f;
-                if (tryReDownloadCD <= 0) {
-                    tryReDownloadCD = TryReDownloadCD;
-                    curDownloading = Addressables.DownloadDependenciesAsync(Keys, Addressables.MergeMode.Union);
-                }
             }
             ShowDownloadUI(false);
             BG.SetActive(false);
