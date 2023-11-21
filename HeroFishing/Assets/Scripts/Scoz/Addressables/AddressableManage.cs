@@ -97,7 +97,6 @@ namespace Scoz.Func {
             Keys.RemoveAll(a => a == "");
             PopupUI_Local.ShowLoading(StringJsonData.GetUIString("AddressableLoading"));
             FinishedAction = _action;
-            //StartCoroutine(ClearAllAssetCoro(OnClearCatchCB));//要測試輕快取用這個(測試用)
             Downloader = StartCoroutine(LoadAssets());//不輕快取用這個(正式版)
         }
         void OnClearCatchCB() {

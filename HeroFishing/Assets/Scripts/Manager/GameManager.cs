@@ -134,8 +134,7 @@ namespace Scoz.Func {
             GameDictionary.CreateNewInstance();//先初始化字典因為這樣會預先載入本機String表與GameSetting，之後在addressable載入後會取代本來String跟GameSetting
             MyText.RefreshActiveTexts();//刷新文字
             //建立Popup_Local
-            if (SceneManager.GetActiveScene().name == MyScene.StartScene.ToString())
-                PopupUI_Local.CreateNewInstance();
+            PopupUI_Local.CreateNewInstance();
             //建立影片播放器
             MyVideoPlayer.CreateNewVideoPlayer();
             //建立TestTool
@@ -216,8 +215,11 @@ namespace Scoz.Func {
         /// 將自己的camera加入到目前場景上的MainCameraStack中
         /// </summary>
         public void AddCamStack(Camera _cam) {
+            if (_cam == null) return;
             Camera mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            if (mainCam == null) return;
             var cameraData = mainCam.GetUniversalAdditionalCameraData();
+            if (cameraData == null) return;
             cameraData.cameraStack.Add(_cam);
         }
 
