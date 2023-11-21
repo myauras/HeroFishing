@@ -121,9 +121,11 @@ namespace HeroFishing.Battle {
 
         private bool CreateBulletInstance(SpellSpawnData spawnData, out Bullet bullet) {
             bullet = null;
-            var bulletPrefab = ResourcePreSetter.Instance.BulletPrefab;
-            if (bulletPrefab == null) return false;
-            var bulletGO = GameObject.Instantiate(bulletPrefab.gameObject);
+            //var bulletPrefab = ResourcePreSetter.Instance.BulletPrefab;
+            //if (bulletPrefab == null) return false;
+            //var bulletGO = GameObject.Instantiate(bulletPrefab.gameObject);
+            var pool = PoolManager.Instance;
+            var bulletGO = pool.PopBullet();
 #if UNITY_EDITOR
             bulletGO.name = "BulletProjectile" + spawnData.SpellPrefabID;
             //bulletGO.hideFlags |= HideFlags.HideAndDontSave;
@@ -132,13 +134,14 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
 #endif
             bullet = bulletGO.GetComponent<Bullet>();
             if (bullet == null) {
-                WriteLog.LogErrorFormat("子彈{0}身上沒有掛Bullet Component", bulletPrefab.name);
+                WriteLog.LogErrorFormat("子彈{0}身上沒有掛Bullet Component", bulletGO.name);
                 return false;
             }
 
             //設定子彈Gameobject的Transfrom
             bulletGO.transform.SetLocalPositionAndRotation(spawnData.InitPosition,
                 quaternion.LookRotationSafe(spawnData.InitDirection, math.up()));
+            bulletGO.transform.SetParent(null);
             if (spawnData.ProjectileScale != 0)
                 bulletGO.transform.localScale *= spawnData.ProjectileScale;
 

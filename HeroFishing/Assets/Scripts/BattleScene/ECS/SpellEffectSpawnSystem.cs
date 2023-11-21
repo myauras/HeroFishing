@@ -35,27 +35,28 @@ namespace HeroFishing.Battle {
                 var rotQuaternion =
                     //Quaternion.Euler(particleSpawn.HitDir);
                     quaternion.LookRotationSafe(particleSpawn.HitDir, math.up());
+                var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", hitPath);
+                var pool = PoolManager.Instance;
+
+                Vector3 position = Vector3.zero;
                 switch (monsterData.HitEffectPos) {
                     case MonsterJsonData.HitEffectPosType.HitPos:
-                        GameObjSpawner.SpawnParticleObjByPath(hitPath, particleSpawn.HitPos, rotQuaternion, null, SpawnCallback);
+                        position = particleSpawn.HitPos;
                         break;
                     case MonsterJsonData.HitEffectPosType.Self:
-                        GameObjSpawner.SpawnParticleObjByPath(hitPath, particleSpawn.Monster.Pos + new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY) / 2, 0), rotQuaternion, null, SpawnCallback);
+                        position = particleSpawn.Monster.Pos + new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY) / 2, 0);
                         break;
                 }
+                pool.Pop(path, position, rotQuaternion, null, SpawnCallback);
 
                 //移除Tag
                 ECB.DestroyEntity(entity);
             }
 
         }
+        
+        private void SpawnCallback(GameObject go) {
 
-        private void SpawnCallback(GameObject go, AsyncOperationHandle handle) {
-            AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
-            DOVirtual.DelayedCall(3f, () => {
-                if (go != null)
-                    Object.Destroy(go);
-            });
         }
     }
 }

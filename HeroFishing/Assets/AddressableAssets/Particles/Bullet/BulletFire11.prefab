@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8325733834604359895}
+  - component: {fileID: 6980637719834516753}
   m_Layer: 0
   m_Name: BulletFire11
   m_TagString: Untagged
@@ -32,6 +33,19 @@ Transform:
   - {fileID: 1708877455147863180}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6980637719834516753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68596768288252742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7c2dcb446e19447a077eb3e0b12e60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _backTime: 0.32
 --- !u!1 &560398467107187010
 GameObject:
   m_ObjectHideFlags: 0

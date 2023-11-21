@@ -145,6 +145,8 @@ namespace Scoz.Func {
             AudioPlayer.CreateNewAudioPlayer();
             //建立AddressableManage
             AddressableManage.CreateNewAddressableManage();
+            //建立PoolManager
+            PoolManager.CreateNewInstance();
             //※設定本機資料要放最後(要在取得本機GameSetting後以及AudioPlayer.CreateNewAudioPlayer之後
             GamePlayer.Instance.LoadLocoData();
         }
