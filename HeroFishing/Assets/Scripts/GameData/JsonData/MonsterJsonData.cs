@@ -13,7 +13,7 @@ namespace HeroFishing.Main {
             }
         }
         public string Ref { get; private set; }
-        public float Multiplier { get; private set; }
+        public float Odds { get; private set; }
         public float Radius { get; private set; }
         public float Speed { get; private set; }
         public int[] MonsterIDs { get; private set; }
@@ -42,8 +42,8 @@ namespace HeroFishing.Main {
                     case "Ref":
                         Ref = item[key].ToString();
                         break;
-                    case "Multiplier":
-                        Multiplier = float.Parse(item[key].ToString());
+                    case "Odds":
+                        Odds = float.Parse(item[key].ToString());
                         break;
                     case "Radius":
                         Radius = float.Parse(item[key].ToString());
