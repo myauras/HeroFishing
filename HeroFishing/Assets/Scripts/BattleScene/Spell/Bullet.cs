@@ -36,6 +36,7 @@ namespace HeroFishing.Battle {
 #endif
 
         public bool IsLoaded { get; private set; }
+        public GameObject Projectile { get; private set; }
 
         private void OnDestroy() {
         }
@@ -69,31 +70,32 @@ namespace HeroFishing.Battle {
             var bulletPos = FirePosition;
             var bulletRot = transform.rotation;
             string firePath = string.Format("Bullet/BulletFire{0}", SpellPrefabID);
-            GameObjSpawner.SpawnParticleObjByPath(firePath, bulletPos, bulletRot, null, (go, handle) => {
-                AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
-                go.SetActive(false);
-                DOVirtual.DelayedCall(0.05f, () => {
-                    go.SetActive(true);
-                });
-                DOVirtual.DelayedCall(3f, () => {
-                    if (go != null)
-                        Destroy(go);
-                });
+            var pool = PoolManager.Instance;
+            //var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", firePath);
+            pool.Pop(firePath, bulletPos, bulletRot, null, go => {
+                // 讓AutoBackPool.cs自己控制返回物件池的時間
             });
         }
 
         void LoadProjetileModel() {
+            if (Projectile != null) {
+                LoadDone();
+                return;
+            }
+
             string projectilePath;
             ////載入Projectile模型
             if (SubSpellPrefabID == 0)
                 projectilePath = string.Format("Bullet/BulletProjectile{0}", SpellPrefabID);
             else
                 projectilePath = string.Format("Bullet/BulletProjectile{0}_{1}", SpellPrefabID, SubSpellPrefabID);
-            GameObjSpawner.SpawnParticleObjByPath(projectilePath, Vector3.zero, Quaternion.identity, transform, (go, handle) => {
-                AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
+
+            var pool = PoolManager.Instance;
+            //var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", projectilePath);
+            pool.Pop(projectilePath, Vector3.zero, Quaternion.identity, transform, go => {
+                Projectile = go;
                 LoadDone();
-            });
-            
+            });            
         }
 
         /// <summary>

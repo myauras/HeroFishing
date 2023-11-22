@@ -106,24 +106,12 @@ namespace HeroFishing.Battle {
                 //移除施法
                 ECB.DestroyEntity(spellEntity);
             }
-
-
-            //var job = new SpawnJob {
-            //    ECBWriter = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
-            //    BulletEntity = MyBulletSpawner.BulletEntity,
-            //    ShootEntity = MyBulletSpawner.ShootEntity,
-            //    MyBulletValue = bulletValue,
-            //    BattlefieldSetting = BattlefieldSetting,
-            //}.Schedule();
-            //job.Complete();
-
         }
 
         private bool CreateBulletInstance(SpellSpawnData spawnData, out Bullet bullet) {
             bullet = null;
-            var bulletPrefab = ResourcePreSetter.Instance.BulletPrefab;
-            if (bulletPrefab == null) return false;
-            var bulletGO = GameObject.Instantiate(bulletPrefab.gameObject);
+            var pool = PoolManager.Instance;
+            var bulletGO = pool.PopBullet(spawnData.SpellPrefabID, spawnData.SubSpellPrefabID);
 #if UNITY_EDITOR
             bulletGO.name = "BulletProjectile" + spawnData.SpellPrefabID;
             //bulletGO.hideFlags |= HideFlags.HideAndDontSave;
@@ -132,15 +120,16 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
 #endif
             bullet = bulletGO.GetComponent<Bullet>();
             if (bullet == null) {
-                WriteLog.LogErrorFormat("子彈{0}身上沒有掛Bullet Component", bulletPrefab.name);
+                WriteLog.LogErrorFormat("子彈{0}身上沒有掛Bullet Component", bulletGO.name);
                 return false;
             }
 
             //設定子彈Gameobject的Transfrom
             bulletGO.transform.SetLocalPositionAndRotation(spawnData.InitPosition,
                 quaternion.LookRotationSafe(spawnData.InitDirection, math.up()));
+            bulletGO.transform.SetParent(null);
             if (spawnData.ProjectileScale != 0)
-                bulletGO.transform.localScale *= spawnData.ProjectileScale;
+                bulletGO.transform.localScale = Vector3.one * spawnData.ProjectileScale;
 
             var firePosition = math.all(spawnData.FirePosition == float3.zero) ? spawnData.InitPosition : spawnData.FirePosition;
 
@@ -154,41 +143,5 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
             });
             return true;
         }
-
-        //[BurstCompile]
-        //partial struct SpawnJob : IJobEntity {
-
-        //    public EntityCommandBuffer.ParallelWriter ECBWriter;
-        //    [ReadOnly] public SpellEntities BulletEntitys;
-
-        //    public void Execute(in SpellCom _spellCom, in Entity _entity) {
-        //        //建立子彈
-        //        var bulletEntity = ECBWriter.Instantiate(0, BulletEntitys.ProjectileEntity);
-        //        //設定子彈Value
-        //        float3 direction = _spellCom.Direction;
-        //        quaternion bulletQuaternion = quaternion.LookRotation(direction, math.up());
-        //        //設定子彈Transform
-        //        ECBWriter.SetComponent(1, bulletEntity, new LocalTransform {
-        //            Position = _spellCom.AttackerPos,
-        //            Scale = 1,
-        //            Rotation = bulletQuaternion,
-        //        });
-        //        //設定BulletValue
-        //        ECBWriter.SetComponent(2, bulletEntity, new BulletValue {
-        //            Speed = _spellCom.Speed,
-        //            Radius = _spellCom.Radius,
-        //            Direction = direction,
-        //        });
-        //        //射擊特效
-        //        var shootEntity = ECBWriter.Instantiate(3, BulletEntitys.FireEntity);
-        //        ECBWriter.SetComponent(4, shootEntity, new LocalTransform {
-        //            Position = _spellCom.AttackerPos + math.normalize(_spellCom.TargetPos - _spellCom.AttackerPos) * 0.8f,
-        //            Scale = 1,
-        //            Rotation = quaternion.Euler(_spellCom.TargetPos - _spellCom.AttackerPos),
-        //        });
-        //    }
-
-        //}
-
     }
 }

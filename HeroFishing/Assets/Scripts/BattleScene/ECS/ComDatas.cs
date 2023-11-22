@@ -23,8 +23,10 @@ public class BulletInstance : IComponentData, IDisposable {
     public Bullet MyBullet;
     public async void Dispose() {
         await UniTask.WaitUntil(() => MyBullet.IsLoaded);
-        if (GO != null)
-            UnityEngine.Object.Destroy(GO);
+        if (GO != null) {
+            var pool = PoolManager.Instance;
+            pool.Push(GO);
+        }
     }
 }
 

@@ -17,6 +17,7 @@ public partial struct AreaCollisionSystem : ISystem {
     [BurstCompile]
     public void OnCreate(ref SystemState state) {
         state.RequireForUpdate<AreaCollisionData>();
+        state.RequireForUpdate<CollisionSys>();
         HitInfoLookup = state.GetBufferLookup<HitInfoBuffer>();
     }
 

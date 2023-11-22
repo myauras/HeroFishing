@@ -1,6 +1,7 @@
 using HeroFishing.Main;
 using JetBrains.Annotations;
 using Scoz.Func;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -10,6 +11,8 @@ namespace HeroFishing.Battle {
 
         public HeroJsonData MyData { get; private set; }
         HeroSkinJsonData MyHeroSkinData;
+
+        private const int SPELL_COUNT = 4;
 
         public void SetData(int _heroID, string _heroSkinID) {
             MyData = HeroJsonData.GetData(_heroID);
@@ -26,6 +29,11 @@ namespace HeroFishing.Battle {
                 Addressables.Release(handle);
                 SetModel();
             });
+
+            for (int i = 0; i < SPELL_COUNT; i++) {
+                var spellData = HeroSpellJsonData.GetSpell(MyData.ID, (SpellName)i);
+                PoolManager.Instance.InitHeroSpell(spellData);
+            }
         }
         protected override void SetModel() {
             base.SetModel();

@@ -399,13 +399,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 361328385}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.9952274, z: 0, w: 0.09758302}
-  m_LocalPosition: {x: -8.41, y: 0, z: 4.05}
+  m_LocalRotation: {x: -0, y: 0.87305826, z: -0, w: 0.48761603}
+  m_LocalPosition: {x: -3.06, y: 0, z: -0.2}
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1525743905}
-  m_LocalEulerAnglesHint: {x: 0, y: 168.8, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 121.632, z: 0}
 --- !u!114 &361328387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -569,7 +569,7 @@ Transform:
   m_GameObject: {fileID: 643103367}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.077748165, z: -0, w: 0.99697304}
-  m_LocalPosition: {x: 1.91, y: 0, z: -4.15}
+  m_LocalPosition: {x: 1.62, y: 0, z: -4.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -986,7 +986,7 @@ Transform:
   m_GameObject: {fileID: 744101599}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.95701396, z: -0, w: 0.29004195}
-  m_LocalPosition: {x: 12.35, y: 0, z: 4.48}
+  m_LocalPosition: {x: 6.1, y: 0, z: -0.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1114,7 +1114,7 @@ Transform:
   m_GameObject: {fileID: 1178423277}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.999838, z: -0, w: -0.018000685}
-  m_LocalPosition: {x: 2.09, y: 0, z: 4.94}
+  m_LocalPosition: {x: 1.15, y: 0, z: 4.96}
   m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6093,6 +6093,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ControlPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5665564989570562366, guid: 674725a37054f4e438148c3309671aac,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8531715220953099092, guid: 674725a37054f4e438148c3309671aac,
         type: 3}
