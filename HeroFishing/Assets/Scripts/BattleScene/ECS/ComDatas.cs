@@ -25,7 +25,6 @@ public class BulletInstance : IComponentData, IDisposable {
         await UniTask.WaitUntil(() => MyBullet.IsLoaded);
         if (GO != null) {
             var pool = PoolManager.Instance;
-            pool.Push(MyBullet.Projectile);
             pool.Push(GO);
         }
     }

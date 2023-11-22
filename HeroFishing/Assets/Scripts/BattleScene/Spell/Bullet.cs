@@ -71,13 +71,18 @@ namespace HeroFishing.Battle {
             var bulletRot = transform.rotation;
             string firePath = string.Format("Bullet/BulletFire{0}", SpellPrefabID);
             var pool = PoolManager.Instance;
-            var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", firePath);
-            pool.Pop(path, bulletPos, bulletRot, null, go => {
+            //var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", firePath);
+            pool.Pop(firePath, bulletPos, bulletRot, null, go => {
                 // 讓AutoBackPool.cs自己控制返回物件池的時間
             });
         }
 
         void LoadProjetileModel() {
+            if (Projectile != null) {
+                LoadDone();
+                return;
+            }
+
             string projectilePath;
             ////載入Projectile模型
             if (SubSpellPrefabID == 0)
@@ -86,8 +91,8 @@ namespace HeroFishing.Battle {
                 projectilePath = string.Format("Bullet/BulletProjectile{0}_{1}", SpellPrefabID, SubSpellPrefabID);
 
             var pool = PoolManager.Instance;
-            var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", projectilePath);
-            pool.Pop(path, Vector3.zero, Quaternion.identity, transform, go => {
+            //var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", projectilePath);
+            pool.Pop(projectilePath, Vector3.zero, Quaternion.identity, transform, go => {
                 Projectile = go;
                 LoadDone();
             });            

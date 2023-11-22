@@ -35,7 +35,6 @@ namespace HeroFishing.Battle {
                 var rotQuaternion =
                     //Quaternion.Euler(particleSpawn.HitDir);
                     quaternion.LookRotationSafe(particleSpawn.HitDir, math.up());
-                var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", hitPath);
                 var pool = PoolManager.Instance;
 
                 Vector3 position = Vector3.zero;
@@ -47,7 +46,7 @@ namespace HeroFishing.Battle {
                         position = particleSpawn.Monster.Pos + new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY) / 2, 0);
                         break;
                 }
-                pool.Pop(path, position, rotQuaternion, null, SpawnCallback);
+                pool.Pop(hitPath, position, rotQuaternion, null, SpawnCallback);
 
                 //移除Tag
                 ECB.DestroyEntity(entity);
