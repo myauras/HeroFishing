@@ -60,7 +60,7 @@ public class PoolManager : MonoBehaviour {
 
     // Addressable Assets用的物件池
     public void Pop(string key, Vector3 position = default, Quaternion rotaiton = default, Transform parent = null, Action<GameObject> popCallback = null) {
-        WriteLog.Log("pop " + key);
+        //WriteLog.Log("pop " + key);
         // 如果還無法識別該物件，重新建立一個List
         if (!_pools.TryGetValue(key, out var objList)) {
             objList = new List<GameObject>();
@@ -88,7 +88,7 @@ public class PoolManager : MonoBehaviour {
 
     // 子彈用的物件池
     public GameObject PopBullet(int prefabID, int subPrefabID) {
-        WriteLog.Log("pop bullet");
+        //WriteLog.Log("pop bullet");
         string bulletID;
         if (subPrefabID == 0) {
             bulletID = POOL_BULLET + prefabID.ToString();
@@ -120,7 +120,7 @@ public class PoolManager : MonoBehaviour {
 
     // 回收物件
     public void Push(GameObject obj) {
-        WriteLog.Log("push " + obj.name);
+        //WriteLog.Log("push " + obj.name);
         obj.SetActive(false);
         obj.transform.SetParent(transform);
     }
