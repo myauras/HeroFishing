@@ -140,7 +140,7 @@ public class PoolManager : MonoBehaviour {
             list.Add(go);
             go.SetActive(false);
             callback?.Invoke(go);
-            WriteLog.Log("create new object " + go.name);
+            //WriteLog.Log("create new object " + go.name);
         });
     }
 }

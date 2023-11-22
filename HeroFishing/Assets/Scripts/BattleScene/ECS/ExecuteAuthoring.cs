@@ -5,6 +5,7 @@ namespace HeroFishing.Battle {
     public class ExecuteAuthoring : MonoBehaviour {
         [SerializeField] bool EnableMonsterSpawnSys;
         [SerializeField] bool EnableBulletSpawnSys;
+        [SerializeField] bool EnableCollisionSys;
         //[SerializeField] bool EnableCollisionSys;
 
         class Baker : Baker<ExecuteAuthoring> {
@@ -14,12 +15,15 @@ namespace HeroFishing.Battle {
                 //if (authoring.EnableCollisionSys) AddComponent<CollisionSys>(entity);
                 if (authoring.EnableMonsterSpawnSys) AddComponent<MonsterSpawnSys>(entity);
                 if (authoring.EnableBulletSpawnSys) AddComponent<BulletSpawnSys>(entity);
+                if (authoring.EnableCollisionSys) AddComponent<CollisionSys>(entity);
             }
         }
     }
     public struct MonsterSpawnSys : IComponentData {
     }
     public struct BulletSpawnSys : IComponentData {
+    }
+    public struct CollisionSys : IComponentData {
     }
     //public struct CollisionSys : IComponentData {
     //}

@@ -20,7 +20,7 @@ namespace HeroFishing.Battle {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<BulletCollisionData>();
-
+            state.RequireForUpdate<CollisionSys>();
             // 定義一個範圍來檢查子彈所在和周圍的網格
             OffsetGrids = new NativeArray<int2>(9, Allocator.Persistent);
             OffsetGrids[0] = new int2(0, 0);// 子彈本身所在的網格
