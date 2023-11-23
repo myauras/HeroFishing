@@ -50,7 +50,6 @@ namespace HeroFishing.Main {
                 return;
             }
             CurCategory = changeToCategory;
-            WriteLog.Log("CurCategory=" + CurCategory);
             SpawnItems();
             SwitchHero(GetFirstHero());
         }

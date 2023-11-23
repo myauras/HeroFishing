@@ -8,6 +8,7 @@ using SimpleJSON;
 using Service.Realms;
 using Realms;
 using System.Linq;
+using HeroFishing.Socket;
 
 namespace Scoz.Func {
     public partial class TestTool : MonoBehaviour {
@@ -20,7 +21,8 @@ namespace Scoz.Func {
 
 
             if (Input.GetKeyDown(KeyCode.Q)) {
-                CamManager.ShakeCam(CamManager.CamNames.Battle, 3, 3, 2f);
+                int[] monsterIdxs = new int[3] { 4, 5, 6 };
+                GameConnector.Instance.Hit("0_1", monsterIdxs, "1_spell2");
             } else if (Input.GetKeyDown(KeyCode.W)) {
             } else if (Input.GetKeyDown(KeyCode.E)) {
 
