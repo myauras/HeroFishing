@@ -50,6 +50,7 @@ namespace HeroFishing.Battle {
                     StrIndex_SpellID = spellData.StrIndex_SpellID,
                     SpellPrefabID = spellData.SpawnData.SpellPrefabID,
                     Radius = spellData.Radius,
+                    Delay = spellData.SpawnData.ProjectileDelay,
                     Destroy = spellData.DestroyOnCollision,
                     EnableBulletHit = spellData.EnableBulletHit,
                 });

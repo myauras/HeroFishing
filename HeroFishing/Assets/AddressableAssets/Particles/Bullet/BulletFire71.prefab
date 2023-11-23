@@ -24567,6 +24567,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2436340800700067592}
+  - component: {fileID: 2937451099592125822}
   m_Layer: 0
   m_Name: BulletFire71
   m_TagString: Untagged
@@ -24603,6 +24604,19 @@ Transform:
   - {fileID: 7795260086916570325}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2937451099592125822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5575658984193020766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7c2dcb446e19447a077eb3e0b12e60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _backTime: 1.2
 --- !u!1 &5994624650346839735
 GameObject:
   m_ObjectHideFlags: 0

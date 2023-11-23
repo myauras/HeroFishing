@@ -93,9 +93,10 @@ namespace HeroFishing.Battle {
             var pool = PoolManager.Instance;
             //var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", projectilePath);
             pool.Pop(projectilePath, Vector3.zero, Quaternion.identity, transform, go => {
+                go.transform.localScale = Vector3.one;
                 Projectile = go;
                 LoadDone();
-            });            
+            });
         }
 
         /// <summary>

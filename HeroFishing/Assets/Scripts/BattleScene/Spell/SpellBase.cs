@@ -8,9 +8,11 @@ using static HeroFishing.Battle.SpellIndicator;
 
 public abstract class SpellBase {
     public SpellHitBase Hit;
+    public SpellMoveBase Move;
     protected abstract int VariableCount { get; }
 
-    public virtual void Play(Vector3 position, Vector3 heroPosition, Vector3 direction) { }
+    public virtual void Play(Vector3 position, Vector3 heroPosition, Vector3 direction) {
+    }
 
     public virtual IndicatorType SpellIndicatorType => IndicatorType.Line;
 

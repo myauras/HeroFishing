@@ -36,6 +36,11 @@ namespace HeroFishing.Main {
             Chain,
             Explode
         }
+
+        public enum MoveType {
+            None,
+            Target
+        }
         public static string DataName { get; set; }
         public new string ID { get; private set; }
         public string Name {
@@ -54,12 +59,15 @@ namespace HeroFishing.Main {
         public float CD { get; private set; }
         public int Cost { get; private set; }
         public int Waves { get; private set; }
+        public int Hits { get; private set; }
         public DragType MyDragType { get; private set; }
         public bool DestroyOnCollision { get; private set; }
         public SpellType MySpellType { get; private set; }
         public string[] SpellTypeValues { get; private set; }
         public HitType MyHitType { get; private set; }
         public string[] HitTypeValues { get; private set; }
+        public MoveType MyMoveType { get; private set; }
+        public string[] MoveTypeValues { get; private set; }
         public int[] Threshold { get; private set; }
         public string[] Motions { get; private set; }
         public string Voice { get; private set; }
@@ -91,6 +99,9 @@ namespace HeroFishing.Main {
                     case "Waves":
                         Waves = int.Parse(item[key].ToString());
                         break;
+                    case "Hits":
+                        Hits = int.Parse(item[key].ToString());
+                        break;
                     case "DragType":
                         MyDragType = MyEnum.ParseEnum<DragType>(item[key].ToString());
                         break;
@@ -109,6 +120,13 @@ namespace HeroFishing.Main {
                         break;
                     case "HitEffectValues":
                         HitTypeValues = item[key].ToString().Split(',');
+                        break;
+                    case "MoveType":
+                        MyMoveType = MyEnum.ParseEnum<MoveType>(item[key].ToString());
+                        break;
+                    case "MoveTypeValues":
+                        MoveTypeValues = item[key].ToString().Split(',');
+                        if (MoveTypeValues == null || MoveTypeValues.Length == 0) WriteLog.LogErrorFormat("Move");
                         break;
                     case "Threshold":
                         Threshold = TextManager.StringSplitToIntArray(item[key].ToString(), ',');
