@@ -15,6 +15,10 @@ namespace HeroFishing.Socket.Matchgame {
         /// </summary>
         public int[] MonsterIDs { get; private set; }
         /// <summary>
+        /// 怪物唯一索引清單
+        /// </summary>
+        public int[] MonsterIdxs { get; private set; }
+        /// <summary>
         /// 路徑JsonID
         /// </summary>
         public int RouteID { get; private set; }
