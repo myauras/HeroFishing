@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 namespace Scoz.Func {
@@ -23,6 +24,15 @@ namespace Scoz.Func {
             result += "}";
 
             return result;
+        }
+
+        public static string EnumerableToStr<T>(IEnumerable<T> _IEnumerable) {
+            string str = "";
+            foreach (var item in _IEnumerable) {
+                if (!string.IsNullOrEmpty(str)) str += ",";
+                str += item.ToString();
+            }
+            return str;
         }
     }
 }

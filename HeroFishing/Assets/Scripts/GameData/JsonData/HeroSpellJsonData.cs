@@ -54,7 +54,8 @@ namespace HeroFishing.Main {
         public float CD { get; private set; }
         public int Cost { get; private set; }
         public int Waves { get; private set; }
-        public int Hits { get; private set; }
+        public int WaveHits { get; private set; }
+        public int MaxHits { get; private set; }
         public DragType MyDragType { get; private set; }
         public bool DestroyOnCollision { get; private set; }
         public SpellType MySpellType { get; private set; }
@@ -92,8 +93,11 @@ namespace HeroFishing.Main {
                     case "Waves":
                         Waves = int.Parse(item[key].ToString());
                         break;
-                    case "Hits":
-                        Hits = int.Parse(item[key].ToString());
+                    case "WaveHits":
+                        WaveHits = int.Parse(item[key].ToString());
+                        break;
+                    case "MaxHits":
+                        MaxHits = int.Parse(item[key].ToString());
                         break;
                     case "DragType":
                         MyDragType = MyEnum.ParseEnum<DragType>(item[key].ToString());
