@@ -78,6 +78,10 @@ namespace HeroFishing.Battle {
             [ReadOnly] public EntityStorageInfoLookup StorageInfoLookup;
 
             public void Execute(ref BulletCollisionData _collisionData, ref MoveData _moveData, in Entity _entity) {
+                _collisionData.Timer += DeltaTime;
+                if (_collisionData.Timer < _collisionData.Delay) {
+                    return;
+                }
 
                 // 計算移動，如果有目標則朝著目標，沒有的話走直線
                 bool hasTargetMonster = StorageInfoLookup.Exists(_moveData.TargetMonster.MyEntity);

@@ -125,6 +125,8 @@ public struct BulletCollisionData : IComponentData {
     public uint StrIndex_SpellID;
     public int SpellPrefabID;
     public float Radius;
+    public float Delay;
+    public float Timer;
     public bool Destroy;
     public bool EnableBulletHit;
 }

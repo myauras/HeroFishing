@@ -19,6 +19,8 @@ namespace HeroFishing.Battle {
         Vector3 TmpSpellPos;
         Vector3 OriginPos;
 
+        private const float MOVE_SCALE_FACTOR = 2;
+
         private void Update() {
             AttackDetect();
         }
@@ -63,7 +65,7 @@ namespace HeroFishing.Battle {
         public void OnDrag() {
             if (!IsSkillMode) return;
             var mousePos = UIPosition.GetMouseWorldPointOnYZero(0);
-            TmpSpellPos = (mousePos - OriginPos) * 2f + TmpHero.transform.position;
+            TmpSpellPos = (mousePos - OriginPos) * MOVE_SCALE_FACTOR + TmpHero.transform.position;
             TmpSpellDir = (mousePos - OriginPos).normalized;
             TmpHero.FaceDir(Quaternion.LookRotation(TmpSpellDir));
 
@@ -106,6 +108,12 @@ namespace HeroFishing.Battle {
             if (TmpSpellData.Spell == null) return;
             var spell = TmpSpellData.Spell;
             spell.Play(_attackPos, TmpHero.transform.position, _attackDir);
+            if(spell.Move != null) {
+                var moveBehaviour = TmpHero.GetComponent<HeroMoveBehaviour>();
+                if (moveBehaviour == null)
+                    moveBehaviour = TmpHero.gameObject.AddComponent<HeroMoveBehaviour>();
+                spell.Move.Play(_attackPos, TmpHero.transform.position, _attackDir, moveBehaviour);
+            }
             //switch (TmpSpellData.MySpellType) {
             //    case HeroSpellJsonData.SpellType.SpreadLineShot:
             //        radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
