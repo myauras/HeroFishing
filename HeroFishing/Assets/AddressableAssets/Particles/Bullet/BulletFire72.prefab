@@ -29300,6 +29300,7 @@ GameObject:
   - component: {fileID: 4504757969186253841}
   - component: {fileID: 8188989246048827786}
   - component: {fileID: 1643115782705964981}
+  - component: {fileID: 5229054195841872642}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -34195,6 +34196,30 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &5229054195841872642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4131491715355109961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2762fdf71cfae6245a1644b18c6615cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _particle: {fileID: 1643115782705964981}
+  _floatValues:
+    m_keys:
+    - 
+    m_values:
+    - 0
+  _vectorValues:
+    m_keys: []
+    m_values: []
+  _colorValues:
+    m_keys: []
+    m_values: []
 --- !u!1 &4278588265293969266
 GameObject:
   m_ObjectHideFlags: 0
