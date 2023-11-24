@@ -20,6 +20,13 @@ public class SpellBuilder {
                 break;
         }
 
+        SpellMoveBase move = null;
+        switch (Data.MyMoveType) {
+            case HeroSpellJsonData.MoveType.Target:
+                move = new SpellTargetMove(Data);
+                break;
+        }
+
         SpellBase spell = null;
         switch (Data.MySpellType) {
             case HeroSpellJsonData.SpellType.LineShot:
@@ -44,6 +51,7 @@ public class SpellBuilder {
             return null;
         }
         spell.Hit = hit;
+        spell.Move = move;
         return spell;
     }
 }

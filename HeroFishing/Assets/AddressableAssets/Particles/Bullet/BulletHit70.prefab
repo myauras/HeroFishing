@@ -14691,6 +14691,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 41968142336267180}
+  - component: {fileID: 7059073085574786987}
   m_Layer: 0
   m_Name: BulletHit70
   m_TagString: Untagged
@@ -14717,6 +14718,19 @@ Transform:
   - {fileID: 2017167141989311073}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7059073085574786987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4580494305291859801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7c2dcb446e19447a077eb3e0b12e60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _backTime: 0.3
 --- !u!1 &6588806695822169850
 GameObject:
   m_ObjectHideFlags: 0

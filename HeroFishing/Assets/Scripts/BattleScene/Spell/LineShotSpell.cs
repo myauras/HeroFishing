@@ -18,6 +18,8 @@ public class LineShotSpell : SpellBase {
 
     private float _lifeTime;
 
+    private float _delay;
+
     private HeroSpellJsonData _data;
 
     public LineShotSpell(HeroSpellJsonData data) {
@@ -28,9 +30,11 @@ public class LineShotSpell : SpellBase {
         _radius = float.Parse(values[1]);
         _speed = float.Parse(values[2]);
         _lifeTime = float.Parse(values[3]);
+        _delay = float.Parse(values[4]);
     }
 
     public override void Play(Vector3 position, Vector3 heroPosition, Vector3 direction) {
+        base.Play(position, heroPosition, direction);
         var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         var entity = entityManager.CreateEntity();
         var strIndex_SpellID = ECSStrManager.AddStr(_data.ID);
@@ -39,7 +43,8 @@ public class LineShotSpell : SpellBase {
             InitPosition = position,
             InitDirection = direction,
             SpellPrefabID = _data.PrefabID,
-            IgnoreFireModel = false
+            IgnoreFireModel = false,
+            ProjectileDelay = _delay,
         };
 
         entityManager.AddComponentData(entity, new SpellBulletData {

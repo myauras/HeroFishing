@@ -30,6 +30,7 @@ public class SectorAreaSpell : SpellBase {
     }
 
     public override void Play(Vector3 position, Vector3 heroPosition, Vector3 direction) {
+        base.Play(position, heroPosition, direction);
         var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         var entity = entityManager.CreateEntity();
         var strIndex_SpellID = ECSStrManager.AddStr(_data.ID);
