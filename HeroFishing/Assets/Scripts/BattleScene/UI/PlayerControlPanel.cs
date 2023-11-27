@@ -102,17 +102,17 @@ namespace HeroFishing.Battle {
         }
         public void OnSetSpell(Vector3 _attackerPos, Vector3 _attackDir) {
             //播放腳色動作(targetPos - TmpHero.transform.position).normalized
-            TmpHero.PlaySpellMotion(TmpSpellData.SpellName);
+            TmpHero.OnSpellPlay(TmpSpellData.SpellName);
             TmpHero.FaceDir(Quaternion.LookRotation(_attackDir));
             //設定ECS施法資料
             SetECSSpellData(_attackerPos, _attackDir);
 
-            if (TmpSpellData.SpellName == SpellName.spell3) {
-                CamManager.ShakeCam(CamManager.CamNames.Battle,
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_Spell3_AmplitudeGain),
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_Spell3_FrequencyGain),
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_Sepll3_Duration));
-            }
+            //if (TmpSpellData.SpellName == SpellName.spell3) {
+            //    CamManager.ShakeCam(CamManager.CamNames.Battle,
+            //        GameSettingJsonData.GetFloat(GameSetting.CamShake_Spell3_AmplitudeGain),
+            //        GameSettingJsonData.GetFloat(GameSetting.CamShake_Spell3_FrequencyGain),
+            //        GameSettingJsonData.GetFloat(GameSetting.CamShake_Sepll3_Duration));
+            //}
         }
 
         void SetECSSpellData(Vector3 _attackPos, Vector3 _attackDir) {
@@ -127,6 +127,9 @@ namespace HeroFishing.Battle {
                     CurrentMove = TmpHero.gameObject.AddComponent<HeroMoveBehaviour>();
                 spell.Move.Play(_attackPos, TmpHero.transform.position, _attackDir, CurrentMove);
             }
+
+            if (spell.ShakeCamera != null)
+                spell.ShakeCamera.Play();
             //switch (TmpSpellData.MySpellType) {
             //    case HeroSpellJsonData.SpellType.SpreadLineShot:
             //        radius = float.Parse(TmpSpellData.SpellTypeValues[1]);

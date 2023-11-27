@@ -75,6 +75,8 @@ namespace HeroFishing.Main {
         public int PrefabID { get; private set; }
         public int SubPrefabID { get; private set; }
         public float[] HitMonsterShaderSetting { get; private set; }
+        public float[] CameraShakeSettings { get; private set; }
+        public float[] HeroShaderSettings { get; private set; }
         static Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>> SpellDic = new Dictionary<int, Dictionary<SpellName, HeroSpellJsonData>>();//使用英雄ID與技能名稱取資料的字典
 
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
@@ -156,6 +158,14 @@ namespace HeroFishing.Main {
                     case "HitMonsterShaderSetting":
                         HitMonsterShaderSetting = TextManager.StringSplitToFloatArray(item[key].ToString(), ',');
                         break;
+                    case "CameraShakeSettings":
+                        var content = item[key].ToString();
+                        if (!string.IsNullOrEmpty(content))
+                            CameraShakeSettings = TextManager.StringSplitToFloatArray(content, ',');
+                        break;
+                    case "HeroShaderSettings":
+                        HeroShaderSettings = TextManager.StringSplitToFloatArray(item[key].ToString(), ',');
+                        break;
                     default:
                         WriteLog.LogWarning(string.Format("{0}表有不明屬性:{1}", DataName, key));
                         break;
@@ -186,7 +196,8 @@ namespace HeroFishing.Main {
                     if (SpellDic[_heroID].ContainsKey(spellName))
                         WriteLog.LogErrorFormat("重複的SpellName: {0}", strs[1]);
                     SpellDic[_heroID][spellName] = _data;
-                } else {
+                }
+                else {
                     SpellDic.Add(_heroID, new Dictionary<SpellName, HeroSpellJsonData>() { { spellName, _data } });
                 }
             }

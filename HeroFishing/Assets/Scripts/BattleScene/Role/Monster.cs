@@ -42,7 +42,7 @@ namespace HeroFishing.Battle {
 
 
         void HitShaderEffect(HeroSpellJsonData _spellData) {
-            if (MySkinnedMaterial == null) return;
+            if (MySkinnedMeshRenderers == null || MySkinnedMeshRenderers.Length == 0) return;
             //Color color = TextManager.ParseTextToColor32(GameSettingJsonData.GetStr(GameSetting.HitEffect_OutlineColor)); 已不使用Gamesetting的設定
             //MySkinnedMaterial.SetFloat("_FresnelPower", GameSettingJsonData.GetFloat(GameSetting.HitEffect_FresnelPower));已不使用Gamesetting的設定
 
@@ -56,19 +56,22 @@ namespace HeroFishing.Battle {
                (byte)(color.b * hdrIntensity),
                color.a
             );
-            MySkinnedMaterial.SetVector("_OutlineColor", new Vector3(color.r, color.g, color.b));
-            MySkinnedMaterial.SetFloat("_FresnelPower", _spellData.HitMonsterShaderSetting[5]);
-            MySkinnedMaterial.SetFloat("_Opacity", _spellData.HitMonsterShaderSetting[6]);
-            MySkinnedMaterial.SetFloat("_Smoothness", _spellData.HitMonsterShaderSetting[7]);
-            MySkinnedMaterial.SetFloat("_Metallic", _spellData.HitMonsterShaderSetting[8]);
-            DOTween.To(() => 1f, x => MySkinnedMaterial.SetFloat("_Opacity", x), 0f, GameSettingJsonData.GetFloat(GameSetting.HitEffect_DecaySec));
+            PropertyBlock.SetVector("_OutlineColor", new Vector3(color.r, color.g, color.b));
+            PropertyBlock.SetFloat("_FresnelPower", _spellData.HitMonsterShaderSetting[5]);
+            PropertyBlock.SetFloat("_Opacity", _spellData.HitMonsterShaderSetting[6]);
+            PropertyBlock.SetFloat("_Smoothness", _spellData.HitMonsterShaderSetting[7]);
+            PropertyBlock.SetFloat("_Metallic", _spellData.HitMonsterShaderSetting[8]);
+            DOTween.To(() => 1f, x => {
+                PropertyBlock.SetFloat("_Opacity", x);
+                SetPropertyBlock(PropertyBlock);
+            }, 0f, GameSettingJsonData.GetFloat(GameSetting.HitEffect_DecaySec));
         }
 
 
         public void Die() {
             if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;
             SetAniTrigger("die");
-            if (MyMonsterSpecialize != null) MyMonsterSpecialize.PlayDissolveEffect(MySkinnedMeshRenderer);
+            if (MyMonsterSpecialize != null) MyMonsterSpecialize.PlayDissolveEffect(MySkinnedMeshRenderers[0]);
         }
 
     }

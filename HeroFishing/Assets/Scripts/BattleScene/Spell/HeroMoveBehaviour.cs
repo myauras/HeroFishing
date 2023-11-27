@@ -73,14 +73,17 @@ public class HeroMoveBehaviour : MonoBehaviour {
                 if (currentTime - _startMovingTime >= _moveTime) {
                     _isMovingBack = true;
                     transform.position = _targetPosition;
-                    _startMovingTime = currentTime;
                     //Debug.Log("finish");
                 }
             }
             else {
                 // 還沒旋轉到定位前，先不移動
-                if (transform.rotation != Quaternion.Euler(0, 180, 0) * _initRotation)
+                if (transform.rotation != Quaternion.Euler(0, 180, 0) * _initRotation) {
                     transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 180, 0) * _initRotation, 600 * deltaTime);
+                    if(transform.rotation == Quaternion.Euler(0, 180, 0) * _initRotation) {
+                        _startMovingTime = currentTime;
+                    }
+                }
                 // 已經旋轉定位，回到原位
                 else {
                     var normalizedTime = (currentTime - _startMovingTime) / _backTime;
