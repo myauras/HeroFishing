@@ -12,8 +12,13 @@ namespace HeroFishing.Battle {
 
         public HeroJsonData MyData { get; private set; }
         HeroSkinJsonData MyHeroSkinData;
+        private SpellActivationBehaviour ActivationBehaviour;
 
         private const int SPELL_COUNT = 4;
+
+        public void Register(SpellActivationBehaviour activationBehaviour) {
+            ActivationBehaviour =  activationBehaviour;
+        }
 
         public void SetData(int _heroID, string _heroSkinID) {
             MyData = HeroJsonData.GetData(_heroID);
@@ -53,6 +58,7 @@ namespace HeroFishing.Battle {
         }
 
         public void OnSpellPlay(SpellName _spellName) {
+            ActivationBehaviour?.OnSpellPlay(_spellName);
 
             var spellData = HeroSpellJsonData.GetSpell(MyData.ID, _spellName);
             if (MyData == null) { WriteLog.LogErrorFormat("HeroData尚未設定"); return; }

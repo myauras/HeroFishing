@@ -93,6 +93,7 @@ public class HeroMoveBehaviour : MonoBehaviour {
                         _isMovingBack = false;
                         _isMoving = false;
                         transform.position = _initPosition;
+                        transform.rotation = _initRotation;
                     }
                 }
 
