@@ -11,7 +11,7 @@ using Scoz.Func;
 
 namespace HeroFishing.Socket {
     public class UdpSocket : MonoBehaviour {
-        private const float CONNECTION_CLOSE_TIME = 30.0f;
+        private const float CONNECTION_CLOSE_TIME = 5.0f; // 設定X秒沒收到封包就斷線
         public event Action<string> OnReceiveMsg;
 
         private UdpClient udpClient;
@@ -188,7 +188,7 @@ namespace HeroFishing.Socket {
                     timer += Time.fixedDeltaTime;
                 }
                 if (timer >= CONNECTION_CLOSE_TIME) {
-                    //5秒都沒收到東西 斷線
+                    //X秒都沒收到封包就斷線
                     OnDisConnect();
                     break;
                 }

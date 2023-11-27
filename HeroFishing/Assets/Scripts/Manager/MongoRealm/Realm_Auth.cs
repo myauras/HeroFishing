@@ -96,8 +96,6 @@ namespace Service.Realms {
         static async Task SetConfiguration() {
             WriteLog.LogColorFormat("開始註冊Realm設定檔...", WriteLog.LogType.Realm);
 
-
-
             try {
                 var config = new FlexibleSyncConfiguration(MyApp.CurrentUser) {
                     PopulateInitialSubscriptions = (realm) => {
@@ -130,8 +128,9 @@ namespace Service.Realms {
 
 
                 try {
+                    var startSyncTime = DateTime.Now;
                     MyRealm = await Realm.GetInstanceAsync(config);
-                    WriteLog.LogColorFormat("Realm設定檔註冊完成", WriteLog.LogType.Realm);
+                    WriteLog.LogColorFormat("Realm設定檔註冊完成, 花費:{0}秒", WriteLog.LogType.Realm, (DateTime.Now - startSyncTime).TotalSeconds);
                 } catch (Exception _e) {
                     WriteLog.LogError("Realm 使用config來GetInstanceAsync時發生錯誤: " + _e);
                     WriteLog.LogError("Realm設定檔註冊失敗");

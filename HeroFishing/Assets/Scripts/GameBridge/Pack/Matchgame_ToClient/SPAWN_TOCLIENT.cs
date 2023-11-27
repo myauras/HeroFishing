@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 namespace HeroFishing.Socket.Matchgame {
-    public class SPAWN : SocketContent {
+    public class SPAWN_TOCLIENT : SocketContent {
         //class名稱就是封包的CMD名稱
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace HeroFishing.Socket.Matchgame {
         /// </summary>
         public double SpawnTime { get; private set; }
 
-        public SPAWN() {
+        public SPAWN_TOCLIENT() {
         }
     }
 }

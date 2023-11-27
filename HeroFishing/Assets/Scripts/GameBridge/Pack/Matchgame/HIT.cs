@@ -1,5 +1,5 @@
 ﻿namespace HeroFishing.Socket.Matchgame {
-    public class ACTION_HIT : SocketContent {
+    public class HIT : SocketContent {
         //class名稱就是封包的CMD名稱
 
         /// <summary>
@@ -16,7 +16,7 @@
         /// </summary>
         public string SpellJsonID { get; private set; }
 
-        public ACTION_HIT(string _attackID, int[] _monsterIdxs, string _spellJsonID) {
+        public HIT(string _attackID, int[] _monsterIdxs, string _spellJsonID) {
             AttackID = _attackID;
             MonsterIdxs = _monsterIdxs;
             SpellJsonID = _spellJsonID;
