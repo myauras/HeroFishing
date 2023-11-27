@@ -45,7 +45,7 @@ namespace HeroFishing.Socket {
                     _callback?.Invoke(false);
                     return;
                 }
-                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMDType.AUTH_REPLY.ToString(), id), (string msg) => {
+                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMD_TCP.AUTH_REPLY.ToString(), id), (string msg) => {
                     SocketCMD<AUTH_REPLY> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_REPLY>>(msg);
                     _callback?.Invoke(packet.Content.IsAuth);
                 });
@@ -65,7 +65,7 @@ namespace HeroFishing.Socket {
             }
             //註冊回呼
             WriteLog.LogColor("註冊回呼", WriteLog.LogType.Connection);
-            RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMDType.CREATEROOM_REPLY.ToString(), id), OnCreateMatchmakerRoom_Reply);
+            RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMD_TCP.CREATEROOM_REPLY.ToString(), id), OnCreateMatchmakerRoom_Reply);
         }
         public void OnCreateMatchmakerRoom_Reply(string _msg) {
             WriteLog.LogColor("OnCreateMatchmakerRoom_Reply", WriteLog.LogType.Connection);
@@ -91,16 +91,16 @@ namespace HeroFishing.Socket {
                     CMDCallback.Remove(commandID);
                     _cb?.Invoke(_msg);
                 } else {
-                    SocketContent.MatchmakerCMDType cmdType;
+                    SocketContent.MatchmakerCMD_TCP cmdType;
                     if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
                         WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
                         return;
                     }
                     switch (cmdType) {
-                        case SocketContent.MatchmakerCMDType.AUTH_REPLY:
+                        case SocketContent.MatchmakerCMD_TCP.AUTH_REPLY:
                             WriteLog.LogColor("AUTH_REPLY", WriteLog.LogType.Connection);
                             break;
-                        case SocketContent.MatchmakerCMDType.CREATEROOM_REPLY:
+                        case SocketContent.MatchmakerCMD_TCP.CREATEROOM_REPLY:
                             WriteLog.LogColor("CREATEROOM_REPLY", WriteLog.LogType.Connection);
                             break;
                     }

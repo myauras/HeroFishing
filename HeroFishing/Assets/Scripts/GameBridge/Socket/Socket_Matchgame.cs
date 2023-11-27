@@ -68,7 +68,7 @@ namespace HeroFishing.Socket {
                     _ac?.Invoke(false);
                     return;
                 }
-                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchgameCMDType.AUTH_REPLY.ToString(), id), (string msg) => {
+                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchgameCMD_TCP.AUTH_REPLY.ToString(), id), (string msg) => {
                     SocketCMD<AUTH_REPLY> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_REPLY>>(msg);
                     _ac?.Invoke(packet.Content.IsAuth);
                     if (packet.Content.IsAuth) {
@@ -101,8 +101,21 @@ namespace HeroFishing.Socket {
         }
         public void OnMatchgameUDPConnCheck(string _msg) {
             try {
-                SocketCMD<UPDATE_UDP> packet = LitJson.JsonMapper.ToObject<SocketCMD<UPDATE_UDP>>(_msg);
-                TimeSyncer.SycServerTime(packet.Content.ServerTime);
+                SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
+                SocketContent.MatchgameCMD_UDP cmdType;
+                if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
+                    WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
+                    return;
+                }
+                switch (cmdType) {
+                    case SocketContent.MatchgameCMD_UDP.UPDATEGAME:
+                        var updateGamePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEGAME>>(_msg);
+                        //WriteLog.Log("GameTime=" + updateGamePacket.Content.GameTime);
+                        break;
+                    default:
+                        WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
+                        break;
+                }
             } catch (Exception e) {
                 WriteLog.LogError("Parse UDP Message with Error : " + e.ToString());
             }
@@ -153,34 +166,38 @@ namespace HeroFishing.Socket {
             //}
             try {
 
-                WriteLog.LogColorFormat("收到Server端資訊: {0}", WriteLog.LogType.Connection, _msg);
+                //WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
                 SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
-                Tuple<string, int> commandID = new Tuple<string, int>(data.CMD, data.PackID);
-                if (CMDCallback.TryGetValue(commandID, out Action<string> _cb)) {
-                    CMDCallback.Remove(commandID);
+                Tuple<string, int> cmdID = new Tuple<string, int>(data.CMD, data.PackID);
+                if (CMDCallback.TryGetValue(cmdID, out Action<string> _cb)) {
+                    CMDCallback.Remove(cmdID);
                     _cb?.Invoke(_msg);
                 } else {
-                    SocketContent.MatchgameCMDType cmdType;
+                    SocketContent.MatchgameCMD_TCP cmdType;
                     if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
                         WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
                         return;
                     }
                     switch (cmdType) {
-                        case SocketContent.MatchgameCMDType.SPAWN:
+                        case SocketContent.MatchgameCMD_TCP.SPAWN:
                             var spawnPacket = LitJson.JsonMapper.ToObject<SocketCMD<SPAWN>>(_msg);
                             HandleSPAWN(spawnPacket);
                             break;
-                        case SocketContent.MatchgameCMDType.ACTION_SETHERO_REPLY:
+                        case SocketContent.MatchgameCMD_TCP.ACTION_SETHERO_REPLY:
                             var setHeroPacket = LitJson.JsonMapper.ToObject<SocketCMD<ACTION_SETHERO_REPLY>>(_msg);
                             HandleSETHERO(setHeroPacket);
                             break;
-                        case SocketContent.MatchgameCMDType.UPDATE_PLAYER_REPLY:
+                        case SocketContent.MatchgameCMD_TCP.UPDATE_PLAYER_REPLY:
                             var updatePlaeyrPacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATE_PLAYER_REPLY>>(_msg);
                             HandleUpdatePlayer(updatePlaeyrPacket);
                             break;
-                        case SocketContent.MatchgameCMDType.ACTION_HIT_REPLY:
+                        case SocketContent.MatchgameCMD_TCP.ACTION_HIT_REPLY:
+                            WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
                             var hitPacket = LitJson.JsonMapper.ToObject<SocketCMD<ACTION_HIT_REPLY>>(_msg);
                             HandleHit(hitPacket);
+                            break;
+                        default:
+                            WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
                             break;
                     }
                 }

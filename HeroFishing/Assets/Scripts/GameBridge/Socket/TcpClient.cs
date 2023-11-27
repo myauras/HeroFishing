@@ -103,7 +103,7 @@ namespace HeroFishing.Socket {
                     command.PackID = packetID++ % int.MaxValue;
                     string msg = LitJson.JsonMapper.ToJson(command);
                     socket.Send(Encoding.UTF8.GetBytes(msg));
-                    WriteLog.LogColorFormat("Socket send: {0}", WriteLog.LogType.Connection, msg);
+                    WriteLog.LogColorFormat("(TCP)送: {0}", WriteLog.LogType.Connection, msg);
                     return command.PackID;
                 } catch (Exception e) {
                     WriteLog.LogErrorFormat("Socket send error: {0}", e.ToString());
