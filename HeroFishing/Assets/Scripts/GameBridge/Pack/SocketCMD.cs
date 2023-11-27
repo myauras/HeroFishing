@@ -31,18 +31,18 @@ namespace HeroFishing.Socket {
     public class SocketContent {
 
         public enum MatchmakerCMD_TCP {
-            AUTH_REPLY,
-            CREATEROOM_REPLY,
+            AUTH_TOCLIENT,
+            CREATEROOM_TOCLIENT,
         }
         public enum MatchgameCMD_TCP {
-            AUTH_REPLY,
-            ACTION_SETHERO_REPLY,
-            ACTION_HIT_REPLY,
-            UPDATE_PLAYER_REPLY,
-            SPAWN,
+            AUTH_TOCLIENT,
+            SETHERO_TOCLIENT,
+            HIT_TOCLIENT,
+            UPDATEPLAYER_TOCLIENT,
+            SPAWN_TOCLIENT,
         }
         public enum MatchgameCMD_UDP {
-            UPDATEGAME,
+            UPDATEGAME_TOCLIENT,
         }
     }
 }

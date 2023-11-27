@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Socket {
     public partial class HeroFishingSocket {
-        public event Action<CREATEROOM_REPLY, string> CreateRoomCallback;
+        public event Action<CREATEROOM_TOCLIENT, string> CreateRoomCallback;
 
         TcpClient TCP_MatchmakerClient;
         public void NewMatchmakerTCPClient(string _ip, int _port) {
@@ -45,15 +45,15 @@ namespace HeroFishing.Socket {
                     _callback?.Invoke(false);
                     return;
                 }
-                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMD_TCP.AUTH_REPLY.ToString(), id), (string msg) => {
-                    SocketCMD<AUTH_REPLY> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_REPLY>>(msg);
+                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMD_TCP.AUTH_TOCLIENT.ToString(), id), (string msg) => {
+                    SocketCMD<AUTH_TOCLIENT> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_TOCLIENT>>(msg);
                     _callback?.Invoke(packet.Content.IsAuth);
                 });
             });
             TCP_MatchmakerClient.RegistOnDisconnect(OnMatchmakerDisconnect);
         }
 
-        public void CreateMatchmakerRoom(string _dbMapID, Action<CREATEROOM_REPLY, string> _cb) {
+        public void CreateMatchmakerRoom(string _dbMapID, Action<CREATEROOM_TOCLIENT, string> _cb) {
             WriteLog.LogColor("CreateMatchmakerRoom", WriteLog.LogType.Connection);
             CreateRoomCallback = _cb;
             CREATEROOM cmdContent = new CREATEROOM(_dbMapID, RealmManager.MyApp.CurrentUser.Id);//建立封包內容
@@ -65,11 +65,11 @@ namespace HeroFishing.Socket {
             }
             //註冊回呼
             WriteLog.LogColor("註冊回呼", WriteLog.LogType.Connection);
-            RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMD_TCP.CREATEROOM_REPLY.ToString(), id), OnCreateMatchmakerRoom_Reply);
+            RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMD_TCP.CREATEROOM_TOCLIENT.ToString(), id), OnCreateMatchmakerRoom_Reply);
         }
         public void OnCreateMatchmakerRoom_Reply(string _msg) {
             WriteLog.LogColor("OnCreateMatchmakerRoom_Reply", WriteLog.LogType.Connection);
-            var packet = LitJson.JsonMapper.ToObject<SocketCMD<CREATEROOM_REPLY>>(_msg);
+            var packet = LitJson.JsonMapper.ToObject<SocketCMD<CREATEROOM_TOCLIENT>>(_msg);
 
             //有錯誤
             if (!string.IsNullOrEmpty(packet.ErrMsg)) {
@@ -97,10 +97,10 @@ namespace HeroFishing.Socket {
                         return;
                     }
                     switch (cmdType) {
-                        case SocketContent.MatchmakerCMD_TCP.AUTH_REPLY:
+                        case SocketContent.MatchmakerCMD_TCP.AUTH_TOCLIENT:
                             WriteLog.LogColor("AUTH_REPLY", WriteLog.LogType.Connection);
                             break;
-                        case SocketContent.MatchmakerCMD_TCP.CREATEROOM_REPLY:
+                        case SocketContent.MatchmakerCMD_TCP.CREATEROOM_TOCLIENT:
                             WriteLog.LogColor("CREATEROOM_REPLY", WriteLog.LogType.Connection);
                             break;
                     }

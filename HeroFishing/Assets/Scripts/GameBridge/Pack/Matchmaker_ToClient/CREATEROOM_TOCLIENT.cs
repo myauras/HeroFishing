@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace HeroFishing.Socket.Matchmaker {
-    public class CREATEROOM_REPLY : SocketContent {
+    public class CREATEROOM_TOCLIENT : SocketContent {
         //class名稱就是封包的CMD名稱
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace HeroFishing.Socket.Matchmaker {
         public string PodName { get; private set; }
 
 
-        public CREATEROOM_REPLY() {
+        public CREATEROOM_TOCLIENT() {
         }
     }
 }

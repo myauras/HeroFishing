@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 namespace HeroFishing.Socket.Matchgame {
-    public class ACTION_HIT_REPLY : SocketContent {
+    public class HIT_TOCLIENT : SocketContent {
         //class名稱就是封包的CMD名稱
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace HeroFishing.Socket.Matchgame {
         /// </summary>
         public int[] GainGolds { get; private set; }
 
-        public ACTION_HIT_REPLY() {
+        public HIT_TOCLIENT() {
         }
     }
 }

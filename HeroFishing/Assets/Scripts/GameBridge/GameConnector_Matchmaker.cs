@@ -75,7 +75,7 @@ namespace HeroFishing.Socket {
         /// <summary>
         /// 收到建立房間結果回傳如果有錯誤就重連
         /// </summary>
-        void OnCreateRoom(CREATEROOM_REPLY _reply, string _erroMsg) {
+        void OnCreateRoom(CREATEROOM_TOCLIENT _reply, string _erroMsg) {
 
             // 建立房間失敗
             if (!string.IsNullOrEmpty(_erroMsg)) {

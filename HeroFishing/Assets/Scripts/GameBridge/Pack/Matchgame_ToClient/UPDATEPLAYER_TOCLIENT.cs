@@ -2,12 +2,12 @@
 using UnityEngine;
 
 namespace HeroFishing.Socket.Matchgame {
-    public class UPDATE_PLAYER_REPLY : SocketContent {
+    public class UPDATEPLAYER_TOCLIENT : SocketContent {
         //class名稱就是封包的CMD名稱
 
         public Player[] Players;
 
-        public UPDATE_PLAYER_REPLY() {
+        public UPDATEPLAYER_TOCLIENT() {
         }
     }
 
