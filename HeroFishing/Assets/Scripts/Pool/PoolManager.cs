@@ -89,6 +89,7 @@ public class PoolManager : MonoBehaviour {
     // 子彈用的物件池
     public GameObject PopBullet(int prefabID, int subPrefabID) {
         //WriteLog.Log("pop bullet");
+        // 製作子彈ID，ex: bullet1、bullet1_1
         string bulletID;
         if (subPrefabID == 0) {
             bulletID = POOL_BULLET + prefabID.ToString();

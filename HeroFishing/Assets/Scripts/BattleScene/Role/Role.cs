@@ -6,13 +6,15 @@ using UnityEngine;
 namespace HeroFishing.Battle {
     public abstract class Role : MonoBehaviour {
 
-        protected SkinnedMeshRenderer MySkinnedMeshRenderer;
-        protected Material MySkinnedMaterial;
+        protected SkinnedMeshRenderer[] MySkinnedMeshRenderers;
+        //protected Material MySkinnedMaterial;
         protected Animator MyAni;
+        protected MaterialPropertyBlock PropertyBlock;
 
 
         public virtual void Start() {
             gameObject.SetActive(false);
+            PropertyBlock = new MaterialPropertyBlock();
         }
 
         /// <summary>
@@ -23,9 +25,9 @@ namespace HeroFishing.Battle {
         }
 
         protected virtual void SetModel() {
-            MySkinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
-            MySkinnedMaterial = MySkinnedMeshRenderer.material;
-            MyAni = MySkinnedMeshRenderer.transform.parent.GetComponent<Animator>();
+            MySkinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+            MySkinnedMeshRenderers[0].GetPropertyBlock(PropertyBlock);
+            MyAni = MySkinnedMeshRenderers[0].transform.parent.GetComponent<Animator>();
         }
 
         public void SetAniTrigger(string _aniName) {
@@ -36,5 +38,10 @@ namespace HeroFishing.Battle {
             transform.rotation = _dir;
         }
 
+        protected void SetPropertyBlock(MaterialPropertyBlock propertyBlock) {
+            foreach (var renderer in MySkinnedMeshRenderers) {
+                renderer.SetPropertyBlock(propertyBlock);
+            }
+        }
     }
 }

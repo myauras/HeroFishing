@@ -27,6 +27,11 @@ public class SpellBuilder {
                 break;
         }
 
+        SpellShakeCamera shakeCam = null;
+        if(Data.CameraShakeSettings != null) {
+            shakeCam = new SpellShakeCamera(Data);
+        }
+
         SpellBase spell = null;
         switch (Data.MySpellType) {
             case HeroSpellJsonData.SpellType.LineShot:
@@ -52,6 +57,7 @@ public class SpellBuilder {
         }
         spell.Hit = hit;
         spell.Move = move;
+        spell.ShakeCamera = shakeCam;
         return spell;
     }
 }

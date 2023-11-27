@@ -19446,6 +19446,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1152064617102594192}
   - component: {fileID: 6893798217618507178}
+  - component: {fileID: 3903864943531876104}
   m_Layer: 0
   m_Name: BulletFire72
   m_TagString: Untagged
@@ -19482,6 +19483,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _backTime: 1.22
+--- !u!95 &3903864943531876104
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2511295583492137040}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 39435d1b678fb0a49bbcb69191f7780c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2807771229091313509
 GameObject:
   m_ObjectHideFlags: 0

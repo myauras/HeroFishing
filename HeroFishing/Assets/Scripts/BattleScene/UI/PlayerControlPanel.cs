@@ -18,8 +18,14 @@ namespace HeroFishing.Battle {
         Vector3 TmpSpellDir;
         Vector3 TmpSpellPos;
         Vector3 OriginPos;
+        HeroMoveBehaviour CurrentMove;
 
         private const float MOVE_SCALE_FACTOR = 2;
+        private bool ControlLock {
+            get {
+                return CurrentMove != null && CurrentMove.IsMoving;
+            }
+        }
 
         private void Update() {
             AttackDetect();
@@ -27,6 +33,7 @@ namespace HeroFishing.Battle {
         //普通攻擊
         void AttackDetect() {
             if (!Input.GetMouseButtonDown(0)) return;
+            if (ControlLock) return;
             if (IsSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
             if (BattleManager.Instance == null) return;
@@ -47,6 +54,7 @@ namespace HeroFishing.Battle {
 
         //施放技能-按下
         public void OnPointerDown(string _spellNameStr) {
+            if (ControlLock) return;
             SpellName spellName;
             if (!MyEnum.TryParseEnum(_spellNameStr, out spellName)) return;
             var hero = BattleManager.Instance.GetHero(0);
@@ -63,6 +71,7 @@ namespace HeroFishing.Battle {
 
         //施放技能-拖曳
         public void OnDrag() {
+            if (ControlLock) return;
             if (!IsSkillMode) return;
             var mousePos = UIPosition.GetMouseWorldPointOnYZero(0);
             TmpSpellPos = (mousePos - OriginPos) * MOVE_SCALE_FACTOR + TmpHero.transform.position;
@@ -72,12 +81,14 @@ namespace HeroFishing.Battle {
             if (TmpSpellData.MyDragType == HeroSpellJsonData.DragType.Rot) {
                 float angle = Mathf.Atan2(TmpSpellDir.x, TmpSpellDir.z) * Mathf.Rad2Deg;
                 SpellIndicator.Instance.RotateIndicator(Quaternion.Euler(0, angle, 0));
-            } else {
+            }
+            else {
                 SpellIndicator.Instance.MoveIndicator(TmpSpellPos);
             }
         }
         //施放技能-放開
         public void OnPointerUp() {
+            if (ControlLock) return;
             if (!IsSkillMode) return;
             IsSkillMode = false;
             SpellIndicator.Instance.Hide();
@@ -91,29 +102,34 @@ namespace HeroFishing.Battle {
         }
         public void OnSetSpell(Vector3 _attackerPos, Vector3 _attackDir) {
             //播放腳色動作(targetPos - TmpHero.transform.position).normalized
-            TmpHero.PlaySpellMotion(TmpSpellData.SpellName);
+            TmpHero.OnSpellPlay(TmpSpellData.SpellName);
             TmpHero.FaceDir(Quaternion.LookRotation(_attackDir));
             //設定ECS施法資料
             SetECSSpellData(_attackerPos, _attackDir);
 
-            if (TmpSpellData.SpellName == SpellName.spell3) {
-                CamManager.ShakeCam(CamManager.CamNames.Battle,
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_Spell3_AmplitudeGain),
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_Spell3_FrequencyGain),
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_Sepll3_Duration));
-            }
+            //if (TmpSpellData.SpellName == SpellName.spell3) {
+            //    CamManager.ShakeCam(CamManager.CamNames.Battle,
+            //        GameSettingJsonData.GetFloat(GameSetting.CamShake_Spell3_AmplitudeGain),
+            //        GameSettingJsonData.GetFloat(GameSetting.CamShake_Spell3_FrequencyGain),
+            //        GameSettingJsonData.GetFloat(GameSetting.CamShake_Sepll3_Duration));
+            //}
         }
 
         void SetECSSpellData(Vector3 _attackPos, Vector3 _attackDir) {
             if (TmpSpellData.Spell == null) return;
             var spell = TmpSpellData.Spell;
             spell.Play(_attackPos, TmpHero.transform.position, _attackDir);
-            if(spell.Move != null) {
-                var moveBehaviour = TmpHero.GetComponent<HeroMoveBehaviour>();
-                if (moveBehaviour == null)
-                    moveBehaviour = TmpHero.gameObject.AddComponent<HeroMoveBehaviour>();
-                spell.Move.Play(_attackPos, TmpHero.transform.position, _attackDir, moveBehaviour);
+
+            if (spell.Move != null) {
+                if (CurrentMove == null)
+                    CurrentMove = TmpHero.GetComponent<HeroMoveBehaviour>();
+                if (CurrentMove == null)
+                    CurrentMove = TmpHero.gameObject.AddComponent<HeroMoveBehaviour>();
+                spell.Move.Play(_attackPos, TmpHero.transform.position, _attackDir, CurrentMove);
             }
+
+            if (spell.ShakeCamera != null)
+                spell.ShakeCamera.Play();
             //switch (TmpSpellData.MySpellType) {
             //    case HeroSpellJsonData.SpellType.SpreadLineShot:
             //        radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
