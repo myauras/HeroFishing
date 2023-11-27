@@ -4856,7 +4856,7 @@ Transform:
   m_GameObject: {fileID: 3749581914367445460}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.26, z: 1.603}
+  m_LocalPosition: {x: 0, y: 0.26, z: -0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4904,7 +4904,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.25
+  m_Time: 0.23
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -4915,21 +4915,12 @@ TrailRenderer:
       - serializedVersion: 3
         time: 0
         value: 0.3161768
-        inSlope: 3.3031008
-        outSlope: 3.3031008
+        inSlope: 2.2740827
+        outSlope: 2.2740827
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.30681816
-      - serializedVersion: 3
-        time: 0.2475856
-        value: 0.8235307
-        inSlope: 0.6756576
-        outSlope: 0.6756576
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.5714237
-        outWeight: 0.2164532
+        outWeight: 0.18309858
       - serializedVersion: 3
         time: 1
         value: 1
@@ -5412,7 +5403,7 @@ ParticleSystem:
     startSizeZ:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.4
+      scalar: 1.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5625,7 +5616,7 @@ ParticleSystem:
     gravitySource: 0
     maxNumParticles: 1
     customEmitterVelocity: {x: 0, y: 0, z: 0}
-    size3D: 1
+    size3D: 0
     rotation3D: 0
     gravityModifier:
       serializedVersion: 2
