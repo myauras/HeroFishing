@@ -20,6 +20,8 @@ public partial class DBPlayerState : IRealmObject {
     [MapTo("inMatchgameID")]
     [Required]
     public string InMatchgameID { get; private set; }
+    [MapTo("heroExp")]
+    public int? HeroExp { get; private set; }
 
     public void SetLastUpdateAt(DateTimeOffset _lastUpdateAt) {
         RealmManager.MyRealm.WriteAsync(() => {
