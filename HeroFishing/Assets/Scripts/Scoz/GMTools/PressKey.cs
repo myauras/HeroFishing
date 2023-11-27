@@ -16,13 +16,15 @@ namespace Scoz.Func {
         [SerializeField] GameObject ToolGO;
 
         public static Animator MyAni;
+        int key = 0;
         // Update is called once per frame
         void KeyDetector() {
 
 
             if (Input.GetKeyDown(KeyCode.Q)) {
-                int[] monsterIdxs = new int[3] { 4, 5, 6 };
-                GameConnector.Instance.Hit("0_1", monsterIdxs, "1_spell2");
+                int[] monsterIdxs = new int[1] { 4 };
+                key++;
+                GameConnector.Instance.Hit(string.Format("0_{0}", key), monsterIdxs, "1_attack");
             } else if (Input.GetKeyDown(KeyCode.W)) {
             } else if (Input.GetKeyDown(KeyCode.E)) {
 
