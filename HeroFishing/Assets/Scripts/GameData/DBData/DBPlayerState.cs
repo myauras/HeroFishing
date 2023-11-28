@@ -22,7 +22,7 @@ public partial class DBPlayerState : IRealmObject {
     [MapTo("heroExp")]
     public int? HeroExp { get; private set; }
 
-    public void SetLastUpdateAt(DateTimeOffset _lastUpdatedAt) {
+    public void SetLastUpdatedAt(DateTimeOffset _lastUpdatedAt) {
         RealmManager.MyRealm.WriteAsync(() => {
             LastUpdatedAt = _lastUpdatedAt;
         });
