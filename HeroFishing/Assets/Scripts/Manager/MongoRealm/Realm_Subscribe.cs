@@ -18,10 +18,10 @@ namespace Service.Realms {
         /// 訂閱Matchgame(遊戲房)資料庫
         /// </summary>
         public static async UniTask Subscribe_Matchgame() {
-            var dbPlayerState = GamePlayer.Instance.GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.playerState);
-            if (dbPlayerState == null) return;
-            WriteLog.LogColorFormat("訂閱Matchgame資料 ID:{0}", WriteLog.LogType.Realm, dbPlayerState.InMatchgameID);
-            var query = MyRealm.All<DBMatchgame>().Where(i => i.ID == dbPlayerState.InMatchgameID);
+            var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
+            if (dbPlayer == null) return;
+            WriteLog.LogColorFormat("訂閱Matchgame資料 ID:{0}", WriteLog.LogType.Realm, dbPlayer.InMatchgameID);
+            var query = MyRealm.All<DBMatchgame>().Where(i => i.ID == dbPlayer.InMatchgameID);
             await query.SubscribeAsync(new SubscriptionOptions() { Name = "MyMatchgame" });
         }
         public static void Unsubscribe_Matchgame() {

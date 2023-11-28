@@ -78,9 +78,9 @@ namespace HeroFishing.Main {
             PodName = _podName;
             WriteLog.LogColorFormat("設定被Matchmaker分配到的房間資料: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));
 
-            var dbPlayerState = GamePlayer.Instance.GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.playerState);
-            if (dbPlayerState == null) return;
-            dbPlayerState.SetInMatchgameID(DBMatchgameID).Forget();
+            var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
+            if (dbPlayer == null) return;
+            dbPlayer.SetInMatchgameID(DBMatchgameID).Forget();
         }
         /// <summary>
         /// 設定房間內玩家的索引, 也就是玩家的座位, 一進房間後就不會更動
@@ -133,9 +133,9 @@ namespace HeroFishing.Main {
             PodName = null;
             WriteLog.LogColorFormat("清空配對房間(AllocatedRoom)資訊: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));
 
-            var dbPlayerState = GamePlayer.Instance.GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.playerState);
-            if (dbPlayerState == null) return;
-            dbPlayerState.SetInMatchgameID(null).Forget();
+            var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
+            if (dbPlayer == null) return;
+            dbPlayer.SetInMatchgameID(null).Forget();
         }
     }
 }

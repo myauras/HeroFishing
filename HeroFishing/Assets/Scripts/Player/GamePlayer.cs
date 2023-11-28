@@ -93,9 +93,9 @@ namespace HeroFishing.Main {
         /// 取得目前所在遊戲房資料，沒在遊戲房中就返回null
         /// </summary>
         public DBMatchgame GetMatchGame() {
-            var dbPlayerState = GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.playerState);
-            if (string.IsNullOrEmpty(dbPlayerState.InMatchgameID)) return null;
-            var dbMatchgame = RealmManager.MyRealm.Find<DBMatchgame>(dbPlayerState.InMatchgameID);
+            var dbPlayer = GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
+            if (string.IsNullOrEmpty(dbPlayer.InMatchgameID)) return null;
+            var dbMatchgame = RealmManager.MyRealm.Find<DBMatchgame>(dbPlayer.InMatchgameID);
             return dbMatchgame;
         }
 
