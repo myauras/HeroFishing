@@ -13,16 +13,14 @@ public partial class DBMatchgame : IRealmObject {
     public string ID { get; private set; }
     [MapTo("createdAt")]
     public DateTimeOffset CreatedAt { get; private set; }
-    [Required]
     [MapTo("dbMapID")]
     public string DBMapID { get; private set; }
     [MapTo("playerIDs")]
     [Required]
     public IList<string> PlayerIDs { get; }
     [MapTo("ip")]
-    [Required]
     public string IP { get; private set; }
     [MapTo("port")]
-    public int Port { get; set; }
+    public int? Port { get; set; }
 
 }
