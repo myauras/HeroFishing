@@ -142,7 +142,7 @@ namespace Service.Realms {
                 //插入
                 foreach (var i in changes.InsertedIndices) {
                     DBMatchgame item = dbMatchgames.ElementAt(i);
-                    var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayerState>(DBPlayerCol.playerState);
+                    var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
                     if (dbPlayer != null && item.ID == dbPlayer.InMatchgameID)
                         GameConnector.Instance.ConnToMatchgame();
                 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Realms;
 using MongoDB.Bson;
 using Service.Realms;
+using Cysharp.Threading.Tasks;
 
 [MapTo("player")]
 public partial class DBPlayer : IRealmObject {
@@ -28,11 +29,28 @@ public partial class DBPlayer : IRealmObject {
     public long? Point { get; private set; }
     [MapTo("heroExp")]
     public int? HeroExp { get; private set; }
+    [MapTo("inMatchgameID")]
+    public string InMatchgameID { get; private set; }
 
     public void SetDeviceUID(string _deviceUID) {
         RealmManager.MyRealm.WriteAsync(() => {
             DeviceUID = _deviceUID;
         });
+    }
+    /// <summary>
+    /// 呼叫時機為: 1.收到Matchmaker建立/加入房間成功後呼叫 2. 離開遊戲房時傳入(null)將玩家所在Matchgame(遊戲房)清掉
+    /// 建立/加入房間時會設定所在Matchgame(遊戲房)的ID並訂閱DBMatchgame資料，若Server房間創好後會收到通知讓玩家主動scoket到Matchgame Server
+    /// 離開遊戲房時將InMatchgameID設回null並取消訂閱
+    /// </summary>
+    public async UniTask SetInMatchgameID(string _matchgameID) {
+        await RealmManager.MyRealm.WriteAsync(() => {
+            InMatchgameID = _matchgameID;
+        });
+        if (!string.IsNullOrEmpty(InMatchgameID)) {
+            await RealmManager.Subscribe_Matchgame();
+        } else {
+            RealmManager.Unsubscribe_Matchgame();
+        }
     }
 
 
