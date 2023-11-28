@@ -49,7 +49,7 @@ namespace HeroFishing.Main {
             var playerDoc = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
 
             //黑名單檢查
-            if (playerDoc.Ban) return CanPlayGameState.Ban;
+            if (playerDoc.Ban ?? false) return CanPlayGameState.Ban;
 
             //維護中檢查
             if (_gameState.Maintain == true) {

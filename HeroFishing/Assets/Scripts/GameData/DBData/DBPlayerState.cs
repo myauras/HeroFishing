@@ -15,17 +15,16 @@ public partial class DBPlayerState : IRealmObject {
     public string ID { get; private set; }
     [MapTo("createdAt")]
     public DateTimeOffset CreatedAt { get; private set; }
-    [MapTo("lastUpdateAt")]
-    public DateTimeOffset LastUpdateAt { get; private set; }
+    [MapTo("lastUpdatedAt")]
+    public DateTimeOffset? LastUpdatedAt { get; private set; }
     [MapTo("inMatchgameID")]
-    [Required]
     public string InMatchgameID { get; private set; }
     [MapTo("heroExp")]
     public int? HeroExp { get; private set; }
 
-    public void SetLastUpdateAt(DateTimeOffset _lastUpdateAt) {
+    public void SetLastUpdateAt(DateTimeOffset _lastUpdatedAt) {
         RealmManager.MyRealm.WriteAsync(() => {
-            LastUpdateAt = _lastUpdateAt;
+            LastUpdatedAt = _lastUpdatedAt;
         });
     }
     /// <summary>

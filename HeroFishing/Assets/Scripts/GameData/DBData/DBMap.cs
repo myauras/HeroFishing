@@ -11,19 +11,18 @@ public partial class DBMap : IRealmObject {
     [PrimaryKey]
     public string Id { get; set; }
     [MapTo("bet")]
-    public int Bet { get; set; }
+    public int? Bet { get; set; }
     [MapTo("betThreshold")]
-    public long BetThreshold { get; set; }
+    public long? BetThreshold { get; set; }
     [MapTo("createdAt")]
     public DateTimeOffset CreatedAt { get; set; }
     [MapTo("enable")]
-    public bool Enable { get; set; }
+    public bool? Enable { get; set; }
     [MapTo("jsonMapID")]
-    public int JsonMapID { get; set; }
+    public int? JsonMapID { get; set; }
     [MapTo("matchType")]
-    [Required]
     public string MatchType { get; set; }
     [MapTo("priority")]
-    public int Priority { get; set; }
+    public int? Priority { get; set; }
 
 }

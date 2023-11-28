@@ -128,7 +128,7 @@ namespace HeroFishing.Socket {
                 UDP_MatchgameClient = new GameObject("GameUdpSocket").AddComponent<UdpSocket>();
                 var dbMatchgame = GamePlayer.Instance.GetMatchGame();
                 if (dbMatchgame == null) { WriteLog.LogError("OnMatchgameUDPDisconnect時重連失敗，dbMatchgame is null"); return; }
-                UDP_MatchgameClient.Init(dbMatchgame.IP, dbMatchgame.Port);
+                UDP_MatchgameClient.Init(dbMatchgame.IP, dbMatchgame.Port ?? 0);
                 UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
                     WriteLog.LogColor("OnMatchgameUDPDisconnect後重連結果 :" + connected, WriteLog.LogType.Connection);
                     if (connected)

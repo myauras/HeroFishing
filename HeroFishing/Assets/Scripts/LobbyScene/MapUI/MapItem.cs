@@ -21,7 +21,7 @@ namespace HeroFishing.Main {
 
         public void Init(DBMap _data) {
             MyDBMap = _data;
-            MyJsonMap = MapJsonData.GetData(MyDBMap.JsonMapID);
+            MyJsonMap = MapJsonData.GetData(MyDBMap.JsonMapID ?? 0);
             RefreshItem();
         }
 
