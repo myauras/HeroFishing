@@ -26,6 +26,8 @@ public partial class DBPlayer : IRealmObject {
     public string OnlineState { get; private set; }
     [MapTo("point")]
     public long? Point { get; private set; }
+    [MapTo("heroExp")]
+    public int? HeroExp { get; private set; }
 
     public void SetDeviceUID(string _deviceUID) {
         RealmManager.MyRealm.WriteAsync(() => {
