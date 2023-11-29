@@ -169,7 +169,7 @@ namespace HeroFishing.Main {
         /// <summary>
         /// 初始化玩家資料
         /// </summary>
-        async Task InitPlayerData(AuthType _authType) {
+        async UniTask InitPlayerData(AuthType _authType) {
             WriteLog.LogColorFormat("尚無此玩家資料，開始初始化玩家 {0} 的資料", WriteLog.LogType.Realm, RealmManager.MyApp.CurrentUser.Id);
             var replyData = await RealmManager.CallAtlasFunc_InitPlayerData(AuthType.Guest);
 
