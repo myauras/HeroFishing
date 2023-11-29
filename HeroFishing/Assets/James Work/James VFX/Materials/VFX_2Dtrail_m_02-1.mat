@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_Trail_m_05 1
-  m_Shader: {fileID: 4800000, guid: 9f604521cce299e4c972e6a0e3709f23, type: 3}
+  m_Name: VFX_2Dtrail_m_02-1
+  m_Shader: {fileID: 4800000, guid: fe8f81c6b511d8a48af18e5991ac94b2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -23,22 +23,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_35DCD328:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_9ADE22F:
-        m_Texture: {fileID: 2800000, guid: 4da4acf576b4a984a98c77af36e4eec1, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_AF540EA9:
-        m_Texture: {fileID: 2800000, guid: 4da4acf576b4a984a98c77af36e4eec1, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_BD320D5E:
-        m_Texture: {fileID: 2800000, guid: 4da4acf576b4a984a98c77af36e4eec1, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -53,21 +37,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Vector1_23E530DB: -5
+    - Vector1_3A9C0162: 0
+    - Vector1_469B8CD7: 1
+    - Vector1_6F21E6F1: 1
+    - Vector1_7047649B: 6.42
+    - Vector1_F50BFD67: 0.94
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Xspeed: -3
-    - _Yspeed: 0
     m_Colors:
-    - Color_37083A07: {r: 5.992157, g: 5.992157, b: 5.992157, a: 1}
-    - Color_81F56A4E: {r: 5.992157, g: 5.992157, b: 5.992157, a: 1}
-    - Color_B2707143: {r: 8, g: 8, b: 8, a: 1}
-    - Vector2_CF81FBAE: {r: 1, g: 1, b: 0, a: 0}
-    - Vector4_7707394: {r: 1, g: 1, b: 1, a: 1}
-    - Vector4_CAA18037: {r: 1, g: 1, b: 1, a: 1}
-    - _Speed: {r: -2.5, g: 0, b: 0, a: 0}
+    - Color_1008328D: {r: 2.9960785, g: 2.9960785, b: 2.9960785, a: 1}
+    - Color_D4E35D9A: {r: 2.9960785, g: 2.9960785, b: 2.9960785, a: 1}
+    - Vector4_36CDFBAF: {r: -2.5, g: 0, b: 0.3, a: 0.5}
   m_BuildTextureStacks: []
---- !u!114 &9177554213283696208
+--- !u!114 &7088690368836604875
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

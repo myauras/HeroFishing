@@ -7,8 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_StoneGlow_m_01
-  m_Shader: {fileID: 4800000, guid: 67852691b75aa744ba5ad3a6fb14b466, type: 3}
+  m_Name: VFX_MagicHit_m_01-1
+  m_Shader: {fileID: -6465566751694194690, guid: c6121ffc44f72ed48a82400b8a56cd75,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -19,16 +20,12 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: Vector1_5A41DF23
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_139CB854:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_2CF0794C:
-        m_Texture: {fileID: 0}
+    - _NormalFromTexture_5354bbe51cbf4d7ca16edba6ccc60a48_Texture_0_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 380ffa9f9b97f4f4682086a31d9102df, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -45,19 +42,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Vector1_17EB7558: 0.12
-    - Vector1_3ADE2CF7: 0.235
-    - Vector1_5A41DF23: 0
-    - Vector1_DA37CFC9: 0.19
+    - _EdgeAlpha: 3
+    - _EndEdgeAlpha: 2
+    - _Frequency: 5
+    - _HeadEdgeAlpha: 0
     - _QueueControl: 1
     - _QueueOffset: 0
-    - _RimValue: 1
+    - _Scale: 5
     m_Colors:
-    - Color_16A8E7A: {r: 0.75608593, g: 0.9177007, b: 1.4980394, a: 1}
-    - Color_8ADDE21D: {r: 0.16164494, g: 0.16037738, b: 2, a: 1}
-    - Color_DA2C7E2B: {r: 1.6037736, g: 1.42997, b: 0.34042367, a: 1}
+    - _Color: {r: 5.992157, g: 5.992157, b: 5.992157, a: 1}
+    - _WaveOffset: {r: 0, g: 2, b: 0, a: 0}
+    - _WaveTiling: {r: 2, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &8676466064618065713
+--- !u!114 &8337399241285848304
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

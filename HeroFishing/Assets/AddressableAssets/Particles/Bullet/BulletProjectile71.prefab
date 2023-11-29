@@ -9723,7 +9723,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 945b031dc27c03b4aa6abf894cb4fcca, type: 2}
+  - {fileID: 2100000, guid: b9b692a54b67b8d4db2ee8530bcd6732, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29325,7 +29325,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9064258126351191185}
-  - component: {fileID: 4622134931401648121}
   m_Layer: 0
   m_Name: BulletProjectile71
   m_TagString: Untagged
@@ -29353,27 +29352,6 @@ Transform:
   - {fileID: 2742605716247152056}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &4622134931401648121
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1406186205297803711}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a80c016b9e2994843a93065dc0814dac, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1651396967634039262
 GameObject:
   m_ObjectHideFlags: 0
@@ -44003,7 +43981,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e403f9f0e4140fa4982e42c3cf283441, type: 2}
+  - {fileID: 2100000, guid: 2f535555247bbd44092c94a19ab226a6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
