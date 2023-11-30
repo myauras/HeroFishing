@@ -7,21 +7,27 @@ namespace HeroFishing.Socket {
     /// Socket封包
     /// </summary>
     public class SocketCMD<T> where T : SocketContent {
-        public string CMD;
-        public int PackID;
-        public string ErrMsg;
+        public string CMD { get; private set; }
+        public int PackID { get; private set; }
+        public string ErrMsg { get; private set; }
+        public string ConnToken { get; private set; }
         public T Content;
 
         public SocketCMD() {
         }
 
-        public SocketCMD(T content) {
-            CMD = content.GetType().Name;
-            Content = content;
+        public SocketCMD(T _content) {
+            CMD = _content.GetType().Name;
+            Content = _content;
         }
-
-        public SocketCMD(Type type) {
-            Content = (T)Activator.CreateInstance(type);
+        public void SetPackID(int _value) {
+            PackID = _value;
+        }
+        public void SetConnToken(string _value) {
+            ConnToken = _value;
+        }
+        public SocketCMD(Type _type) {
+            Content = (T)Activator.CreateInstance(_type);
         }
     }
 

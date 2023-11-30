@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 using Scoz.Func;
+using HeroFishing.Socket.Matchmaker;
+using HeroFishing.Socket.Matchgame;
+using Service.Realms;
 
 namespace HeroFishing.Socket {
     public class UdpSocket : MonoBehaviour {
@@ -27,6 +30,7 @@ namespace HeroFishing.Socket {
         private ConcurrentQueue<string> messageQueue = new ConcurrentQueue<string>();
         private bool isTryConnect = false;
         private float timer = 0;
+        private int packetID;
         private WaitForFixedUpdate waitFixUpdate = new WaitForFixedUpdate();
         private System.Object timerLock = new System.Object();
         private void Start() {
@@ -122,7 +126,10 @@ namespace HeroFishing.Socket {
 
         private void Thread_Receive() {
             string mseQueue = "";
-            udpClient.Send(Encoding.UTF8.GetBytes(this.udpToken), this.udpToken.Length);
+            UDPAUTH cmdContent = new UDPAUTH();//建立封包內容
+            SocketCMD<UDPAUTH> cmd = new SocketCMD<UDPAUTH>(cmdContent);//建立封包
+            cmd.SetConnToken(udpToken);//設定封包ConnToken
+            Send(cmd);
             while (true) {
                 try {
                     //if (udpClient.Available <= 0) continue;
@@ -162,6 +169,18 @@ namespace HeroFishing.Socket {
             try {
                 this.Close();
             } catch {
+            }
+        }
+        public int Send<T>(SocketCMD<T> cmd) where T : SocketContent {
+            try {
+                cmd.SetPackID(packetID++ % int.MaxValue);
+                string msg = LitJson.JsonMapper.ToJson(cmd);
+                udpClient.Send(Encoding.UTF8.GetBytes(msg), msg.Length);
+                WriteLog.LogColorFormat("(UDP)送: {0}", WriteLog.LogType.Connection, msg);
+                return cmd.PackID;
+            } catch (Exception e) {
+                WriteLog.LogErrorFormat("(UDP)Socket send error: {0}", e.ToString());
+                return -1;
             }
         }
 
