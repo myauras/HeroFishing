@@ -14,7 +14,7 @@ namespace Scoz.Func {
             Loco,
             Json,
             Debug,
-            Undefined,
+            Poster,
         }
         public static Dictionary<LogType, string> LocColorCodes = new Dictionary<LogType, string>() {
             { LogType.Player,"db7777"},//紅
@@ -24,7 +24,7 @@ namespace Scoz.Func {
 			{ LogType.Loco,"d9ad83"},//橘
 			{ LogType.Json,"398000"},//綠
 			{ LogType.Debug,"bcbcbc"},//灰
-			{ LogType.Undefined,"008080"},//藍綠
+			{ LogType.Poster,"008080"},//藍綠
         };
 
 

@@ -1,37 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Scoz.Func;
-using System.Linq;
-using UnityEngine.Networking;
-using System.Text;
 using System;
+using System.Text;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.Networking;
 
-namespace HeroFishing.Main {
-    public class PostData {
-        public string URL;
-        public string BodyJson;
-        public PostData(string _url, string _bodyJson) {
-            URL = _url;
-            BodyJson = _bodyJson;
-        }
-    }
+namespace Scoz.Func {
     public class Poster : MonoBehaviour {
+        public static async UniTask<object> Post(string _url, string _bodyJson) {
+            WriteLog.LogColorFormat("SendPost URL: {0}", WriteLog.LogType.Poster, _url);
 
-
-        public static IEnumerator Post(string _url, string _bodyJson, Action<object> _cb = null) {
-            WriteLog.Log("SendPost");
-            //string url = "https://asia-east1-lanlansbizarre-dev.cloudfunctions.net/AddData";
-            //string jsonString = "{\"Col\":\"Dev\"}";
             var request = new UnityWebRequest(_url, "POST");
             byte[] bodyRaw = Encoding.UTF8.GetBytes(_bodyJson);
-            request.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
-            yield return request.SendWebRequest();
-            _cb?.Invoke(request.result);
-            WriteLog.Log("Status Code: " + request.responseCode);
-            WriteLog.Log("Result:" + request.result);
+
+            await request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError) {
+                // ¿ù»~³B²z
+                WriteLog.Log("Error: " + request.error);
+                return null;
+            }
+
+            WriteLog.Log("Response Code: " + request.responseCode);
+            WriteLog.Log("Result: " + request.result);
+
+            return request.result;
         }
     }
 }
