@@ -1,12 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System;
-using HeroFishing.Main;
-using SimpleJSON;
 using Service.Realms;
-using Realms;
 using System.Linq;
 using HeroFishing.Socket;
 
@@ -56,6 +49,7 @@ namespace Scoz.Func {
                 WriteLog.LogColor("文件數量:" + dbPlayerState.Count(), WriteLog.LogType.Realm);
             }
         }
+
 
         public void OnModifyHP(int _value) {
         }
