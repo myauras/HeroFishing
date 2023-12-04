@@ -10,6 +10,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Networking;
 using System.Text;
+using HeroFishing.Socket;
 
 namespace Service.Realms {
     public static partial class RealmManager {
@@ -65,18 +66,15 @@ namespace Service.Realms {
             WriteLog.LogColorFormat("Realm帳號登入: {0}", WriteLog.LogType.Realm, MyApp.CurrentUser);
             try {
                 await GetServerTime();
-                //string url = "https://aurafordev.com/player/syncredischeck";
-                //var token = GetValidAccessToken();
-                //string jsonPayload = $"{{\"cmd\":\"test\", \"token\":\"{token}\"}}";
-                //// 呼叫 Poster 來發送請求
-                //var result = await Poster.Post(url, jsonPayload);
-
+                await GameConnector.SendRestfulAPI("player/syncredischeck", null); //檢查是否需要同步Redis資料回玩家資料
 
             } catch (Exception _e) {
                 WriteLog.LogError(_e);
             }
             await SetConfiguration();
         }
+
+
 
         /// <summary>
         /// 向AtlasFunction取Server時間
