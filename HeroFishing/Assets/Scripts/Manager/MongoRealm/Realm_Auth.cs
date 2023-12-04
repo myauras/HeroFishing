@@ -65,11 +65,11 @@ namespace Service.Realms {
             WriteLog.LogColorFormat("Realm帳號登入: {0}", WriteLog.LogType.Realm, MyApp.CurrentUser);
             try {
                 await GetServerTime();
-                string url = "https://aurafordev.com/player/syncredischeck";
-                var token = GetValidAccessToken();
-                string jsonPayload = $"{{\"cmd\":\"test\", \"token\":\"{token}\"}}";
-                // 呼叫 Poster 來發送請求
-                var result = await Poster.Post(url, jsonPayload);
+                //string url = "https://aurafordev.com/player/syncredischeck";
+                //var token = GetValidAccessToken();
+                //string jsonPayload = $"{{\"cmd\":\"test\", \"token\":\"{token}\"}}";
+                //// 呼叫 Poster 來發送請求
+                //var result = await Poster.Post(url, jsonPayload);
 
 
             } catch (Exception _e) {
