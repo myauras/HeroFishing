@@ -96,22 +96,23 @@ namespace Service.Realms {
         /// <summary>
         /// 註冊帳戶，傳入AuthType
         /// </summary>
-        public static async Task<Dictionary<string, object>> CallAtlasFunc_InitPlayerData(AuthType _authType) {
+        public static async UniTask<Dictionary<string, object>> CallAtlasFunc_InitPlayerData(AuthType _authType) {
             try {
                 var dataDic = new Dictionary<string, object> { { "AuthType", _authType.ToString() } };
-                var replyData = await CallAtlasFunc(AtlasFunc.InitPlayerData, dataDic);
+                var replyData = await CallAtlasFunc(AtlasFunc.InitPlayerData, dataDic).AsUniTask();
                 if (replyData == null) {
                     WriteLog.LogErrorFormat("CallAtlasFunc_InitPlayerData發生錯誤");
                     return null;
                 }
 
-                var tcs = new TaskCompletionSource<object>();
+                var utcs = new UniTaskCompletionSource();
                 using var token = MyRealm.All<DBPlayer>().Where(i => i.ID == MyApp.CurrentUser.Id).SubscribeForNotifications((sender, e) => {
                     if (sender.Count > 0) {
-                        tcs.TrySetResult(null);
+                        utcs.TrySetResult();
                     }
                 });
-                await tcs.Task;
+
+                await utcs.Task;
                 return replyData;
 
             } catch (Exception _e) {

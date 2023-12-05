@@ -117,7 +117,7 @@ namespace HeroFishing.Socket {
 
             if (IsConnected) {
                 try {
-                    command.PackID = packetID++ % int.MaxValue;
+                    command.SetPackID(packetID++ % int.MaxValue);
                     string msg = LitJson.JsonMapper.ToJson(command);
                     socket.Send(Encoding.UTF8.GetBytes(msg));
                     WriteLog.LogColorFormat("(TCP)送: {0}", WriteLog.LogType.Connection, msg);
@@ -145,9 +145,8 @@ namespace HeroFishing.Socket {
                 WriteLog.LogColor("Tcp connect success", WriteLog.LogType.Connection);
                 thread_receive = new Thread(Thread_Receive);
                 thread_receive.Start();
-            }
-            catch (Exception e) {
-                WriteLog.LogErrorFormat("Socket send error: {0}", e.ToString());
+            } catch (Exception e) {
+                WriteLog.LogErrorFormat("(TCP)Socket send error: {0}", e.ToString());
                 isTryConnect = false;
 
                 cancellationSource.Cancel();

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Networking;
+using System.Text;
+using HeroFishing.Socket;
 
 namespace Service.Realms {
     public static partial class RealmManager {
@@ -39,7 +42,7 @@ namespace Service.Realms {
         /// <summary>
         /// 取得AccessToken
         /// </summary>
-        public static async Task<string> GetValidAccessToken() {
+        public static async UniTask<string> GetValidAccessToken() {
             if (MyApp == null || MyApp.CurrentUser == null) { WriteLog.LogErrorFormat("尚未建立Realm App，無法取得AccessToken"); return null; }
             await MyApp.CurrentUser.RefreshCustomDataAsync();
             WriteLog.LogColor("AccessToken:" + MyApp.CurrentUser.AccessToken, WriteLog.LogType.Realm);
@@ -49,7 +52,7 @@ namespace Service.Realms {
         /// <summary>
         /// 取得Provider
         /// </summary>
-        public static async Task<string> GetProvider() {
+        public static async UniTask<string> GetProvider() {
             if (MyApp == null || MyApp.CurrentUser == null) { WriteLog.LogErrorFormat("尚未建立Realm App，無法取得AccessToken"); return null; }
             await MyApp.CurrentUser.RefreshCustomDataAsync();
             var provider = MyApp.CurrentUser.Provider;
@@ -59,22 +62,24 @@ namespace Service.Realms {
         /// <summary>
         /// 玩家登入後都會執行這裡(不管是剛註冊後還是已註冊的玩家登入)
         /// </summary>
-        public static async Task OnSignin() {
+        public static async UniTask OnSignin() {
             WriteLog.LogColorFormat("Realm帳號登入: {0}", WriteLog.LogType.Realm, MyApp.CurrentUser);
-            UniTask.Void(async () => {
-                try {
-                    await GetServerTime();
-                } catch (Exception _e) {
-                    WriteLog.LogError(_e);
-                }
-            });
+            try {
+                await GetServerTime();
+                await GameConnector.SendRestfulAPI("player/syncredischeck", null); //檢查是否需要同步Redis資料回玩家資料
+
+            } catch (Exception _e) {
+                WriteLog.LogError(_e);
+            }
             await SetupConfig();
         }
+
+
 
         /// <summary>
         /// 向AtlasFunction取Server時間
         /// </summary>
-        static async Task GetServerTime() {
+        static async UniTask GetServerTime() {
             var serverTimeData = await CallAtlasFunc(AtlasFunc.GetServerTime, null);
             if (serverTimeData.TryGetValue("serverTime", out object _obj)) {
                 //WriteLog.LogColor(_obj.ToString(), WriteLog.LogType.Realm);
@@ -142,7 +147,7 @@ namespace Service.Realms {
             }
         }
 
-        public static async Task Signout() {
+        public static async UniTask Signout() {
             await MyApp.CurrentUser.LogOutAsync();
             WriteLog.LogColorFormat("登出Realm帳戶", WriteLog.LogType.Realm);
         }

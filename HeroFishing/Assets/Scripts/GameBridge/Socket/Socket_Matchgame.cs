@@ -47,7 +47,7 @@ namespace HeroFishing.Socket {
             TCP_MatchgameClient.RegistOnDisconnect(OnMatchmakerDisconnect);
         }
 
-        public void OnMatchgameUDPConnCheck(string _msg) {
+        public void OnRecieveMatchgameUDPMsg(string _msg) {
             try {
                 SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
                 SocketContent.MatchgameCMD_UDP cmdType;
@@ -58,7 +58,7 @@ namespace HeroFishing.Socket {
                 switch (cmdType) {
                     case SocketContent.MatchgameCMD_UDP.UPDATEGAME_TOCLIENT:
                         var updateGamePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEGAME_TOCLIENT>>(_msg);
-                        //WriteLog.Log("GameTime=" + updateGamePacket.Content.GameTime);
+                        HandleUpdateGame(updateGamePacket);
                         break;
                     default:
                         WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
@@ -70,7 +70,7 @@ namespace HeroFishing.Socket {
             }
         }
         public void OnMatchgameUDPDisconnect() {
-            UDP_MatchgameClient.OnReceiveMsg -= OnMatchgameUDPConnCheck;
+            UDP_MatchgameClient.OnReceiveMsg -= OnRecieveMatchgameUDPMsg;
             //沒有timeout重連UDP
             if (UDP_MatchgameClient != null && UDP_MatchgameClient.CheckTimerInTime()) {
                 UDP_MatchgameClient.Close();
@@ -81,7 +81,7 @@ namespace HeroFishing.Socket {
                 UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
                     WriteLog.LogColor("OnMatchgameUDPDisconnect後重連結果 :" + connected, WriteLog.LogType.Connection);
                     if (connected)
-                        UDP_MatchgameClient.OnReceiveMsg += OnMatchgameUDPConnCheck;
+                        UDP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameUDPMsg;
                     else {
                         this.MatchgameDisconnect();
                     }
@@ -151,7 +151,7 @@ namespace HeroFishing.Socket {
             UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
                 WriteLog.LogColor($"UDP Is connected: {connected}", WriteLog.LogType.Connection);
                 if (connected)
-                    UDP_MatchgameClient.OnReceiveMsg += OnMatchgameUDPConnCheck;
+                    UDP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameUDPMsg;
             });
             UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
         }
@@ -237,6 +237,14 @@ namespace HeroFishing.Socket {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.KillMonsterIdxs));
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.GainGolds));
+        }
+        void HandleUpdateGame(SocketCMD<UPDATEGAME_TOCLIENT> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            //WriteLog.Log("GameTime=" + _packet.Content.GameTime);
+            var cmdContent = new UPDATEGAME();//建立封包內容
+            var cmd = new SocketCMD<UPDATEGAME>(cmdContent);//建立封包
+            cmd.SetConnToken(UDP_MatchgameConnToken);//設定封包ConnToken
+            UDP_MatchgameClient.Send(cmd);
         }
 
     }

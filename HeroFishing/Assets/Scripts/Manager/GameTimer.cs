@@ -14,7 +14,7 @@ namespace HeroFishing.Main {
     public class GameTimer : MonoBehaviour {
         static DateTimeOffset LastOverMidNightTime;
         public static GameTimer Instance;
-        const int MinimumOnlineSentSec = 30;//送server目前在線的時間戳，最短間隔設為30，避免跟太頻繁修改DB
+        const int MinimumOnlineSentSec = 10;//送server目前在線的時間戳，最短間隔設為10，避免跟太頻繁修改DB
 
         public void Init() {
             Instance = this;

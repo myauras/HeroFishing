@@ -35,6 +35,17 @@ namespace HeroFishing.Socket {
             Socket.JoinRoomObservable.Subscribe(_ => JoinGameSuccess(), JoinGameFailed);
         }
 
+        /// <summary>
+        /// 送RestfulAPI請求
+        /// </summary>
+        public static async UniTask<object> SendRestfulAPI(string _endPoint, string _valueJson) {
+            string baseURL = "https://aurafordev.com/";
+            string url = baseURL + _endPoint;
+            var token = await RealmManager.GetValidAccessToken();
+            string jsonPayload = $"{{\"token\": \"{token}\", \"valueJson\":\"{_valueJson}\"}}";
+            var result = await Poster.Post(url, jsonPayload);
+            return result;
+        }
 
         void OnDisConnect() {
             WriteLog.LogColor("OnDisConnect", WriteLog.LogType.Connection);
