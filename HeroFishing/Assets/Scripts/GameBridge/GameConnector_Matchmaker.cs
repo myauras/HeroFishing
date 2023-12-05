@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UniRx;
 
 namespace HeroFishing.Socket {
     public partial class GameConnector : MonoBehaviour {
@@ -30,37 +31,38 @@ namespace HeroFishing.Socket {
             OnConnToMatchgameCB = _cb;
             // 接Socket
             var gameSetting = GamePlayer.Instance.GetDBGameSettingDoc<DBGameSetting>(DBGameSettingDoc.GameState);
-            HeroFishingSocket.GetInstance().NewMatchmakerTCPClient(gameSetting.MatchmakerIP, gameSetting.MatchmakerPort ?? 0);
+            Socket.CreateMatchmaker(gameSetting.MatchmakerIP, gameSetting.MatchmakerPort ?? 0);
             var token = await RealmManager.GetValidAccessToken();
-            HeroFishingSocket.GetInstance().LoginToMatchmaker(token, OnLoginToMatchmaker);
+            Socket.LoginToMatchmaker(token);
 
         }
 
         /// <summary>
         /// 登入配對伺服器成功時執行
         /// </summary>
-        async UniTask OnLoginToMatchmaker(bool _success) {
-
-            // 連線失敗時嘗試重連
-            if (!_success) {
-                CurRetryTimes++;
-                if (CurRetryTimes >= MAX_RETRY_TIMES || !InternetChecker.InternetConnected) {
-                    WriteLog.LogColorFormat("嘗試連線{0}次都失敗，糟糕了", WriteLog.LogType.Connection, CurRetryTimes, RETRY_INTERVAL_SECS);
-                    OnConnToMatchgameCB?.Invoke(false);
-                } else {
-                    WriteLog.LogColorFormat("第{0}次連線失敗，{0}秒後嘗試重連", WriteLog.LogType.Connection, CurRetryTimes, RETRY_INTERVAL_SECS);
-                    //連線失敗有可能是TOKEN過期 刷Token後再連
-                    var token = await RealmManager.GetValidAccessToken();
-                    HeroFishingSocket.GetInstance().LoginToMatchmaker(token, OnLoginToMatchmaker);
-                }
-                return;
-            }
+        void OnLoginToMatchmaker() {
             // 連上MatchmakerServer
             WriteLog.LogColor("登入Matchmaker成功", WriteLog.LogType.Connection);
             CreateRoom();
         }
 
-
+        /// <summary>
+        /// 登入配對伺服器失敗
+        /// </summary>
+        async UniTask OnLoginToMatchmakerError() {
+            // 連線失敗時嘗試重連
+            CurRetryTimes++;
+            if (CurRetryTimes >= MAX_RETRY_TIMES || !InternetChecker.InternetConnected) {
+                WriteLog.LogColorFormat("嘗試連線{0}次都失敗，糟糕了", WriteLog.LogType.Connection, CurRetryTimes, RETRY_INTERVAL_SECS);
+                OnConnToMatchgameCB?.Invoke(false);
+            }
+            else {
+                WriteLog.LogColorFormat("第{0}次連線失敗，{0}秒後嘗試重連: ", WriteLog.LogType.Connection, CurRetryTimes, RETRY_INTERVAL_SECS);
+                //連線失敗有可能是TOKEN過期 刷Token後再連
+                var token = await RealmManager.GetValidAccessToken();
+                Socket.LoginToMatchmaker(token);
+            }
+        }
 
         /// <summary>
         ///  1. 送Matchmaker(配對伺服器)來建立Matchgame(遊戲房)
@@ -69,28 +71,13 @@ namespace HeroFishing.Socket {
         /// </summary>
         void CreateRoom() {
             CurRetryTimes = 0;
-            HeroFishingSocket.GetInstance().CreateMatchmakerRoom(TmpDBMapID, OnCreateRoom);
+            Socket.CreateMatchmakerRoom(TmpDBMapID);
         }
 
         /// <summary>
         /// 收到建立房間結果回傳如果有錯誤就重連
         /// </summary>
-        void OnCreateRoom(CREATEROOM_TOCLIENT _reply, string _erroMsg) {
-
-            // 建立房間失敗
-            if (!string.IsNullOrEmpty(_erroMsg)) {
-                CurRetryTimes++;
-                if (CurRetryTimes >= MAX_RETRY_TIMES || _erroMsg == "NOT_FOUR_PLAYER" || !InternetChecker.InternetConnected) {
-                    OnConnToMatchgameCB?.Invoke(false);
-                } else {
-                    WriteLog.LogColor("[GameConnector] 建立房間失敗 再試1次", WriteLog.LogType.Connection);
-                    // 再試一次
-                    DG.Tweening.DOVirtual.DelayedCall(RETRY_INTERVAL_SECS, () => {
-                        HeroFishingSocket.GetInstance().CreateMatchmakerRoom(TmpDBMapID, OnCreateRoom);
-                    });
-                }
-                return;
-            }
+        void OnCreateRoom(CREATEROOM_TOCLIENT _reply) {
             if (_reply == null) {
                 WriteLog.LogError("OnCreateRoom回傳的CREATEROOM_REPLY內容為null");
                 OnConnToMatchgameCB?.Invoke(false);
@@ -100,6 +87,24 @@ namespace HeroFishing.Socket {
             WriteLog.LogColor("建立房間成功", WriteLog.LogType.Connection);
             //設定玩家目前所在遊戲房間的資料並開始偵聽DBMatchgame(偵聽到DBMatchgame好後會自動去連Matchgame socket)
             AllocatedRoom.Instance.SetRoom(_reply.CreaterID, _reply.PlayerIDs, _reply.DBMapID, _reply.DBMatchgameID, _reply.IP, _reply.Port, _reply.PodName);
+        }
+
+        private void OnCreateRoomError(Exception _exception) {
+            // 建立房間失敗
+            if (_exception != null) {
+                CurRetryTimes++;
+                if (CurRetryTimes >= MAX_RETRY_TIMES || _exception.Message == "NOT_FOUR_PLAYER" || !InternetChecker.InternetConnected) {
+                    OnConnToMatchgameCB?.Invoke(false);
+                }
+                else {
+                    WriteLog.LogColor("[GameConnector] 建立房間失敗 再試1次", WriteLog.LogType.Connection);
+                    // 再試一次
+                    DG.Tweening.DOVirtual.DelayedCall(RETRY_INTERVAL_SECS, () => {
+                        Socket.CreateMatchmakerRoom(TmpDBMapID);
+                    });
+                }
+                return;
+            }
         }
 
         /// <summary>
@@ -127,12 +132,17 @@ namespace HeroFishing.Socket {
                 OnConnToMatchgameCB?.Invoke(false);
                 return;
             }
-            HeroFishingSocket.GetInstance().JoinMatchgame(realmToken, AllocatedRoom.Instance.IP, AllocatedRoom.Instance.Port, success => {
-                OnConnToMatchgameCB?.Invoke(success);
-                if (success) {
-                    WriteLog.LogColor("JoinMatchgame success!", WriteLog.LogType.Connection);
-                } else WriteLog.LogError("JoinMatchgame failed");
-            });
+            Socket.JoinMatchgame(realmToken, AllocatedRoom.Instance.IP, AllocatedRoom.Instance.Port);
+        }
+
+        void JoinGameSuccess() {
+            OnConnToMatchgameCB?.Invoke(true);
+            WriteLog.LogColor("JoinMatchgame success!", WriteLog.LogType.Connection);
+        }
+
+        void JoinGameFailed(Exception ex) {
+            Debug.Log("JoinMatghgame failed: " + ex);
+            OnConnToMatchgameCB?.Invoke(false);
         }
     }
 }

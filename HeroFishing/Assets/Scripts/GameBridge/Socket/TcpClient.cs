@@ -8,9 +8,10 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 using Scoz.Func;
+using Cysharp.Threading.Tasks;
 
 namespace HeroFishing.Socket {
-    public class TcpClient : MonoBehaviour {
+    public class TcpClient : MonoBehaviour, INetworkClient {
         public event Action<string> OnReceiveMsg;
 
         private System.Net.Sockets.Socket socket;
@@ -22,6 +23,9 @@ namespace HeroFishing.Socket {
         private event Action<bool> OnConnect;
         private event Action OnDisConnectEvent;
         private int packetID;
+        private SynchronizationContext syncContext;
+        private CancellationTokenSource cancellationSource;
+        private CancellationToken cancellationToken;
 
         private ConcurrentQueue<string> messageQueue = new ConcurrentQueue<string>();
         private bool isTryConnect = false;
@@ -35,10 +39,17 @@ namespace HeroFishing.Socket {
                     thread_connect.Abort();
                 if (thread_receive != null)
                     thread_receive.Abort();
-            } catch {
+                if (cancellationSource != null)
+                    cancellationSource.Dispose();
+            }
+            catch {
 
             }
 
+        }
+
+        public void Init(string ip, int port) {
+            Init(ip, port, protocol: ProtocolType.Tcp);
         }
 
         public void Init(string ip, int port, AddressFamily family = AddressFamily.InterNetwork, SocketType type = SocketType.Stream, ProtocolType protocol = ProtocolType.Tcp) {
@@ -51,6 +62,9 @@ namespace HeroFishing.Socket {
 
             if (thread_receive != null)
                 thread_receive.Abort();
+            syncContext = SynchronizationContext.Current;
+            cancellationSource = new CancellationTokenSource();
+            cancellationToken = cancellationSource.Token;
             WriteLog.LogColor("Tcp init", WriteLog.LogType.Connection);
         }
 
@@ -61,7 +75,7 @@ namespace HeroFishing.Socket {
             isTryConnect = true;
             thread_connect = new Thread(Thread_Connect);
             thread_connect.Start();
-            StartCoroutine(HandleConnect());
+            //StartCoroutine(HandleConnect());
         }
 
         public void RegistOnDisconnect(Action _cb) {
@@ -79,10 +93,13 @@ namespace HeroFishing.Socket {
                     thread_connect.Abort();
                 if (thread_receive != null)
                     thread_receive.Abort();
+                if (cancellationSource != null)
+                    cancellationSource.Dispose();
                 if (!IsConnected || socket == null) return;
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Close();
-            } catch {
+            }
+            catch {
 
             }
             StopAllCoroutines();
@@ -105,7 +122,8 @@ namespace HeroFishing.Socket {
                     socket.Send(Encoding.UTF8.GetBytes(msg));
                     WriteLog.LogColorFormat("(TCP)送: {0}", WriteLog.LogType.Connection, msg);
                     return command.PackID;
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     WriteLog.LogErrorFormat("Socket send error: {0}", e.ToString());
                     OnDisConnect();
                     return -1;
@@ -115,34 +133,41 @@ namespace HeroFishing.Socket {
             return -1;
         }
 
-        private void Thread_Connect() {
+        private async void Thread_Connect() {
             try {
                 WriteLog.LogColor("IP=" + IP, WriteLog.LogType.Connection);
                 WriteLog.LogColor("Port=" + Port, WriteLog.LogType.Connection);
                 socket.Connect(IPAddress.Parse(IP), Port);
 
+                await UniTask.WaitUntil(() => socket.Connected, cancellationToken: cancellationToken);
+                syncContext.Post(state => OnConnect(true), null);
+
                 WriteLog.LogColor("Tcp connect success", WriteLog.LogType.Connection);
                 thread_receive = new Thread(Thread_Receive);
                 thread_receive.Start();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 WriteLog.LogErrorFormat("Socket send error: {0}", e.ToString());
                 isTryConnect = false;
+
+                cancellationSource.Cancel();
+                syncContext.Post(state => OnConnect(false), null);
             }
         }
 
-        private IEnumerator HandleConnect() {
-            while (isTryConnect) {
-                if (socket != null && socket.Connected) {
-                    isTryConnect = false;
-                    OnConnect?.Invoke(true);
-                    StartCoroutine(HandleMessageEvent());
-                    yield break;
-                }
-                yield return null;
-            }
-            WriteLog.LogErrorFormat("Call connect error");
-            OnConnect?.Invoke(false);
-        }
+        //private IEnumerator HandleConnect() {
+        //    while (isTryConnect) {
+        //        if (socket != null && socket.Connected) {
+        //            isTryConnect = false;
+        //            OnConnect?.Invoke(true);
+        //            StartCoroutine(HandleMessageEvent());
+        //            yield break;
+        //        }
+        //        yield return null;
+        //    }
+        //    WriteLog.LogErrorFormat("Call connect error");
+        //    OnConnect?.Invoke(false);
+        //}
 
         private void Thread_Receive() {
             string mseQueue = "";
@@ -175,14 +200,17 @@ namespace HeroFishing.Socket {
                     }
                     for (int i = 0; i < packetNumber; i++) {
                         if (!string.IsNullOrEmpty(packets[i]))
-                            messageQueue.Enqueue(packets[i]);
+                            syncContext.Post(state => OnReceiveMsg?.Invoke(msg), null);
+                            //messageQueue.Enqueue(packets[i]);
                     }
-                } catch (ThreadAbortException e) {
+                }
+                catch (ThreadAbortException e) {
                     //this.Close();
                     WriteLog.Log($"TcpClient Exception={e}");
                     WriteLog.LogWarning($"TcpClient Exception={e}");
                     break;
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     WriteLog.LogErrorFormat("Scoket receive error: {0}", e.ToString());
                     //OnDisConnect();
                     break;
@@ -190,22 +218,23 @@ namespace HeroFishing.Socket {
             }
             try {
                 socket.Close();
-            } catch {
+            }
+            catch {
             }
 
         }
 
-        private IEnumerator HandleMessageEvent() {
-            while (socket.Connected) {
-                while (!messageQueue.IsEmpty) {
-                    if (messageQueue.TryDequeue(out string msg)) {
-                        OnReceiveMsg?.Invoke(msg);
-                    }
-                }
-                yield return null;
-            }
-            OnDisConnect();
-        }
+        //private IEnumerator HandleMessageEvent() {
+        //    while (socket.Connected) {
+        //        while (!messageQueue.IsEmpty) {
+        //            if (messageQueue.TryDequeue(out string msg)) {
+        //                OnReceiveMsg?.Invoke(msg);
+        //            }
+        //        }
+        //        yield return null;
+        //    }
+        //    OnDisConnect();
+        //}
 
         private void OnDisConnect() {
             OnDisConnectEvent?.Invoke();

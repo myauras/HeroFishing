@@ -10,7 +10,7 @@ using UnityEngine;
 using Scoz.Func;
 
 namespace HeroFishing.Socket {
-    public class UdpSocket : MonoBehaviour {
+    public class UdpSocket : MonoBehaviour, INetworkClient {
         private const float CONNECTION_CLOSE_TIME = 5.0f; // 設定X秒沒收到封包就斷線
         public event Action<string> OnReceiveMsg;
 

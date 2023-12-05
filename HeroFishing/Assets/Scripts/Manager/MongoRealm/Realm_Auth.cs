@@ -68,7 +68,7 @@ namespace Service.Realms {
                     WriteLog.LogError(_e);
                 }
             });
-            await SetConfiguration();
+            await SetupConfig();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Service.Realms {
         /// <summary>
         /// 設定FlexibleSyncConfg
         /// </summary>
-        static async Task SetConfiguration() {
+        static async Task SetupConfig() {
             WriteLog.LogColorFormat("開始註冊Realm設定檔...", WriteLog.LogType.Realm);
 
             try {

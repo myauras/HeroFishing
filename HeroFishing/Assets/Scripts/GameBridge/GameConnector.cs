@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using UniRx;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,12 +23,16 @@ namespace HeroFishing.Socket {
         const int MAX_RETRY_TIMES = 3; //最大重連次數
         const float CONNECT_TIMEOUT_SECS = 60.0f; //連線超時時間60秒
         int CurRetryTimes = 0; //目前重試次數
+        HeroFishingSocket Socket => HeroFishingSocket.GetInstance();
 
         #endregion
 
 
         public void Init() {
             Instance = this;
+            Socket.LogInObservable.Subscribe(_ => OnLoginToMatchmaker(), ex => OnLoginToMatchmakerError().Forget());
+            Socket.CreateRoomObservable.Subscribe(OnCreateRoom, OnCreateRoomError);
+            Socket.JoinRoomObservable.Subscribe(_ => JoinGameSuccess(), JoinGameFailed);
         }
 
 

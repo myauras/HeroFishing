@@ -5,6 +5,7 @@ using LitJson;
 using Scoz.Func;
 using System;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,6 +18,9 @@ namespace HeroFishing.Socket {
 
         Dictionary<Tuple<string, int>, Action<string>> CMDCallback = new Dictionary<Tuple<string, int>, Action<string>>();
 
+        readonly Subject<Unit> JoinRoomSubject = new Subject<Unit>();
+        public IObservable<Unit> JoinRoomObservable => JoinRoomSubject;
+
         public int GetMatchgamePing() {
             if (TimeSyncer)
                 return Mathf.RoundToInt(TimeSyncer.GetLantency() * 1000);
@@ -25,80 +29,24 @@ namespace HeroFishing.Socket {
         public void MatchgameDisconnect() {
             WriteLog.LogColor("MatchgameDisconnect", WriteLog.LogType.Connection);
         }
-        void RegistrMatchgameCommandCB(Tuple<string, int> _cmdID, Action<string> _ac) {
-            if (CMDCallback.ContainsKey(_cmdID)) {
+        void RegisterMatchgameCommandCB(string _command, int _packetID, Action<string> _ac) {
+            var cmdID = new Tuple<string, int>(_command, _packetID);
+            if (CMDCallback.ContainsKey(cmdID)) {
                 WriteLog.LogError("Command remain here should not happen.");
-                CMDCallback.Remove(_cmdID);
+                CMDCallback.Remove(cmdID);
             }
-            CMDCallback.Add(_cmdID, _ac);
+            CMDCallback.Add(cmdID, _ac);
         }
-        public void JoinMatchgame(string _realmToken, string _ip, int _port, Action<bool> _ac) {
+        public void JoinMatchgame(string _realmToken, string _ip, int _port) {
             WriteLog.LogColor("JoinMatchgame", WriteLog.LogType.Connection);
-            if (TCP_MatchgameClient != null) {
-                WriteLog.LogColor($"JoinMatchgame時 TCP_MatchgameClient不為null, 關閉 {TCP_MatchgameClient}", WriteLog.LogType.Connection);
-                TCP_MatchgameClient.Close();
-            }
-            TCP_MatchgameClient = new GameObject("TCP_MatchgameClient").AddComponent<TcpClient>();
-            TCP_MatchgameClient.Init(_ip, _port);
+            CreateClientObject(TCP_MatchgameClient, _ip, _port, "JoinMatchgame", "TCP_MatchgameClient");
+            CreateClientObject(UDP_MatchgameClient, _ip, _port, "JoinMatchgame", "UDP_MatchgameClient");
             TCP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameTCPMsg;
-            if (UDP_MatchgameClient != null) {
-                UDP_MatchgameClient.Close();
-                WriteLog.LogColor($"JoinMatchgame時 TCP_MatchgameClient不為null, 關閉 {TCP_MatchgameClient}", WriteLog.LogType.Connection);
-            }
-            UDP_MatchgameClient = new GameObject("TCP_MatchgameClient").AddComponent<UdpSocket>();
-            UDP_MatchgameClient.Init(_ip, _port);
 
-
-            TCP_MatchgameClient.StartConnect((bool connected) => {
-
-                WriteLog.LogColor($"TCP_MatchgameClient connection: {connected}", WriteLog.LogType.Connection);
-                if (!connected) {
-                    _ac?.Invoke(false);
-                    return;
-                }
-                if (TCP_MatchmakerClient != null) {
-                    TCP_MatchmakerClient.OnReceiveMsg -= OnRecieveMatchmakerTCPMsg;
-                    TCP_MatchmakerClient.Close();
-                    WriteLog.LogColor($"JoinMatchgame成功後 TCP_MatchmakerClient不需要了關閉 {TCP_MatchmakerClient}", WriteLog.LogType.Connection);
-                }
-                SocketCMD<AUTH> cmd = new SocketCMD<AUTH>(new AUTH(_realmToken));
-
-                int id = TCP_MatchgameClient.Send(cmd);
-                if (id < 0) {
-                    _ac?.Invoke(false);
-                    return;
-                }
-                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchgameCMD_TCP.AUTH_TOCLIENT.ToString(), id), (string msg) => {
-                    SocketCMD<AUTH_TOCLIENT> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_TOCLIENT>>(msg);
-                    _ac?.Invoke(packet.Content.IsAuth);
-                    if (packet.Content.IsAuth) {
-                        try {
-                            //取得Matchgame Auth的回傳結果 UDP socket的ConnToken與遊戲房間的座位索引
-                            WriteLog.LogColor($"Matchgame auth success! UDP_MatchgameConnToken: {UDP_MatchgameConnToken}", WriteLog.LogType.Connection);
-                            UDP_MatchgameConnToken = packet.Content.ConnToken;
-                            AllocatedRoom.Instance.SetPlayerIndex(packet.Content.Index);
-
-                            //取得ConnToken後就能進行UDP socket連線
-                            UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
-                                WriteLog.LogColor($"UDP Is connected: {connected}", WriteLog.LogType.Connection);
-                                if (connected)
-                                    UDP_MatchgameClient.OnReceiveMsg += OnMatchgameUDPConnCheck;
-                            });
-                            UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
-                        } catch (Exception e) {
-                            WriteLog.LogError($"UDP error: " + e);
-                        }
-                        if (TimeSyncer == null)
-                            TimeSyncer = new GameObject("TimeSyncer").AddComponent<ServerTimeSyncer>();
-                        TimeSyncer.StartCountTime();
-
-                    }
-                });
-            });
+            TCP_MatchgameClient.StartConnect((bool connected) => OnMatchgameTCPConnect(connected, _realmToken));
             TCP_MatchgameClient.RegistOnDisconnect(OnMatchmakerDisconnect);
-
-
         }
+
         public void OnMatchgameUDPConnCheck(string _msg) {
             try {
                 SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
@@ -116,7 +64,8 @@ namespace HeroFishing.Socket {
                         WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
                         break;
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 WriteLog.LogError("Parse UDP Message with Error : " + e.ToString());
             }
         }
@@ -138,7 +87,8 @@ namespace HeroFishing.Socket {
                     }
                 });
                 UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
-            } else {
+            }
+            else {
                 WriteLog.LogError("OnUDPDisconnect");
                 this.MatchgameDisconnect();
             }
@@ -147,6 +97,65 @@ namespace HeroFishing.Socket {
         public void TCPSend<T>(SocketCMD<T> cmd) where T : SocketContent {
             TCP_MatchgameClient.Send(cmd);
         }
+
+        private void OnMatchgameTCPConnect(bool connected, string realmToken) {
+            WriteLog.LogColor($"TCP_MatchgameClient connection: {connected}", WriteLog.LogType.Connection);
+            if (!connected) {
+                JoinRoomSubject?.OnError(new Exception("client connection error"));
+                return;
+            }
+            // Close Matchmaker client
+            if (TCP_MatchmakerClient != null) {
+                TCP_MatchmakerClient.OnReceiveMsg -= OnRecieveMatchmakerTCPMsg;
+                TCP_MatchmakerClient.Close();
+                WriteLog.LogColor($"JoinMatchgame成功後 TCP_MatchmakerClient不需要了關閉 {TCP_MatchmakerClient}", WriteLog.LogType.Connection);
+            }
+            SocketCMD<AUTH> cmd = new SocketCMD<AUTH>(new AUTH(realmToken));
+
+            int id = TCP_MatchgameClient.Send(cmd);
+            if (id < 0) {
+                JoinRoomSubject?.OnError(new Exception("packet id < 0"));
+                return;
+            }
+            RegisterMatchgameCommandCB(SocketContent.MatchgameCMD_TCP.AUTH_TOCLIENT.ToString(), id, TCPClientCmdCallback);
+        }
+
+        private void TCPClientCmdCallback(string msg) {
+            SocketCMD<AUTH_TOCLIENT> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_TOCLIENT>>(msg);
+            if (packet.Content.IsAuth) {
+                try {
+                    ConnectUDPMatchgame(packet.Content.ConnToken, packet.Content.Index);
+
+                    JoinRoomSubject?.OnNext(Unit.Default);
+                }
+                catch (Exception e) {
+                    WriteLog.LogError($"UDP error: " + e);
+                    JoinRoomSubject?.OnError(e);
+                }
+                if (TimeSyncer == null)
+                    TimeSyncer = new GameObject("TimeSyncer").AddComponent<ServerTimeSyncer>();
+                TimeSyncer.StartCountTime();
+            }
+            else {
+                JoinRoomSubject?.OnError(new Exception("auth is invalid"));
+            }
+        }
+
+        private void ConnectUDPMatchgame(string connToken, int index) {
+            //取得Matchgame Auth的回傳結果 UDP socket的ConnToken與遊戲房間的座位索引
+            WriteLog.LogColor($"Matchgame auth success! UDP_MatchgameConnToken: {UDP_MatchgameConnToken}", WriteLog.LogType.Connection);
+            UDP_MatchgameConnToken = connToken;
+            AllocatedRoom.Instance.SetPlayerIndex(index);
+
+            //取得ConnToken後就能進行UDP socket連線
+            UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
+                WriteLog.LogColor($"UDP Is connected: {connected}", WriteLog.LogType.Connection);
+                if (connected)
+                    UDP_MatchgameClient.OnReceiveMsg += OnMatchgameUDPConnCheck;
+            });
+            UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
+        }
+
         private void OnRecieveMatchgameTCPMsg(string _msg) {
             //if (UDP_MatchgameClient != null)
             //    UDP_MatchgameClient.ResetTimer();
@@ -172,7 +181,8 @@ namespace HeroFishing.Socket {
                 if (CMDCallback.TryGetValue(cmdID, out Action<string> _cb)) {
                     CMDCallback.Remove(cmdID);
                     _cb?.Invoke(_msg);
-                } else {
+                }
+                else {
                     SocketContent.MatchgameCMD_TCP cmdType;
                     if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
                         WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
@@ -201,7 +211,8 @@ namespace HeroFishing.Socket {
                             break;
                     }
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 WriteLog.LogError("Parse收到的封包時出錯 : " + e.ToString());
                 if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) {
                     WriteLog.LogErrorFormat("不在{0}就釋放資源: ", MyScene.BattleScene, e.ToString());
