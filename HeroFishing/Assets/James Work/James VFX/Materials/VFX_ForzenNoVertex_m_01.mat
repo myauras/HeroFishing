@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_Forzen_m_01
-  m_Shader: {fileID: -6465566751694194690, guid: 7a8f921353a566a48a237a0c220a21bf,
+  m_Name: VFX_ForzenNoVertex_m_01
+  m_Shader: {fileID: -6465566751694194690, guid: c83c0b09209a65e4ebdd48bb22018d8a,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -88,16 +88,16 @@ Material:
     - _CastShadows: 1
     - _Cull: 2
     - _DstBlend: 0
-    - _EdgePower: 0
+    - _EdgePower: 0.7550818
     - _Float: 2.51
     - _Float_1: 2.65
     - _ForzenMask: 2
-    - _FreezeMask: 0
+    - _FreezeMask: 0.4854097
     - _IceAmont: 0
     - _IceAmount: 0
     - _IceRamp: 5
     - _IcicleAmont: 0
-    - _IcicleAmount: 0
+    - _IcicleAmount: 0.5
     - _IcicleScale: 5
     - _Metallic: 0
     - _NormalStreng: 1
