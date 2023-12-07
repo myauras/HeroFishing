@@ -48,9 +48,9 @@ namespace HeroFishing.Socket {
                 CreateRoomSubject.Dispose();
         }
 
-        private void CreateClientObject<T>(T client, string ip, int port, string progress, string name) where T : MonoBehaviour, INetworkClient {
+        private void CreateClientObject<T>(ref T client, string ip, int port, string progress, string name) where T : MonoBehaviour, INetworkClient {
             if (client != null) {
-                WriteLog.LogColor($"{progress}Æ… {name}§£¨∞null, √ˆ≥¨ {name}", WriteLog.LogType.Connection);
+                WriteLog.LogColor($"{progress}ÊôÇ {name}‰∏çÁÇ∫null, ÈóúÈñâ {name}", WriteLog.LogType.Connection);
                 client.Close();
             }
             client = new GameObject(name).AddComponent<T>();

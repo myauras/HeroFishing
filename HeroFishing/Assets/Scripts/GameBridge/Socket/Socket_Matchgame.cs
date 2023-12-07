@@ -38,9 +38,8 @@ namespace HeroFishing.Socket {
             CMDCallback.Add(cmdID, _ac);
         }
         public void JoinMatchgame(string _realmToken, string _ip, int _port) {
-            WriteLog.LogColor("JoinMatchgame", WriteLog.LogType.Connection);
-            CreateClientObject(TCP_MatchgameClient, _ip, _port, "JoinMatchgame", "TCP_MatchgameClient");
-            CreateClientObject(UDP_MatchgameClient, _ip, _port, "JoinMatchgame", "UDP_MatchgameClient");
+            CreateClientObject(ref TCP_MatchgameClient, _ip, _port, "JoinMatchgame", "TCP_MatchgameClient");
+            CreateClientObject(ref UDP_MatchgameClient, _ip, _port, "JoinMatchgame", "UDP_MatchgameClient");
             TCP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameTCPMsg;
 
             TCP_MatchgameClient.StartConnect((bool connected) => OnMatchgameTCPConnect(connected, _realmToken));
@@ -64,8 +63,7 @@ namespace HeroFishing.Socket {
                         WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
                         break;
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 WriteLog.LogError("Parse UDP Message with Error : " + e.ToString());
             }
         }
@@ -87,8 +85,7 @@ namespace HeroFishing.Socket {
                     }
                 });
                 UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
-            }
-            else {
+            } else {
                 WriteLog.LogError("OnUDPDisconnect");
                 this.MatchgameDisconnect();
             }
@@ -127,16 +124,14 @@ namespace HeroFishing.Socket {
                     ConnectUDPMatchgame(packet.Content.ConnToken, packet.Content.Index);
 
                     JoinRoomSubject?.OnNext(Unit.Default);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     WriteLog.LogError($"UDP error: " + e);
                     JoinRoomSubject?.OnError(e);
                 }
                 if (TimeSyncer == null)
                     TimeSyncer = new GameObject("TimeSyncer").AddComponent<ServerTimeSyncer>();
                 TimeSyncer.StartCountTime();
-            }
-            else {
+            } else {
                 JoinRoomSubject?.OnError(new Exception("auth is invalid"));
             }
         }
@@ -181,8 +176,7 @@ namespace HeroFishing.Socket {
                 if (CMDCallback.TryGetValue(cmdID, out Action<string> _cb)) {
                     CMDCallback.Remove(cmdID);
                     _cb?.Invoke(_msg);
-                }
-                else {
+                } else {
                     SocketContent.MatchgameCMD_TCP cmdType;
                     if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
                         WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
@@ -211,8 +205,7 @@ namespace HeroFishing.Socket {
                             break;
                     }
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 WriteLog.LogError("Parse收到的封包時出錯 : " + e.ToString());
                 if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) {
                     WriteLog.LogErrorFormat("不在{0}就釋放資源: ", MyScene.BattleScene, e.ToString());
