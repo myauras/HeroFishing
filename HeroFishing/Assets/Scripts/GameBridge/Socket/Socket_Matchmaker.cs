@@ -2,19 +2,26 @@ using Cysharp.Threading.Tasks;
 using HeroFishing.Main;
 using HeroFishing.Socket.Matchmaker;
 using LitJson;
+using NSubstitute;
 using Scoz.Func;
 using Service.Realms;
 using System;
 using System.Threading.Tasks;
+using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Socket {
     public partial class HeroFishingSocket {
-        public event Action<CREATEROOM_TOCLIENT, string> CreateRoomCallback;
 
         TcpClient TCP_MatchmakerClient;
-        public void NewMatchmakerTCPClient(string _ip, int _port) {
+
+        readonly Subject<Unit> LogInSubject = new Subject<Unit>();
+        readonly Subject<CREATEROOM_TOCLIENT> CreateRoomSubject = new Subject<CREATEROOM_TOCLIENT>();
+        public IObservable<Unit> LogInObservable => LogInSubject;
+        public IObservable<CREATEROOM_TOCLIENT> CreateRoomObservable => CreateRoomSubject;
+     
+        public void CreateMatchmaker(string _ip, int _port) {
             if (TCP_MatchmakerClient != null)
                 TCP_MatchmakerClient.Close();
             TCP_MatchmakerClient = new GameObject("MatchmakerSocket").AddComponent<TcpClient>();
@@ -24,48 +31,40 @@ namespace HeroFishing.Socket {
         private void OnMatchmakerDisconnect() {
             WriteLog.LogColor("OnMatchmakerDisconnect", WriteLog.LogType.Connection);
         }
-        public void LoginToMatchmaker(string _realmToken, Func<bool, UniTask> _callback) {
+        public void LoginToMatchmaker(string _realmToken) {
             WriteLog.LogColor("LoginToMatchmaker", WriteLog.LogType.Connection);
             if (TCP_MatchmakerClient == null) {
                 WriteLog.LogError("TCP_MatchmakerClient is null");
-                _callback?.Invoke(false);
+                LogInSubject?.OnError(null);
                 return;
             }
+
             CMDCallback.Clear();
             TCP_MatchmakerClient.UnRegistOnDisconnect(OnMatchmakerDisconnect);
+
             TCP_MatchmakerClient.StartConnect((bool isConnect) => {
                 if (!isConnect) {
-                    _callback?.Invoke(false);
+                    LogInSubject?.OnError(null);
                     return;
                 }
-                SocketCMD<AUTH> command = new SocketCMD<AUTH>(new AUTH(_realmToken));
 
-                int id = TCP_MatchmakerClient.Send(command);
-                if (id < 0) {
-                    _callback?.Invoke(false);
-                    return;
-                }
-                RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMD_TCP.AUTH_TOCLIENT.ToString(), id), (string msg) => {
-                    SocketCMD<AUTH_TOCLIENT> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_TOCLIENT>>(msg);
-                    _callback?.Invoke(packet.Content.IsAuth);
-                });
+                OnMatchmakerConnect(_realmToken);
             });
             TCP_MatchmakerClient.RegistOnDisconnect(OnMatchmakerDisconnect);
         }
 
-        public void CreateMatchmakerRoom(string _dbMapID, Action<CREATEROOM_TOCLIENT, string> _cb) {
+        public void CreateMatchmakerRoom(string _dbMapID) {
             WriteLog.LogColor("CreateMatchmakerRoom", WriteLog.LogType.Connection);
-            CreateRoomCallback = _cb;
             CREATEROOM cmdContent = new CREATEROOM(_dbMapID, RealmManager.MyApp.CurrentUser.Id);//建立封包內容
             SocketCMD<CREATEROOM> cmd = new SocketCMD<CREATEROOM>(cmdContent);//建立封包
             int id = TCP_MatchmakerClient.Send(cmd);//送出封包
             if (id < 0) {
-                _cb?.Invoke(null, "packID小於0");
+                CreateRoomSubject?.OnError(new Exception("packID小於0"));
                 return;
             }
             //註冊回呼
             WriteLog.LogColor("註冊回呼", WriteLog.LogType.Connection);
-            RegistrMatchgameCommandCB(new Tuple<string, int>(SocketContent.MatchmakerCMD_TCP.CREATEROOM_TOCLIENT.ToString(), id), OnCreateMatchmakerRoom_Reply);
+            RegisterMatchgameCommandCB(SocketContent.MatchmakerCMD_TCP.CREATEROOM_TOCLIENT.ToString(), id, OnCreateMatchmakerRoom_Reply);
         }
         public void OnCreateMatchmakerRoom_Reply(string _msg) {
             WriteLog.LogColor("OnCreateMatchmakerRoom_Reply", WriteLog.LogType.Connection);
@@ -73,13 +72,11 @@ namespace HeroFishing.Socket {
 
             //有錯誤
             if (!string.IsNullOrEmpty(packet.ErrMsg)) {
-                WriteLog.LogError("Create MatchmakerRoom Fail : " + packet.ErrMsg);
-                CreateRoomCallback?.Invoke(null, packet.ErrMsg);
-                CreateRoomCallback = null;
-                return;
+                //WriteLog.LogError("Create MatchmakerRoom Fail : " + packet.ErrMsg);
+                CreateRoomSubject?.OnError(new Exception(packet.ErrMsg));
             }
-            CreateRoomCallback?.Invoke(packet.Content, null);
-            CreateRoomCallback = null;
+            else
+                CreateRoomSubject?.OnNext(packet.Content);
         }
 
         private void OnRecieveMatchmakerTCPMsg(string _msg) {
@@ -87,10 +84,13 @@ namespace HeroFishing.Socket {
                 SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
                 WriteLog.LogColorFormat("Recieve Command: {0}   PackID: {1}", WriteLog.LogType.Connection, data.CMD, data.PackID);
                 Tuple<string, int> commandID = new Tuple<string, int>(data.CMD, data.PackID);
+                // 已登錄至callback的訊息
                 if (CMDCallback.TryGetValue(commandID, out Action<string> _cb)) {
                     CMDCallback.Remove(commandID);
                     _cb?.Invoke(_msg);
-                } else {
+                }
+                // 未登錄的訊息
+                else {
                     SocketContent.MatchmakerCMD_TCP cmdType;
                     if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
                         WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
@@ -105,7 +105,8 @@ namespace HeroFishing.Socket {
                             break;
                     }
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 WriteLog.LogError("Parse收到的封包時出錯 : " + e.ToString());
                 if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) {
                     WriteLog.LogErrorFormat("不在{0}就釋放資源: ", MyScene.BattleScene, e.ToString());
@@ -114,6 +115,23 @@ namespace HeroFishing.Socket {
             }
         }
 
+        private void OnMatchmakerConnect(string _realmToken) {
 
+            SocketCMD<AUTH> command = new SocketCMD<AUTH>(new AUTH(_realmToken));
+
+            int id = TCP_MatchmakerClient.Send(command);
+            if (id < 0) {
+                LogInSubject?.OnError(null);
+                return;
+            }
+            RegisterMatchgameCommandCB(SocketContent.MatchmakerCMD_TCP.AUTH_TOCLIENT.ToString(), id, (string msg) => {
+                SocketCMD<AUTH_TOCLIENT> packet = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_TOCLIENT>>(msg);
+                if (packet.Content.IsAuth)
+                    LogInSubject?.OnNext(Unit.Default);
+                else
+                    LogInSubject?.OnError(null);
+                //_callback?.Invoke(packet.Content.IsAuth);
+            });
+        }
     }
 }

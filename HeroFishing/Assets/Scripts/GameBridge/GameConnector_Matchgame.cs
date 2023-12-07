@@ -20,21 +20,21 @@ namespace HeroFishing.Socket {
         /// </summary>
         public void SetHero(int _heroID, string _heroSkinID) {
             SocketCMD<SETHERO> cmd = new SocketCMD<SETHERO>(new SETHERO(_heroID, _heroSkinID));
-            HeroFishingSocket.GetInstance().TCPSend(cmd);
+            Socket.TCPSend(cmd);
         }
         /// <summary>
         /// 離開遊戲房
         /// </summary>
         public void LeaveRoom() {
             SocketCMD<LEAVE> cmd = new SocketCMD<LEAVE>(new LEAVE());
-            HeroFishingSocket.GetInstance().TCPSend(cmd);
+            Socket.TCPSend(cmd);
         }
         /// <summary>
         /// 擊中
         /// </summary>
         public void Hit(string _attackID, int[] _monsterIdxs, string _spellJsonID) {
             SocketCMD<HIT> cmd = new SocketCMD<HIT>(new HIT(_attackID, _monsterIdxs, _spellJsonID));
-            HeroFishingSocket.GetInstance().TCPSend(cmd);
+            Socket.TCPSend(cmd);
         }
     }
 }

@@ -42,9 +42,20 @@ namespace HeroFishing.Socket {
                 UDP_MatchgameClient.Close();
             if (TimeSyncer != null)
                 GameObject.Destroy(TimeSyncer.gameObject);
+            if (LogInSubject != null)
+                LogInSubject.Dispose();
+            if (CreateRoomSubject != null)
+                CreateRoomSubject.Dispose();
         }
 
-
+        private void CreateClientObject<T>(T client, string ip, int port, string progress, string name) where T : MonoBehaviour, INetworkClient {
+            if (client != null) {
+                WriteLog.LogColor($"{progress}時 {name}不為null, 關閉 {name}", WriteLog.LogType.Connection);
+                client.Close();
+            }
+            client = new GameObject(name).AddComponent<T>();
+            client.Init(ip, port);
+        }
 
     }
 }
