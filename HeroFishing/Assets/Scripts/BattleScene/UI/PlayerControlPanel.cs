@@ -66,6 +66,7 @@ namespace HeroFishing.Battle {
             OriginPos = UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
             //    TmpHero.transform.position;
             SpellIndicator.Instance.ShowIndicator(TmpSpellData);
+            SpellIndicator.Instance.MoveIndicator(TmpHero.transform.position);
             IsSkillMode = true;
         }
 
