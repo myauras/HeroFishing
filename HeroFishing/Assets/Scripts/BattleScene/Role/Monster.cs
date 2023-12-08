@@ -183,6 +183,14 @@ namespace HeroFishing.Battle {
                 startIndex += renderer.materials.Length;
             }
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos() {
+            Gizmos.color = Color.red;
+            var position = transform.position + (Vector3)BattleManager.MonsterCollisionPosOffset;
+            Gizmos.DrawWireSphere(transform.position, MyData.Radius);
+        }
+#endif
     }
 
 }
