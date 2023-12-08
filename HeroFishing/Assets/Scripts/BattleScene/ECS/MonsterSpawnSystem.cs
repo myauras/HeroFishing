@@ -19,6 +19,8 @@ namespace HeroFishing.Battle {
             var spawn = BattleManager.Instance.MyMonsterScheduler.DequeueMonster();
             if (spawn == null) return;
             if (spawn.MonsterIDs == null || spawn.MonsterIDs.Length == 0) return;
+            bool isFreeze = SystemAPI.HasSingleton<FreezeTag>();
+            if (isFreeze) return;
 
             foreach (var monsterID in spawn.MonsterIDs) {
                 GameObject monsterPrefab = ResourcePreSetter.Instance.MonsterPrefab.gameObject;
