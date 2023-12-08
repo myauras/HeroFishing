@@ -63,10 +63,12 @@ namespace HeroFishing.Battle {
 
         public void OnDestroy() {
             Instance = null;
-            // 呼叫clear all system去清理所有entity
-            var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            var entity = entityManager.CreateEntity();
-            entityManager.AddComponent<ClearAllTag>(entity);
+            if (World.DefaultGameObjectInjectionWorld != null) {
+                // 呼叫clear all system去清理所有entity
+                var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+                var entity = entityManager.CreateEntity();
+                entityManager.AddComponent<ClearAllTag>(entity);
+            }
         }
 
 
