@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MagicHit(use texture)
-  m_Shader: {fileID: -6465566751694194690, guid: 204b0b055dcafb44c8e41d4947010aa7,
+  m_Shader: {fileID: -6465566751694194690, guid: b897d7dd3b5c8944fa67e717f20d7d6e,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -55,6 +55,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _EndEdgeAlpha: 3
+    - _HeadEdgeAlpha: 0
+    - _Mask: -2
     - _QueueControl: 0
     - _QueueOffset: 0
     - _edgealpha: 1
@@ -62,4 +65,6 @@ Material:
     - _Color: {r: 5.9921575, g: 5.9921575, b: 5.9921575, a: 1}
     - _Offset: {r: -1, g: 0, b: 0, a: 0}
     - _Tiling: {r: 1, g: 5, b: 0, a: 0}
+    - _WaveOffset: {r: 0, g: 1, b: 0, a: 0}
+    - _WaveTiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
