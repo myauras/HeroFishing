@@ -54,10 +54,23 @@ namespace HeroFishing.Socket {
                     WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
                     return;
                 }
+                if (cmdType != SocketContent.MatchgameCMD_UDP.UPDATEGAME_TOCLIENT)
+                    WriteLog.LogColorFormat("(UDP)接收: {0}", WriteLog.LogType.Connection, _msg);
                 switch (cmdType) {
                     case SocketContent.MatchgameCMD_UDP.UPDATEGAME_TOCLIENT:
                         var updateGamePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEGAME_TOCLIENT>>(_msg);
                         HandleUpdateGame(updateGamePacket);
+                        break;
+                    case SocketContent.MatchgameCMD_UDP.UPDATEPLAYER_TOCLIENT:
+                        JsonMapper.RegisterImporter<int, long>((int value) => {
+                            return (long)value;
+                        });
+                        var updatePlayerPacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEPLAYER_TOCLIENT>>(_msg);
+                        HandleUpdatePlayer(updatePlayerPacket);
+                        break;
+                    case SocketContent.MatchgameCMD_UDP.UPDATESCENE_TOCLIENT:
+                        var updateScenePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATESCENE_TOCLIENT>>(_msg);
+                        HandleUpdateScene(updateScenePacket);
                         break;
                     default:
                         WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
@@ -223,9 +236,7 @@ namespace HeroFishing.Socket {
         void HandleSETHERO(SocketCMD<SETHERO_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
         }
-        void HandleUpdatePlayer(SocketCMD<UPDATEPLAYER_TOCLIENT> _packet) {
-            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
-        }
+
         void HandleHit(SocketCMD<HIT_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.KillMonsterIdxs));
@@ -238,6 +249,12 @@ namespace HeroFishing.Socket {
             var cmd = new SocketCMD<UPDATEGAME>(cmdContent);//建立封包
             cmd.SetConnToken(UDP_MatchgameConnToken);//設定封包ConnToken
             UDP_MatchgameClient.Send(cmd);
+        }
+        void HandleUpdatePlayer(SocketCMD<UPDATEPLAYER_TOCLIENT> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+        }
+        void HandleUpdateScene(SocketCMD<UPDATESCENE_TOCLIENT> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
         }
 
     }

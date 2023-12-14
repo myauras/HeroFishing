@@ -4,13 +4,9 @@ using UnityEngine;
 namespace HeroFishing.Socket.Matchgame {
     public class UPDATEGAME_TOCLIENT : SocketContent {
         /// <summary>
-        /// ¹CÀ¸¶}©lX¬í
+        /// éŠæˆ²é–‹å§‹Xç§’
         /// </summary>
         public double GameTime { get; private set; }
-        /// <summary>
-        /// ©Ò¦³ª±®aªºÁ`Àò±oÂI¼Æ
-        /// </summary>
-        public long[] PlayerGainPoints { get; private set; } = new long[4];
 
         public UPDATEGAME_TOCLIENT() {
         }
