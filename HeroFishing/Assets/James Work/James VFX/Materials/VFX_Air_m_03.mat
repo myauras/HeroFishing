@@ -55,14 +55,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EndEdgeAlpha: 0
+    - _EndEdgeAlpha: 0.5
     - _Float: -2
-    - _HeadEdgeAlpha: 0
-    - _Mask: 0.07
+    - _HeadEdgeAlpha: 0.5
+    - _Mask: -2
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
     - _Color: {r: 11.984318, g: 11.984318, b: 11.984318, a: 1}
-    - _WaveOffset: {r: 0, g: 0.8, b: 0, a: 0}
-    - _WaveTiling: {r: 1, g: 0.74, b: 0, a: 0}
+    - _WaveOffset: {r: -3, g: 0, b: 0, a: 0}
+    - _WaveTiling: {r: 1, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []
