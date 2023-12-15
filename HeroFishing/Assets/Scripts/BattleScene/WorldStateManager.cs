@@ -1,3 +1,4 @@
+using Scoz.Func;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
@@ -20,6 +21,7 @@ public class WorldStateManager : MonoBehaviour {
             return _instance;
         }
     }
+    private GameObject _freezeEffect;
 
     public bool IsFrozen { get; private set; }
 
@@ -32,11 +34,28 @@ public class WorldStateManager : MonoBehaviour {
     }
 
     public void Freeze(bool active) {
-        if (active) {
-            _entityManager.AddComponentData(_worldStateEntity, new FreezeTag());
+        if (_freezeEffect == null) {
+            SetupFreezeModel(active);
         }
         else {
-            _entityManager.RemoveComponent<FreezeTag>(_worldStateEntity);
+            _freezeEffect.SetActive(active);
+
+            if (active) {
+                _entityManager.AddComponentData(_worldStateEntity, new FreezeTag());
+                SceneMaterialConverter.Instance.Freeze();
+            }
+            else {
+                _entityManager.RemoveComponent<FreezeTag>(_worldStateEntity);
+                SceneMaterialConverter.Instance.Unfreeze();
+            }
         }
+    }
+
+    private void SetupFreezeModel(bool active) {
+        AddressablesLoader.GetParticle("Scene/Freeze/SnowStorm", (obj, handle) => {
+            AddressableManage.SetToChangeSceneRelease(handle);
+            _freezeEffect = Instantiate(obj);
+            Freeze(active);
+        });
     }
 }

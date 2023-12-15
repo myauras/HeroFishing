@@ -18,8 +18,8 @@ namespace HeroFishing.Battle {
         private static readonly Dictionary<int, List<Material>> _originMatDic = new();
         private static readonly Dictionary<int, List<Material>> _frozenMatDic = new();
 
-        private const string MAT_FREEZE_OPAQUE = "FreezeOpaque";
-        private const string MAT_FREEZE_TRANSPARENT = "FreezeTransparent";
+        private const string MAT_FREEZE_OPAQUE = "FreezeMonOp";
+        private const string MAT_FREEZE_TRANSPARENT = "FreezeMonTr";
 
         public void SetData(int _monsterID, Action _ac) {
             MyData = MonsterJsonData.GetData(_monsterID);
@@ -75,6 +75,14 @@ namespace HeroFishing.Battle {
             }, 0f, GameSettingJsonData.GetFloat(GameSetting.HitEffect_DecaySec));
         }
 
+        public void Explode() {
+            if (Explosion == null) {
+                Die();
+                return;
+            }
+
+            Explosion.Explode();
+        }
 
         public void Die() {
             if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;
@@ -107,16 +115,19 @@ namespace HeroFishing.Battle {
                     var renderer = MySkinnedMeshRenderers[i];
                     var matList = allMatList.GetRange(startIndex, renderer.materials.Length);
                     renderer.SetSharedMaterials(matList);
+                    Explosion.SetMaterials(i, matList);
                     startIndex += renderer.materials.Length;
                 }
             }
 
-            MyAni.enabled = false;
+            if (MyAni != null)
+                MyAni.enabled = false;
             FreezeSmoothly();
         }
 
         public void UnFreeze() {
-            MyAni.enabled = true;
+            if (MyAni != null)
+                MyAni.enabled = true;
             var allMatList = _originMatDic[MyData.ID];
             int matIndex = 0;
             foreach (var renderer in MySkinnedMeshRenderers) {
@@ -155,30 +166,33 @@ namespace HeroFishing.Battle {
             var frozenMatOpaque = ResourcePreSetter.GetMaterial(MAT_FREEZE_OPAQUE);
             var frozenMatTransparent = ResourcePreSetter.GetMaterial(MAT_FREEZE_TRANSPARENT);
 
-            foreach (var renderer in MySkinnedMeshRenderers) {
+            for (int index = 0; index < MySkinnedMeshRenderers.Length; index++) {
+                var renderer = MySkinnedMeshRenderers[index];
                 var matList = new List<Material>();
                 for (int i = 0; i < renderer.sharedMaterials.Length; i++) {
                     var oldMat = renderer.sharedMaterials[i];
                     if (oldMat != null) {
                         var texture = oldMat.mainTexture;
                         var tag = oldMat.GetTag("RenderType", false);
-                        Material newMat = null;
-                        if (tag == "Opaque")
-                            newMat = new Material(frozenMatOpaque);
-                        else if (tag == "Transparent")
+                        //Debug.Log("tag " + tag);
+                        Material newMat;
+                        if (tag == "Transparent")
                             newMat = new Material(frozenMatTransparent);
-                        if (newMat == null) {
-                            // 存失敗，為了不打亂list順序，還是要存個null
-                            WriteLog.LogErrorFormat("new mat is null.");
-                            matList.Add(null);
-                            continue;
-                        }
+                        else
+                            newMat = new Material(frozenMatOpaque);
+                        //if (newMat == null) {
+                        //    // 存失敗，為了不打亂list順序，還是要存個null
+                        //    WriteLog.LogErrorFormat("new mat is null. " + tag);
+                        //    matList.Add(null);
+                        //    continue;
+                        //}
                         newMat.mainTexture = texture;
                         matList.Add(newMat);
                     }
                 }
                 // 設定renderer
                 renderer.SetSharedMaterials(matList);
+                Explosion.SetMaterials(index, matList);
                 _frozenMatDic[MyData.ID].AddRange(matList);
                 startIndex += renderer.materials.Length;
             }

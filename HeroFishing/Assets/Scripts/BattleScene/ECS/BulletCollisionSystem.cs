@@ -50,6 +50,7 @@ namespace HeroFishing.Battle {
             //取得網格資料
             var gridData = SystemAPI.GetSingleton<MapGridData>();
             var storageInfoLookup = state.GetEntityStorageInfoLookup();
+            var monsterFreezeLookup = state.GetComponentLookup<MonsterFreezeTag>();
             HitInfoLookup.Update(ref state);
 
             new MoveJob {
@@ -62,6 +63,7 @@ namespace HeroFishing.Battle {
                 MonsterCollisionPosOffset = BattleManager.MonsterCollisionPosOffset,
                 HitInfoLookup = HitInfoLookup,
                 StorageInfoLookup = storageInfoLookup,
+                MonsterFreezeLookup = monsterFreezeLookup,
             }.ScheduleParallel();
 
         }
@@ -76,6 +78,7 @@ namespace HeroFishing.Battle {
             [ReadOnly] public float3 MonsterCollisionPosOffset;
             [ReadOnly] public BufferLookup<HitInfoBuffer> HitInfoLookup;
             [ReadOnly] public EntityStorageInfoLookup StorageInfoLookup;
+            [ReadOnly] public ComponentLookup<MonsterFreezeTag> MonsterFreezeLookup;
 
             public void Execute(ref BulletCollisionData _collisionData, ref MoveData _moveData, in Entity _entity) {
                 _collisionData.Timer += DeltaTime;
@@ -146,9 +149,16 @@ namespace HeroFishing.Battle {
                                 if (value < 0.01f) {
                                     //在怪物實體身上建立死亡標籤元件，讓其他系統知道要死亡後該做什麼
                                     ECB.AddComponent<MonsterDieTag>(3, monsterValue.MyEntity);
-                                    //在怪物實體身上建立移除標籤元件
-                                    var autoDestroyTag = new AutoDestroyTag { LifeTime = 6 };
-                                    ECB.AddComponent(3, monsterValue.MyEntity, autoDestroyTag);
+                                    // 如果是冰凍狀態被擊殺，較短時間就消失
+                                    if (MonsterFreezeLookup.HasComponent(monsterValue.MyEntity)) {
+                                        var autoDestroyTag = new AutoDestroyTag { LifeTime = 1 };
+                                        ECB.AddComponent(3, monsterValue.MyEntity, autoDestroyTag);
+                                    }
+                                    else {
+                                        //在怪物實體身上建立移除標籤元件
+                                        var autoDestroyTag = new AutoDestroyTag { LifeTime = 6 };
+                                        ECB.AddComponent(3, monsterValue.MyEntity, autoDestroyTag);
+                                    }
                                     //目前不實做將死亡怪物從網格中移除，因為MonsterBehaviourSystem中每幀都會清空網格資料，所以各別移除就沒那麼需要
                                 }
                                 else {
