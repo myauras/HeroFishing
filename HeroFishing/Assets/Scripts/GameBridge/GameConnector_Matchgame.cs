@@ -39,7 +39,7 @@ namespace HeroFishing.Socket {
         /// <summary>
         /// 擊中
         /// </summary>
-        public void Hit(string _attackID, int[] _monsterIdxs, string _spellJsonID) {
+        public void Hit(int _attackID, int[] _monsterIdxs, string _spellJsonID) {
             SocketCMD<HIT> cmd = new SocketCMD<HIT>(new HIT(_attackID, _monsterIdxs, _spellJsonID));
             Socket.TCPSend(cmd);
         }

@@ -17,7 +17,7 @@ namespace Scoz.Func {
             if (Input.GetKeyDown(KeyCode.Q)) {
                 int[] monsterIdxs = new int[1] { 1 };
                 key++;
-                GameConnector.Instance.Hit(string.Format("0_{0}", key), monsterIdxs, "1_attack");
+                GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
             } else if (Input.GetKeyDown(KeyCode.W)) {
                 GameConnector.Instance.Attack("1_attack", 5);
             } else if (Input.GetKeyDown(KeyCode.E)) {

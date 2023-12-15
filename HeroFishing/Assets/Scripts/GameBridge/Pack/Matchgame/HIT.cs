@@ -3,10 +3,9 @@
         //class名稱就是封包的CMD名稱
 
         /// <summary>
-        /// 攻擊ID格式為 [玩家index]_[攻擊流水號] (攻擊流水號(AttackID)是client端送來的施放攻擊的累加流水號
-	    /// EX. 2_3就代表房間座位2的玩家進行的第3次攻擊
+        /// 攻擊ID為攻擊流水號, 同個攻擊但是不同波次要送同一個AttackID, 假設好運姊的彈幕有三波擊中, 這三波送的AttackID需要一樣
         /// </summary>
-        public string AttackID { get; private set; }
+        public int AttackID { get; private set; }
         /// <summary>
         /// 此次命中怪物索引清單
         /// </summary>
@@ -16,7 +15,7 @@
         /// </summary>
         public string SpellJsonID { get; private set; }
 
-        public HIT(string _attackID, int[] _monsterIdxs, string _spellJsonID) {
+        public HIT(int _attackID, int[] _monsterIdxs, string _spellJsonID) {
             AttackID = _attackID;
             MonsterIdxs = _monsterIdxs;
             SpellJsonID = _spellJsonID;
