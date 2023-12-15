@@ -54,17 +54,14 @@ namespace HeroFishing.Socket {
                     WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
                     return;
                 }
-                if (cmdType != SocketContent.MatchgameCMD_UDP.UPDATEGAME_TOCLIENT)
-                    WriteLog.LogColorFormat("(UDP)接收: {0}", WriteLog.LogType.Connection, _msg);
+                //if (cmdType != SocketContent.MatchgameCMD_UDP.UPDATEGAME_TOCLIENT)
+                //    WriteLog.LogColorFormat("(UDP)接收: {0}", WriteLog.LogType.Connection, _msg);
                 switch (cmdType) {
                     case SocketContent.MatchgameCMD_UDP.UPDATEGAME_TOCLIENT:
                         var updateGamePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEGAME_TOCLIENT>>(_msg);
                         HandleUpdateGame(updateGamePacket);
                         break;
                     case SocketContent.MatchgameCMD_UDP.UPDATEPLAYER_TOCLIENT:
-                        JsonMapper.RegisterImporter<int, long>((int value) => {
-                            return (long)value;
-                        });
                         var updatePlayerPacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEPLAYER_TOCLIENT>>(_msg);
                         HandleUpdatePlayer(updatePlayerPacket);
                         break;
@@ -252,9 +249,18 @@ namespace HeroFishing.Socket {
         }
         void HandleUpdatePlayer(SocketCMD<UPDATEPLAYER_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            //foreach (var player in _packet.Content.Players) {
+            //    WriteLog.Log(DebugUtils.ObjToStr(player));
+            //}
         }
         void HandleUpdateScene(SocketCMD<UPDATESCENE_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            //foreach (var spawn in _packet.Content.Spawns) {
+            //    foreach (var monster in spawn.Monsters) {
+            //        WriteLog.Log(DebugUtils.ObjToStr(monster));
+            //    }
+            //}
+
         }
 
     }
