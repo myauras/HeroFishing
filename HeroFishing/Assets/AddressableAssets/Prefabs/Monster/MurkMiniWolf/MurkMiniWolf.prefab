@@ -47,8 +47,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _originRenderer: {fileID: 4822882410301872426}
-  _rigid: {fileID: 1494019789821853521}
   _bomb: {fileID: 5621190465540170061}
+  _rigids:
+  - {fileID: 1494019789821853521}
+  _renderers: []
 --- !u!1001 &5524025193728669196
 PrefabInstance:
   m_ObjectHideFlags: 0

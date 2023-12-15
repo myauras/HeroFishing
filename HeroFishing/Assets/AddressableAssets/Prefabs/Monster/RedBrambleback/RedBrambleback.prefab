@@ -358,6 +358,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4688118643556515661}
   - component: {fileID: 9100239849305484890}
+  - component: {fileID: 6194765587647174132}
   m_Layer: 8
   m_Name: RedBrambleback
   m_TagString: Untagged
@@ -395,6 +396,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DieDissolveParticle: {fileID: 0}
+--- !u!114 &6194765587647174132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653284313961122508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2b3f02e856174846b58ea3f23213776, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _originRenderer: {fileID: 8629732864919219644}
+  _bomb: {fileID: 6931625491217187739}
+  _rigids:
+  - {fileID: 3052392210080559646}
+  _renderers: []
 --- !u!1 &665912631599478523
 GameObject:
   m_ObjectHideFlags: 0
@@ -4244,9 +4262,33 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 831ed30c9b9c2e247bd3939cca810211, type: 3}
+--- !u!114 &3052392210080559646 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5791151969174803086, guid: 831ed30c9b9c2e247bd3939cca810211,
+    type: 3}
+  m_PrefabInstance: {fileID: 8791598779434442896}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb6e52f37bca2404fac00b69fd8d21f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4460206255633655307 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5181353403174241947, guid: 831ed30c9b9c2e247bd3939cca810211,
     type: 3}
   m_PrefabInstance: {fileID: 8791598779434442896}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6931625491217187739 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1887039211655766795, guid: 831ed30c9b9c2e247bd3939cca810211,
+    type: 3}
+  m_PrefabInstance: {fileID: 8791598779434442896}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dafd0a8e9ee856a49bf432688899df59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

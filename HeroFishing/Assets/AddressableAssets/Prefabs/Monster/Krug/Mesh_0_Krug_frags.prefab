@@ -1458,7 +1458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb6e52f37bca2404fac00b69fd8d21f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialization: 1
+  initialization: 0
   simulationType: 2
   objectType: 1
   demolitionType: 0
@@ -1478,7 +1478,7 @@ MonoBehaviour:
     meshCollider: {fileID: 0}
     clusterColliders: []
     ignoreList: 
-    exclude: 1
+    exclude: 0
     solidity: 1
     destructible: 0
   activation:
@@ -1622,7 +1622,7 @@ MonoBehaviour:
     destroyDelay: 1
     mesh: 4
     fragments: 0
-  initialized: 1
+  initialized: 0
   rfMeshes: []
   fragments:
   - {fileID: 6423328188877362879}
