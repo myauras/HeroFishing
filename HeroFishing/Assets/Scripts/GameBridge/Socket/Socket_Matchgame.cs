@@ -54,9 +54,13 @@ namespace HeroFishing.Socket {
                     WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
                     return;
                 }
-                //if (cmdType != SocketContent.MatchgameCMD_UDP.UPDATEGAME_TOCLIENT)
-                //    WriteLog.LogColorFormat("(UDP)接收: {0}", WriteLog.LogType.Connection, _msg);
+                if (cmdType != SocketContent.MatchgameCMD_UDP.ATTACK_TOCLIENT)
+                    WriteLog.LogColorFormat("(UDP)接收: {0}", WriteLog.LogType.Connection, _msg);
                 switch (cmdType) {
+                    case SocketContent.MatchgameCMD_UDP.ATTACK_TOCLIENT:
+                        var attackPacket = LitJson.JsonMapper.ToObject<SocketCMD<ATTACK_TOCLIENT>>(_msg);
+                        HandleAttack(attackPacket);
+                        break;
                     case SocketContent.MatchgameCMD_UDP.UPDATEGAME_TOCLIENT:
                         var updateGamePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEGAME_TOCLIENT>>(_msg);
                         HandleUpdateGame(updateGamePacket);
@@ -100,10 +104,14 @@ namespace HeroFishing.Socket {
                 this.MatchgameDisconnect();
             }
         }
-
-        public void TCPSend<T>(SocketCMD<T> cmd) where T : SocketContent {
-            TCP_MatchgameClient.Send(cmd);
+        public int UDPSend<T>(SocketCMD<T> cmd) where T : SocketContent {
+            cmd.SetConnToken(UDP_MatchgameConnToken);//設定封包ConnToken
+            return UDP_MatchgameClient.Send(cmd);
         }
+        public int TCPSend<T>(SocketCMD<T> cmd) where T : SocketContent {
+            return TCP_MatchgameClient.Send(cmd);
+        }
+
 
         private void OnMatchgameTCPConnect(bool connected, string realmToken) {
             WriteLog.LogColor($"TCP_MatchgameClient connection: {connected}", WriteLog.LogType.Connection);
@@ -239,13 +247,16 @@ namespace HeroFishing.Socket {
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.KillMonsterIdxs));
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.GainGolds));
         }
+        void HandleAttack(SocketCMD<ATTACK_TOCLIENT> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            WriteLog.Log(DebugUtils.ObjToStr(_packet.Content));
+        }
         void HandleUpdateGame(SocketCMD<UPDATEGAME_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             //WriteLog.Log("GameTime=" + _packet.Content.GameTime);
             var cmdContent = new UPDATEGAME();//建立封包內容
             var cmd = new SocketCMD<UPDATEGAME>(cmdContent);//建立封包
-            cmd.SetConnToken(UDP_MatchgameConnToken);//設定封包ConnToken
-            UDP_MatchgameClient.Send(cmd);
+            UDPSend(cmd);
         }
         void HandleUpdatePlayer(SocketCMD<UPDATEPLAYER_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;

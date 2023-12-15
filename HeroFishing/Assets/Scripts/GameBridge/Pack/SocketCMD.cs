@@ -48,6 +48,7 @@ namespace HeroFishing.Socket {
             SPAWN_TOCLIENT,
         }
         public enum MatchgameCMD_UDP {
+            ATTACK_TOCLIENT,
             UPDATEGAME_TOCLIENT,
             UPDATEPLAYER_TOCLIENT,
             UPDATESCENE_TOCLIENT,
