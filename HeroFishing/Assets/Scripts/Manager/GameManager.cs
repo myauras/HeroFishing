@@ -7,6 +7,7 @@ using System;
 using HeroFishing.Main;
 using UnityEngine.Rendering.Universal;
 using HeroFishing.Socket;
+using LitJson;
 
 namespace Scoz.Func {
     public enum DataLoad {
@@ -82,6 +83,12 @@ namespace Scoz.Func {
             return Instance;
         }
 
+        public void SetJsonMapper() {
+            JsonMapper.RegisterImporter<int, long>((int value) => {
+                return (long)value;
+            });
+        }
+
         public void SetTime(DateTimeOffset _serverTime) {
             LastServerTime = _serverTime;
             LastClientTime = DateTimeOffset.Now;
@@ -101,6 +108,8 @@ namespace Scoz.Func {
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = TargetFPS;
 #endif
+            //設定LiteJson的JsonMapper
+            SetJsonMapper();
             //產生一個新玩家
             new GamePlayer();
             //建立FirebaseManager

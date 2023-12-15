@@ -12,10 +12,9 @@ namespace HeroFishing.Socket.Matchgame {
     }
 
     public class Player {
-        public string ID;
-        public int Index;
-        public PlayerStatus Status;
-        public float LeftSecs;
+        public string ID { get; private set; }
+        public int Idx { get; private set; }
+        public long GainPoints { get; private set; }
     }
     public class PlayerStatus {
 
