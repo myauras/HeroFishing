@@ -179,6 +179,7 @@ public class MonsterInstance : IComponentData, IDisposable {
 /// </summary>
 public struct MonsterValue : IComponentData {
     public int MonsterID;
+    public int MonsterIdx;
     public Entity MyEntity;//把自己的Enity記錄起來，之後取的時候較快
     public float Radius;
     public float3 Pos;

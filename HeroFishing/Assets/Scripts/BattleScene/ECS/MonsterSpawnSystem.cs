@@ -1,5 +1,6 @@
 using HeroFishing.Main;
 using Scoz.Func;
+using UniRx.Triggers;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -22,7 +23,15 @@ namespace HeroFishing.Battle {
             bool isFreeze = SystemAPI.HasSingleton<FreezeTag>();
             if (isFreeze) return;
 
-            foreach (var monsterID in spawn.MonsterIDs) {
+            for (int i = 0; i < spawn.MonsterIDs.Length; i++) {
+                int monsterID = spawn.MonsterIDs[i];
+                int monsterIdx;
+                if (i >= spawn.MonsterIdxs.Length) {
+                    WriteLog.LogErrorFormat("怪物ID陣列大小與index大小不移置");
+                    monsterIdx = 0;
+                }
+                else
+                    monsterIdx = spawn.MonsterIdxs[i];
                 GameObject monsterPrefab = ResourcePreSetter.Instance.MonsterPrefab.gameObject;
                 if (monsterPrefab == null) continue;
                 var monsterData = MonsterJsonData.GetData(monsterID);
@@ -49,12 +58,14 @@ namespace HeroFishing.Battle {
                     dirQuaternion = Quaternion.LookRotation(dir);
                     state.EntityManager.AddComponentData(entity, new MonsterValue {
                         MonsterID = monsterData.ID,
+                        MonsterIdx = monsterIdx,
                         MyEntity = entity,
                         Radius = monsterData.Radius,
                         Pos = routeData.SpawnPos,
                         InField = false,
                     });
-                } else {
+                }
+                else {
                     monsterGO.transform.localPosition = Vector3.zero;
                     state.EntityManager.AddComponentData(entity, new MonsterValue {
                         MyEntity = entity,

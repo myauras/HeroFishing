@@ -7,10 +7,12 @@ using System.Linq;
 namespace HeroFishing.Battle {
     public class ScheduledSpawn {
         public int[] MonsterIDs;
+        public int[] MonsterIdxs;
         public int RouteID;
         public bool IsBooss;
-        public ScheduledSpawn(int[] monsterIDs, int routeID, bool isBoss) {
+        public ScheduledSpawn(int[] monsterIDs, int[] monsterIdxs, int routeID, bool isBoss) {
             MonsterIDs = monsterIDs;
+            MonsterIdxs = monsterIdxs;
             RouteID = routeID;
             IsBooss = isBoss;
         }
@@ -24,6 +26,7 @@ namespace HeroFishing.Battle {
         Dictionary<int, int> SpawnTimerDic;//<MonsterSpawn表ID,出怪倒數秒數>
 
         MapJsonData CurMapJson;
+        private int _localMonsterIndex = 0;
 
 
         /// <summary>
@@ -52,6 +55,7 @@ namespace HeroFishing.Battle {
         /// </summary>
         void SpawnCheck() {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
+            var monsterIdx = GetLocalMonsterIdx(SpawnTimerDic.Count);
             foreach (var id in SpawnTimerDic.Keys.ToArray()) {
                 var spawnData = MonsterSpawnerJsonData.GetData(id);
                 if (spawnData == null) continue;
@@ -66,11 +70,11 @@ namespace HeroFishing.Battle {
                             var newSpawnID = Prob.GetRandomTFromTArray(ids);
                             var newSpawnData = MonsterSpawnerJsonData.GetData(newSpawnID);
                             if (newSpawnData == null) continue;
-                            EnqueueMonster(newSpawnData.MonsterIDs, newSpawnData.GetRandRoute(), newSpawnData.MySpanwType == MonsterSpawnerJsonData.SpawnType.Boss);
+                            EnqueueMonster(newSpawnData.MonsterIDs, monsterIdx, newSpawnData.GetRandRoute(), newSpawnData.MySpanwType == MonsterSpawnerJsonData.SpawnType.Boss);
                             break;
                         case MonsterSpawnerJsonData.SpawnType.Minion:
                         case MonsterSpawnerJsonData.SpawnType.Boss:
-                            EnqueueMonster(spawnData.MonsterIDs, spawnData.GetRandRoute(), spawnData.MySpanwType == MonsterSpawnerJsonData.SpawnType.Boss);
+                            EnqueueMonster(spawnData.MonsterIDs, monsterIdx, spawnData.GetRandRoute(), spawnData.MySpanwType == MonsterSpawnerJsonData.SpawnType.Boss);
                             break;
                     }
                     SpawnTimerDic[id] = spawnData.GetRandSpawnSec();
@@ -81,9 +85,9 @@ namespace HeroFishing.Battle {
         /// <summary>
         /// 加入到要生怪物的排程中
         /// </summary>
-        public void EnqueueMonster(int[] _monsterIDs, int _routeID, bool _isBoss) {
+        public void EnqueueMonster(int[] _monsterIDs, int[] _monsterIdxs, int _routeID, bool _isBoss) {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
-            var spawn = new ScheduledSpawn(_monsterIDs, _routeID, _isBoss);
+            var spawn = new ScheduledSpawn(_monsterIDs, _monsterIdxs, _routeID, _isBoss);
             //WriteLog.Log(DebugUtils.ObjToStr(spawn));
             SpawnMonsterQueue.Enqueue(spawn);//加入排程
         }
@@ -99,5 +103,18 @@ namespace HeroFishing.Battle {
             return spawn;
         }
 
+        /// <summary>
+        /// 需要local測試的時候，取得所需的int陣列使用
+        /// </summary>
+        /// <param name="count">需要多少index</param>
+        /// <returns>index陣列</returns>
+        private int[] GetLocalMonsterIdx(int count) {
+            int[] values = new int[count];
+            for (int i = 0; i < count; i++) {
+                values[i] = _localMonsterIndex;
+                _localMonsterIndex++;
+            }
+            return values;
+        }
     }
 }
