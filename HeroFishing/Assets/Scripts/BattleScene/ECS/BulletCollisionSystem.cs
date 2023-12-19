@@ -16,6 +16,7 @@ namespace HeroFishing.Battle {
 
         NativeArray<int2> OffsetGrids;//定義碰撞檢定9宮格
         [ReadOnly] BufferLookup<HitInfoBuffer> HitInfoLookup;
+        [ReadOnly] EntityStorageInfoLookup StorageInfoLookup;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
@@ -34,6 +35,7 @@ namespace HeroFishing.Battle {
             OffsetGrids[8] = new int2(-1, 1);// 左上
 
             HitInfoLookup = state.GetBufferLookup<HitInfoBuffer>(false);
+            StorageInfoLookup = state.GetEntityStorageInfoLookup();
         }
         [BurstCompile]
         public void OnDestroy(ref SystemState state) {
@@ -44,14 +46,13 @@ namespace HeroFishing.Battle {
             var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
             float deltaTime = SystemAPI.Time.DeltaTime;
             double elapsedTime = SystemAPI.Time.ElapsedTime;
-
-
+            bool localDeadTest = SystemAPI.HasSingleton<LocalDeadSys>();
             uint seed = (uint)(deltaTime * 1000000f);
             //取得網格資料
             var gridData = SystemAPI.GetSingleton<MapGridData>();
-            var storageInfoLookup = state.GetEntityStorageInfoLookup();
-            var monsterFreezeLookup = state.GetComponentLookup<MonsterFreezeTag>();
+
             HitInfoLookup.Update(ref state);
+            StorageInfoLookup.Update(ref state);
 
             new MoveJob {
                 ECB = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
@@ -62,8 +63,8 @@ namespace HeroFishing.Battle {
                 OffsetGrids = OffsetGrids,
                 MonsterCollisionPosOffset = BattleManager.MonsterCollisionPosOffset,
                 HitInfoLookup = HitInfoLookup,
-                StorageInfoLookup = storageInfoLookup,
-                MonsterFreezeLookup = monsterFreezeLookup,
+                StorageInfoLookup = StorageInfoLookup,
+                LocalDeadTest = localDeadTest,
             }.ScheduleParallel();
 
         }
@@ -78,7 +79,7 @@ namespace HeroFishing.Battle {
             [ReadOnly] public float3 MonsterCollisionPosOffset;
             [ReadOnly] public BufferLookup<HitInfoBuffer> HitInfoLookup;
             [ReadOnly] public EntityStorageInfoLookup StorageInfoLookup;
-            [ReadOnly] public ComponentLookup<MonsterFreezeTag> MonsterFreezeLookup;
+            [ReadOnly] public bool LocalDeadTest;
 
             public void Execute(ref BulletCollisionData _collisionData, ref MoveData _moveData, in Entity _entity) {
                 _collisionData.Timer += DeltaTime;
@@ -143,21 +144,9 @@ namespace HeroFishing.Battle {
                                 }
 
                                 //本地端測試用，有機率擊殺怪物
-                                var random = new Unity.Mathematics.Random(Seed);
-                                float value = random.NextFloat(); // 產生一個0.0到1.0之間的浮點數
-                                if (value < 0.01f) {
+                                if (LocalDeadTest) {
                                     //在怪物實體身上建立死亡標籤元件，讓其他系統知道要死亡後該做什麼
                                     ECB.AddComponent<MonsterDieTag>(3, monsterValue.MyEntity);
-                                    // 如果是冰凍狀態被擊殺，較短時間就消失
-                                    if (MonsterFreezeLookup.HasComponent(monsterValue.MyEntity)) {
-                                        var autoDestroyTag = new AutoDestroyTag { LifeTime = 1 };
-                                        ECB.AddComponent(3, monsterValue.MyEntity, autoDestroyTag);
-                                    }
-                                    else {
-                                        //在怪物實體身上建立移除標籤元件
-                                        var autoDestroyTag = new AutoDestroyTag { LifeTime = 6 };
-                                        ECB.AddComponent(3, monsterValue.MyEntity, autoDestroyTag);
-                                    }
                                     //目前不實做將死亡怪物從網格中移除，因為MonsterBehaviourSystem中每幀都會清空網格資料，所以各別移除就沒那麼需要
                                 }
                                 else {
@@ -184,7 +173,7 @@ namespace HeroFishing.Battle {
                                     ECB.AddComponent(7, hitEntity, bulletHitTag);
                                 }
 
-                                bool isNetwork = true;
+                                bool isNetwork = true && !LocalDeadTest;
                                 Entity networkEntity = Entity.Null;
                                 if (isNetwork) {
                                     networkEntity = ECB.CreateEntity(0);

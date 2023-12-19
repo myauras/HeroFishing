@@ -6,6 +6,7 @@ namespace HeroFishing.Battle {
         [SerializeField] bool EnableMonsterSpawnSys;
         [SerializeField] bool EnableBulletSpawnSys;
         [SerializeField] bool EnableCollisionSys;
+        [SerializeField] bool LocalDead;
         //[SerializeField] bool EnableCollisionSys;
 
         class Baker : Baker<ExecuteAuthoring> {
@@ -16,6 +17,7 @@ namespace HeroFishing.Battle {
                 if (authoring.EnableMonsterSpawnSys) AddComponent<MonsterSpawnSys>(entity);
                 if (authoring.EnableBulletSpawnSys) AddComponent<BulletSpawnSys>(entity);
                 if (authoring.EnableCollisionSys) AddComponent<CollisionSys>(entity);
+                if (authoring.LocalDead) AddComponent<LocalDeadSys>(entity);
             }
         }
     }
@@ -24,6 +26,8 @@ namespace HeroFishing.Battle {
     public struct BulletSpawnSys : IComponentData {
     }
     public struct CollisionSys : IComponentData {
+    }
+    public struct LocalDeadSys : IComponentData {
     }
     //public struct CollisionSys : IComponentData {
     //}

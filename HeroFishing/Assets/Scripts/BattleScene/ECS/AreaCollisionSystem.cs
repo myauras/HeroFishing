@@ -30,6 +30,7 @@ public partial struct AreaCollisionSystem : ISystem {
     public void OnUpdate(ref SystemState state) {
         var ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         var ecbWriter = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
+        bool localDeadTest = SystemAPI.HasSingleton<LocalDeadSys>();
         HitInfoLookup.Update(ref state);
 
         var monsters = SystemAPI.QueryBuilder().WithAll<MonsterValue>().WithAbsent<AutoDestroyTag>().Build().ToComponentDataArray<MonsterValue>(Allocator.TempJob);
@@ -39,6 +40,7 @@ public partial struct AreaCollisionSystem : ISystem {
             ElapsedTime = SystemAPI.Time.ElapsedTime,
             Monsters = monsters,
             HitInfoLookup = HitInfoLookup,
+            LocalDeadTest = localDeadTest,
         }.ScheduleParallel(state.Dependency);
 
         jobHandle.Complete();
@@ -52,6 +54,7 @@ public partial struct AreaCollisionSystem : ISystem {
         [ReadOnly] public double ElapsedTime;
         [ReadOnly] public NativeArray<MonsterValue> Monsters;
         [ReadOnly] public BufferLookup<HitInfoBuffer> HitInfoLookup;
+        [ReadOnly] public bool LocalDeadTest;
 
         public void Execute(ref AreaCollisionData _collisionData, in Entity _entity) {
             _collisionData.Timer += DeltaTime;
@@ -70,8 +73,7 @@ public partial struct AreaCollisionSystem : ISystem {
             }
             _collisionData.WaveIndex++;
 
-
-            bool isNetwork = true;
+            bool isNetwork = true && !LocalDeadTest;
             Entity networkEntity = Entity.Null;
             if (isNetwork) {
                 networkEntity = ECB.CreateEntity(0);
@@ -94,14 +96,9 @@ public partial struct AreaCollisionSystem : ISystem {
                     }
 
                     //本地端測試用，有機率擊殺怪物
-                    uint Seed = (uint)(DeltaTime * 1000000f);
-                    var random = new Unity.Mathematics.Random(Seed);
-                    float value = random.NextFloat();
-                    if (value < 0.01f) {
+                    if (LocalDeadTest) {
                         //在怪物實體身上建立死亡標籤元件，讓其他系統知道要死亡後該做什麼
                         ECB.AddComponent<MonsterDieTag>(3, monster.MyEntity);
-                        //在怪物實體身上建立移除標籤元件
-                        ECB.AddComponent(3, monster.MyEntity, new AutoDestroyTag { LifeTime = 6 });
                     }
                     else {
                         var hitTag = new MonsterHitTag {
