@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using HeroFishing.Battle;
 using Scoz.Func;
 using System;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -74,6 +75,23 @@ public struct SpellHitNetworkData : IComponentData {
 [InternalBufferCapacity(16)]
 public struct MonsterHitNetworkData : IBufferElementData {
     public MonsterValue Monster;
+}
+
+public struct MonsterDieNetworkData : IComponentData, IDisposable {
+    public NativeArray<KillMonsterData> KillMonsters;
+
+    public void Dispose() {
+        if (KillMonsters.IsCreated)
+            KillMonsters.Dispose();
+    }
+}
+
+public struct KillMonsterData : IComponentData {
+    public int KillMonsterIdx;
+    public long GainPoints;
+    public int GainHeroExp;
+    public int GainSpellCharge;
+    public int GainDrop;
 }
 
 public struct SpellHitTag : IComponentData {

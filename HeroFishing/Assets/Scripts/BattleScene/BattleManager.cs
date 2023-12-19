@@ -2,6 +2,8 @@ using HeroFishing.Main;
 using Scoz.Func;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 namespace HeroFishing.Battle {
@@ -38,6 +40,28 @@ namespace HeroFishing.Battle {
         public Hero GetHero(int _index) {
             if (_index < 0 || _index >= MyHeros.Length) return null;
             return MyHeros[_index];
+        }
+        public void SetMonsterDead(int[] monsterIdxs, long[] gainPoints, int[] gainHeroExps, int[] gainSpellCharge, int[] gainDrops) {
+            var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            var entity = entityManager.CreateEntity();
+
+            NativeArray<KillMonsterData> killMonsters = new(monsterIdxs.Length, Allocator.Persistent);
+            for (int i = 0; i < killMonsters.Length; i++) {
+                var killMonster = new KillMonsterData {
+                    KillMonsterIdx = monsterIdxs[i],
+                    GainPoints = gainPoints[i],
+                    GainHeroExp = gainHeroExps[i],
+                    GainSpellCharge = gainSpellCharge[i],
+                    GainDrop = gainDrops[i],
+                };
+                killMonsters[i] = killMonster;
+            }
+
+            MonsterDieNetworkData monsterDieNetworkData = new MonsterDieNetworkData {
+                KillMonsters = killMonsters,
+            };
+
+            entityManager.AddComponentData(entity, monsterDieNetworkData);
         }
     }
 }

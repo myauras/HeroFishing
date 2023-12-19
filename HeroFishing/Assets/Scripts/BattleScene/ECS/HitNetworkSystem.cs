@@ -31,7 +31,7 @@ public partial struct HitNetworkSystem : ISystem {
                 idxs += monsterIdxs[i].ToString() + ", ";
             }
             //idxs.Replace(", ", ")");
-            Debug.Log($"hit network attack id: {hitData.AttackID} monsters {idxs} spell id {spellID}");
+            //Debug.Log($"hit network attack id: {hitData.AttackID} monsters {idxs} spell id {spellID}");
             writer.DestroyEntity(entity.Index, entity);
             if (GameConnector.Connected)
                 GameConnector.Instance.Hit(hitData.AttackID, monsterIdxs, spellID);
