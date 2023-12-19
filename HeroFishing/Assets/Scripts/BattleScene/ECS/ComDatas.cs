@@ -32,6 +32,7 @@ public class BulletInstance : IComponentData, IDisposable {
 
 public struct SpellSpawnData {
     public int SpellPrefabID;
+    public int AttackID;
     public int SubSpellPrefabID;
     public float3 InitPosition;
     public float3 FirePosition;
@@ -49,7 +50,7 @@ public struct SpellBulletData : IComponentData {
     public float Radius;
     public float LifeTime;
     public bool DestroyOnCollision;
-    public bool EnableBulletHit;
+    public bool IsSub;
     public MonsterValue TargetMonster;
 }
 
@@ -65,31 +66,19 @@ public struct SpellAreaData : IComponentData {
     public int Waves;
 }
 
-//public struct SpellData : IComponentData {
-//    public int PlayerID;
-//    public uint StrIndex_SpellID;
-//    public int SpellPrefabID;
-//    public int SubSpellPrefabID;
-//    public float3 InitPosition;
-//    public float3 FirPosition;
-//    public quaternion InitRotation;
-//    public float Speed;
-//    public float Radius;
-//    public float LifeTime;
-//    public float ProjectileScale;
-//    public float ProjectileDelay;
-//    public float CollisionDelay;
-//    public float CollisionTime;
-//    public float CollisionAngle;
-//    public int Waves;
-//    public bool DestoryOnCollision;
-//    public bool IgnoreFireModel;
-//    public bool EnableBulletHit;
-//    public MonsterValue TargetMonster;
-//}
+public struct SpellHitNetworkData : IComponentData {
+    public int AttackID;
+    public uint StrIndex_SpellID;
+}
+
+[InternalBufferCapacity(16)]
+public struct MonsterHitNetworkData : IBufferElementData {
+    public MonsterValue Monster;
+}
 
 public struct SpellHitTag : IComponentData {
     public int PlayerID;
+    public int AttackID;
     public uint StrIndex_SpellID;
     public MonsterValue Monster;
     public float3 HitPosition;
@@ -98,6 +87,7 @@ public struct SpellHitTag : IComponentData {
 
 public struct ChainHitData : IComponentData {
     public int PlayerID;
+    public int AttackID;
     public uint StrIndex_SpellID;
     public MonsterValue OnHitMonster;
     public MonsterValue NearestMonster;
@@ -122,17 +112,19 @@ public struct MoveData : IComponentData {
 
 public struct BulletCollisionData : IComponentData {
     public int PlayerID;
+    public int AttackID;
     public uint StrIndex_SpellID;
     public int SpellPrefabID;
     public float Radius;
     public float Delay;
     public float Timer;
     public bool Destroy;
-    public bool EnableBulletHit;
+    public bool IsSub;
 }
 
 public struct AreaCollisionData : IComponentData {
     public int PlayerID;
+    public int AttackID;
     public uint StrIndex_SpellID;
     public int SpellPrefabID;
     public float3 Position;
@@ -143,6 +135,7 @@ public struct AreaCollisionData : IComponentData {
     public float Timer;
     public float Angle;
     public int Waves;
+    public int WaveIndex;
 }
 
 [InternalBufferCapacity(16)]

@@ -47,12 +47,13 @@ namespace HeroFishing.Battle {
                 //設定碰撞
                 ECB.AddComponent(entity, new BulletCollisionData {
                     PlayerID = spellData.PlayerID,
+                    AttackID = spellData.SpawnData.AttackID,
                     StrIndex_SpellID = spellData.StrIndex_SpellID,
                     SpellPrefabID = spellData.SpawnData.SpellPrefabID,
                     Radius = spellData.Radius,
                     Delay = spellData.SpawnData.ProjectileDelay,
                     Destroy = spellData.DestroyOnCollision,
-                    EnableBulletHit = spellData.EnableBulletHit,
+                    IsSub = spellData.IsSub,
                 });
                 //加入BulletInstance
                 ECB.AddComponent(entity, new BulletInstance {
@@ -81,6 +82,7 @@ namespace HeroFishing.Battle {
                 //設定碰撞
                 ECB.AddComponent(entity, new AreaCollisionData {
                     PlayerID = spellData.PlayerID,
+                    AttackID = spellData.SpawnData.AttackID,
                     StrIndex_SpellID = spellData.StrIndex_SpellID,
                     Position = spellData.SpawnData.InitPosition,
                     Direction = spellData.SpawnData.InitDirection,
@@ -90,7 +92,7 @@ namespace HeroFishing.Battle {
                     Delay = spellData.CollisionDelay,
                     Timer = 0,
                     Angle = spellData.CollisionAngle,
-                    Radius = spellData.Radius
+                    Radius = spellData.Radius,
                 });
                 //加入BulletInstance
                 ECB.AddComponent(entity, new BulletInstance {

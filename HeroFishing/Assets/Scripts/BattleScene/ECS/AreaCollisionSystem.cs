@@ -61,6 +61,27 @@ public partial struct AreaCollisionSystem : ISystem {
                 return;
             }
 
+            // 波數時間差
+            float checkTime = _collisionData.Waves > 0 ? _collisionData.CollisionTime / _collisionData.Waves : 0.5f;
+
+            // 超過總波數或者時間不到波數的碰撞時間就return
+            if (_collisionData.WaveIndex >= _collisionData.Waves || _collisionData.Timer < _collisionData.Delay + checkTime * _collisionData.WaveIndex) {
+                return;
+            }
+            _collisionData.WaveIndex++;
+
+
+            bool isNetwork = true;
+            Entity networkEntity = Entity.Null;
+            if (isNetwork) {
+                networkEntity = ECB.CreateEntity(0);
+                ECB.AddComponent(1, networkEntity, new SpellHitNetworkData {
+                    AttackID = _collisionData.AttackID,
+                    StrIndex_SpellID = _collisionData.StrIndex_SpellID
+                });
+                ECB.AddBuffer<MonsterHitNetworkData>(1, networkEntity);
+            }
+
             foreach (var monster in Monsters) {
                 float3 deltaPos = monster.Pos - _collisionData.Position;
                 float distancesq = math.lengthsq(deltaPos);
@@ -70,26 +91,6 @@ public partial struct AreaCollisionSystem : ISystem {
                     if (_collisionData.Angle > 0 && !math.all(_collisionData.Direction == float3.zero)) {
                         var angle = MathUtility.angle(deltaPos, _collisionData.Direction);
                         if (angle > _collisionData.Angle / 2) continue;
-                    }
-
-                    double checkTime = _collisionData.Waves > 0 ? _collisionData.CollisionTime / _collisionData.Waves : 0.5;
-
-                    // 是否曾經打過此怪物，沒有就新增。
-                    if (!HitInfoLookup.TryGetBuffer(_entity, out var buffer)) {
-                        ECB.AddBuffer<HitInfoBuffer>(1, _entity)
-                            .Add(new HitInfoBuffer { MonsterEntity = monster.MyEntity, HitTime = ElapsedTime, HitCount = 1 });
-                    }
-                    else {
-                        bool alreadyCollided = false;
-                        for (int i = 0; i < buffer.Length; i++) {
-                            if (buffer[i].MonsterEntity == monster.MyEntity && ElapsedTime - buffer[i].HitTime < checkTime) {
-                                alreadyCollided = true;
-                                break;
-                            }
-                        }
-                        if (alreadyCollided) continue;
-
-                        ECB.AppendToBuffer(1, _entity, new HitInfoBuffer { MonsterEntity = monster.MyEntity, HitTime = ElapsedTime });
                     }
 
                     //本地端測試用，有機率擊殺怪物
@@ -119,6 +120,12 @@ public partial struct AreaCollisionSystem : ISystem {
                         HitDir = math.forward()
                     };
                     ECB.AddComponent(5, effectEntity, effectSpawnTag);
+
+                    if (isNetwork) {
+                        ECB.AppendToBuffer(6, networkEntity, new MonsterHitNetworkData {
+                            Monster = monster,
+                        });
+                    }
                 }
             }
         }

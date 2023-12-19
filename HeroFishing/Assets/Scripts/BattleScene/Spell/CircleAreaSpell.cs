@@ -31,19 +31,20 @@ public class CircleAreaSpell : SpellBase {
         _collisionTime = float.Parse(values[5]);
     }
 
-    public override void Play(Vector3 position, Vector3 heroPosition, Vector3 direction) {
-        base.Play(position, heroPosition, direction);
+    public override void Play(SpellPlayData playData) {
+        //base.Play(position, heroPosition, direction);
         var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         var entity = entityManager.CreateEntity();
         var strIndex_SpellID = ECSStrManager.AddStr(_data.ID);
 
         var spawnData = new SpellSpawnData {
+            AttackID = playData.attackID,
             SpellPrefabID = _data.PrefabID,
             ProjectileScale = _scale,
             ProjectileDelay = _delay,
-            FirePosition = heroPosition,
-            InitPosition = position,
-            InitDirection = direction,
+            FirePosition = playData.heroPos,
+            InitPosition = playData.attackPos,
+            InitDirection = playData.direction,
             IgnoreFireModel = false
         };
 

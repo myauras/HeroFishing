@@ -33,15 +33,16 @@ public class LineShotSpell : SpellBase {
         _delay = float.Parse(values[4]);
     }
 
-    public override void Play(Vector3 position, Vector3 heroPosition, Vector3 direction) {
-        base.Play(position, heroPosition, direction);
-        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+    public override void Play(SpellPlayData playData) {
+        //base.Play(position, heroPosition, direction);
+        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager; 
         var entity = entityManager.CreateEntity();
         var strIndex_SpellID = ECSStrManager.AddStr(_data.ID);
-        position += new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);//子彈高度固定調整
+        var position = playData.attackPos + new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);//子彈高度固定調整
         var spawnData = new SpellSpawnData {
+            AttackID = playData.attackID,
             InitPosition = position,
-            InitDirection = direction,
+            InitDirection = playData.direction,
             SpellPrefabID = _data.PrefabID,
             IgnoreFireModel = false,
             ProjectileDelay = _delay,
@@ -55,7 +56,7 @@ public class LineShotSpell : SpellBase {
             Radius = _radius,
             LifeTime = _lifeTime,
             DestroyOnCollision = _data.DestroyOnCollision,
-            EnableBulletHit = true
+            IsSub = false
         });
     }
 

@@ -6,13 +6,20 @@ using Unity.Entities;
 using UnityEngine;
 using static HeroFishing.Battle.SpellIndicator;
 
+public struct SpellPlayData {
+    public int attackID;
+    public Vector3 attackPos;
+    public Vector3 heroPos;
+    public Vector3 direction;
+}
+
 public abstract class SpellBase {
     public SpellHitBase Hit;
     public SpellMoveBase Move;
     public SpellShakeCamera ShakeCamera;
     protected abstract int VariableCount { get; }
 
-    public virtual void Play(Vector3 position, Vector3 heroPosition, Vector3 direction) {
+    public virtual void Play(SpellPlayData playData) {
     }
 
     public virtual IndicatorType SpellIndicatorType => IndicatorType.Line;

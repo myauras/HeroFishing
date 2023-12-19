@@ -235,7 +235,7 @@ namespace HeroFishing.Socket {
         void HandleSPAWN(SocketCMD<SPAWN_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             if (BattleManager.Instance == null || BattleManager.Instance.MyMonsterScheduler == null) return;
-            BattleManager.Instance.MyMonsterScheduler.EnqueueMonster(_packet.Content.MonsterIDs, _packet.Content.RouteID, _packet.Content.IsBoss);
+            BattleManager.Instance.MyMonsterScheduler.EnqueueMonster(_packet.Content.MonsterIDs, _packet.Content.MonsterIdxs, _packet.Content.RouteID, _packet.Content.IsBoss);
         }
 
         void HandleSETHERO(SocketCMD<SETHERO_TOCLIENT> _packet) {

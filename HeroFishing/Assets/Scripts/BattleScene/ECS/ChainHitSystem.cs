@@ -77,6 +77,7 @@ public partial struct ChainHitSystem : ISystem {
                     var direction = monsterBuffer.Monster.Pos - hitData.OnHitMonster.Pos;
                     var position = hitData.HitPosition;
                     var spawnData = new SpellSpawnData {
+                        AttackID = hitData.AttackID,
                         SpellPrefabID = hitData.SpellPrefabID,
                         SubSpellPrefabID = hitData.SubSpellPrefabID,
                         InitPosition = position,
@@ -92,7 +93,7 @@ public partial struct ChainHitSystem : ISystem {
                         Speed = hitData.Speed,
                         LifeTime = hitData.LifeTime,
                         Radius = hitData.Radius,
-                        EnableBulletHit = false,
+                        IsSub = true,
                         TargetMonster = monsterBuffer.Monster
                     });
                 }

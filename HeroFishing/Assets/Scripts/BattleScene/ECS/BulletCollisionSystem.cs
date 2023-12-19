@@ -112,7 +112,6 @@ namespace HeroFishing.Battle {
                     return;
                 }
 
-
                 foreach (var offset in OffsetGrids) {
                     int2 gridToCheck = gridIndex + offset;
 
@@ -173,9 +172,10 @@ namespace HeroFishing.Battle {
                                 ECB.AddComponent(5, effectEntity, effectSpawnTag);
 
                                 //加入擊中tag
-                                if (_collisionData.EnableBulletHit) {
+                                if (!_collisionData.IsSub) {
                                     Entity hitEntity = ECB.CreateEntity(6);
                                     var bulletHitTag = new SpellHitTag {
+                                        AttackID = _collisionData.AttackID,
                                         Monster = monsterValue,
                                         StrIndex_SpellID = _collisionData.StrIndex_SpellID,
                                         HitPosition = monsterValue.Pos,
@@ -184,8 +184,26 @@ namespace HeroFishing.Battle {
                                     ECB.AddComponent(7, hitEntity, bulletHitTag);
                                 }
 
-                                if (_collisionData.Destroy)
+                                bool isNetwork = true;
+                                Entity networkEntity = Entity.Null;
+                                if (isNetwork) {
+                                    networkEntity = ECB.CreateEntity(0);
+                                    ECB.AddComponent(1, networkEntity, new SpellHitNetworkData {
+                                        AttackID = _collisionData.AttackID,
+                                        StrIndex_SpellID = _collisionData.StrIndex_SpellID
+                                    });
+                                    ECB.AddBuffer<MonsterHitNetworkData>(1, networkEntity);
+                                }
+
+                                if (_collisionData.Destroy) {
                                     ECB.DestroyEntity(8, _entity);//銷毀子彈
+                                    if (isNetwork) {
+                                        ECB.AppendToBuffer(9, networkEntity, new MonsterHitNetworkData {
+                                            Monster = monsterValue
+                                        });
+                                    }
+                                    return;
+                                }
                             }
 
                         } while (GridData.GridMap.TryGetNextValue(out monsterValue, ref iterator)); // 如果該key還有其他值就繼續
