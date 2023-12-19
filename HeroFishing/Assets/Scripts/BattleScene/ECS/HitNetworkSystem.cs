@@ -19,7 +19,7 @@ public partial struct HitNetworkSystem : ISystem {
     public void OnUpdate(ref SystemState state) {
         _singleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         var writer = _singleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
-        foreach(var (hitData, entity) in SystemAPI.Query<SpellHitNetworkData>().WithEntityAccess()) {
+        foreach (var (hitData, entity) in SystemAPI.Query<SpellHitNetworkData>().WithEntityAccess()) {
             var monsterData = SystemAPI.GetBuffer<MonsterHitNetworkData>(entity);
             var path = ECSStrManager.GetStr(hitData.StrIndex_SpellID);
             string spellID = new string(path.ToCharArray());
@@ -33,7 +33,8 @@ public partial struct HitNetworkSystem : ISystem {
             //idxs.Replace(", ", ")");
             Debug.Log($"hit network attack id: {hitData.AttackID} monsters {idxs} spell id {spellID}");
             writer.DestroyEntity(entity.Index, entity);
-            //GameConnector.Instance.Hit(hitData.AttackID, monsterIdxs, spellID);
+            if (GameConnector.Connected)
+                GameConnector.Instance.Hit(hitData.AttackID, monsterIdxs, spellID);
         }
     }
 }
