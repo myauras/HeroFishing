@@ -3,7 +3,7 @@ using System.Linq;
 using Unity.Burst;
 using Unity.Entities;
 
-public partial struct BulletHitSystem : ISystem {
+public partial struct SpellHitSystem : ISystem {
     EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
     public void OnCreate(ref SystemState state) {
         state.RequireForUpdate<SpellHitTag>();
