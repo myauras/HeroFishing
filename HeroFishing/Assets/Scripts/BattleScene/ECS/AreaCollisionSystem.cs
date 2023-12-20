@@ -1,4 +1,5 @@
 using HeroFishing.Battle;
+using HeroFishing.Socket;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -30,7 +31,7 @@ public partial struct AreaCollisionSystem : ISystem {
     public void OnUpdate(ref SystemState state) {
         var ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         var ecbWriter = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
-        bool localDeadTest = SystemAPI.HasSingleton<LocalDeadSys>();
+        bool localTest = SystemAPI.HasSingleton<LocalTestSys>();
         HitInfoLookup.Update(ref state);
 
         var monsters = SystemAPI.QueryBuilder().WithAll<MonsterValue>().WithAbsent<AutoDestroyTag>().Build().ToComponentDataArray<MonsterValue>(Allocator.TempJob);
@@ -40,7 +41,7 @@ public partial struct AreaCollisionSystem : ISystem {
             ElapsedTime = SystemAPI.Time.ElapsedTime,
             Monsters = monsters,
             HitInfoLookup = HitInfoLookup,
-            LocalDeadTest = localDeadTest,
+            IsNetwork = !localTest,
         }.ScheduleParallel(state.Dependency);
 
         jobHandle.Complete();
@@ -54,7 +55,7 @@ public partial struct AreaCollisionSystem : ISystem {
         [ReadOnly] public double ElapsedTime;
         [ReadOnly] public NativeArray<MonsterValue> Monsters;
         [ReadOnly] public BufferLookup<HitInfoBuffer> HitInfoLookup;
-        [ReadOnly] public bool LocalDeadTest;
+        [ReadOnly] public bool IsNetwork;
 
         public void Execute(ref AreaCollisionData _collisionData, in Entity _entity) {
             _collisionData.Timer += DeltaTime;
@@ -73,9 +74,8 @@ public partial struct AreaCollisionSystem : ISystem {
             }
             _collisionData.WaveIndex++;
 
-            bool isNetwork = true && !LocalDeadTest;
             Entity networkEntity = Entity.Null;
-            if (isNetwork) {
+            if (IsNetwork) {
                 networkEntity = ECB.CreateEntity(0);
                 ECB.AddComponent(1, networkEntity, new SpellHitNetworkData {
                     AttackID = _collisionData.AttackID,
@@ -95,18 +95,13 @@ public partial struct AreaCollisionSystem : ISystem {
                         if (angle > _collisionData.Angle / 2) continue;
                     }
 
-                    //本地端測試用，有機率擊殺怪物
-                    if (LocalDeadTest) {
-                        //在怪物實體身上建立死亡標籤元件，讓其他系統知道要死亡後該做什麼
-                        ECB.AddComponent<MonsterDieTag>(3, monster.MyEntity);
-                    }
-                    else {
-                        var hitTag = new MonsterHitTag {
-                            MonsterID = monster.MonsterID,
-                            StrIndex_SpellID = _collisionData.StrIndex_SpellID,
-                        };
-                        ECB.AddComponent(3, monster.MyEntity, hitTag);
-                    }
+                    //加入本地擊中標籤，死亡標籤在擊中系統中處理，這樣才能在怪物死亡時知道最後的擊中方向。
+                    var hitTag = new MonsterHitTag {
+                        MonsterID = monster.MonsterID,
+                        StrIndex_SpellID = _collisionData.StrIndex_SpellID,
+                        HitDirection = float3.zero,
+                    };
+                    ECB.AddComponent(3, monster.MyEntity, hitTag);
 
                     //加入子彈擊中特效標籤元件
                     Entity effectEntity = ECB.CreateEntity(4);
@@ -118,7 +113,7 @@ public partial struct AreaCollisionSystem : ISystem {
                     };
                     ECB.AddComponent(5, effectEntity, effectSpawnTag);
 
-                    if (isNetwork) {
+                    if (IsNetwork) {
                         ECB.AppendToBuffer(6, networkEntity, new MonsterHitNetworkData {
                             Monster = monster,
                         });

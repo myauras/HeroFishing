@@ -202,6 +202,7 @@ public struct MonsterValue : IComponentData {
 public struct MonsterHitTag : IComponentData {
     public int MonsterID;//受擊怪物ID 
     public uint StrIndex_SpellID;//ECSStrManager的技能ID字串索引
+    public float3 HitDirection;
 }
 /// <summary>
 /// 死亡標籤元件

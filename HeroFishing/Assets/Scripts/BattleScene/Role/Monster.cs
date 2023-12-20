@@ -4,6 +4,7 @@ using Scoz.Func;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -14,6 +15,8 @@ namespace HeroFishing.Battle {
 
         MonsterSpecialize MyMonsterSpecialize;
         MonsterExplosion Explosion;
+
+        private Vector3 _lastHitDirection;
 
         private static readonly Dictionary<int, List<Material>> _originMatDic = new();
         private static readonly Dictionary<int, List<Material>> _frozenMatDic = new();
@@ -42,8 +45,9 @@ namespace HeroFishing.Battle {
             });
         }
 
-        public void OnHit(string _spellID) {
+        public void OnHit(string _spellID, float3 hitDirection) {
             var spellData = HeroSpellJsonData.GetData(_spellID);
+            _lastHitDirection = hitDirection;
             if (spellData == null) return;
             HitShaderEffect(spellData);
         }

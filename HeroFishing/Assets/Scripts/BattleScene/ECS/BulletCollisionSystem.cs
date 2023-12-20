@@ -1,4 +1,5 @@
 ﻿using HeroFishing.Main;
+using HeroFishing.Socket;
 using Scoz.Func;
 using System;
 using Unity.Burst;
@@ -46,7 +47,7 @@ namespace HeroFishing.Battle {
             var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
             float deltaTime = SystemAPI.Time.DeltaTime;
             double elapsedTime = SystemAPI.Time.ElapsedTime;
-            bool localDeadTest = SystemAPI.HasSingleton<LocalDeadSys>();
+            bool localTest = SystemAPI.HasSingleton<LocalTestSys>();
             uint seed = (uint)(deltaTime * 1000000f);
             //取得網格資料
             var gridData = SystemAPI.GetSingleton<MapGridData>();
@@ -64,7 +65,7 @@ namespace HeroFishing.Battle {
                 MonsterCollisionPosOffset = BattleManager.MonsterCollisionPosOffset,
                 HitInfoLookup = HitInfoLookup,
                 StorageInfoLookup = StorageInfoLookup,
-                LocalDeadTest = localDeadTest,
+                IsNetwork = !localTest,
             }.ScheduleParallel();
 
         }
@@ -79,7 +80,7 @@ namespace HeroFishing.Battle {
             [ReadOnly] public float3 MonsterCollisionPosOffset;
             [ReadOnly] public BufferLookup<HitInfoBuffer> HitInfoLookup;
             [ReadOnly] public EntityStorageInfoLookup StorageInfoLookup;
-            [ReadOnly] public bool LocalDeadTest;
+            [ReadOnly] public bool IsNetwork;
 
             public void Execute(ref BulletCollisionData _collisionData, ref MoveData _moveData, in Entity _entity) {
                 _collisionData.Timer += DeltaTime;
@@ -143,17 +144,13 @@ namespace HeroFishing.Battle {
                                         ECB.AppendToBuffer(1, _entity, new HitInfoBuffer { MonsterEntity = monsterValue.MyEntity, HitTime = ElapsedTime });
                                 }
 
-                                //本地端測試用，有機率擊殺怪物
-                                if (LocalDeadTest) {
-                                    //在怪物實體身上建立死亡標籤元件，讓其他系統知道要死亡後該做什麼
-                                    ECB.AddComponent<MonsterDieTag>(3, monsterValue.MyEntity);
-                                    //目前不實做將死亡怪物從網格中移除，因為MonsterBehaviourSystem中每幀都會清空網格資料，所以各別移除就沒那麼需要
-                                }
-                                else {
-                                    //在怪物實體身上建立被擊中的標籤元件，讓其他系統知道要處理被擊中後該做什麼
-                                    var hitTag = new MonsterHitTag { MonsterID = monsterValue.MonsterID, StrIndex_SpellID = _collisionData.StrIndex_SpellID };
-                                    ECB.AddComponent(3, monsterValue.MyEntity, hitTag);
-                                }
+                                //加入本地擊中標籤，死亡標籤在擊中系統中處理，這樣才能在怪物死亡時知道最後的擊中方向。
+                                var hitTag = new MonsterHitTag {
+                                    MonsterID = monsterValue.MonsterID,
+                                    StrIndex_SpellID = _collisionData.StrIndex_SpellID,
+                                    HitDirection = _moveData.Direction
+                                };
+                                ECB.AddComponent(3, monsterValue.MyEntity, hitTag);
 
                                 //加入子彈擊中特效標籤元件
                                 Entity effectEntity = ECB.CreateEntity(4);
@@ -173,9 +170,8 @@ namespace HeroFishing.Battle {
                                     ECB.AddComponent(7, hitEntity, bulletHitTag);
                                 }
 
-                                bool isNetwork = true && !LocalDeadTest;
                                 Entity networkEntity = Entity.Null;
-                                if (isNetwork) {
+                                if (IsNetwork) {
                                     networkEntity = ECB.CreateEntity(0);
                                     ECB.AddComponent(1, networkEntity, new SpellHitNetworkData {
                                         AttackID = _collisionData.AttackID,
@@ -186,9 +182,9 @@ namespace HeroFishing.Battle {
 
                                 if (_collisionData.Destroy) {
                                     ECB.DestroyEntity(8, _entity);//銷毀子彈
-                                    if (isNetwork) {
+                                    if (IsNetwork) {
                                         ECB.AppendToBuffer(9, networkEntity, new MonsterHitNetworkData {
-                                            Monster = monsterValue
+                                            Monster = monsterValue,
                                         });
                                     }
                                     return;

@@ -1,3 +1,4 @@
+using HeroFishing.Socket;
 using Unity.Entities;
 using UnityEngine;
 
@@ -6,7 +7,8 @@ namespace HeroFishing.Battle {
         [SerializeField] bool EnableMonsterSpawnSys;
         [SerializeField] bool EnableBulletSpawnSys;
         [SerializeField] bool EnableCollisionSys;
-        [SerializeField] bool LocalDead;
+        [SerializeField] bool LocalTest;
+        [SerializeField] float LocalDeadThreshold;
         //[SerializeField] bool EnableCollisionSys;
 
         class Baker : Baker<ExecuteAuthoring> {
@@ -17,7 +19,8 @@ namespace HeroFishing.Battle {
                 if (authoring.EnableMonsterSpawnSys) AddComponent<MonsterSpawnSys>(entity);
                 if (authoring.EnableBulletSpawnSys) AddComponent<BulletSpawnSys>(entity);
                 if (authoring.EnableCollisionSys) AddComponent<CollisionSys>(entity);
-                if (authoring.LocalDead) AddComponent<LocalDeadSys>(entity);
+                if (authoring.LocalTest || !GameConnector.Connected) AddComponent(entity,
+                    new LocalTestSys { DeadThreshold = authoring.LocalDeadThreshold });
             }
         }
     }
@@ -27,7 +30,8 @@ namespace HeroFishing.Battle {
     }
     public struct CollisionSys : IComponentData {
     }
-    public struct LocalDeadSys : IComponentData {
+    public struct LocalTestSys : IComponentData {
+        public float DeadThreshold;
     }
     //public struct CollisionSys : IComponentData {
     //}
