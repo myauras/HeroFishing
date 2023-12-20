@@ -6,6 +6,7 @@ using UnityEngine;
 namespace HeroFishing.Battle {
     public class MonsterSpecialize : MonoBehaviour {
         [SerializeField] ParticleSystem DieDissolveParticle;
+        [SerializeField] ParticleSystem CoinParticle;
 
         void Start() {
             if (DieDissolveParticle != null) DieDissolveParticle.gameObject.SetActive(false);
@@ -30,6 +31,16 @@ namespace HeroFishing.Battle {
             }
             _renderer.materials = materials;  // 將修改後的材質陣列設回Renderer的材質陣列
 
+        }
+
+        public void PlayCoinEffect(Vector3 hitDirection) {
+            if (CoinParticle == null) return;
+            Debug.Log("coin hit direction " + hitDirection);
+            var deltaPos = hitDirection.normalized * 10;
+            var velocity = CoinParticle.velocityOverLifetime;
+            velocity.x = new ParticleSystem.MinMaxCurve(velocity.x.constantMin + deltaPos.x, velocity.x.constantMax + deltaPos.x);
+            velocity.z = new ParticleSystem.MinMaxCurve(velocity.z.constantMin + deltaPos.z, velocity.z.constantMax + deltaPos.z);
+            CoinParticle.transform.parent.gameObject.SetActive(true);
         }
     }
 }

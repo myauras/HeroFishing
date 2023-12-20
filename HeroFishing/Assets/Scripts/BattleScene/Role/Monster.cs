@@ -91,7 +91,9 @@ namespace HeroFishing.Battle {
         public void Die() {
             if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;
             SetAniTrigger("die");
-            if (MyMonsterSpecialize != null) MyMonsterSpecialize.PlayDissolveEffect(MySkinnedMeshRenderers[0]);
+            if (MyMonsterSpecialize != null)
+                //MyMonsterSpecialize.PlayDissolveEffect(MySkinnedMeshRenderers[0]);
+                MyMonsterSpecialize.PlayCoinEffect(_lastHitDirection);
         }
 
         // 如果要每個Instance都創建一個材質球會再第一次創建過久。所以讓材質球的創建跟怪物ID綁定
