@@ -244,6 +244,7 @@ namespace HeroFishing.Socket {
 
         void HandleHit(SocketCMD<HIT_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            WriteLog.LogError("Hit Error: " + _packet.ErrMsg);
             if (_packet.Content.KillMonsterIdxs == null || _packet.Content.KillMonsterIdxs.Length == 0) return;
             BattleManager.Instance.SetMonsterDead(_packet.Content.KillMonsterIdxs, _packet.Content.GainPoints, _packet.Content.GainHeroExps, _packet.Content.GainSpellCharges, _packet.Content.GainDrops);
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.KillMonsterIdxs));
