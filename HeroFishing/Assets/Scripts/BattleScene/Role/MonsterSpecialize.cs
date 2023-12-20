@@ -8,6 +8,8 @@ namespace HeroFishing.Battle {
         [SerializeField] ParticleSystem DieDissolveParticle;
         [SerializeField] ParticleSystem CoinParticle;
 
+        private const float COIN_EFFECT_STRENGTH = 5f;
+
         void Start() {
             if (DieDissolveParticle != null) DieDissolveParticle.gameObject.SetActive(false);
         }
@@ -35,8 +37,8 @@ namespace HeroFishing.Battle {
 
         public void PlayCoinEffect(Vector3 hitDirection) {
             if (CoinParticle == null) return;
-            Debug.Log("coin hit direction " + hitDirection);
-            var deltaPos = hitDirection.normalized * 10;
+            //Debug.Log("coin hit direction " + hitDirection);
+            var deltaPos = hitDirection.normalized * COIN_EFFECT_STRENGTH;
             var velocity = CoinParticle.velocityOverLifetime;
             velocity.x = new ParticleSystem.MinMaxCurve(velocity.x.constantMin + deltaPos.x, velocity.x.constantMax + deltaPos.x);
             velocity.z = new ParticleSystem.MinMaxCurve(velocity.z.constantMin + deltaPos.z, velocity.z.constantMax + deltaPos.z);
