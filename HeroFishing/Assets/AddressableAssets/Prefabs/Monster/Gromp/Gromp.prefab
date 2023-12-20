@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 16514434915574644}
   - component: {fileID: 5968112859959843372}
+  - component: {fileID: 8428568614590607306}
   m_Layer: 8
   m_Name: Gromp
   m_TagString: Untagged
@@ -32,6 +33,7 @@ Transform:
   m_Children:
   - {fileID: 3976734971907146543}
   - {fileID: 1528718339452530019}
+  - {fileID: 2494168504595076686}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5968112859959843372
@@ -51,6 +53,20 @@ MonoBehaviour:
   _rigids:
   - {fileID: 2303131194212824287}
   _renderers: []
+--- !u!114 &8428568614590607306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3001249653656124581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286c4f28fc8f7bb46b2683fc4b9b1055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DieDissolveParticle: {fileID: 0}
+  CoinParticle: {fileID: 7188611783382933409}
 --- !u!1001 &3511270722433148100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62,17 +78,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: fd003d6e8eed21a4abc4417a637bffca,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd003d6e8eed21a4abc4417a637bffca,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd003d6e8eed21a4abc4417a637bffca,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd003d6e8eed21a4abc4417a637bffca,
         type: 3}
@@ -123,6 +139,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fd003d6e8eed21a4abc4417a637bffca,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fd003d6e8eed21a4abc4417a637bffca,
         type: 3}
@@ -401,6 +422,96 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -3081994679161391779, guid: fd003d6e8eed21a4abc4417a637bffca,
     type: 3}
   m_PrefabInstance: {fileID: 3511270722433148100}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4515276363770778520
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 16514434915574644}
+    m_Modifications:
+    - target: {fileID: 2032366860461999574, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032366860461999574, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032366860461999574, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032366860461999574, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032366860461999574, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032366860461999574, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032366860461999574, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032366860461999574, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032366860461999574, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032366860461999574, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6731315440095349817, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: ShapeModule.m_SkinnedMeshRenderer
+      value: 
+      objectReference: {fileID: 1459814798498093728}
+    - target: {fileID: 6929840253974717831, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_Name
+      value: Coin effect
+      objectReference: {fileID: 0}
+    - target: {fileID: 6929840253974717831, guid: c5df985600aeade46b54d54635e9d285,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c5df985600aeade46b54d54635e9d285, type: 3}
+--- !u!4 &2494168504595076686 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2032366860461999574, guid: c5df985600aeade46b54d54635e9d285,
+    type: 3}
+  m_PrefabInstance: {fileID: 4515276363770778520}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7188611783382933409 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6731315440095349817, guid: c5df985600aeade46b54d54635e9d285,
+    type: 3}
+  m_PrefabInstance: {fileID: 4515276363770778520}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8462195824659133894
 PrefabInstance:
