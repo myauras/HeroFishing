@@ -19,7 +19,7 @@ namespace HeroFishing.Battle {
                 if (authoring.EnableMonsterSpawnSys) AddComponent<MonsterSpawnSys>(entity);
                 if (authoring.EnableBulletSpawnSys) AddComponent<BulletSpawnSys>(entity);
                 if (authoring.EnableCollisionSys) AddComponent<CollisionSys>(entity);
-                if (authoring.LocalTest || !GameConnector.Connected) AddComponent(entity,
+                if (authoring.LocalTest /*|| !GameConnector.Connected*/) AddComponent(entity,
                     new LocalTestSys { DeadThreshold = authoring.LocalDeadThreshold });
             }
         }

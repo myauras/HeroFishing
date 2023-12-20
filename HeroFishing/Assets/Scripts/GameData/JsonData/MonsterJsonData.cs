@@ -30,6 +30,7 @@ namespace HeroFishing.Main {
             Self,
         }
         public HitEffectPosType HitEffectPos = HitEffectPosType.HitPos;
+        public short CoinCount { get; private set; }
 
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
             DataName = _dataName;
@@ -62,6 +63,9 @@ namespace HeroFishing.Main {
                         break;
                     case "HitEffectPos":
                         HitEffectPos = MyEnum.ParseEnum<HitEffectPosType>(item[key].ToString());
+                        break;
+                    case "CoinCount":
+                        CoinCount = short.Parse(item[key].ToString());
                         break;
                     default:
                         //WriteLog.LogWarning(string.Format("{0}表有不明屬性:{1}", DataName, key));

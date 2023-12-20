@@ -8,20 +8,20 @@ namespace HeroFishing.Battle {
         [SerializeField] ParticleSystem DieDissolveParticle;
         [SerializeField] ParticleSystem CoinParticle;
 
-        private const float COIN_EFFECT_STRENGTH = 5f;
+        private const float COIN_EFFECT_STRENGTH = 1f;
 
         void Start() {
             if (DieDissolveParticle != null) DieDissolveParticle.gameObject.SetActive(false);
         }
         public void PlayDissolveEffect(SkinnedMeshRenderer _renderer) {
-            if (DieDissolveParticle != null) DieDissolveParticle.gameObject.SetActive(true);
+            //if (DieDissolveParticle != null) DieDissolveParticle.gameObject.SetActive(true);
 
             Material[] materials = _renderer.materials;  // 取得材質的複本
             for (int i = 0; i < materials.Length; i++) {
                 if (_renderer.materials[i] != null) {
                     //將本來material更改為死亡material並改變texture
                     var tex = materials[i].GetTexture("_MainTex");
-                    materials[i] = ResourcePreSetter.GetMaterial("MonsterDie");
+                    materials[i] = new Material(ResourcePreSetter.GetMaterial("MonsterDie"));
                     materials[i].SetTexture("_MainTex", tex);
                     //設定material的shader參數
                     materials[i].SetFloat("_Progress", 0);
@@ -35,13 +35,18 @@ namespace HeroFishing.Battle {
 
         }
 
-        public void PlayCoinEffect(Vector3 hitDirection) {
+        public void PlayCoinEffect(short emitCount, Vector3 hitDirection) {
             if (CoinParticle == null) return;
             //Debug.Log("coin hit direction " + hitDirection);
             var deltaPos = hitDirection.normalized * COIN_EFFECT_STRENGTH;
+            //設定力道
             var velocity = CoinParticle.velocityOverLifetime;
             velocity.x = new ParticleSystem.MinMaxCurve(velocity.x.constantMin + deltaPos.x, velocity.x.constantMax + deltaPos.x);
             velocity.z = new ParticleSystem.MinMaxCurve(velocity.z.constantMin + deltaPos.z, velocity.z.constantMax + deltaPos.z);
+            //設定數量
+            var emission = CoinParticle.emission;
+            emission.SetBurst(0, new ParticleSystem.Burst(0, emitCount));
+
             CoinParticle.transform.parent.gameObject.SetActive(true);
         }
     }

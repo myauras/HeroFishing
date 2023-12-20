@@ -31,7 +31,7 @@ namespace HeroFishing.Battle {
                     monsterInstance.MyMonster.Die();
                     //在怪物實體身上建立移除標籤元件
                     ecbWriter.AddComponent(entity.Index, entity, new AutoDestroyTag {
-                        LifeTime = 6
+                        LifeTime = 2
                     });
                 }
                 ecbWriter.RemoveComponent<MonsterDieTag>(entity.Index, entity);
