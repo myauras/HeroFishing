@@ -8,6 +8,7 @@ using Unity.Mathematics;
 namespace HeroFishing.Battle {
     public partial struct MonsterHitSystem : ISystem {
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
+        Random random;
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<MonsterInstance>();
             state.RequireForUpdate<MonsterHitTag>();
@@ -22,8 +23,11 @@ namespace HeroFishing.Battle {
 
             //確認是否是本地端處理死亡
             bool localTest = SystemAPI.HasSingleton<LocalTestSys>();
-            uint seed = (uint)(SystemAPI.Time.DeltaTime * 1000000f);
-            var random = new Random(seed);
+            if(localTest && random.state == 0) {
+                uint seed = (uint)(SystemAPI.Time.DeltaTime * 1000000f);
+                random = new Random(seed);
+            }
+
             foreach (var (monsterInstance, hitTag, entity) in SystemAPI.Query<MonsterInstance, MonsterHitTag>().WithEntityAccess()) {
                 var path = ECSStrManager.GetStr(hitTag.StrIndex_SpellID);
                 string spellID = new string(path.ToArray());

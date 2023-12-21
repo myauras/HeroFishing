@@ -112,6 +112,13 @@ namespace HeroFishing.Battle {
             //    MyLoadingProgress.FinishProgress("LobbyUI");//完成讀取UI
             //};
 
+            AddressablesLoader.GetPrefabByRef(BattleUIAsset, (prefab, handle) => {
+                AddressableManage.SetToChangeSceneRelease(handle);
+                GameObject go = Instantiate(prefab, transform);
+                go.GetComponent<Canvas>().worldCamera = Camera.main;
+                go.GetComponent<BattleSceneUI>().Init();
+            });
+
             //載入SpellIndicator
             MyLoadingProgress.AddLoadingProgress("SpellIndicator");//新增讀取中項目
             Addressables.LoadAssetAsync<GameObject>(SpellIndicatorAsset).Completed += handle => {

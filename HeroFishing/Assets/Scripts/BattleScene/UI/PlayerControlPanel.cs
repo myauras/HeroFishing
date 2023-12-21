@@ -40,6 +40,7 @@ namespace HeroFishing.Battle {
             if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
             if (!CheckSpell(SpellName.attack)) return;
+            if (!_isSpellTest) return;
 
             //攻擊方向
             var pos = UIPosition.GetMouseWorldPointOnYZero(0);
