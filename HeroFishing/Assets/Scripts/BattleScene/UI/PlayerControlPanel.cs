@@ -9,22 +9,24 @@ using HeroFishing.Socket;
 namespace HeroFishing.Battle {
     public class PlayerControlPanel : MonoBehaviour {
         [SerializeField]
-        bool LockAttack = false;
+        private bool _isSpellTest;
+        [SerializeField]
+        private bool _lockAttack = false;
 
-        bool IsSkillMode = false;
+        private bool _isSkillMode = false;
         //Vector3 OriginPos;
-        HeroSpellJsonData TmpSpellData;
-        Hero TmpHero;
-        Vector3 TmpSpellDir;
-        Vector3 TmpSpellPos;
-        Vector3 OriginPos;
-        HeroMoveBehaviour CurrentMove;
-        int AttackID = 0;
+        private HeroSpellJsonData _spellData;
+        private Hero _hero;
+        private Vector3 _spellDir;
+        private Vector3 _spellPos;
+        private Vector3 _originPos;
+        private HeroMoveBehaviour _currentMove;
+        private int _attackID = 0;
 
         private const float MOVE_SCALE_FACTOR = 2;
         private bool ControlLock {
             get {
-                return CurrentMove != null && CurrentMove.IsMoving;
+                return _currentMove != null && _currentMove.IsMoving;
             }
         }
 
@@ -32,107 +34,108 @@ namespace HeroFishing.Battle {
             AttackDetect();
         }
         //普通攻擊
-        void AttackDetect() {
+        private void AttackDetect() {
             if (!Input.GetMouseButtonDown(0)) return;
             if (ControlLock) return;
-            if (IsSkillMode) return;
+            if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
-            if (BattleManager.Instance == null) return;
-            var hero = BattleManager.Instance.GetHero(0);
-            if (hero == null) { WriteLog.LogError("玩家英雄不存在"); return; }
-            TmpHero = hero;
-            var spellData = HeroSpellJsonData.GetSpell(TmpHero.MyData.ID, SpellName.attack);
-            if (spellData == null) { WriteLog.LogErrorFormat("玩家英雄的 {0} 不存在", SpellName.attack); return; }
-            TmpSpellData = spellData;
+            if (!CheckSpell(SpellName.attack)) return;
 
             //攻擊方向
             var pos = UIPosition.GetMouseWorldPointOnYZero(0);
-            var dir = (pos - hero.transform.position).normalized;
+            var dir = (pos - _hero.transform.position).normalized;
             //設定技能
-            OnSetSpell(TmpHero.transform.position, dir);
+            OnSetSpell(_hero.transform.position, dir);
         }
 
 
         //施放技能-按下
-        public void OnPointerDown(string _spellNameStr) {
+        public void OnPointerDown(string spellNameStr) {
             if (ControlLock) return;
             SpellName spellName;
-            if (!MyEnum.TryParseEnum(_spellNameStr, out spellName)) return;
-            var hero = BattleManager.Instance.GetHero(0);
-            if (hero == null) { WriteLog.LogError("玩家英雄不存在"); return; }
-            TmpHero = hero;
-            var spellData = HeroSpellJsonData.GetSpell(TmpHero.MyData.ID, spellName);
-            if (spellData == null) { WriteLog.LogErrorFormat("玩家英雄的 {0} 不存在", spellName); return; }
-            TmpSpellData = spellData;
-            OriginPos = UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
+            if (!MyEnum.TryParseEnum(spellNameStr, out spellName)) return;
+            if (!CheckSpell(spellName)) return;
+
+            _originPos = UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
             //    TmpHero.transform.position;
-            SpellIndicator.Instance.ShowIndicator(TmpSpellData);
-            SpellIndicator.Instance.MoveIndicator(TmpHero.transform.position);
-            IsSkillMode = true;
+            SpellIndicator.Instance.ShowIndicator(_spellData);
+            SpellIndicator.Instance.MoveIndicator(_hero.transform.position);
+            _isSkillMode = true;
         }
 
         //施放技能-拖曳
         public void OnDrag() {
             if (ControlLock) return;
-            if (!IsSkillMode) return;
+            if (!_isSkillMode) return;
             var mousePos = UIPosition.GetMouseWorldPointOnYZero(0);
-            TmpSpellPos = (mousePos - OriginPos) * MOVE_SCALE_FACTOR + TmpHero.transform.position;
-            TmpSpellDir = (mousePos - OriginPos).normalized;
-            TmpHero.FaceDir(Quaternion.LookRotation(TmpSpellDir));
+            _spellPos = (mousePos - _originPos) * MOVE_SCALE_FACTOR + _hero.transform.position;
+            _spellDir = (mousePos - _originPos).normalized;
+            _hero.FaceDir(Quaternion.LookRotation(_spellDir));
 
-            if (TmpSpellData.MyDragType == HeroSpellJsonData.DragType.Rot) {
-                float angle = Mathf.Atan2(TmpSpellDir.x, TmpSpellDir.z) * Mathf.Rad2Deg;
+            if (_spellData.MyDragType == HeroSpellJsonData.DragType.Rot) {
+                float angle = Mathf.Atan2(_spellDir.x, _spellDir.z) * Mathf.Rad2Deg;
                 SpellIndicator.Instance.RotateIndicator(Quaternion.Euler(0, angle, 0));
             }
             else {
-                SpellIndicator.Instance.MoveIndicator(TmpSpellPos);
+                SpellIndicator.Instance.MoveIndicator(_spellPos);
             }
         }
         //施放技能-放開
         public void OnPointerUp() {
             if (ControlLock) return;
-            if (!IsSkillMode) return;
-            IsSkillMode = false;
+            if (!_isSkillMode) return;
+            _isSkillMode = false;
             SpellIndicator.Instance.Hide();
             // 回到原位，否則旋轉的Indicator會有錯誤
-            SpellIndicator.Instance.MoveIndicator(TmpHero.transform.position);
+            SpellIndicator.Instance.MoveIndicator(_hero.transform.position);
 
-            var position = TmpSpellData.MyDragType == HeroSpellJsonData.DragType.Rot ? TmpHero.transform.position : TmpSpellPos;
+            var position = _spellData.MyDragType == HeroSpellJsonData.DragType.Rot ? _hero.transform.position : _spellPos;
 
             //設定技能
-            OnSetSpell(position, TmpSpellDir);
+            OnSetSpell(position, _spellDir);
         }
         public void OnSetSpell(Vector3 _attackerPos, Vector3 _attackDir) {
             //播放腳色動作(targetPos - TmpHero.transform.position).normalized
-            TmpHero.OnSpellPlay(TmpSpellData.SpellName);
-            TmpHero.FaceDir(Quaternion.LookRotation(_attackDir));
+            _hero.OnSpellPlay(_spellData.SpellName);
+            _hero.FaceDir(Quaternion.LookRotation(_attackDir));
             //設定ECS施法資料
             SetECSSpellData(_attackerPos, _attackDir);
         }
 
-        void SetECSSpellData(Vector3 _attackPos, Vector3 _attackDir) {
-            if (TmpSpellData.Spell == null) return;
-            var spell = TmpSpellData.Spell;
+        private bool CheckSpell(SpellName spellName) {
+            if (BattleManager.Instance == null) return false;
+            var hero = BattleManager.Instance.GetHero(0);
+            if (hero == null) { WriteLog.LogError("玩家英雄不存在"); return false; }
+            _hero = hero;
+            var spellData = HeroSpellJsonData.GetSpell(_hero.MyData.ID, spellName);
+            if (spellData == null) { WriteLog.LogErrorFormat("玩家英雄的 {0} 不存在", spellName); return false; }
+            _spellData = spellData;
+            return true;
+        }
+
+        private void SetECSSpellData(Vector3 _attackPos, Vector3 _attackDir) {
+            if (_spellData.Spell == null) return;
+            var spell = _spellData.Spell;
             spell.Play(new SpellPlayData {
-                attackID = AttackID,
+                attackID = _attackID,
                 attackPos = _attackPos,
-                heroPos = TmpHero.transform.position,
+                heroPos = _hero.transform.position,
                 direction = _attackDir
             });
-            AttackID++;
+            _attackID++;
 
             if (spell.Move != null) {
-                if (CurrentMove == null)
-                    CurrentMove = TmpHero.GetComponent<HeroMoveBehaviour>();
-                if (CurrentMove == null)
-                    CurrentMove = TmpHero.gameObject.AddComponent<HeroMoveBehaviour>();
-                spell.Move.Play(_attackPos, TmpHero.transform.position, _attackDir, CurrentMove);
+                if (_currentMove == null)
+                    _currentMove = _hero.GetComponent<HeroMoveBehaviour>();
+                if (_currentMove == null)
+                    _currentMove = _hero.gameObject.AddComponent<HeroMoveBehaviour>();
+                spell.Move.Play(_attackPos, _hero.transform.position, _attackDir, _currentMove);
             }
 
             if (spell.ShakeCamera != null)
                 spell.ShakeCamera.Play();
             if (GameConnector.Connected)
-                GameConnector.Instance.Attack(TmpSpellData.ID, -1);
+                GameConnector.Instance.Attack(_spellData.ID, -1);
             //switch (TmpSpellData.MySpellType) {
             //    case HeroSpellJsonData.SpellType.SpreadLineShot:
             //        radius = float.Parse(TmpSpellData.SpellTypeValues[1]);
