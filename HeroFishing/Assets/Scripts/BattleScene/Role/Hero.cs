@@ -1,6 +1,7 @@
 using DG.Tweening;
 using HeroFishing.Main;
 using JetBrains.Annotations;
+using Loxodon.Framework.Messaging;
 using Scoz.Func;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,12 @@ namespace HeroFishing.Battle {
         HeroSkinJsonData MyHeroSkinData;
         private SpellActivationBehaviour ActivationBehaviour;
 
+        private int _level = 1;
+        public int Level => _level;
+        public event Action<int> OnLevelUp;
+
         private const int SPELL_COUNT = 4;
+        private const int MAX_LEVEL = 10;
 
         public void Register(SpellActivationBehaviour activationBehaviour) {
             ActivationBehaviour =  activationBehaviour;
@@ -24,6 +30,7 @@ namespace HeroFishing.Battle {
             MyData = HeroJsonData.GetData(_heroID);
             MyHeroSkinData = HeroSkinJsonData.GetData(_heroSkinID);
             LoadModel();
+            OnLevelUp?.Invoke(_level);
         }
         void LoadModel() {
             string path = string.Format("Role/{0}/{1}.prefab", MyData.Ref, MyHeroSkinData.Prefab);
@@ -41,6 +48,7 @@ namespace HeroFishing.Battle {
                 PoolManager.Instance.InitHeroSpell(spellData);
             }
         }
+
         protected override void SetModel() {
             base.SetModel();
             string path = string.Format("Role/{0}/{1}.png", MyData.Ref, MyHeroSkinData.Texture);
@@ -104,6 +112,12 @@ namespace HeroFishing.Battle {
                 PropertyBlock.SetFloat("_RimValue", x);
                 SetPropertyBlock(PropertyBlock);
             }, 0, spellData.HeroShaderSettings[10]);
+        }
+
+        [ContextMenu("Level Up")]
+        public void LevelUp() {
+            _level = Mathf.Min(_level + 1, MAX_LEVEL);
+            OnLevelUp?.Invoke(_level);
         }
     }
 }

@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleSceneUI : BaseUI {
+    [Header("Settings")]
+    private bool _isSpellTest;
+
+    [Header("UI")]
     [SerializeField]
     private SpellUI _spellUI;
 

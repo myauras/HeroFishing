@@ -368,38 +368,18 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5237048136296910261}
-    - targetCorrespondingSourceObject: {fileID: 6206675499519028266, guid: 174261cfc784c124ba16d175d9656b85,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3004895221218155482}
-    - targetCorrespondingSourceObject: {fileID: 4066725372487708481, guid: 174261cfc784c124ba16d175d9656b85,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1056181242757975112}
     - targetCorrespondingSourceObject: {fileID: 7761462281265144712, guid: 174261cfc784c124ba16d175d9656b85,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4527175576194092422}
+      addedObject: {fileID: 7567894543508096517}
   m_SourcePrefab: {fileID: 100100000, guid: 174261cfc784c124ba16d175d9656b85, type: 3}
---- !u!114 &496791407953170280 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7140000830929343044, guid: 174261cfc784c124ba16d175d9656b85,
-    type: 3}
-  m_PrefabInstance: {fileID: 7346098638638701868}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1028180917315485348 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7761462281265144712, guid: 174261cfc784c124ba16d175d9656b85,
     type: 3}
   m_PrefabInstance: {fileID: 7346098638638701868}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4527175576194092422
+--- !u!114 &7567894543508096517
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -408,27 +388,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1028180917315485348}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 756395c1bdffc7248810d5f1171fb304, type: 3}
+  m_Script: {fileID: 11500000, guid: 589b5d4da3f1d554d95e442f4b8faa09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _button: {fileID: 1124678223985536384}
-  _animations:
-  - {fileID: 5118731762384692440}
-  - {fileID: 496791407953170280}
-  - {fileID: 7990003217114158152}
-  - {fileID: 5319138336506476214}
---- !u!114 &1124678223985536384 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7667727085440086188, guid: 174261cfc784c124ba16d175d9656b85,
-    type: 3}
-  m_PrefabInstance: {fileID: 7346098638638701868}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1028180917315485348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  ControlChild: 1
 --- !u!1 &1523377034707864912 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8130838588033749116, guid: 174261cfc784c124ba16d175d9656b85,
@@ -447,6 +410,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cd25855b75f3054d9906e8d0d37835f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spellBtn1: {fileID: 8786883992828196236}
+  _spellBtn2: {fileID: 7653493229093083400}
+  _spellBtn3: {fileID: 6782671693369962897}
 --- !u!1 &3121756079436096530 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5665564989570562366, guid: 174261cfc784c124ba16d175d9656b85,
@@ -480,174 +446,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spellUI: {fileID: 1492728965685121167}
---- !u!1 &3733518939951067398 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6206675499519028266, guid: 174261cfc784c124ba16d175d9656b85,
-    type: 3}
-  m_PrefabInstance: {fileID: 7346098638638701868}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3004895221218155482
+--- !u!114 &6782671693369962897 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3733518939951067398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8517859634624254378}
-          m_TargetAssemblyTypeName: HeroFishing.Battle.PlayerControlPanel, Assembly-CSharp
-          m_MethodName: OnPointerDown
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: spell2
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8517859634624254378}
-          m_TargetAssemblyTypeName: HeroFishing.Battle.PlayerControlPanel, Assembly-CSharp
-          m_MethodName: OnPointerUp
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 5
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8517859634624254378}
-          m_TargetAssemblyTypeName: HeroFishing.Battle.PlayerControlPanel, Assembly-CSharp
-          m_MethodName: OnDrag
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
---- !u!114 &5118731762384692440 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2520879585855846900, guid: 174261cfc784c124ba16d175d9656b85,
+  m_CorrespondingSourceObject: {fileID: 4310637752319454397, guid: 174261cfc784c124ba16d175d9656b85,
     type: 3}
   m_PrefabInstance: {fileID: 7346098638638701868}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d3c25780007aa84e93fe22202d0c483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5319138336506476214 stripped
+--- !u!114 &7653493229093083400 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3180656142723001242, guid: 174261cfc784c124ba16d175d9656b85,
-    type: 3}
-  m_PrefabInstance: {fileID: 7346098638638701868}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &6745685137364152941 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4066725372487708481, guid: 174261cfc784c124ba16d175d9656b85,
-    type: 3}
-  m_PrefabInstance: {fileID: 7346098638638701868}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1056181242757975112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6745685137364152941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8517859634624254378}
-          m_TargetAssemblyTypeName: HeroFishing.Battle.PlayerControlPanel, Assembly-CSharp
-          m_MethodName: OnPointerDown
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: spell3
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8517859634624254378}
-          m_TargetAssemblyTypeName: HeroFishing.Battle.PlayerControlPanel, Assembly-CSharp
-          m_MethodName: OnPointerUp
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 5
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8517859634624254378}
-          m_TargetAssemblyTypeName: HeroFishing.Battle.PlayerControlPanel, Assembly-CSharp
-          m_MethodName: OnDrag
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
---- !u!114 &7990003217114158152 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 797317856459688292, guid: 174261cfc784c124ba16d175d9656b85,
+  m_CorrespondingSourceObject: {fileID: 1136101454293566500, guid: 174261cfc784c124ba16d175d9656b85,
     type: 3}
   m_PrefabInstance: {fileID: 7346098638638701868}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d3c25780007aa84e93fe22202d0c483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8462600951463701705 stripped
@@ -717,3 +537,15 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &8786883992828196236 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2018700761451292832, guid: 174261cfc784c124ba16d175d9656b85,
+    type: 3}
+  m_PrefabInstance: {fileID: 7346098638638701868}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d3c25780007aa84e93fe22202d0c483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
