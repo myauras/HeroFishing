@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_BuffRed_m_01
-  m_Shader: {fileID: 4800000, guid: 0873b1ae869acbc47b8b549d0bca081b, type: 3}
+  m_Name: VFX_ModelGlow_m_02
+  m_Shader: {fileID: 4800000, guid: 3009c4b8c916a4a42a36bf2c6f22f31f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,11 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_AF540EA9:
-        m_Texture: {fileID: 2800000, guid: 9e28c7cdc17cdd5419d4abca2f0b62b4, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_BD320D5E:
-        m_Texture: {fileID: 2800000, guid: 668abd22ce3380047935bcc835d3ca61, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -45,16 +41,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Vector1_D1455B61: 5
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Xspeed: 0
     - _Yspeed: 0
     m_Colors:
-    - Color_37083A07: {r: 0.8559341, g: 0.8559341, b: 0.8559341, a: 1}
-    - Color_B2707143: {r: 2.1185474, g: 2.1185474, b: 2.1185474, a: 1}
+    - Color_B2707143: {r: 2.9960785, g: 2.9960785, b: 2.9960785, a: 1}
+    - Color_F6076DE5: {r: 2.7924528, g: 2.7924528, b: 2.7924528, a: 1}
     - Vector4_7707394: {r: 1, g: 1, b: 0, a: 0}
-    - Vector4_CAA18037: {r: 1, g: 1, b: 0, a: 0}
-    - _Speed: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &3039064481521325255
 MonoBehaviour:
