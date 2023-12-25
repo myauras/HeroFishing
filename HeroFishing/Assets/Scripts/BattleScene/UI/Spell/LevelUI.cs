@@ -59,11 +59,6 @@ public class LevelUI : MonoBehaviour {
         string param = string.Format(LEVEL, _level);
         _animator.SetTrigger(param);
 
-        await UniTask.DelayFrame(1);
-        //Debug.Log(state.IsName("LvupBtn.LevelupBtn_Close_Flicker"));
-        //Debug.Log(state);
-        //Debug.Log(state.normalizedTime);
-        //Observable.EveryUpdate().Subscribe(_ => Debug.Log(state.normalizedTime));
         await UniTask.WaitUntil(() => {
             var state = _animator.GetCurrentAnimatorStateInfo(1);
             return state.normalizedTime > .95f;

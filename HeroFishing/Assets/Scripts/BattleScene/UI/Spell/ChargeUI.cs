@@ -25,17 +25,20 @@ public class ChargeUI : MonoBehaviour {
 
     public void AddValue(float value) {
         _value = Mathf.Clamp01(_value + value);
-        //float normalizedValue = Mathf.Clamp01(_value / _maxValue);
-        for (int i = 0; i < _images.Length; i++) {
-            var image = _images[i];
-            image.gameObject.SetActive(_value < 1);
-            image.fillAmount = 1 - _value;
-        }
+        UpdateChargeValue();
     }
 
     public void SetValue(float value) {
         _value = Mathf.Clamp01(value);
-        //var normalizedValue = Mathf.Clamp01(value / _maxValue);
+        UpdateChargeValue();
+    }
+
+    public void ResetValue() {
+        _value = 0;
+        UpdateChargeValue();
+    }
+
+    private void UpdateChargeValue() {
         for (int i = 0; i < _images.Length; i++) {
             var image = _images[i];
             image.gameObject.SetActive(_value < 1);

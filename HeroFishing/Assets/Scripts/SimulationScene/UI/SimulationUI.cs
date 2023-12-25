@@ -11,7 +11,7 @@ namespace HeroFishing.Battle {
 
 
         public void OnAttackBtnClick() {
-            SimulationSceneManager.Instance.MyHero.OnSpellPlay(SpellName.attack);
+            SimulationSceneManager.Instance.MyHero.PlaySpell(SpellName.attack);
             SetAttack();
         }
         void SetAttack() {

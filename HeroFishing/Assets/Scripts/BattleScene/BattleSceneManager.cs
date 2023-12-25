@@ -22,6 +22,9 @@ namespace HeroFishing.Battle {
         [HeaderAttribute("==============設定==============")]
         public int HeroID;
         public string HeroSkin;
+        [SerializeField]
+        private bool _isSpellTest;
+        public bool IsSpellTest => _isSpellTest;
         LoadingProgress MyLoadingProgress;//讀取進度，讀取完會跑FinishInitLobby()
 
 

@@ -9,8 +9,6 @@ using HeroFishing.Socket;
 namespace HeroFishing.Battle {
     public class PlayerControlPanel : MonoBehaviour {
         [SerializeField]
-        private bool _isSpellTest;
-        [SerializeField]
         private bool _lockAttack = false;
 
         private bool _isSkillMode = false;
@@ -30,6 +28,8 @@ namespace HeroFishing.Battle {
             }
         }
 
+        public bool IsSpellTest => BattleSceneManager.Instance != null && BattleSceneManager.Instance.IsSpellTest;
+
         private void Update() {
             AttackDetect();
         }
@@ -40,7 +40,7 @@ namespace HeroFishing.Battle {
             if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
             if (!CheckSpell(SpellName.attack)) return;
-            if (!_isSpellTest) return;
+            //if (!IsSpellTest) return;
 
             //攻擊方向
             var pos = UIPosition.GetMouseWorldPointOnYZero(0);
@@ -56,6 +56,7 @@ namespace HeroFishing.Battle {
             SpellName spellName;
             if (!MyEnum.TryParseEnum(spellNameStr, out spellName)) return;
             if (!CheckSpell(spellName)) return;
+            if (!IsSpellTest && !BaseUI.GetInstance<SpellUI>().CanUse(spellName)) return;
 
             _originPos = UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
             //    TmpHero.transform.position;
@@ -97,7 +98,7 @@ namespace HeroFishing.Battle {
         }
         public void OnSetSpell(Vector3 _attackerPos, Vector3 _attackDir) {
             //播放腳色動作(targetPos - TmpHero.transform.position).normalized
-            _hero.OnSpellPlay(_spellData.SpellName);
+            _hero.PlaySpell(_spellData.SpellName);
             _hero.FaceDir(Quaternion.LookRotation(_attackDir));
             //設定ECS施法資料
             SetECSSpellData(_attackerPos, _attackDir);
