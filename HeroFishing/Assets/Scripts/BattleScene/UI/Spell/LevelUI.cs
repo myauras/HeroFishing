@@ -34,6 +34,7 @@ public class LevelUI : MonoBehaviour {
         if (_isLevelBtnOpen) return;
 
         _upgradeButton.enabled = true;
+        _upgradeButton.targetGraphic.raycastTarget = true;
         _animator.SetTrigger(LEVEL_UP_BTN);
         _isLevelBtnOpen = true;
     }
@@ -44,6 +45,7 @@ public class LevelUI : MonoBehaviour {
 
         _animator.SetTrigger(LEVEL_UP_BTN_CLOSE);
         _upgradeButton.enabled = false;
+        _upgradeButton.targetGraphic.raycastTarget = false;
         _isLevelBtnOpen = false;
     }
 
@@ -53,6 +55,7 @@ public class LevelUI : MonoBehaviour {
             return false;
         _animator.SetTrigger(LEVEL_UP_BTN_CLOSE_FLICKER);
         _upgradeButton.enabled = false;
+        _upgradeButton.targetGraphic.raycastTarget = false;
         _isLevelBtnOpen = false;
 
         _level++;
