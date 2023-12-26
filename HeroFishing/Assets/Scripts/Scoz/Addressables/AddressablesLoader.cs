@@ -1,6 +1,8 @@
 
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -95,6 +97,24 @@ namespace Scoz.Func {
                 //Addressables.Release(handle);
             };
         }
+        public static async UniTask<Tuple<T, AsyncOperationHandle>> GetResourceByFullPath_Async<T>(string _fullPath) {
+            var handle = Addressables.LoadAssetAsync<T>(_fullPath);
+            await handle.ToUniTask();
+
+            if (_fullPath == "") {
+                return new Tuple<T, AsyncOperationHandle>(default(T), handle);
+            }
+
+            switch (handle.Status) {
+                case AsyncOperationStatus.Succeeded:
+                    return new Tuple<T, AsyncOperationHandle>(handle.Result, handle);
+                default:
+                    // WriteLog.LogError("讀取資源失敗:" + _path);
+                    return new Tuple<T, AsyncOperationHandle>(default(T), handle);
+            }
+        }
+
+
         public static void GetPrefabResourceByPath<T>(string _path, Action<T, AsyncOperationHandle> _cb) {
             _path = string.Format("Assets/AddressableAssets/Prefabs/{0}", _path);
             Addressables.LoadAssetAsync<T>(_path).Completed += handle => {

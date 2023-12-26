@@ -8,6 +8,7 @@ using HeroFishing.Main;
 using UnityEngine.Rendering.Universal;
 using HeroFishing.Socket;
 using LitJson;
+using Cysharp.Threading.Tasks;
 
 namespace Scoz.Func {
     public enum DataLoad {
@@ -169,9 +170,9 @@ namespace Scoz.Func {
         /// 4. Callback
         /// </summary>
         public static void StartDownloadAddressable(Action _action) {
-            AddressableManage.Instance.StartLoadAsset(() =>//下載AssetBundle
+            AddressableManage.Instance.StartLoadAsset(async () =>//下載AssetBundle
             {
-                OnAddressableDownloaded();
+                await LoadAssembly();//載入GameDll
                 GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
                     MyText.RefreshActivityTextsAndFunctions();//更新介面的MyTex
                     Instance.CreateAddressableUIs(() => { //產生PopupUI
@@ -179,11 +180,21 @@ namespace Scoz.Func {
                     });
                     Instance.CreateResourcePreSetter();//載入ResourcePreSetter
                 });
+
             });
         }
-        static void OnAddressableDownloaded() {
-
+        /// <summary>
+        /// 載入GameDll
+        /// </summary>
+        static async UniTask LoadAssembly() {
+            WriteLog.LogColorFormat("開始載入熱更Dll", WriteLog.LogType.Addressable);
+            var result = await AddressablesLoader.GetResourceByFullPath_Async<TextAsset>("Assets/AddressableAssets/Dlls/Game.dll.bytes");
+            TextAsset dll = result.Item1;
+            //AsyncOperationHandle handle = result.Item2;<-要釋放嗎?
+            var gameAssembly = System.Reflection.Assembly.Load(dll.bytes);
+            WriteLog.LogColorFormat("載入熱更Dll完成", WriteLog.LogType.Addressable);
         }
+
         public void CreateAddressableUIs(Action _ac) {
             //載入PopupUI(這個UI東西較多會載較久，所以在載好前會先設定StartUI文字讓玩家不要覺得是卡住)
             if (SceneManager.GetActiveScene().name == MyScene.StartScene.ToString()) {
