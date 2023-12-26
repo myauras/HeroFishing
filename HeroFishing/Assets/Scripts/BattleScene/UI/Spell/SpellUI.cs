@@ -14,6 +14,7 @@ public class SpellUI : BaseUI {
     [SerializeField]
     private SpellBtn _spellBtn3;
 
+    public bool IsSpellTest => BattleSceneManager.Instance != null && BattleSceneManager.Instance.IsSpellTest;
     public int TotalSpellLevel => _spellBtn1.SpellLevel + _spellBtn2.SpellLevel + _spellBtn3.SpellLevel;
     private Hero _hero;
 
@@ -36,11 +37,13 @@ public class SpellUI : BaseUI {
         _spellBtn3.OnSpellUpgradeAnimationComplete += OnUpgradeComplete;
 
         _hero.OnLevelUp += OnLevelUp;
+        _hero.OnSpellCharge += OnCharge;
+        _hero.OnSpellPlay += OnPlay;
         OnLevelUp(1);
     }
 
     public void OnLevelUp(int level) {
-        Debug.Log(level + " " + TotalSpellLevel);
+        //Debug.Log(level + " " + TotalSpellLevel);
         if (level > TotalSpellLevel) {
             if (CanUpgrade(_spellBtn1, level))
                 _spellBtn1.OpenUpgradeBtn();
@@ -49,6 +52,10 @@ public class SpellUI : BaseUI {
             if (CanUpgrade(_spellBtn3, level))
                 _spellBtn3.OpenUpgradeBtn();
         }
+    }
+
+    public bool CanUse(SpellName spellName) {
+        return GetSpellBtn(spellName).CanUse;
     }
 
     private void OnUpgrade(SpellName spellName) {
@@ -74,15 +81,6 @@ public class SpellUI : BaseUI {
             btn.OpenUpgradeBtn();
     }
 
-    private static bool CanUpgrade(SpellBtn spellBtn, int level) {
-        return !spellBtn.IsMaxLevel && level >= spellBtn.Threshold;
-    }
-
-    private static void CloseUpgradeBtn(SpellBtn spellBtn, SpellName upgradeSpell) {
-        if (spellBtn.SpellName != upgradeSpell)
-            spellBtn.CloseUpgradeBtn();
-    }
-
     private SpellBtn GetSpellBtn(SpellName spellName) {
         switch (spellName) {
             case SpellName.spell1:
@@ -94,4 +92,25 @@ public class SpellUI : BaseUI {
         }
         throw new Exception("spell name is not match " + spellName);
     }
+
+    private void OnCharge(SpellName spellName) {
+        var btn = GetSpellBtn(spellName);
+        btn.AddChargeValue();
+    }
+
+    private void OnPlay(SpellName spellName) {
+        if (spellName == SpellName.attack) return;
+        var btn = GetSpellBtn(spellName);
+        btn.Play();
+    }
+
+    private static bool CanUpgrade(SpellBtn spellBtn, int level) {
+        return !spellBtn.IsMaxLevel && level >= spellBtn.Threshold;
+    }
+
+    private static void CloseUpgradeBtn(SpellBtn spellBtn, SpellName upgradeSpell) {
+        if (spellBtn.SpellName != upgradeSpell)
+            spellBtn.CloseUpgradeBtn();
+    }
+
 }

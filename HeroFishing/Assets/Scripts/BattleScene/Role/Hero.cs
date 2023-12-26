@@ -18,12 +18,14 @@ namespace HeroFishing.Battle {
         private int _level = 1;
         public int Level => _level;
         public event Action<int> OnLevelUp;
+        public event Action<SpellName> OnSpellCharge;
+        public event Action<SpellName> OnSpellPlay;
 
         private const int SPELL_COUNT = 4;
         private const int MAX_LEVEL = 10;
 
         public void Register(SpellActivationBehaviour activationBehaviour) {
-            ActivationBehaviour =  activationBehaviour;
+            ActivationBehaviour = activationBehaviour;
         }
 
         public void SetData(int _heroID, string _heroSkinID) {
@@ -65,7 +67,7 @@ namespace HeroFishing.Battle {
             SetAniTrigger(rndMotion);
         }
 
-        public void OnSpellPlay(SpellName _spellName) {
+        public void PlaySpell(SpellName _spellName) {
             ActivationBehaviour?.OnSpellPlay(_spellName);
 
             var spellData = HeroSpellJsonData.GetSpell(MyData.ID, _spellName);
@@ -73,6 +75,7 @@ namespace HeroFishing.Battle {
             if (spellData == null) { WriteLog.LogErrorFormat("此HeroID {0} 無此 SpellName:{1}", MyData.ID, _spellName); return; }
             PlaySpellMotion(spellData);
             PlaySpellEffect(spellData);
+            OnSpellPlay?.Invoke(_spellName);
         }
 
         private void PlaySpellMotion(HeroSpellJsonData spellData) {
@@ -118,6 +121,17 @@ namespace HeroFishing.Battle {
         public void LevelUp() {
             _level = Mathf.Min(_level + 1, MAX_LEVEL);
             OnLevelUp?.Invoke(_level);
+        }
+
+        public void ChargeSpell(int[] spellIndices) {
+            for (int i = 0; i < spellIndices.Length; i++) {
+                int spellIndex = spellIndices[i];
+                OnSpellCharge?.Invoke((SpellName)spellIndex);
+            }
+        }
+
+        public void ChargeSpell(int spellIndex) {
+            OnSpellCharge?.Invoke((SpellName)spellIndex);
         }
     }
 }

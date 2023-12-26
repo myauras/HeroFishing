@@ -15,6 +15,9 @@ public class SpellBtn : MonoBehaviour {
     [SerializeField]
     private ChargeUI _chargeButton;
 
+    private int _chargeValue;
+    public int MaxChargeValue => _spellData.Cost;
+
     public int SpellLevel => _levelButton.Level;
     public bool IsMaxLevel => _levelButton.IsMaxLevel;
     public int Threshold {
@@ -24,6 +27,7 @@ public class SpellBtn : MonoBehaviour {
             return _spellData.Threshold[_levelButton.Level];
         }
     }
+    public bool CanUse => !_levelButton.IsNoLevel && _chargeButton.IsFullCharge;
 
     public event Action<SpellName> OnSpellUpgrade;
     public event Action<SpellName> OnSpellUpgradeAnimationComplete;
@@ -57,6 +61,22 @@ public class SpellBtn : MonoBehaviour {
         OnSpellUpgrade?.Invoke(_spellData.SpellName);
         await task;
         OnSpellUpgradeAnimationComplete?.Invoke(_spellData.SpellName);
+    }
+
+    [ContextMenu("charge")]
+    public void AddChargeValue() {
+        if (_levelButton.IsNoLevel) return;
+        float value = (float)++_chargeValue / MaxChargeValue;
+        _chargeButton.SetValue(value);
+        if (_chargeButton.IsFullCharge) {
+            _button.interactable = true;
+        }
+    }
+
+    public void Play() {
+        _chargeButton.ResetValue();
+        _chargeValue = 0;
+        _button.interactable = false;
     }
 
     //[ContextMenu("Level Up")]

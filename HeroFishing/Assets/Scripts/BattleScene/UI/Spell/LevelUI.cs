@@ -34,6 +34,7 @@ public class LevelUI : MonoBehaviour {
         if (_isLevelBtnOpen) return;
 
         _upgradeButton.enabled = true;
+        _upgradeButton.targetGraphic.raycastTarget = true;
         _animator.SetTrigger(LEVEL_UP_BTN);
         _isLevelBtnOpen = true;
     }
@@ -44,6 +45,7 @@ public class LevelUI : MonoBehaviour {
 
         _animator.SetTrigger(LEVEL_UP_BTN_CLOSE);
         _upgradeButton.enabled = false;
+        _upgradeButton.targetGraphic.raycastTarget = false;
         _isLevelBtnOpen = false;
     }
 
@@ -53,17 +55,13 @@ public class LevelUI : MonoBehaviour {
             return false;
         _animator.SetTrigger(LEVEL_UP_BTN_CLOSE_FLICKER);
         _upgradeButton.enabled = false;
+        _upgradeButton.targetGraphic.raycastTarget = false;
         _isLevelBtnOpen = false;
 
         _level++;
         string param = string.Format(LEVEL, _level);
         _animator.SetTrigger(param);
 
-        await UniTask.DelayFrame(1);
-        //Debug.Log(state.IsName("LvupBtn.LevelupBtn_Close_Flicker"));
-        //Debug.Log(state);
-        //Debug.Log(state.normalizedTime);
-        //Observable.EveryUpdate().Subscribe(_ => Debug.Log(state.normalizedTime));
         await UniTask.WaitUntil(() => {
             var state = _animator.GetCurrentAnimatorStateInfo(1);
             return state.normalizedTime > .95f;

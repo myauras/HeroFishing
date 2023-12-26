@@ -16,10 +16,10 @@ namespace HeroFishing.Battle {
             GridEntity = state.EntityManager.CreateEntity();
             var gridData = new MapGridData {
                 CellSize = 1f,//網格大小是2x2
-                GridWidth = 12,//網格寬度為12
-                GridHeight = 10,//網格高度為10
-                BoundaryX = new int2(-6, 6),//網格索引範圍
-                BoundaryY = new int2(-5, 5),//網格索引範圍
+                GridWidth = 20,//網格寬度為12 => 改為20
+                GridHeight = 20,//網格高度為10 => 改為20
+                BoundaryX = new int2(-10, 10),//網格索引範圍
+                BoundaryY = new int2(-10, 10),//網格索引範圍
                 GridMap = new NativeParallelMultiHashMap<int2, MonsterValue>(120, Allocator.Persistent)
             };
             state.EntityManager.AddComponentData(GridEntity, gridData);
@@ -27,8 +27,8 @@ namespace HeroFishing.Battle {
             // 創建邊界實體並新增怪物移除邊界元件
             BoundaryEntity = state.EntityManager.CreateEntity();
             var boundaryData = new RemoveMonsterBoundaryData {
-                BoundaryX = new int2(-8, 8),//X軸範圍
-                BoundaryZ = new int2(-7, 7),//Z軸範圍
+                BoundaryX = new int2(-12, 12),//X軸範圍
+                BoundaryZ = new int2(-12, 12),//Z軸範圍
             };
             state.EntityManager.AddComponentData(BoundaryEntity, boundaryData);
 
