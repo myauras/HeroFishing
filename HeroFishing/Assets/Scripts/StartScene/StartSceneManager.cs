@@ -17,6 +17,8 @@ namespace HeroFishing.Main {
         public StartSceneUI MyStartSceneUI;
         [SerializeField] Text VersionText;
         [SerializeField] AudioClip StartMusic;
+        [SerializeField] AssetReference Asset_StartUI2;
+        [SerializeField] Transform UIParent;
 
         public static StartSceneManager Instance;
         List<AsyncOperationHandle> HandleList = new List<AsyncOperationHandle>();
@@ -152,6 +154,10 @@ namespace HeroFishing.Main {
             GameManager.StartDownloadAddressable(() => {//下載完資源包後執行
 
 
+                AddressablesLoader.GetPrefab("StartUI/StartSceneUI2", (prefab, handle) => {
+                    var go = Instantiate(prefab, UIParent);
+                }, null);
+                return;
                 //繞過正式流程
                 FirstTimeLaunchGame = false;
                 PopupUI.InitSceneTransitionProgress(0);

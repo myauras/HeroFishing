@@ -13,6 +13,7 @@ using UnityEngine.AddressableAssets.ResourceLocators;
 using System.Linq;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using Unity.VisualScripting;
+using Cysharp.Threading.Tasks;
 
 namespace Scoz.Func {
 
@@ -312,9 +313,11 @@ namespace Scoz.Func {
 
                 yield return new WaitForSeconds(0.1f);
             }
+
             ShowDownloadUI(false);
             BG.SetActive(false);
             _cb?.Invoke(true);
         }
+
     }
 }
