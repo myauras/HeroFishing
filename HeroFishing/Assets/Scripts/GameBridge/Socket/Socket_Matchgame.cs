@@ -46,41 +46,6 @@ namespace HeroFishing.Socket {
             TCP_MatchgameClient.RegistOnDisconnect(OnMatchmakerDisconnect);
         }
 
-        public void OnRecieveMatchgameUDPMsg(string _msg) {
-            try {
-                SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
-                SocketContent.MatchgameCMD_UDP cmdType;
-                if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
-                    WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
-                    return;
-                }
-                if (cmdType != SocketContent.MatchgameCMD_UDP.ATTACK_TOCLIENT)
-                    WriteLog.LogColorFormat("(UDP)接收: {0}", WriteLog.LogType.Connection, _msg);
-                switch (cmdType) {
-                    case SocketContent.MatchgameCMD_UDP.ATTACK_TOCLIENT:
-                        var attackPacket = LitJson.JsonMapper.ToObject<SocketCMD<ATTACK_TOCLIENT>>(_msg);
-                        HandleAttack(attackPacket);
-                        break;
-                    case SocketContent.MatchgameCMD_UDP.UPDATEGAME_TOCLIENT:
-                        var updateGamePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEGAME_TOCLIENT>>(_msg);
-                        HandleUpdateGame(updateGamePacket);
-                        break;
-                    case SocketContent.MatchgameCMD_UDP.UPDATEPLAYER_TOCLIENT:
-                        var updatePlayerPacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEPLAYER_TOCLIENT>>(_msg);
-                        HandleUpdatePlayer(updatePlayerPacket);
-                        break;
-                    case SocketContent.MatchgameCMD_UDP.UPDATESCENE_TOCLIENT:
-                        var updateScenePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATESCENE_TOCLIENT>>(_msg);
-                        HandleUpdateScene(updateScenePacket);
-                        break;
-                    default:
-                        WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
-                        break;
-                }
-            } catch (Exception e) {
-                WriteLog.LogError("Parse UDP Message with Error : " + e.ToString());
-            }
-        }
         public void OnMatchgameUDPDisconnect() {
             UDP_MatchgameClient.OnReceiveMsg -= OnRecieveMatchgameUDPMsg;
             //沒有timeout重連UDP
@@ -169,26 +134,46 @@ namespace HeroFishing.Socket {
             UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
         }
 
-        private void OnRecieveMatchgameTCPMsg(string _msg) {
-            //if (UDP_MatchgameClient != null)
-            //    UDP_MatchgameClient.ResetTimer();
-            //var matchgame = GamePlayer.Instance.GetMatchGame();
-            //if (matchgame != null) {
-            //    UDP_MatchgameClient = new GameObject("UDP_MatchgameClient").AddComponent<UdpSocket>();
-            //    UDP_MatchgameClient.Init(matchgame.IP, matchgame.Port);
-            //    try {
-            //        UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool isConnect) => {
-            //            if (isConnect)
-            //                UDP_MatchgameClient.OnReceiveMsg += OnMatchgameUDPConnCheck;
-            //        });
-            //        UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
-            //    } catch (Exception e) {
-            //        WriteLog.LogError("UDP error " + e.ToString());
-            //    }
-            //}
+        public void OnRecieveMatchgameUDPMsg(string _msg) {
             try {
+                SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
+                SocketContent.MatchgameCMD_UDP cmdType;
+                if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
+                    WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
+                    return;
+                }
+                if (cmdType != SocketContent.MatchgameCMD_UDP.ATTACK_TOCLIENT)
+                    WriteLog.LogColorFormat("(UDP)接收: {0}", WriteLog.LogType.Connection, _msg);
+                switch (cmdType) {
+                    case SocketContent.MatchgameCMD_UDP.ATTACK_TOCLIENT:
+                        var attackPacket = LitJson.JsonMapper.ToObject<SocketCMD<ATTACK_TOCLIENT>>(_msg);
+                        HandleAttack(attackPacket);
+                        break;
+                    case SocketContent.MatchgameCMD_UDP.UPDATEGAME_TOCLIENT:
+                        var updateGamePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEGAME_TOCLIENT>>(_msg);
+                        HandleUpdateGame(updateGamePacket);
+                        break;
+                    case SocketContent.MatchgameCMD_UDP.UPDATEPLAYER_TOCLIENT:
+                        var updatePlayerPacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEPLAYER_TOCLIENT>>(_msg);
+                        HandleUpdatePlayer(updatePlayerPacket);
+                        break;
+                    case SocketContent.MatchgameCMD_UDP.UPDATESCENE_TOCLIENT:
+                        var updateScenePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATESCENE_TOCLIENT>>(_msg);
+                        HandleUpdateScene(updateScenePacket);
+                        break;
+                    default:
+                        WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
+                        break;
+                }
+            }
+            catch (Exception e) {
+                WriteLog.LogError("Parse UDP Message with Error : " + e.ToString());
+            }
+        }
 
-                //WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
+        private void OnRecieveMatchgameTCPMsg(string _msg) {
+            try {
+                WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
                 SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
                 Tuple<string, int> cmdID = new Tuple<string, int>(data.CMD, data.PackID);
                 if (CMDCallback.TryGetValue(cmdID, out Action<string> _cb)) {
