@@ -14,7 +14,7 @@ namespace HeroFishing.Socket.Matchgame {
     }
     public class Spawn {
         public int RouteJsonID { get; private set; }// 路徑JsonID
-        public float SpanwTime { get; private set; }// 在遊戲時間第X秒時被產生的
+        public float SpawnTime { get; private set; }// 在遊戲時間第X秒時被產生的
         public bool IsBoss { get; private set; }// 是否為Boss生怪
 
         public Monster[] Monsters { get; private set; }// 怪物清單
@@ -29,13 +29,13 @@ namespace HeroFishing.Socket.Matchgame {
 
     public class MonsterEffect {
         public string Name { get; private set; }
-        public DateTime AtTime { get; private set; }
+        public float AtTime { get; private set; }
         public float Duration { get; private set; }
     }
 
     public class SceneEffect {
         public string Name { get; private set; }
-        public DateTime AtTime { get; private set; }
+        public float AtTime { get; private set; }
         public float Duration { get; private set; }
     }
 }
