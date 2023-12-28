@@ -7,36 +7,36 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_Trail_m_05-2
-  m_Shader: {fileID: 4800000, guid: 9f604521cce299e4c972e6a0e3709f23, type: 3}
+  m_Name: VFX_StoneGlow_m_04
+  m_Shader: {fileID: 4800000, guid: 67852691b75aa744ba5ad3a6fb14b466, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: Vector1_5A41DF23 _NormalIntensity
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_35DCD328:
+    - Texture2D_139CB854:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - Texture2D_9ADE22F:
-        m_Texture: {fileID: 2800000, guid: 4da4acf576b4a984a98c77af36e4eec1, type: 3}
+    - Texture2D_2CF0794C:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - Texture2D_AF540EA9:
-        m_Texture: {fileID: 2800000, guid: 4da4acf576b4a984a98c77af36e4eec1, type: 3}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: ce0242d4e86d59342bbd1a8a565bef92, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - Texture2D_BD320D5E:
-        m_Texture: {fileID: 2800000, guid: 4da4acf576b4a984a98c77af36e4eec1, type: 3}
+    - _Normal:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -53,21 +53,26 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Vector1_23E530DB: -5
-    - _QueueControl: 0
+    - Vector1_17EB7558: 0.12
+    - Vector1_3ADE2CF7: 0.235
+    - Vector1_5A41DF23: 0
+    - Vector1_DA37CFC9: 0.19
+    - _Cut: 0
+    - _NormalIntensity: 0
+    - _QueueControl: 1
     - _QueueOffset: 0
-    - _Xspeed: -3
-    - _Yspeed: 0
+    - _Rim: 0.989
+    - _RimValue: 0.912
+    - _Smoothness: 0
     m_Colors:
-    - Color_37083A07: {r: 5.992157, g: 5.992157, b: 5.992157, a: 1}
-    - Color_81F56A4E: {r: 5.992157, g: 5.992157, b: 5.992157, a: 1}
-    - Color_B2707143: {r: 8, g: 8, b: 8, a: 1}
-    - Vector2_CF81FBAE: {r: 1, g: 1, b: 0, a: 0}
-    - Vector4_7707394: {r: 1, g: 1, b: 1, a: 1}
-    - Vector4_CAA18037: {r: 1, g: 1, b: 1, a: 1}
-    - _Speed: {r: -3, g: 0, b: 0, a: 0}
+    - Color_16A8E7A: {r: 0.75608593, g: 0.9177007, b: 1.4980394, a: 1}
+    - Color_8ADDE21D: {r: 0.16164494, g: 0.16037738, b: 2, a: 1}
+    - Color_DA2C7E2B: {r: 1.6037736, g: 1.42997, b: 0.34042367, a: 1}
+    - _Color: {r: 0.9811321, g: 0.8159404, b: 0.46742612, a: 0}
+    - _RimColor: {r: 5.992157, g: 3.5722992, b: 0.8784313, a: 1}
+    - _SpecularColor: {r: 1.4980392, g: 0.7426499, b: 0, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &9177554213283696208
+--- !u!114 &8676466064618065713
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
