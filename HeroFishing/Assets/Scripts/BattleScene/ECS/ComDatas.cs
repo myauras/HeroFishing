@@ -72,6 +72,28 @@ public struct SpellHitNetworkData : IComponentData {
     public uint StrIndex_SpellID;
 }
 
+public struct RefreshSceneData : IComponentData {
+    public NativeArray<SpawnData> Spawns;
+}
+
+public struct SpawnData : IComponentData, IDisposable {
+    public NativeArray<MonsterData> Monsters;
+    public int RouteID;
+    public float SpawnTime;
+    public bool IsBoss;
+
+    public void Dispose() {
+        if (Monsters.IsCreated)
+            Monsters.Dispose();
+    }
+}
+
+public struct MonsterData {
+    public int ID;
+    public int Idx;
+    public bool Death;
+}
+
 [InternalBufferCapacity(16)]
 public struct MonsterHitNetworkData : IBufferElementData {
     public MonsterValue Monster;

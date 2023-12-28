@@ -10,8 +10,10 @@ using UnityEngine.AddressableAssets;
 
 namespace HeroFishing.Battle {
     public class Monster : Role {
-
+        private static List<Monster> s_aliveMonsters = new List<Monster>();
         public MonsterJsonData MyData { get; private set; }
+        public int MonsterID => MyData.ID;
+        public int MonsterIdx { get; private set; }
 
         MonsterSpecialize MyMonsterSpecialize;
         MonsterExplosion Explosion;
@@ -24,8 +26,9 @@ namespace HeroFishing.Battle {
         private const string MAT_FREEZE_OPAQUE = "FreezeMonOp";
         private const string MAT_FREEZE_TRANSPARENT = "FreezeMonTr";
 
-        public void SetData(int _monsterID, Action _ac) {
+        public void SetData(int _monsterID, int _monsterIdx, Action _ac) {
             MyData = MonsterJsonData.GetData(_monsterID);
+            MonsterIdx = _monsterIdx;
             LoadModel(_ac);
         }
         void LoadModel(Action _ac) {
@@ -41,6 +44,8 @@ namespace HeroFishing.Battle {
                 AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
                 SetModel();
                 LoadDone();
+                if (!s_aliveMonsters.Contains(this))
+                    s_aliveMonsters.Add(this);
                 _ac?.Invoke();
             });
         }
@@ -86,6 +91,8 @@ namespace HeroFishing.Battle {
             }
 
             Explosion.Explode();
+            if (s_aliveMonsters.Contains(this))
+                s_aliveMonsters.Remove(this);
         }
 
         public void Die() {
@@ -95,6 +102,8 @@ namespace HeroFishing.Battle {
                 MyMonsterSpecialize.PlayDissolveEffect(MySkinnedMeshRenderers[0]);
                 MyMonsterSpecialize.PlayCoinEffect(MyData.CoinCount, _lastHitDirection);
             }
+            if (s_aliveMonsters.Contains(this))
+                s_aliveMonsters.Remove(this);
         }
 
         // 如果要每個Instance都創建一個材質球會再第一次創建過久。所以讓材質球的創建跟怪物ID綁定
@@ -203,6 +212,17 @@ namespace HeroFishing.Battle {
                 _frozenMatDic[MyData.ID].AddRange(matList);
                 startIndex += renderer.materials.Length;
             }
+        }
+
+        public static bool TryGetMonster(int id, int idx, out Monster monster) {
+            monster = null;
+            foreach (var aliveMonster in s_aliveMonsters) {
+                if (aliveMonster.MonsterID == id && aliveMonster.MonsterIdx == idx) {
+                    monster = aliveMonster;
+                    return true;
+                }
+            }
+            return false;
         }
 
 #if UNITY_EDITOR
