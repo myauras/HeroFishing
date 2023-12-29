@@ -27,7 +27,7 @@ public partial struct RefreshSceneSystem : ISystem {
                 // update
                 foreach (var (monsterValue, monsterEntity) in SystemAPI.Query<RefRW<MonsterValue>>().WithAbsent<AutoDestroyTag>().WithEntityAccess()) {
                     if (monsterValue.ValueRO.MonsterID == monsterData.ID && monsterValue.ValueRO.MonsterIdx == monsterData.Idx) {
-                        Debug.Log("refresh update");
+                        //Debug.Log("refresh update");
                         found = true;
                         var deltaTime = GameTime.Current - spawnData.SpawnTime;
                         var routeData = RouteJsonData.GetData(spawnData.RouteID);
@@ -43,12 +43,12 @@ public partial struct RefreshSceneSystem : ISystem {
             }
             // add
             if (!found) {
-                Debug.Log("refresh add");
+                //Debug.Log("refresh add");
                 commandBuffer.RemoveComponent<RefreshSceneTag>(entity);
                 commandBuffer.AddComponent<SpawnTag>(entity);
             }
             else {
-                Debug.Log("refresh destroy");
+                //Debug.Log("refresh destroy");
                 commandBuffer.DestroyEntity(entity);
             }
         }
@@ -60,11 +60,11 @@ public partial struct RefreshSceneSystem : ISystem {
         EntityCommandBuffer commandBuffer2 = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
         // delete
         var deleteQuery = SystemAPI.QueryBuilder().WithAll<MonsterValue>().WithAbsent<AutoDestroyTag, AlreadyUpdateTag>().Build();
-        Debug.Log("refresh delete " + deleteQuery.CalculateEntityCount());
+        //Debug.Log("refresh delete " + deleteQuery.CalculateEntityCount());
         commandBuffer2.AddComponent(deleteQuery, new AutoDestroyTag { LifeTime = 1 });
 
         var aliveQuery = SystemAPI.QueryBuilder().WithAll<MonsterValue, AlreadyUpdateTag>().Build();
-        Debug.Log("refresh clear " + aliveQuery.CalculateEntityCount());
+        //Debug.Log("refresh clear " + aliveQuery.CalculateEntityCount());
         commandBuffer2.RemoveComponent<AlreadyUpdateTag>(aliveQuery, EntityQueryCaptureMode.AtRecord);
 
         state.Dependency.Complete();

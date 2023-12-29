@@ -20,7 +20,7 @@ namespace HeroFishing.Battle {
                 GridHeight = 20,//網格高度為10 => 改為20
                 BoundaryX = new int2(-10, 10),//網格索引範圍
                 BoundaryY = new int2(-10, 10),//網格索引範圍
-                GridMap = new NativeParallelMultiHashMap<int2, MonsterValue>(120, Allocator.Persistent)
+                GridMap = new NativeParallelMultiHashMap<int2, MonsterValue>(400, Allocator.Persistent)
             };
             state.EntityManager.AddComponentData(GridEntity, gridData);
 
