@@ -37,21 +37,22 @@ namespace HeroFishing.Socket {
     public class SocketContent {
 
         public enum MatchmakerCMD_TCP {
-            AUTH_TOCLIENT,
-            CREATEROOM_TOCLIENT,
+            AUTH_TOCLIENT,//身分驗證
+            CREATEROOM_TOCLIENT,//加房間or開房
         }
         public enum MatchgameCMD_TCP {
-            AUTH_TOCLIENT,
-            SETHERO_TOCLIENT,
-            HIT_TOCLIENT,
-            UPDATEPLAYER_TOCLIENT,
-            SPAWN_TOCLIENT,
+            AUTH_TOCLIENT, //身分驗證
+            SETHERO_TOCLIENT,//設定玩家英雄
+            HIT_TOCLIENT,//擊中
+            UPDATEPLAYER_TOCLIENT,//更新玩家
+            SPAWN_TOCLIENT,//生怪
+            UPDATESCENE_TOCLIENT,//場景狀態更新
         }
         public enum MatchgameCMD_UDP {
-            ATTACK_TOCLIENT,
-            UPDATEGAME_TOCLIENT,
-            UPDATEPLAYER_TOCLIENT,
-            UPDATESCENE_TOCLIENT,
+            ATTACK_TOCLIENT,//攻擊
+            UPDATEGAME_TOCLIENT,//遊戲狀態更新
+            UPDATEPLAYER_TOCLIENT,//更新玩家
+            UPDATESCENE_TOCLIENT,//場景狀態更新
         }
     }
 }

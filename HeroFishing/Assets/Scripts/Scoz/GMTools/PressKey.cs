@@ -24,12 +24,10 @@ namespace Scoz.Func {
                 GameConnector.Instance.Hit(1, new int[1] { 0 }, "1_attack");
 
             } else if (Input.GetKeyDown(KeyCode.R)) {
-
+                GameConnector.Instance.DropSpell(4);
 
             } else if (Input.GetKeyDown(KeyCode.P)) {
-                ToolGO?.SetActive(!ToolGO.activeSelf);
-
-
+                GameConnector.Instance.UpdateScene();
             } else if (Input.GetKeyDown(KeyCode.O)) {
 
             } else if (Input.GetKeyDown(KeyCode.I)) {
