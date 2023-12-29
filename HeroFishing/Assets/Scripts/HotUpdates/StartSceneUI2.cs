@@ -13,7 +13,7 @@ namespace HeroFishing.Main {
 
         private void Start() {
             Instance = this;
-            MyText.text = "測試1";
+            MyText.text = "測試2";
             MyText2.text = "測試2";
             MyText3.text = "測試3";
             MyText4.text = "測試4";

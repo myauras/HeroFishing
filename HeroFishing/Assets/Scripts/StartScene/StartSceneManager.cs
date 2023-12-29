@@ -119,8 +119,8 @@ namespace HeroFishing.Main {
                         AppsFlyerManager.Inst.Login(RealmManager.MyApp.CurrentUser.Id);
 #endif
 
-                        //如果是編輯器不直接轉場景(正式機才會直接進Lobby)
-#if UNITY_EDITOR
+                        //如果是Dev版本不直接轉場景(Dev版以外會直接進Lobby)
+#if Dev
                         MyStartSceneUI.ShowUI(StartSceneUI.Condition.BackFromLobby_ShowLogoutBtn);
 #else
                         StartDownloadingAssetAndGoNextScene();//開始載資源包並開始遊戲
