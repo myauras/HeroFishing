@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6521361789459394518
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: VFX_Circle_m_01
+  m_Shader: {fileID: 4800000, guid: 0873b1ae869acbc47b8b549d0bca081b, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_AF540EA9:
+        m_Texture: {fileID: 2800000, guid: 68f3576c7eb8b7340b8d57baeae97da3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2D:
+        m_Texture: {fileID: 2800000, guid: 03190ffa1633e8a45be99332e4173584, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: 1, y: 1}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _EndEdgeAlpha: -0.61
+    - _Float: -2
+    - _HeadEdgeAlpha: 0
+    - _Mask: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _Xspeed: 0
+    - _Yspeed: 0
+    m_Colors:
+    - Color_B2707143: {r: 1.4980394, g: 1.4980394, b: 1.4980394, a: 1}
+    - Vector4_7707394: {r: 1, g: 1, b: 0, a: 0}
+    - _Color: {r: 23.968628, g: 23.968628, b: 23.968628, a: 1}
+    - _WaveOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _WaveTiling: {r: 1, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []
