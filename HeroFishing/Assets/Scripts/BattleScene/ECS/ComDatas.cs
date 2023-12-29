@@ -72,9 +72,14 @@ public struct SpellHitNetworkData : IComponentData {
     public uint StrIndex_SpellID;
 }
 
-public struct RefreshSceneData : IComponentData {
-    public NativeArray<SpawnData> Spawns;
-}
+public struct RefreshSceneTag : IComponentData { }
+public struct SpawnTag : IComponentData { }
+public struct AlreadyUpdateTag : IComponentData { }
+
+//public struct MonsterUpdateData : IComponentData {
+//    public int RouteID;
+//    public float SpawnTime;
+//}
 
 public struct SpawnData : IComponentData, IDisposable {
     public NativeArray<MonsterData> Monsters;
@@ -88,10 +93,9 @@ public struct SpawnData : IComponentData, IDisposable {
     }
 }
 
-public struct MonsterData {
+public struct MonsterData : IComponentData {
     public int ID;
     public int Idx;
-    public bool Death;
 }
 
 [InternalBufferCapacity(16)]

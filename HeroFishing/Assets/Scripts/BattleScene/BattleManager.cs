@@ -49,6 +49,7 @@ namespace HeroFishing.Battle {
 
             var entity = _entityManager.CreateEntity();
             _entityManager.AddComponentData(entity, spawnData);
+            _entityManager.AddComponent<SpawnTag>(entity);
 
             //是BOSS就會攝影機震動
             if (spawnData.IsBoss)
@@ -64,6 +65,26 @@ namespace HeroFishing.Battle {
         }
 
         public void UpdateScene(Spawn[] spawns, SceneEffect[] effects) {
+            for (int i = 0; i < spawns.Length; i++) {
+                NativeArray<MonsterData> monsterDatas = new NativeArray<MonsterData>(spawns[i].Monsters.Length, Allocator.Persistent);
+                for (int j = 0; j < monsterDatas.Length; j++) {
+                    var monster = spawns[i].Monsters[j];
+                    if (monster == null || monster.Death) continue;
+                    MonsterData monsterData = new MonsterData() {
+                        ID = monster.JsonID,
+                        Idx = monster.Idx,
+                    };
+                    monsterDatas[j] = monsterData;
+                }
+                var entity = _entityManager.CreateEntity();
+                _entityManager.AddComponentData(entity, new SpawnData {
+                    Monsters = monsterDatas,
+                    RouteID = spawns[i].RouteJsonID,
+                    SpawnTime = (float)spawns[i].SpawnTime,
+                    IsBoss = spawns[i].IsBoss,
+                });
+                _entityManager.AddComponent<RefreshSceneTag>(entity);
+            }
         }
 
         public void SetMonsterDead(int[] monsterIdxs, long[] gainPoints, int[] gainHeroExps, int[] gainSpellCharge, int[] gainDrops) {

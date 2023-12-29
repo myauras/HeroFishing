@@ -58,8 +58,8 @@ namespace HeroFishing.Battle {
 
                 //怪物移動
                 if (monsterInstance.MyMonster.MyData.Speed != 0 && !state.EntityManager.HasComponent<MonsterFreezeTag>(entity)) {
-                    monsterInstance.Trans.localPosition += (monsterInstance.Dir * monsterInstance.MyMonster.MyData.Speed) * deltaTime;
-                    monsterValue.ValueRW.Pos = monsterInstance.Trans.localPosition;
+                    monsterValue.ValueRW.Pos = monsterValue.ValueRO.Pos + (float3)(monsterInstance.Dir * monsterInstance.MyMonster.MyData.Speed) * deltaTime;
+                    monsterInstance.Trans.localPosition = monsterValue.ValueRO.Pos;
                 }
 
                 //取得怪物移動後的網格位置

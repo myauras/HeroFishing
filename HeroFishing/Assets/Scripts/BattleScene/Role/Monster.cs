@@ -229,7 +229,8 @@ namespace HeroFishing.Battle {
         private void OnDrawGizmos() {
             Gizmos.color = Color.red;
             var position = transform.position + (Vector3)BattleManager.MonsterCollisionPosOffset;
-            Gizmos.DrawWireSphere(transform.position, MyData.Radius);
+            Gizmos.DrawWireSphere(position, MyData.Radius);
+            UnityEditor.Handles.Label(position, $"id {MonsterID}\nidx {MonsterIdx}");
         }
 #endif
     }

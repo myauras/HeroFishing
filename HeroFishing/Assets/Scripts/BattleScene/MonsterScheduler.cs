@@ -137,7 +137,6 @@ namespace HeroFishing.Battle {
                 MonsterData monster = new MonsterData {
                     ID = spawn.Monsters[i].JsonID,
                     Idx = spawn.Monsters[i].Idx,
-                    Death = spawn.Monsters[i].Death
                 };
                 monsters[i] = monster;
             }
@@ -146,7 +145,7 @@ namespace HeroFishing.Battle {
                 Monsters = monsters,
                 RouteID = spawn.RouteJsonID,
                 IsBoss = spawn.IsBoss,
-                SpawnTime = spawn.SpawnTime,
+                SpawnTime = (float)spawn.SpawnTime,
             };
 
             SpawnMonsterQueue.Enqueue(spawnData);
