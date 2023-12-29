@@ -173,7 +173,8 @@ namespace HeroFishing.Socket {
 
         private void OnRecieveMatchgameTCPMsg(string _msg) {
             try {
-                WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
+
+                //WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
                 SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
                 Tuple<string, int> cmdID = new Tuple<string, int>(data.CMD, data.PackID);
                 if (CMDCallback.TryGetValue(cmdID, out Action<string> _cb)) {
@@ -202,6 +203,11 @@ namespace HeroFishing.Socket {
                             WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
                             var hitPacket = LitJson.JsonMapper.ToObject<SocketCMD<HIT_TOCLIENT>>(_msg);
                             HandleHit(hitPacket);
+                            break;
+                        case SocketContent.MatchgameCMD_TCP.UPDATESCENE_TOCLIENT:
+                            WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
+                            var updateScenePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATESCENE_TOCLIENT>>(_msg);
+                            HandleUpdateScene(updateScenePacket);
                             break;
                         default:
                             WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
