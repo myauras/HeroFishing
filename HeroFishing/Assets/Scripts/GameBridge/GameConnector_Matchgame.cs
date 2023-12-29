@@ -54,7 +54,7 @@ namespace HeroFishing.Socket {
         /// 場景狀態更新
         /// </summary>
         public void UpdateScene() {
-            SocketCMD<UPDATEGAME> cmd = new SocketCMD<UPDATEGAME>(new UPDATEGAME());
+            SocketCMD<UPDATESCENE> cmd = new SocketCMD<UPDATESCENE>(new UPDATESCENE());
             Socket.TCPSend(cmd);
         }
 

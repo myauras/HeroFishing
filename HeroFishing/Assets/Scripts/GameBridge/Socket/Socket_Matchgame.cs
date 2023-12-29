@@ -170,22 +170,6 @@ namespace HeroFishing.Socket {
         }
 
         private void OnRecieveMatchgameTCPMsg(string _msg) {
-            //if (UDP_MatchgameClient != null)
-            //    UDP_MatchgameClient.ResetTimer();
-            //var matchgame = GamePlayer.Instance.GetMatchGame();
-            //if (matchgame != null) {
-            //    UDP_MatchgameClient = new GameObject("UDP_MatchgameClient").AddComponent<UdpSocket>();
-            //    UDP_MatchgameClient.Init(matchgame.IP, matchgame.Port);
-            //    try {
-            //        UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool isConnect) => {
-            //            if (isConnect)
-            //                UDP_MatchgameClient.OnReceiveMsg += OnMatchgameUDPConnCheck;
-            //        });
-            //        UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
-            //    } catch (Exception e) {
-            //        WriteLog.LogError("UDP error " + e.ToString());
-            //    }
-            //}
             try {
 
                 //WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
@@ -217,6 +201,11 @@ namespace HeroFishing.Socket {
                             WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
                             var hitPacket = LitJson.JsonMapper.ToObject<SocketCMD<HIT_TOCLIENT>>(_msg);
                             HandleHit(hitPacket);
+                            break;
+                        case SocketContent.MatchgameCMD_TCP.UPDATESCENE_TOCLIENT:
+                            WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
+                            var updateScenePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATESCENE_TOCLIENT>>(_msg);
+                            HandleUpdateScene(updateScenePacket);
                             break;
                         default:
                             WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
