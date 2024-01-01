@@ -31,6 +31,13 @@ namespace HeroFishing.Main {
         private void Start() {
             SetMiddleText(StringJsonData.GetUIString("LoginType"));
             AppleLoginGO.SetActive(false);
+            // 詢問IOS玩家是否要開啟透明追蹤(Appsflyer會用到)
+#if APPSFLYER && UNITY_IOS && !UNITY_EDITOR
+             AppsFlyerManager.Inst.IOSAskATTUserTrack();
+#endif
+
+
+
 
             //Apple登入要打開
             //#if UNITY_IOS
@@ -38,6 +45,26 @@ namespace HeroFishing.Main {
             //#endif
 
         }
+
+        void GoLobby() {
+            //繞過正式流程
+            FirstTimeLaunchGame = false;
+            PopupUI.InitSceneTransitionProgress(0);
+            PopupUI.CallSceneTransition(MyScene.LobbyScene);
+            return;
+
+            /// 根據是否能進行遊戲來執行各種狀態
+            /// 1. 判斷玩家版本，若版本低於最低遊戲版本則會跳強制更新
+            /// 2. 判斷玩家版本，若版本低於目前遊戲版本則會跳更新建議
+            /// 3. 判斷Maintain是否為true，若為true則不在MaintainExemptPlayerUIDs中的玩家都會跳維護中
+            /// 4. 判斷該玩家是否被Ban，不是才能進遊戲
+            GameStateManager.Instance.StartCheckCanPlayGame(() => {
+                FirstTimeLaunchGame = false;
+                PopupUI.InitSceneTransitionProgress(0, "LobbyUILoaded");
+                PopupUI.CallSceneTransition(MyScene.LobbyScene);
+            });
+        }
+
 
         public enum Condition {
             HideAll,//隱藏所有按鈕
@@ -291,7 +318,7 @@ namespace HeroFishing.Main {
         }
         public void StartDownloadingAssetAndGoNextScene() {
             ShowUI(Condition.HideAll);
-            StartSceneManager.Instance.StartDownloadingAssetAndGoNextScene();//進入下一個場景
+            StartSceneManager.Instance.StartDownloadingAsset();//進入下一個場景
         }
 
         /// <summary>

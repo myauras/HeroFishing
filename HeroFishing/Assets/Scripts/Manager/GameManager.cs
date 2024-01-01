@@ -170,17 +170,16 @@ namespace Scoz.Func {
         /// 4. Callback
         /// </summary>
         public static void StartDownloadAddressable(Action _action) {
-            AddressableManage.Instance.StartLoadAsset(async () =>//下載AssetBundle
+            AddressableManage.Instance.StartLoadAsset(async () =>
             {
                 await LoadAssembly();//載入GameDll
                 GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
                     MyText.RefreshActivityTextsAndFunctions();//更新介面的MyTex
+                    Instance.CreateResourcePreSetter();//載入ResourcePreSetter
                     Instance.CreateAddressableUIs(() => { //產生PopupUI
                         _action?.Invoke();
                     });
-                    Instance.CreateResourcePreSetter();//載入ResourcePreSetter
                 });
-
             });
         }
         /// <summary>
