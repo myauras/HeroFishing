@@ -217,6 +217,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1717091783594356528 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8372066468675185578, guid: 664b6d4814712f54d84c0c58c23e6646,
+    type: 3}
+  m_PrefabInstance: {fileID: 7204593894400836762}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2618432050405704534 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5164874413570246604, guid: 664b6d4814712f54d84c0c58c23e6646,
@@ -255,6 +261,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &3675726420050472044 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5834719316298541302, guid: 664b6d4814712f54d84c0c58c23e6646,
+    type: 3}
+  m_PrefabInstance: {fileID: 7204593894400836762}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5787673535946512009 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3722833753592074771, guid: 664b6d4814712f54d84c0c58c23e6646,
@@ -276,6 +288,9 @@ MonoBehaviour:
   _button: {fileID: 1690887998414905380}
   _levelButton: {fileID: 956008440443296396}
   _chargeButton: {fileID: 1177246501920558996}
+  _dragObject: {fileID: 1717091783594356528}
+  _dragBigCircle: {fileID: 6383942302738808227}
+  _dragSmallCircle: {fileID: 3675726420050472044}
 --- !u!114 &1177246501920558996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,6 +373,12 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!224 &6383942302738808227 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4279416124986112313, guid: 664b6d4814712f54d84c0c58c23e6646,
+    type: 3}
+  m_PrefabInstance: {fileID: 7204593894400836762}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7196288735285916449 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 10556976285710267, guid: 664b6d4814712f54d84c0c58c23e6646,

@@ -7,7 +7,7 @@ using Unity.Mathematics;
 using HeroFishing.Socket;
 
 namespace HeroFishing.Battle {
-    public class PlayerControlPanel : MonoBehaviour {
+    public class PlayerAttackController : MonoBehaviour {
         [SerializeField]
         private bool _lockAttack = false;
 
@@ -22,7 +22,7 @@ namespace HeroFishing.Battle {
         private int _attackID = 0;
 
         private const float MOVE_SCALE_FACTOR = 2;
-        private bool ControlLock {
+        public bool ControlLock {
             get {
                 return _currentMove != null && _currentMove.IsMoving;
             }
@@ -49,12 +49,9 @@ namespace HeroFishing.Battle {
             OnSetSpell(_hero.transform.position, dir);
         }
 
-
         //施放技能-按下
-        public void OnPointerDown(string spellNameStr) {
+        public void OnPointerDown(SpellName spellName) {
             if (ControlLock) return;
-            SpellName spellName;
-            if (!MyEnum.TryParseEnum(spellNameStr, out spellName)) return;
             if (!CheckSpell(spellName)) return;
             if (!IsSpellTest && !BaseUI.GetInstance<SpellUI>().CanUse(spellName)) return;
 
@@ -83,7 +80,7 @@ namespace HeroFishing.Battle {
             }
         }
         //施放技能-放開
-        public void OnPointerUp() {
+        public void OnPointerUp(bool cancel = false) {
             if (ControlLock) return;
             if (!_isSkillMode) return;
             _isSkillMode = false;
@@ -91,11 +88,13 @@ namespace HeroFishing.Battle {
             // 回到原位，否則旋轉的Indicator會有錯誤
             SpellIndicator.Instance.MoveIndicator(_hero.transform.position);
 
-            var position = _spellData.MyDragType == HeroSpellJsonData.DragType.Rot ? _hero.transform.position : _spellPos;
-
-            //設定技能
-            OnSetSpell(position, _spellDir);
+            if (!cancel) {
+                var position = _spellData.MyDragType == HeroSpellJsonData.DragType.Rot ? _hero.transform.position : _spellPos;
+                //設定技能
+                OnSetSpell(position, _spellDir);
+            }
         }
+
         public void OnSetSpell(Vector3 _attackerPos, Vector3 _attackDir) {
             //播放腳色動作(targetPos - TmpHero.transform.position).normalized
             _hero.PlaySpell(_spellData.SpellName);
