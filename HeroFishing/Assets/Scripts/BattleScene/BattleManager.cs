@@ -27,7 +27,8 @@ namespace HeroFishing.Battle {
             MonsterCollisionPosOffset = new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
             _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             DeviceManager.AddOnFocusAction(() => {
-                GameConnector.Instance.UpdateScene();
+                if (GameConnector.Connected)
+                    GameConnector.Instance.UpdateScene();
             });
         }
 
