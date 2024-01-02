@@ -19,7 +19,7 @@ namespace Scoz.Func {
                 key++;
                 GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
             } else if (Input.GetKeyDown(KeyCode.W)) {
-                GameConnector.Instance.Attack("1_attack", 5);
+                GameConnector.Instance.Attack("1_attack", 2);
             } else if (Input.GetKeyDown(KeyCode.E)) {
                 GameConnector.Instance.Hit(1, new int[1] { 0 }, "1_attack");
 
