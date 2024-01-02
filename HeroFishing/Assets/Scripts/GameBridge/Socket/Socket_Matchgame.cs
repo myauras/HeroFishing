@@ -235,7 +235,8 @@ namespace HeroFishing.Socket {
 
         void HandleHit(SocketCMD<HIT_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
-            //WriteLog.LogError("Hit Error: " + _packet.ErrMsg);
+            if(!string.IsNullOrEmpty(_packet.ErrMsg))
+                WriteLog.LogError("Hit Error: " + _packet.ErrMsg);
             if (_packet.Content.KillMonsterIdxs == null || _packet.Content.KillMonsterIdxs.Length == 0) return;
             BattleManager.Instance.SetMonsterDead(_packet.Content.KillMonsterIdxs, _packet.Content.GainPoints, _packet.Content.GainHeroExps, _packet.Content.GainSpellCharges, _packet.Content.GainDrops);
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.KillMonsterIdxs));
@@ -262,6 +263,8 @@ namespace HeroFishing.Socket {
         void HandleUpdateScene(SocketCMD<UPDATESCENE_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             BattleManager.Instance.UpdateScene(_packet.Content.Spawns, _packet.Content.SceneEffects);
+            if (UpdateSceneGizmos.Instance != null)
+                UpdateSceneGizmos.Instance.SetUpdateScene(_packet.Content);
             //BattleManager.Instance.MyMonsterScheduler.EnqueueMonster(_packet.Content.Spawns);
         }
 

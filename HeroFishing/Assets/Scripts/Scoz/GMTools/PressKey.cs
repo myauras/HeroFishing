@@ -46,6 +46,8 @@ namespace Scoz.Func {
 
                 var dbPlayerState = RealmManager.MyRealm.All<DBPlayerState>();
                 WriteLog.LogColor("文件數量:" + dbPlayerState.Count(), WriteLog.LogType.Realm);
+            }else if (Input.GetKeyDown(KeyCode.L)) {
+                GameConnector.Instance.UpdateScene();
             }
         }
 

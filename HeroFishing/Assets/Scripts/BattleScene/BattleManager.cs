@@ -1,4 +1,5 @@
 using HeroFishing.Main;
+using HeroFishing.Socket;
 using HeroFishing.Socket.Matchgame;
 using Scoz.Func;
 using System;
@@ -25,6 +26,9 @@ namespace HeroFishing.Battle {
             InitPlayerHero();
             MonsterCollisionPosOffset = new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
             _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            DeviceManager.AddOnFocusAction(() => {
+                GameConnector.Instance.UpdateScene();
+            });
         }
 
         private void InitPlayerHero() {
