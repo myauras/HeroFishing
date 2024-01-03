@@ -31,7 +31,7 @@ namespace HeroFishing.Battle {
 
                 for (int i = 0; i < spawn.Monsters.Length; i++) {
                     int monsterID = spawn.Monsters[i].ID;
-                    if (monsterID < 0) continue;
+                    if (monsterID <= 0) continue;
                     if (!TryGetMonsterData(monsterID, out var monsterData)) continue;
 
                     var routeData = spawn.RouteID != 0 ? RouteJsonData.GetData(spawn.RouteID) : null;
@@ -63,7 +63,7 @@ namespace HeroFishing.Battle {
 #else
                 monsterGO.hideFlags |= HideFlags.HideAndDontSave;
 #endif
-                    
+
                     var monsterEntity = state.EntityManager.CreateEntity();
                     //state.EntityManager.AddComponentObject(monsterEntity, monster.transform);
 
