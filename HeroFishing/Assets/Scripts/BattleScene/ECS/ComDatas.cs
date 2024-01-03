@@ -65,6 +65,7 @@ public struct SpellAreaData : IComponentData {
     public float CollisionTime;
     public float CollisionAngle;
     public int Waves;
+    public MonsterValue IgnoreMonster;
 }
 
 public struct SpellHitNetworkData : IComponentData {
@@ -127,6 +128,7 @@ public struct SpellHitTag : IComponentData {
     public MonsterValue Monster;
     public float3 HitPosition;
     public float3 HitDirection;
+    public float3 BulletPosition;
 }
 
 public struct ChainHitData : IComponentData {
@@ -180,6 +182,7 @@ public struct AreaCollisionData : IComponentData {
     public float Angle;
     public int Waves;
     public int WaveIndex;
+    public MonsterValue IgnoreMonster;
 }
 
 [InternalBufferCapacity(16)]
