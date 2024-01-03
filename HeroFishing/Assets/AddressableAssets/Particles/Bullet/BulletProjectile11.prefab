@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9185588458068216226}
   - component: {fileID: 3569076637623754453}
+  - component: {fileID: 4826564508052142719}
   m_Layer: 0
   m_Name: Trail 01
   m_TagString: Untagged
@@ -145,6 +146,19 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &4826564508052142719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807907544216240773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 243f2eb63b68ea949b4286708ab4c793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trail: {fileID: 3569076637623754453}
 --- !u!1 &2493003033966330259
 GameObject:
   m_ObjectHideFlags: 0
@@ -19826,6 +19840,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5938834145782044062}
   - component: {fileID: 2670827491597435947}
+  - component: {fileID: 4003871530155199361}
   m_Layer: 0
   m_Name: Trail 02
   m_TagString: Untagged
@@ -19961,3 +19976,16 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &4003871530155199361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8709207853990251590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 243f2eb63b68ea949b4286708ab4c793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trail: {fileID: 2670827491597435947}
