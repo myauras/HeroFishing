@@ -159,13 +159,16 @@ namespace HeroFishing.Battle {
 
                                 //加入擊中tag
                                 if (!_collisionData.IsSub) {
+                                    var position = _moveData.Position;
+                                    position.y = 0;
                                     Entity hitEntity = ECB.CreateEntity(6);
                                     var bulletHitTag = new SpellHitTag {
                                         AttackID = _collisionData.AttackID,
                                         Monster = monsterValue,
                                         StrIndex_SpellID = _collisionData.StrIndex_SpellID,
                                         HitPosition = monsterValue.Pos,
-                                        HitDirection = _moveData.Direction
+                                        HitDirection = _moveData.Direction,
+                                        BulletPosition = position,
                                     };
                                     ECB.AddComponent(7, hitEntity, bulletHitTag);
                                 }

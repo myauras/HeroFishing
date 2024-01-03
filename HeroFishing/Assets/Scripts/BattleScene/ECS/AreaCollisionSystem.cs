@@ -85,6 +85,8 @@ public partial struct AreaCollisionSystem : ISystem {
             }
 
             foreach (var monster in Monsters) {
+                if (monster.MyEntity == _collisionData.IgnoreMonster.MyEntity) continue;
+
                 float3 deltaPos = monster.Pos - _collisionData.Position;
                 float distancesq = math.lengthsq(deltaPos);
                 float radius = _collisionData.Radius + monster.Radius;
