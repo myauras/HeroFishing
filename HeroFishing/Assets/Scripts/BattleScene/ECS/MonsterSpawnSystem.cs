@@ -40,17 +40,18 @@ namespace HeroFishing.Battle {
                     Vector3 dir = Vector3.zero;//面向方向向量
                     Vector3 pos = Vector3.zero;
                     if (routeData != null) {
-                        dir = (routeData.TargetPos - routeData.SpawnPos).normalized;
-                        dirQuaternion = Quaternion.LookRotation(dir);
+                        var rotation = Quaternion.AngleAxis(spawn.PlayerIndex * 90f, Vector3.up);
+                        dir = rotation * (routeData.TargetPos - routeData.SpawnPos).normalized;
+                        dirQuaternion = rotation * Quaternion.LookRotation(dir);
                         if (spawn.SpawnTime == 0)
-                            pos = routeData.SpawnPos;
+                            pos = rotation * routeData.SpawnPos;
                         else {
                             var deltaTime = GameTime.Current - spawn.SpawnTime;
-                            var deltaPosition = dir * deltaTime * monsterData.Speed;
+                            var deltaPosition = deltaTime * monsterData.Speed * dir;
                             if (Vector3.SqrMagnitude(deltaPosition) > Vector3.SqrMagnitude(routeData.TargetPos - routeData.SpawnPos)) {
                                 continue;
                             }
-                            pos = routeData.SpawnPos + deltaPosition;
+                            pos = rotation * routeData.SpawnPos + deltaPosition;
                         }
                     }
 

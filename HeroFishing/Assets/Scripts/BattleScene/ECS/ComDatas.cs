@@ -87,6 +87,7 @@ public struct SpawnData : IComponentData, IDisposable {
     public int RouteID;
     public float SpawnTime;
     public bool IsBoss;
+    public int PlayerIndex;
 
     public void Dispose() {
         if (Monsters.IsCreated)
