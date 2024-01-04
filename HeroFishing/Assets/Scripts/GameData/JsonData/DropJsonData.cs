@@ -13,6 +13,7 @@ namespace HeroFishing.Main {
                 return StringJsonData.GetString_static(DataName + "_" + ID, "Name");
             }
         }
+        public float RTP { get; private set; }
         public string Ref { get; private set; }
         public DropType MyDropType { get; private set; }
         public string DropValue { get; private set; }
@@ -32,8 +33,11 @@ namespace HeroFishing.Main {
                     case "Ref":
                         Ref = item[key].ToString();
                         break;
+                    case "RTP":
+                        RTP = float.Parse(item[key].ToString());
+                        break;
                     case "DropType":
-                        if(MyEnum.TryParseEnum(item[key].ToString(), out DropType _type)) {
+                        if (MyEnum.TryParseEnum(item[key].ToString(), out DropType _type)) {
                             MyDropType = _type;
                         }
                         break;
