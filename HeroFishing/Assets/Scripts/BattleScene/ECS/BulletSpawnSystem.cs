@@ -93,6 +93,7 @@ namespace HeroFishing.Battle {
                     Timer = 0,
                     Angle = spellData.CollisionAngle,
                     Radius = spellData.Radius,
+                    IgnoreMonster = spellData.IgnoreMonster,
                 });
                 //加入BulletInstance
                 ECB.AddComponent(entity, new BulletInstance {

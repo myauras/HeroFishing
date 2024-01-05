@@ -172,7 +172,7 @@ namespace Scoz.Func {
         public static void StartDownloadAddressable(Action _action) {
             AddressableManage.Instance.StartLoadAsset(async () =>
             {
-                await LoadAssembly();//載入GameDll
+                //await LoadAssembly();//載入GameDll
                 GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
                     MyText.RefreshActivityTextsAndFunctions();//更新介面的MyTex
                     Instance.CreateResourcePreSetter();//載入ResourcePreSetter

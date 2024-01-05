@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2872677241051886882}
   - component: {fileID: 3823584335545242765}
+  - component: {fileID: 6464709319165293085}
   m_Layer: 0
   m_Name: Trail wave
   m_TagString: Untagged
@@ -145,6 +146,19 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &6464709319165293085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429949489910155956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 243f2eb63b68ea949b4286708ab4c793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trail: {fileID: 3823584335545242765}
 --- !u!1 &1292722628023473205
 GameObject:
   m_ObjectHideFlags: 0
@@ -10151,7 +10165,7 @@ Transform:
   m_GameObject: {fileID: 3977905624370710182}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.116, y: 1.072, z: 1.693}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -15026,6 +15040,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2019312144481599835}
   - component: {fileID: 6937731588122782657}
+  - component: {fileID: 1738662129685069077}
   m_Layer: 0
   m_Name: Trail line
   m_TagString: Untagged
@@ -15161,3 +15176,16 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &1738662129685069077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8505067154665056057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 243f2eb63b68ea949b4286708ab4c793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trail: {fileID: 6937731588122782657}
