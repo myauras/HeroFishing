@@ -142,13 +142,13 @@ namespace HeroFishing.Socket {
                     WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
                     return;
                 }
-                if (cmdType != SocketContent.MatchgameCMD_UDP.ATTACK_TOCLIENT)
-                    WriteLog.LogColorFormat("(UDP)接收: {0}", WriteLog.LogType.Connection, _msg);
+
                 switch (cmdType) {
-                    case SocketContent.MatchgameCMD_UDP.ATTACK_TOCLIENT:
-                        var attackPacket = LitJson.JsonMapper.ToObject<SocketCMD<ATTACK_TOCLIENT>>(_msg);
-                        HandleAttack(attackPacket);
-                        break;
+                    // Attack改使用TCP傳
+                    //case SocketContent.MatchgameCMD_UDP.ATTACK_TOCLIENT:
+                    //    var attackPacket = LitJson.JsonMapper.ToObject<SocketCMD<ATTACK_TOCLIENT>>(_msg);
+                    //    HandleAttack(attackPacket);
+                    //    break;
                     case SocketContent.MatchgameCMD_UDP.UPDATEGAME_TOCLIENT:
                         var updateGamePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEGAME_TOCLIENT>>(_msg);
                         HandleUpdateGame(updateGamePacket);
@@ -165,8 +165,7 @@ namespace HeroFishing.Socket {
                         WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
                         break;
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 WriteLog.LogError("Parse UDP Message with Error : " + e.ToString());
             }
         }
@@ -186,7 +185,13 @@ namespace HeroFishing.Socket {
                         WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
                         return;
                     }
+                    if (cmdType != SocketContent.MatchgameCMD_TCP.ATTACK_TOCLIENT)
+                        WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
                     switch (cmdType) {
+                        case SocketContent.MatchgameCMD_TCP.ATTACK_TOCLIENT:
+                            var attackPacket = LitJson.JsonMapper.ToObject<SocketCMD<ATTACK_TOCLIENT>>(_msg);
+                            HandleAttack(attackPacket);
+                            break;
                         case SocketContent.MatchgameCMD_TCP.SPAWN_TOCLIENT:
                             var spawnPacket = LitJson.JsonMapper.ToObject<SocketCMD<SPAWN_TOCLIENT>>(_msg);
                             HandleSPAWN(spawnPacket);
@@ -235,7 +240,7 @@ namespace HeroFishing.Socket {
 
         void HandleHit(SocketCMD<HIT_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
-            if(!string.IsNullOrEmpty(_packet.ErrMsg))
+            if (!string.IsNullOrEmpty(_packet.ErrMsg))
                 WriteLog.LogError("Hit Error: " + _packet.ErrMsg);
             if (_packet.Content.KillMonsterIdxs == null || _packet.Content.KillMonsterIdxs.Length == 0) return;
             BattleManager.Instance.SetMonsterDead(_packet.Content.KillMonsterIdxs, _packet.Content.GainPoints, _packet.Content.GainHeroExps, _packet.Content.GainSpellCharges, _packet.Content.GainDrops);

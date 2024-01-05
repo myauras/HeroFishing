@@ -74,8 +74,7 @@ namespace HeroFishing.Battle {
             if (_spellData.MyDragType == HeroSpellJsonData.DragType.Rot) {
                 float angle = Mathf.Atan2(_spellDir.x, _spellDir.z) * Mathf.Rad2Deg;
                 SpellIndicator.Instance.RotateIndicator(Quaternion.Euler(0, angle, 0));
-            }
-            else {
+            } else {
                 SpellIndicator.Instance.MoveIndicator(_spellPos);
             }
         }
@@ -123,7 +122,7 @@ namespace HeroFishing.Battle {
                 heroPos = _hero.transform.position,
                 direction = _attackDir
             });
-            _attackID++;
+
 
             if (spell.Move != null) {
                 if (_currentMove == null)
@@ -136,7 +135,8 @@ namespace HeroFishing.Battle {
             if (spell.ShakeCamera != null)
                 spell.ShakeCamera.Play();
             if (GameConnector.Connected)
-                GameConnector.Instance.Attack(_spellData.ID, -1);
+                GameConnector.Instance.Attack(_attackID, _spellData.ID, -1);
+            _attackID++;
             //switch (TmpSpellData.MySpellType) {
             //    case HeroSpellJsonData.SpellType.SpreadLineShot:
             //        radius = float.Parse(TmpSpellData.SpellTypeValues[1]);

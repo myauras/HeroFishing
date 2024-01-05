@@ -32,9 +32,9 @@ namespace HeroFishing.Socket {
         /// <summary>
         /// 攻擊
         /// </summary>
-        public void Attack(string _spellJsonID, int _monsterIdx) {
-            SocketCMD<ATTACK> cmd = new SocketCMD<ATTACK>(new ATTACK(_spellJsonID, _monsterIdx));
-            Socket.UDPSend(cmd);
+        public void Attack(int _attackID, string _spellJsonID, int _monsterIdx) {
+            SocketCMD<ATTACK> cmd = new SocketCMD<ATTACK>(new ATTACK(_attackID, _spellJsonID, _monsterIdx));
+            Socket.TCPSend(cmd);
         }
         /// <summary>
         /// 擊中
