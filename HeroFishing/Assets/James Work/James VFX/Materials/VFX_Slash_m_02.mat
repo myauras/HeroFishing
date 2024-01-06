@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8161359319914452656
+--- !u!114 &-6521361789459394518
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,33 +20,27 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_disstort_m_01
-  m_Shader: {fileID: -6465566751694194690, guid: c7580828aeecb8c4aac17490ddf3f31b,
+  m_Name: VFX_Slash_m_02
+  m_Shader: {fileID: -6465566751694194690, guid: b897d7dd3b5c8944fa67e717f20d7d6e,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _RECEIVE_SHADOWS_OFF
-  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _SampleTexture2D_ffce15e249264694a04139ebff5a925a_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 33dc22a30364c1341bdf4bddc8457f54, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: ff23b6cddf60b21459e27939660097d0, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: c5ee98d0dcb4deb4eae45d02f0860020, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: 1, y: 1}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -61,28 +55,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlphaClip: 0
-    - _AlphaToMask: 0
-    - _Blend: 0
-    - _BlendModePreserveSpecular: 1
-    - _CastShadows: 0
-    - _Cull: 2
-    - _DstBlend: 10
-    - _EdgeAlpha: 1
-    - _EndEdgeAlpha: 1
-    - _Frequency: 1
-    - _HeadEdgeAlpha: 0
+    - _EndEdgeAlpha: 2
+    - _Float: -2
+    - _HeadEdgeAlpha: -0.05
+    - _Mask: -0.55
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReceiveShadows: 0
-    - _Scale: 2
-    - _SrcBlend: 5
-    - _Surface: 1
-    - _WorkflowMode: 1
-    - _ZTest: 4
-    - _ZWrite: 0
-    - _ZWriteControl: 0
     m_Colors:
-    - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Tiling: {r: 3, g: 6, b: 0, a: 0}
+    - _Color: {r: 5.992157, g: 5.992157, b: 5.992157, a: 1}
+    - _WaveOffset: {r: -0.2, g: 1.2, b: 0, a: 0}
+    - _WaveTiling: {r: 1, g: 0.7, b: 0, a: 0}
   m_BuildTextureStacks: []
