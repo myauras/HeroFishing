@@ -36,7 +36,7 @@ namespace HeroFishing.Main {
 
         public override void Init() {
             base.Init();
-
+            PopupUI.FinishSceneTransitionProgress("LobbyUILoaded");
             //初始化UIs
             MyMapUI.Init();
             MyMapUI.LoadItemAsset();

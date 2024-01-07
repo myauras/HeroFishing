@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using System;
-using HeroFishing.Main;
 using UnityEngine.Rendering.Universal;
-using HeroFishing.Socket;
 using LitJson;
 using Cysharp.Threading.Tasks;
 
@@ -109,6 +107,7 @@ namespace Scoz.Func {
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = TargetFPS;
 #endif
+            RealmManager.NewApp();//初始化Realm
             //設定LiteJson的JsonMapper
             SetJsonMapper();
             //產生一個新玩家
@@ -159,9 +158,33 @@ namespace Scoz.Func {
             AddressableManage.CreateNewAddressableManage();
             //建立PoolManager
             PoolManager.CreateNewInstance();
+
             //※設定本機資料要放最後(要在取得本機GameSetting後以及AudioPlayer.CreateNewAudioPlayer之後
             GamePlayer.Instance.LoadLocoData();
         }
+
+        public void OnAuthFinished(AuthType _authType) {
+            // 初始化AppsFlyer
+            SetAppsFlyer();
+        }
+
+        public void SetAppsFlyer() {
+            // 詢問IOS玩家是否要開啟透明追蹤(Appsflyer會用到)
+#if APPSFLYER && UNITY_IOS && !UNITY_EDITOR
+             AppsFlyerManager.Inst.IOSAskATTUserTrack();
+#endif
+
+            //完成分析相關的註冊事件
+#if APPSFLYER
+                        // 設定玩家UID
+                        AppsFlyerManager.Inst.SetCustomerUserId(RealmManager.MyApp.CurrentUser.Id);
+                        // AppsFlyer紀錄玩家登入
+                        AppsFlyerManager.Inst.Login(RealmManager.MyApp.CurrentUser.Id);
+#endif
+
+        }
+
+
         /// <summary>
         /// 依序執行以下
         /// 1. 下載Bundle包

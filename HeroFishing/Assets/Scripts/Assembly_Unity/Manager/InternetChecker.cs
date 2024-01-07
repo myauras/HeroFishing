@@ -12,9 +12,6 @@ namespace Scoz.Func {
         public void Init() {
             Instance = this;
         }
-        public static void SetOnConnectedAction(Action _action) {
-            Instance.OnConnectedAction = _action;
-        }
         public static bool InternetConnected {
             get {
                 if (Application.internetReachability == 0) //Not reachable at all
@@ -25,7 +22,8 @@ namespace Scoz.Func {
                 return true;
             }
         }
-        public static void StartCheckInternet() {
+        public static void StartCheckInternet(Action _action) {
+            Instance.OnConnectedAction = _action;
             Instance.CheckInternetCoroutine = Instance.StartCoroutine(Instance.CheckInternet());
         }
 

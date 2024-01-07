@@ -5,10 +5,12 @@ using UnityEngine.UI;
 using Service.Realms;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HeroFishing.Main {
     public class StartSceneUI : BaseUI {
         [SerializeField] Toggle TermsOfUseToggle;
+        [SerializeField] Text VersionText;
         [SerializeField] GameObject GuestLoginBtn;//登入按鈕
         [SerializeField] GameObject ThirdpartBtns;//三方登入按鈕
         [SerializeField] GameObject AppleLoginGO;//蘋果登入
@@ -19,7 +21,20 @@ namespace HeroFishing.Main {
         [SerializeField] Text MiddleText;//等待登入文字
         [SerializeField] RectTransform QuestReportButton; // 問題回報的按鍵
 
+        /// <summary>
+        /// 是否第一次執行遊戲，第一次執行遊戲後會自動進大廳，之後透過從大廳的設定中點回到主介面就不會又自動進大廳了
+        /// </summary>
+        public static bool FirstTimeLaunchGame { get; private set; } = true;
+
         public static StartSceneUI Instance { get; private set; }
+
+        public enum Condition {
+            HideAll,//隱藏所有按鈕
+            NotLogin,//還沒登入就顯示登入按鈕
+            OfflineMode,//離線模式
+            BackFromLobby_ShowLogoutBtn,//從大廳返回主介面 且 已經是登入狀態，會顯示登出按鈕與返回大廳按鈕
+            BackFromLobby_ShowLoginBtn,//從大廳返回主介面 且 已經是登入狀態，會顯示登出按鈕與返回大廳按鈕
+        }
 
         public override void Init() {
             base.Init();
@@ -29,24 +44,69 @@ namespace HeroFishing.Main {
         }
 
         private void Start() {
-            SetMiddleText(StringJsonData.GetUIString("LoginType"));
+            Init();
+            ShowInfo();//顯示資訊
+            // Apple登入要打開
+#if UNITY_IOS
+                        AppleLoginGO.SetActive(true);
+#else
             AppleLoginGO.SetActive(false);
-            // 詢問IOS玩家是否要開啟透明追蹤(Appsflyer會用到)
-#if APPSFLYER && UNITY_IOS && !UNITY_EDITOR
-             AppsFlyerManager.Inst.IOSAskATTUserTrack();
 #endif
-
-
-
-
-            //Apple登入要打開
-            //#if UNITY_IOS
-            //            AppleLoginGO.SetActive(true);
-            //#endif
+            ShowUI(Condition.HideAll);
+            SetMiddleText(StringJsonData.GetUIString("LoginType"));
+            AuthChek();
 
         }
 
+        /// <summary>
+        /// 登入狀態確認
+        /// 1. (還沒登入)打開UI介面，讓玩家選擇登入方式
+        /// 2. (已登入且第一次開遊戲)開始取同步Realm上的資料，都取完後就開始載Addressable資源包，載完後進入大廳場景(在編輯器模式中，為了測試不會直接進大廳)
+        /// 3. (已登入且是從大廳退回主介面)打開UI介面，讓玩家選擇回大廳,登出還是移除帳戶(Apple限定)
+        /// </summary>
+        void AuthChek() {
+            PopupUI_Local.HideLoading();
+
+
+            //※之後也要新增玩家註冊完但是初始化玩家資料失敗的流程(不太會發生 但要考慮這個可能性)
+            //※之後也要新增玩家註冊完但是初始化玩家資料失敗的流程(不太會發生 但要考慮這個可能性)
+            //※之後也要新增玩家註冊完但是初始化玩家資料失敗的流程(不太會發生 但要考慮這個可能性)
+            //※之後也要新增玩家註冊完但是初始化玩家資料失敗的流程(不太會發生 但要考慮這個可能性)
+
+            if (RealmManager.MyApp.CurrentUser == null) {//玩家尚未登入
+                WriteLog.LogColor("玩家尚未登入Realm", WriteLog.LogType.Realm);
+                ShowUI(Condition.NotLogin);
+            } else {//已經登入，就開始載包並進入遊戲
+
+                //是否第一次執行遊戲，第一次執行遊戲後會自動進大廳，之後透過從大廳的設定中點回到主介面就不會又自動進大廳了
+                if (FirstTimeLaunchGame) {
+                    PopupUI_Local.ShowLoading("Loading");
+                    UniTask.Void(async () => {
+                        await RealmManager.OnSignin();
+                        RealmManager.OnDataLoaded();
+                        PopupUI_Local.HideLoading();
+                        StartSceneManager.Instance.ShowInfo();//顯示下方文字
+
+                        //如果是Dev版本不直接轉場景(Dev版以外會直接進Lobby)
+#if Dev
+                        ShowUI(StartSceneUI.Condition.BackFromLobby_ShowLogoutBtn);
+#else
+                        StartDownloadingAssetAndGoNextScene();//開始載資源包並開始遊戲
+#endif
+
+                    });
+                } else {//如果是從大廳點設定回到主介面跑這裡，顯示登出按鈕與返回大廳按鈕
+                    ShowUI(StartSceneUI.Condition.BackFromLobby_ShowLogoutBtn);
+                }
+
+            }
+        }
+
+
+
         void GoLobby() {
+
+
             //繞過正式流程
             FirstTimeLaunchGame = false;
             PopupUI.InitSceneTransitionProgress(0);
@@ -66,13 +126,7 @@ namespace HeroFishing.Main {
         }
 
 
-        public enum Condition {
-            HideAll,//隱藏所有按鈕
-            NotLogin,//還沒登入就顯示登入按鈕
-            OfflineMode,//離線模式
-            BackFromLobby_ShowLogoutBtn,//從大廳返回主介面 且 已經是登入狀態，會顯示登出按鈕與返回大廳按鈕
-            BackFromLobby_ShowLoginBtn,//從大廳返回主介面 且 已經是登入狀態，會顯示登出按鈕與返回大廳按鈕
-        }
+
         public void ShowUI(Condition _condition) {
             SetActive(true);
             switch (_condition) {
@@ -106,9 +160,19 @@ namespace HeroFishing.Main {
             DeleteACGO.SetActive(!_show);
         }
         /// <summary>
+        /// 1. (玩家尚未登入) 顯示版本
+        /// 2. (玩家登入) 顯示版本+玩家ID
+        /// </summary>
+        public void ShowInfo() {
+            if (RealmManager.MyApp != null && RealmManager.MyApp.CurrentUser != null)
+                VersionText.text = string.Format("Ver: {0} {1} ", Application.version, RealmManager.MyApp.CurrentUser.Id);
+            else
+                VersionText.text = string.Format("Ver: {0}", Application.version);
+        }
+        /// <summary>
         /// 登入按鈕按下
         /// </summary>
-        public void OnSignupClick(string _authentication) {
+        public void OnSignupClick(string _authTypeStr) {
 
             if (!TermsOfUseToggle.isOn) {//沒有勾選同意使用者條款的話會跳彈窗並返回
                 PopupUI_Local.ShowClickCancel(StringJsonData.GetUIString("NeedToAgreeTersOfUse"), null);
@@ -117,7 +181,7 @@ namespace HeroFishing.Main {
 
             //錯誤的登入類型就返回
             AuthType authType = AuthType.Guest;
-            if (!MyEnum.TryParseEnum(_authentication, out authType)) { WriteLog.LogError("錯誤的登入類型: " + _authentication); return; }
+            if (!MyEnum.TryParseEnum(_authTypeStr, out authType)) { WriteLog.LogError("錯誤的登入類型: " + _authTypeStr); return; }
 
             switch (authType) {
                 case AuthType.Guest:
@@ -129,7 +193,6 @@ namespace HeroFishing.Main {
                             await RealmManager.AnonymousSignup();//Realm訪客註冊
                             ShowUI(Condition.HideAll);
                             StartSceneManager.Instance.ShowInfo();//顯示下方文字
-                            CompleteRegistrationEvent(authType);// 通知分析註冊完成事件
                             await InitPlayerData(authType);//初始化玩家資料
                             RealmManager.OnDataLoaded();
                             PopupUI_Local.HideLoading();
@@ -137,59 +200,48 @@ namespace HeroFishing.Main {
 
                     } else {//如果本來就有登入，代表是UI顯示錯誤(登入中的玩家不該點的到訪客註冊)
                         WriteLog.LogError("本來就有登入，代表是UI顯示錯誤(登入中的玩家不該點的到訪客註冊)");
-                        PopupUI_Local.HideLoading();
-                        //登入中進行登出並重新註冊
-                        //PopupUI_Local.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
-                        //    PopupUI_Local.ShowLoading(string.Format("Loading"));
-                        //    UniTask.Void(async () => {
-                        //        await RealmManager.Signout();//Realm登出
-                        //        await RealmManager.AnonymousSignup();//Realm訪客註冊
-                        //        StartSceneManager.Instance.ShowInfo();//顯示下方文字
-                        //        CompleteRegistrationEvent(authType);// 通知分析註冊完成事件
-                        //        await InitPlayerData(authType);//初始化玩家資料
-                        //        await RealmManager.RegisterPropertyChangedNotifies();//註冊DB異動通知
-                        //        PopupUI_Local.HideLoading();
-                        //    });
-                        //}, null);
                     }
                     break;
-                    //                case AuthType.Facebook:
-                    //                    if (FirebaseManager.MyUser == null) {//玩家還沒登入Firebase，開始進行三方登入
-                    //                        FBAuth();
-                    //                    } else {//如果玩家本來就有登入Firebase帳戶，代表是從大廳退回主畫面的，此時要登出後再進行三方登入
-                    //                        PopupUI_Local.ShowConfirmCancel(StringData.GetUIString("OverrideGuestAccountCheck"), () => {
-                    //                            StartCoroutine(FirebaseManager.Logout(() => {//登出
-                    //                                FBAuth();
-                    //                            }));
-                    //                        }, null);
-                    //                    }
-                    //                    break;
-                    //                case AuthType.Apple:
-                    //                    if (FirebaseManager.MyUser == null) {//玩家還沒登入Firebase，開始進行三方登入
-                    //                        AppleAuth();
-                    //                    } else {//如果玩家本來就有登入Firebase帳戶，代表是從大廳退回主畫面的，此時要登出後再進行三方登入
-                    //                        PopupUI_Local.ShowConfirmCancel(StringData.GetUIString("OverrideGuestAccountCheck"), () => {
-                    //                            StartCoroutine(FirebaseManager.Logout(() => {//登出
-                    //                                AppleAuth();
-                    //                            }));
-                    //                        }, null);
-                    //                    }
-                    //                    break;
-                    //                case AuthType.Google:
+                case AuthType.Facebook:
+                    WriteLog.LogError("尚未實作FB登入");
+                    //if (RealmManager.MyApp.CurrentUser == null) {//玩家還沒登入Realm，開始進行三方登入
+                    //    FBAuth();
+                    //} else {//如果玩家本來就有登入Firebase帳戶，代表是從大廳退回主畫面的，此時要登出後再進行三方登入
+                    //    PopupUI_Local.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
+                    //        StartCoroutine(FirebaseManager.Logout(() => {//登出
+                    //            FBAuth();
+                    //        }));
+                    //    }, null);
+                    //}
+                    break;
+                case AuthType.Apple:
+                    WriteLog.LogError("尚未實作Apple登入");
+                    //if (RealmManager.MyApp.CurrentUser == null) {//玩家還沒登入Firebase，開始進行三方登入
+                    //    AppleAuth();
+                    //} else {//如果玩家本來就有登入Firebase帳戶，代表是從大廳退回主畫面的，此時要登出後再進行三方登入
+                    //    PopupUI_Local.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
+                    //        StartCoroutine(FirebaseManager.Logout(() => {//登出
+                    //            AppleAuth();
+                    //        }));
+                    //    }, null);
+                    //}
+                    break;
+                case AuthType.Google:
+                    WriteLog.LogError("尚未實作Google登入");
                     //#if UNITY_EDITOR
                     //                    PopupUI_Local.ShowClickCancel("Editor不能使用Google登入", null);
                     //#else
-                    //                                if (FirebaseManager.MyUser == null) {//玩家還沒登入Firebase，開始進行三方登入
-                    //                                    GoogleAuth();
-                    //                                } else {//如果玩家本來就有登入Firebase帳戶，代表是從大廳退回主畫面的，此時要登出後再進行三方登入
-                    //                                    PopupUI_Local.ShowConfirmCancel(StringData.GetUIString("OverrideGuestAccountCheck"), () => {
-                    //                                        StartCoroutine(FirebaseManager.Logout(() => {//登出
-                    //                                            GoogleAuth();
-                    //                                        }));
-                    //                                    }, null);
-                    //                                }
+                    //                                                    if (RealmManager.MyApp.CurrentUser == null) {//玩家還沒登入Firebase，開始進行三方登入
+                    //                                                        GoogleAuth();
+                    //                                                    } else {//如果玩家本來就有登入Firebase帳戶，代表是從大廳退回主畫面的，此時要登出後再進行三方登入
+                    //                                                        PopupUI_Local.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
+                    //                                                            StartCoroutine(FirebaseManager.Logout(() => {//登出
+                    //                                                                GoogleAuth();
+                    //                                                            }));
+                    //                                                        }, null);
+                    //                                                    }
                     //#endif
-                    //                    break;
+                    break;
 
             }
         }
@@ -298,18 +350,15 @@ namespace HeroFishing.Main {
             //    }
             //});
         }
+
+
+
         /// <summary>
         /// 三方登入驗證完成跑這裡
         /// </summary>
         void OnThirdPartAuthFinished(AuthType _authType) {
             // 通知分析註冊完成事件
-            CompleteRegistrationEvent(_authType);
-
-            //FirebaseManager.GetDataByDocID(ColEnum.Player, FirebaseManager.MyUser.UserId, (colName, data) => {
-            //    CheckIfNeedInitializePlayerData(_authType, data);
-            //});
-
-
+            GameManager.Instance.OnAuthFinished(_authType);
         }
 
 
@@ -321,43 +370,7 @@ namespace HeroFishing.Main {
             StartSceneManager.Instance.StartDownloadingAsset();//進入下一個場景
         }
 
-        /// <summary>
-        /// 完成分析相關的註冊事件
-        /// </summary>
-        private void CompleteRegistrationEvent(AuthType authType) {
 
-#if APPSFLYER
-            // 設定玩家UID
-            AppsFlyerManager.Inst.SetCustomerUserId(FirebaseManager.MyUser.UserId);
-            // AppsFlyer紀錄玩家登入
-            AppsFlyerManager.Inst.CompleteRegistration(FirebaseManager.MyUser.UserId, authType.ToString(), FirebaseManager.LanguageCode);
-#endif
-
-#if !UNITY_EDITOR && FIREBASE_ANALYTICS
-            FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
-            // 設定Firebase UserId
-            FirebaseAnalytics.SetUserId(FirebaseManager.MyUser.UserId);
-            // 註冊登入來源
-            FirebaseAnalytics.LogEvent(FirebaseAnalytics.EventSignUp,
-            new Parameter[] {
-            new Parameter(FirebaseAnalytics.ParameterMethod, authType.ToString())}
-            );
-
-            // 記錄登入事件
-            Parameter[] RegistrationParameters = {
-                          new Parameter("userId", FirebaseManager.MyUser.UserId),
-                          new Parameter("authType", authType.ToString()),
-#if UNITY_IOS
-                          new Parameter("platform", "Apple"),
-#elif UNITY_ANDROID
-                          new Parameter("platform", "Google"),
-#endif
-                          new Parameter("languageCode", FirebaseManager.LanguageCode)
-                        };
-            // 紀錄完成註冊事件
-            FirebaseAnalytics.LogEvent("COMPLETE_REGISTRATION", RegistrationParameters);
-#endif
-        }
 
         /// <summary>
         /// 使用者條款
