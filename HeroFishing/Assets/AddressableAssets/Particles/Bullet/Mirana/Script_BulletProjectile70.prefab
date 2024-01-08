@@ -73,6 +73,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4975537578231497596}
   m_SourcePrefab: {fileID: 100100000, guid: e0537ab9d33b27e43acf1ee0f04dcca1, type: 3}
+--- !u!96 &6514956305026034337 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 2188352015749983206, guid: e0537ab9d33b27e43acf1ee0f04dcca1,
+    type: 3}
+  m_PrefabInstance: {fileID: 4915486225446273351}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8088007874029340819 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3749581914367445460, guid: e0537ab9d33b27e43acf1ee0f04dcca1,
@@ -91,4 +97,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 243f2eb63b68ea949b4286708ab4c793, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _trail: {fileID: 2188352015749983206, guid: e0537ab9d33b27e43acf1ee0f04dcca1, type: 3}
+  _trail: {fileID: 6514956305026034337}
