@@ -43,6 +43,7 @@ namespace HeroFishing.Socket {
         public enum MatchgameCMD_TCP {
             AUTH_TOCLIENT, //身分驗證
             SETHERO_TOCLIENT,//設定玩家英雄
+            ATTACK_TOCLIENT,//攻擊
             HIT_TOCLIENT,//擊中
             UPDATEPLAYER_TOCLIENT,//更新玩家
             SPAWN_TOCLIENT,//生怪
@@ -50,7 +51,7 @@ namespace HeroFishing.Socket {
             MONSTERDIE_TOCLIENT,//怪物死亡時送Client
         }
         public enum MatchgameCMD_UDP {
-            ATTACK_TOCLIENT,//攻擊
+            //ATTACK_TOCLIENT,//攻擊
             UPDATEGAME_TOCLIENT,//遊戲狀態更新
             UPDATEPLAYER_TOCLIENT,//更新玩家
             UPDATESCENE_TOCLIENT,//場景狀態更新

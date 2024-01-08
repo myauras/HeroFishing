@@ -14,6 +14,12 @@ public class SpellBtn : MonoBehaviour {
     private LevelUI _levelButton;
     [SerializeField]
     private ChargeUI _chargeButton;
+    [SerializeField]
+    private GameObject _dragObject;
+    [SerializeField]
+    private RectTransform _dragBigCircle;
+    [SerializeField]
+    private RectTransform _dragSmallCircle;
 
     private int _chargeValue;
     public int MaxChargeValue => _spellData.Cost;
@@ -33,7 +39,10 @@ public class SpellBtn : MonoBehaviour {
     public event Action<SpellName> OnSpellUpgradeAnimationComplete;
 
     private HeroSpellJsonData _spellData;
+    private RectTransform _rt;
     public SpellName SpellName => _spellData.SpellName;
+
+    private static float MAX_DRAG_CIRCLE_LENGTH = 150;
 
     public void Init(HeroSpellJsonData spellData, int maxLevel) {
         if (spellData.SpellName == SpellName.attack) {
@@ -46,6 +55,7 @@ public class SpellBtn : MonoBehaviour {
         _levelButton.Init(maxLevel);
         _chargeButton.Init();
         _button.interactable = false;
+        _rt = GetComponent<RectTransform>();
     }
 
     public void OpenUpgradeBtn() {
@@ -77,6 +87,26 @@ public class SpellBtn : MonoBehaviour {
         _chargeButton.ResetValue();
         _chargeValue = 0;
         _button.interactable = false;
+    }
+
+    public void Press() {
+        _dragObject.SetActive(true);
+    }
+
+    public void Drag() {
+        // 取得Screen Position，在此Rect Transform的相對位置
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(_rt, Input.mousePosition, Camera.main, out var localPos);
+        // 取得相對方向
+        var direction = localPos.normalized;
+        // 取得相對角度 (上方角度為0，所以原點方向為Vector2.up)
+        var angle = Vector2.SignedAngle(Vector2.up, direction);
+        _dragBigCircle.transform.localEulerAngles = new Vector3(0, 0, angle);
+        // 取得位置，最大距離為150
+        _dragSmallCircle.transform.localPosition = Mathf.Min(MAX_DRAG_CIRCLE_LENGTH, localPos.magnitude) * direction;
+    }
+
+    public void Release() {
+        _dragObject.SetActive(false);
     }
 
     //[ContextMenu("Level Up")]

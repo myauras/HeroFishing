@@ -1,4 +1,5 @@
 using HeroFishing.Main;
+using HeroFishing.Socket.Matchgame;
 using Scoz.Func;
 using UniRx.Triggers;
 using Unity.Burst;
@@ -10,90 +11,117 @@ namespace HeroFishing.Battle {
 
     public partial struct MonsterSpawnSystem : ISystem {
 
+        private EndSimulationEntityCommandBufferSystem.Singleton _ecbSingleton;
+
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<MonsterSpawnSys>();
+            state.RequireForUpdate<SpawnTag>();
         }
 
         public void OnUpdate(ref SystemState state) {
-            if (BattleManager.Instance == null || BattleManager.Instance.MyMonsterScheduler == null) return;
-            var spawn = BattleManager.Instance.MyMonsterScheduler.DequeueMonster();
-            if (spawn == null) return;
-            if (spawn.MonsterIDs == null || spawn.MonsterIDs.Length == 0) return;
+            _ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+            var ecbCommandBuffer = _ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
             bool isFreeze = SystemAPI.HasSingleton<FreezeTag>();
-            if (isFreeze) return;
-
-            for (int i = 0; i < spawn.MonsterIDs.Length; i++) {
-                int monsterID = spawn.MonsterIDs[i];
-                int monsterIdx;
-                if (i >= spawn.MonsterIdxs.Length) {
-                    WriteLog.LogErrorFormat("怪物ID陣列大小與index大小不移置");
-                    monsterIdx = 0;
+            foreach (var (spawn, entity) in SystemAPI.Query<SpawnData>().WithAll<SpawnTag>().WithEntityAccess()) {
+                if (isFreeze) {
+                    ecbCommandBuffer.DestroyEntity(entity);
+                    continue;
                 }
-                else
-                    monsterIdx = spawn.MonsterIdxs[i];
-                GameObject monsterPrefab = ResourcePreSetter.Instance.MonsterPrefab.gameObject;
-                if (monsterPrefab == null) continue;
-                var monsterData = MonsterJsonData.GetData(monsterID);
-                if (monsterData == null) continue;
-                var monsterGO = GameObject.Instantiate(monsterPrefab);
-                monsterGO.transform.SetParent(BattleManager.Instance.MonsterParent);
-                var routeData = spawn.RouteID != 0 ? RouteJsonData.GetData(spawn.RouteID) : null;
+
+                for (int i = 0; i < spawn.Monsters.Length; i++) {
+                    int monsterID = spawn.Monsters[i].ID;
+                    if (monsterID <= 0) continue;
+                    if (!TryGetMonsterData(monsterID, out var monsterData)) continue;
+
+                    var routeData = spawn.RouteID != 0 ? RouteJsonData.GetData(spawn.RouteID) : null;
+                    //設定怪物位置與方向
+                    Quaternion dirQuaternion = Quaternion.Euler(0, 180, 0);//面向方向四元數
+                    Vector3 dir = Vector3.zero;//面向方向向量
+                    Vector3 pos = Vector3.zero;
+                    if (routeData != null) {
+                        var rotation = Quaternion.AngleAxis(spawn.PlayerIndex * 90f, Vector3.up);
+                        dir = rotation * (routeData.TargetPos - routeData.SpawnPos).normalized;
+                        dirQuaternion = rotation * Quaternion.LookRotation(dir);
+                        if (spawn.SpawnTime == 0)
+                            pos = rotation * routeData.SpawnPos;
+                        else {
+                            var deltaTime = GameTime.Current - spawn.SpawnTime;
+                            var deltaPosition = deltaTime * monsterData.Speed * dir;
+                            if (Vector3.SqrMagnitude(deltaPosition) > Vector3.SqrMagnitude(routeData.TargetPos - routeData.SpawnPos)) {
+                                continue;
+                            }
+                            pos = rotation * routeData.SpawnPos + deltaPosition;
+                        }
+                    }
+
+                    if (!TryCreateMonster(monsterID, out var monster)) continue;
+                    int monsterIdx = spawn.Monsters[i].Idx;
+
 #if UNITY_EDITOR
-                monsterGO.name = monsterData.Ref;
-                //monsterGO.hideFlags |= HideFlags.HideAndDontSave;
+                    monster.name = monsterData.Ref;
+                    //monsterGO.hideFlags |= HideFlags.HideAndDontSave;
 #else
                 monsterGO.hideFlags |= HideFlags.HideAndDontSave;
 #endif
-                var entity = state.EntityManager.CreateEntity();
-                state.EntityManager.AddComponentObject(entity, monsterGO.GetComponent<Transform>());
-                var monster = monsterGO.GetComponent<Monster>();
 
-                //設定怪物位置與方向
-                Quaternion dirQuaternion = Quaternion.Euler(0, 180, 0);//面向方向四元數
-                Vector3 dir = Vector3.zero;//面向方向向量
-                if (routeData != null) {
-                    monsterGO.transform.localPosition = routeData.SpawnPos;
-                    dir = (routeData.TargetPos - routeData.SpawnPos).normalized;
-                    dirQuaternion = Quaternion.LookRotation(dir);
-                    state.EntityManager.AddComponentData(entity, new MonsterValue {
-                        MonsterID = monsterData.ID,
+                    var monsterEntity = state.EntityManager.CreateEntity();
+                    //state.EntityManager.AddComponentObject(monsterEntity, monster.transform);
+
+                    monster.transform.localPosition = pos;
+                    ecbCommandBuffer.AddComponent(monsterEntity, new MonsterValue {
+                        MonsterID = monsterID,
                         MonsterIdx = monsterIdx,
-                        MyEntity = entity,
+                        MyEntity = monsterEntity,
                         Radius = monsterData.Radius,
-                        Pos = routeData.SpawnPos,
+                        Pos = pos,
                         InField = false,
                     });
-                }
-                else {
-                    monsterGO.transform.localPosition = Vector3.zero;
-                    state.EntityManager.AddComponentData(entity, new MonsterValue {
-                        MyEntity = entity,
-                        Radius = monsterData.Radius,
-                        Pos = float3.zero,
-                        InField = false,
+                    //設定怪物資料，並在完成載入模型後設定動畫與方向
+                    monster.SetData(monsterID, monsterIdx, () => {
+                        monster.FaceDir(dirQuaternion);
+                        monster.SetAniTrigger("run");
+                    });
+                    ecbCommandBuffer.AddComponent(monsterEntity, new MonsterInstance {
+                        GO = monster.gameObject,
+                        Trans = monster.transform,
+                        MyMonster = monster,
+                        Dir = dir,
                     });
                 }
-                //設定怪物資料，並在完成載入模型後設定動畫與方向
-                monster.SetData(monsterID, () => {
-                    monster.FaceDir(dirQuaternion);
-                    monster.SetAniTrigger("run");
-                });
-                state.EntityManager.AddComponentData(entity, new MonsterInstance {
-                    GO = monsterGO,
-                    Trans = monsterGO.transform,
-                    MyMonster = monster,
-                    Dir = dir,
-                });
+
+                ecbCommandBuffer.DestroyEntity(entity);
             }
+        }
 
-            //是BOSS就會攝影機震動
-            if (spawn.IsBooss)
-                CamManager.ShakeCam(CamManager.CamNames.Battle,
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_AmplitudeGain),
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_FrequencyGain),
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_Duration));
+        /// <summary>
+        /// 取得怪物資料
+        /// </summary>
+        /// <param name="monsterID">輸入Monster ID</param>
+        /// <param name="monsterData">取得目標資料</param>
+        /// <returns>取得怪物資料成功與否</returns>
+        private bool TryGetMonsterData(int monsterID, out MonsterJsonData monsterData) {
+            monsterData = null;
+            monsterData = MonsterJsonData.GetData(monsterID);
+            if (monsterData == null) return false;
+            return true;
+        }
 
+        /// <summary>
+        /// 創建怪物實體
+        /// </summary>
+        /// <param name="monsterID">輸入怪物ID</param>
+        /// <param name="monster">創建怪物實體</param>
+        /// <returns>創建怪物成功與否</returns>
+        private bool TryCreateMonster(int monsterID, out Monster monster) {
+            monster = null;
+            GameObject monsterPrefab = ResourcePreSetter.Instance.MonsterPrefab.gameObject;
+            if (monsterPrefab == null) return false;
+            var monsterGO = Object.Instantiate(monsterPrefab);
+            monster = monsterGO.GetComponent<Monster>();
+            monster.transform.SetParent(BattleManager.Instance.MonsterParent);
+
+            return true;
         }
     }
 }

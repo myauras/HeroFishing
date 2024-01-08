@@ -31,7 +31,6 @@ namespace HeroFishing.Battle {
             foreach (var (particleSpawn, entity) in SystemAPI.Query<HitParticleSpawnTag>().WithEntityAccess()) {
                 var monsterData = MonsterJsonData.GetData(particleSpawn.Monster.MonsterID);
                 if (monsterData == null) continue;
-                string hitPath = string.Format("Bullet/BulletHit{0}", particleSpawn.SpellPrefabID);
                 var rotQuaternion =
                     //Quaternion.Euler(particleSpawn.HitDir);
                     quaternion.LookRotationSafe(particleSpawn.HitDir, math.up());
@@ -46,7 +45,7 @@ namespace HeroFishing.Battle {
                         position = particleSpawn.Monster.Pos + new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY) / 2, 0);
                         break;
                 }
-                pool.Pop(hitPath, position, rotQuaternion, null, SpawnCallback);
+                pool.Pop(particleSpawn.SpellPrefabID, 0, PoolManager.PopType.Hit, position, rotQuaternion, null, SpawnCallback);
 
                 //移除Tag
                 ECB.DestroyEntity(entity);

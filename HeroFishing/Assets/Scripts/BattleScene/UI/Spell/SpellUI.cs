@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpellUI : BaseUI {
     [SerializeField]
@@ -13,10 +14,16 @@ public class SpellUI : BaseUI {
     private SpellBtn _spellBtn2;
     [SerializeField]
     private SpellBtn _spellBtn3;
+    [SerializeField]
+    private Button _cancelBtn;
+    [SerializeField]
+    private PlayerAttackController _attackController;
 
     public bool IsSpellTest => BattleSceneManager.Instance != null && BattleSceneManager.Instance.IsSpellTest;
     public int TotalSpellLevel => _spellBtn1.SpellLevel + _spellBtn2.SpellLevel + _spellBtn3.SpellLevel;
     private Hero _hero;
+    private SpellBtn _pressingBtn;
+    private const float CANCEL_SPELL_THRESHOLD = 50;
 
     public override void RefreshText() {
 
@@ -98,10 +105,44 @@ public class SpellUI : BaseUI {
         btn.AddChargeValue();
     }
 
+    public void Press(string spellStr) {
+        if (_attackController.ControlLock) return;
+        if (MyEnum.TryParseEnum<SpellName>(spellStr, out var spellName))
+            Press(spellName);
+    }
+
+    public void Press(SpellName spellName) {
+        if (spellName == SpellName.attack) return;
+        _pressingBtn = GetSpellBtn(spellName);
+        _pressingBtn.Press();
+        _attackController.OnPointerDown(spellName);
+        _cancelBtn.gameObject.SetActive(true);
+    }
+
+    public void Drag() {
+        if (_pressingBtn == null) return;
+        _pressingBtn.Drag();
+        _attackController.OnDrag();
+    }
+
+    public void Release() {
+        if (_pressingBtn == null) return;
+        _pressingBtn.Release();
+        _pressingBtn = null;
+        bool cancel = IsCancelBtnNearby();
+        _attackController.OnPointerUp(cancel);
+        _cancelBtn.gameObject.SetActive(false);
+    }
+
     private void OnPlay(SpellName spellName) {
         if (spellName == SpellName.attack) return;
         var btn = GetSpellBtn(spellName);
         btn.Play();
+    }
+
+    private bool IsCancelBtnNearby() {
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(_cancelBtn.targetGraphic.rectTransform, Input.mousePosition, Camera.main, out var localPos);
+        return localPos.sqrMagnitude <= CANCEL_SPELL_THRESHOLD * CANCEL_SPELL_THRESHOLD;
     }
 
     private static bool CanUpgrade(SpellBtn spellBtn, int level) {
@@ -112,5 +153,4 @@ public class SpellUI : BaseUI {
         if (spellBtn.SpellName != upgradeSpell)
             spellBtn.CloseUpgradeBtn();
     }
-
 }

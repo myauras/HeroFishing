@@ -157,7 +157,6 @@ namespace HeroFishing.Main {
                 AddressablesLoader.GetPrefab("StartUI/StartSceneUI2", (prefab, handle) => {
                     var go = Instantiate(prefab, UIParent);
                 }, null);
-                return;
                 //繞過正式流程
                 FirstTimeLaunchGame = false;
                 PopupUI.InitSceneTransitionProgress(0);

@@ -20,7 +20,7 @@ namespace HeroFishing.Battle {
                 GridHeight = 20,//網格高度為10 => 改為20
                 BoundaryX = new int2(-10, 10),//網格索引範圍
                 BoundaryY = new int2(-10, 10),//網格索引範圍
-                GridMap = new NativeParallelMultiHashMap<int2, MonsterValue>(120, Allocator.Persistent)
+                GridMap = new NativeParallelMultiHashMap<int2, MonsterValue>(400, Allocator.Persistent)
             };
             state.EntityManager.AddComponentData(GridEntity, gridData);
 
@@ -58,8 +58,8 @@ namespace HeroFishing.Battle {
 
                 //怪物移動
                 if (monsterInstance.MyMonster.MyData.Speed != 0 && !state.EntityManager.HasComponent<MonsterFreezeTag>(entity)) {
-                    monsterInstance.Trans.localPosition += (monsterInstance.Dir * monsterInstance.MyMonster.MyData.Speed) * deltaTime;
-                    monsterValue.ValueRW.Pos = monsterInstance.Trans.localPosition;
+                    monsterValue.ValueRW.Pos = monsterValue.ValueRO.Pos + (float3)(monsterInstance.Dir * monsterInstance.MyMonster.MyData.Speed) * deltaTime;
+                    monsterInstance.Trans.localPosition = monsterValue.ValueRO.Pos;
                 }
 
                 //取得怪物移動後的網格位置

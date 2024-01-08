@@ -69,11 +69,13 @@ Material:
     - _Cull: 2
     - _DstBlend: 10
     - _EdgeAlpha: 1
-    - _Frequency: 8
-    - _QueueControl: 1
+    - _EndEdgeAlpha: 1
+    - _Frequency: 1
+    - _HeadEdgeAlpha: 0
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 0
-    - _Scale: 1
+    - _Scale: 2
     - _SrcBlend: 5
     - _Surface: 1
     - _WorkflowMode: 1
@@ -81,6 +83,6 @@ Material:
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _Offset: {r: 0, g: 5, b: 0, a: 0}
-    - _Tiling: {r: 2, g: 6, b: 0, a: 0}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Tiling: {r: 3, g: 6, b: 0, a: 0}
   m_BuildTextureStacks: []

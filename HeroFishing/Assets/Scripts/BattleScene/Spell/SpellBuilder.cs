@@ -18,6 +18,9 @@ public class SpellBuilder {
             case HeroSpellJsonData.HitType.Chain:
                 hit = new SpellChainHit(Data);
                 break;
+            case HeroSpellJsonData.HitType.Explode:
+                hit = new SpellExplodeHit(Data);
+                break;
         }
 
         SpellMoveBase move = null;

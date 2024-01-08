@@ -65,11 +65,39 @@ public struct SpellAreaData : IComponentData {
     public float CollisionTime;
     public float CollisionAngle;
     public int Waves;
+    public MonsterValue IgnoreMonster;
 }
 
 public struct SpellHitNetworkData : IComponentData {
     public int AttackID;
     public uint StrIndex_SpellID;
+}
+
+public struct RefreshSceneTag : IComponentData { }
+public struct SpawnTag : IComponentData { }
+public struct AlreadyUpdateTag : IComponentData { }
+
+//public struct MonsterUpdateData : IComponentData {
+//    public int RouteID;
+//    public float SpawnTime;
+//}
+
+public struct SpawnData : IComponentData, IDisposable {
+    public NativeArray<MonsterData> Monsters;
+    public int RouteID;
+    public float SpawnTime;
+    public bool IsBoss;
+    public int PlayerIndex;
+
+    public void Dispose() {
+        if (Monsters.IsCreated)
+            Monsters.Dispose();
+    }
+}
+
+public struct MonsterData : IComponentData {
+    public int ID;
+    public int Idx;
 }
 
 [InternalBufferCapacity(16)]
@@ -101,6 +129,7 @@ public struct SpellHitTag : IComponentData {
     public MonsterValue Monster;
     public float3 HitPosition;
     public float3 HitDirection;
+    public float3 BulletPosition;
 }
 
 public struct ChainHitData : IComponentData {
@@ -154,6 +183,7 @@ public struct AreaCollisionData : IComponentData {
     public float Angle;
     public int Waves;
     public int WaveIndex;
+    public MonsterValue IgnoreMonster;
 }
 
 [InternalBufferCapacity(16)]
