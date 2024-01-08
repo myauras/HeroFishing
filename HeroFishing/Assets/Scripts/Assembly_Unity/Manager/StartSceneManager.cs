@@ -20,10 +20,10 @@ namespace HeroFishing.Main {
         List<AsyncOperationHandle> HandleList = new List<AsyncOperationHandle>();
 
         private void Start() {
- 
+
             Instance = this;
             //建立遊戲管理者
-            GameManager.CreateNewInstance();
+            //GameManager.CreateNewInstance();
             //檢查網路
             PopupUI_Local.ShowLoading("Checking Internet");
             InternetChecker.StartCheckInternet(OnConnected);
@@ -53,9 +53,9 @@ namespace HeroFishing.Main {
         /// 3. 切至下一個場景
         /// </summary>
         public void StartDownloadingAsset() {
-            GameManager.StartDownloadAddressable(() => {//下載完資源包後執行
-                SpawnAddressableAssets();
-            });
+            //GameManager.StartDownloadAddressable(() => {//下載完資源包後執行
+            //    SpawnAddressableAssets();
+            //});
         }
         /// <summary>
         /// 載入UI

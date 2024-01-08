@@ -1,3 +1,4 @@
+using HeroFishing.Main;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -50,7 +51,7 @@ namespace Scoz.Func {
         }
         public void Init() {
             Instance = this;
-            GameManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
+            BaseManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
             MyCanvas = GetComponent<Canvas>();
             InitLoading();
             InitClickCamcel();
