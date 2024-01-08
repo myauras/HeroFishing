@@ -30,7 +30,7 @@ namespace HeroFishing.Battle {
             // 創建 Bullet 技能
             foreach (var (spellData, spellEntity) in SystemAPI.Query<SpellBulletData>().WithEntityAccess()) {
 
-                if (!CreateBulletInstance(spellData.SpawnData, out Bullet bullet)) continue;
+                if (!CreateBulletInstance(spellData.SpawnData, spellData.StrIndex_SpellID, out Bullet bullet)) continue;
 
                 //建立Entity
                 var entity = state.EntityManager.CreateEntity();
@@ -73,7 +73,7 @@ namespace HeroFishing.Battle {
 
             // 創建 Area 技能
             foreach (var (spellData, spellEntity) in SystemAPI.Query<SpellAreaData>().WithEntityAccess()) {
-                if (!CreateBulletInstance(spellData.SpawnData, out Bullet bullet)) continue;
+                if (!CreateBulletInstance(spellData.SpawnData, spellData.StrIndex_SpellID, out Bullet bullet)) continue;
 
                 //建立Entity
                 var entity = state.EntityManager.CreateEntity();
@@ -112,7 +112,7 @@ namespace HeroFishing.Battle {
             }
         }
 
-        private bool CreateBulletInstance(SpellSpawnData spawnData, out Bullet bullet) {
+        private bool CreateBulletInstance(SpellSpawnData spawnData, uint spellID, out Bullet bullet) {
             bullet = null;
             var pool = PoolManager.Instance;
             var bulletGO = pool.PopBullet(spawnData.SpellPrefabID, spawnData.SubSpellPrefabID);
@@ -143,7 +143,7 @@ bulletGO.hideFlags |= HideFlags.HideAndDontSave;
                 SubPrefabID = spawnData.SubSpellPrefabID,
                 IgnoreFireModel = spawnData.IgnoreFireModel,
                 FirePosition = firePosition,
-                Delay = spawnData.ProjectileDelay
+                Delay = spawnData.ProjectileDelay,
             });
             return true;
         }

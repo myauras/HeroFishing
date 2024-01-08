@@ -69,10 +69,10 @@ namespace HeroFishing.Battle {
             //載入Fire模型
             var bulletPos = FirePosition;
             var bulletRot = transform.rotation;
-            string firePath = string.Format("Bullet/BulletFire{0}", SpellPrefabID);
+            //string firePath = string.Format($"Bullet/{HeroName}/BulletFire{SpellPrefabID}");
             var pool = PoolManager.Instance;
             //var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", firePath);
-            pool.Pop(firePath, bulletPos, bulletRot, null, go => {
+            pool.Pop(SpellPrefabID, 0, PoolManager.PopType.Fire, bulletPos, bulletRot, null, go => {
                 // 讓AutoBackPool.cs自己控制返回物件池的時間
             });
         }
@@ -83,16 +83,16 @@ namespace HeroFishing.Battle {
                 return;
             }
 
-            string projectilePath;
+            //string projectilePath;
             ////載入Projectile模型
-            if (SubSpellPrefabID == 0)
-                projectilePath = string.Format("Bullet/BulletProjectile{0}", SpellPrefabID);
-            else
-                projectilePath = string.Format("Bullet/BulletProjectile{0}_{1}", SpellPrefabID, SubSpellPrefabID);
+            //if (SubSpellPrefabID == 0)
+            //    projectilePath = string.Format($"Bullet/{HeroName}/BulletProjectile{SpellPrefabID}");
+            //else
+            //    projectilePath = string.Format($"Bullet/{HeroName}/BulletProjectile{SpellPrefabID}_{SubSpellPrefabID}");
 
             var pool = PoolManager.Instance;
             //var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", projectilePath);
-            pool.Pop(projectilePath, Vector3.zero, Quaternion.identity, transform, go => {
+            pool.Pop(SpellPrefabID, SubSpellPrefabID, PoolManager.PopType.Projectile, Vector3.zero, Quaternion.identity, transform, go => {
                 go.transform.localScale = Vector3.one;
                 Projectile = go;
                 LoadDone();
@@ -117,7 +117,7 @@ namespace HeroFishing.Battle {
             UnityEditor.Handles.color = Color.yellow;
             if (gizmoData.Angle > 0 && gizmoData.Direction != Vector3.zero) {
                 Vector3 fromDir = Quaternion.AngleAxis(-gizmoData.Angle / 2, Vector3.up) * gizmoData.Direction;
-                gizmoData.Position.y += 0.1f;                
+                gizmoData.Position.y += 0.1f;
                 UnityEditor.Handles.DrawWireArc(gizmoData.Position, Vector3.up, fromDir, gizmoData.Angle, gizmoData.Radius);
                 Gizmos.DrawRay(gizmoData.Position, fromDir * gizmoData.Radius);
                 Gizmos.DrawRay(gizmoData.Position, Quaternion.AngleAxis(gizmoData.Angle, Vector3.up) * fromDir * gizmoData.Radius);

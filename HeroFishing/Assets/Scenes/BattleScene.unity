@@ -659,7 +659,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &262319835
 Transform:
   m_ObjectHideFlags: 0
@@ -2829,6 +2829,8 @@ MonoBehaviour:
   MyHeros:
   - {fileID: 643103369}
   MonsterParent: {fileID: 422263882}
+  _rotateTest: 0
+  _rotateTestIndex: 0
 --- !u!1 &1621932757
 GameObject:
   m_ObjectHideFlags: 0
