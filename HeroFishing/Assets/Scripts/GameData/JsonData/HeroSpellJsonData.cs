@@ -43,6 +43,7 @@ namespace HeroFishing.Main {
         }
         public static string DataName { get; set; }
         public new string ID { get; private set; }
+        public int HeroID { get; private set; }
         public string Name {
             get {
                 return StringJsonData.GetString_static(DataName + "_" + ID, "Name");
@@ -200,6 +201,7 @@ namespace HeroFishing.Main {
                 else {
                     SpellDic.Add(_heroID, new Dictionary<SpellName, HeroSpellJsonData>() { { spellName, _data } });
                 }
+                _data.HeroID = _heroID;
             }
 
         }

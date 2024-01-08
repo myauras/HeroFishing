@@ -1,5 +1,3 @@
-using Cysharp.Threading.Tasks;
-using HeroFishing.Battle;
 using HeroFishing.Main;
 using Scoz.Func;
 using System;
@@ -7,10 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities.UniversalDelegates;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using static UnityEngine.Application;
-using UnityEngine.UIElements;
 
 public class PoolManager : MonoBehaviour {
     private static PoolManager _instance;
@@ -20,8 +14,10 @@ public class PoolManager : MonoBehaviour {
     [SerializeField] private GameObject _monster;
 
     private Dictionary<string, List<GameObject>> _pools;
+    private Dictionary<int, string> _heroNameDic;
 
     private const string POOL_BULLET = "bullet";
+    public enum PopType { Fire, Projectile, Hit }
 
     public static PoolManager CreateNewInstance() {
         if (Instance != null) {
@@ -40,22 +36,32 @@ public class PoolManager : MonoBehaviour {
         _instance = this;
         DontDestroyOnLoad(gameObject);
         _pools = new Dictionary<string, List<GameObject>>();
+        _heroNameDic = new Dictionary<int, string>();
     }
 
     public void InitHeroSpell(HeroSpellJsonData data) {
+        var heroData = HeroJsonData.GetData(data.HeroID);
+        if (heroData == null)
+            WriteLog.LogError("pool manager cannot find the hero data");
         if (data.SubPrefabID != 0) {
-            var path = string.Format("Bullet/BulletProjectile{0}_{1}", data.PrefabID, data.SubPrefabID);
+            var path = $"Bullet/{heroData.Ref}/Script_BulletProjectile{data.PrefabID}_{data.SubPrefabID}";
             CreateParticleInstance(path);
         }
 
-        var projectilePath = string.Format("Bullet/BulletProjectile{0}", data.PrefabID);
+        var projectilePath = $"Bullet/{heroData.Ref}/Script_BulletProjectile{data.PrefabID}";
         CreateParticleInstance(projectilePath);
 
-        var firePath = string.Format("Bullet/BulletFire{0}", data.PrefabID);
+        var firePath = $"Bullet/{heroData.Ref}/Script_BulletFire{data.PrefabID}";
         CreateParticleInstance(firePath);
 
-        var hitPath = string.Format("Bullet/BulletHit{0}", data.PrefabID);
+        var hitPath = $"Bullet/{heroData.Ref}/Script_BulletHit{data.PrefabID}";
         CreateParticleInstance(hitPath);
+        _heroNameDic.Add(data.PrefabID, heroData.Ref);
+    }
+
+    public void Pop(int prefabID, int subPrefabID, PopType popType, Vector3 position = default, Quaternion rotaiton = default, Transform parent = null, Action<GameObject> popCallback = null) {
+        string key = GetKey(prefabID, subPrefabID, popType);
+        Pop(key, position, rotaiton, parent, popCallback);
     }
 
     // Addressable Assets用的物件池
@@ -124,6 +130,25 @@ public class PoolManager : MonoBehaviour {
         //WriteLog.Log("push " + obj.name);
         obj.SetActive(false);
         obj.transform.SetParent(transform);
+    }
+
+    private string GetKey(int prefabID, int subPrefabID, PopType popType) {
+        if (!_heroNameDic.TryGetValue(prefabID, out var heroName) || string.IsNullOrEmpty(heroName))
+            throw new Exception("hero name is not found");
+        switch (popType) {
+            case PopType.Fire:
+                return $"Bullet/{heroName}/Script_BulletFire{prefabID}";
+            case PopType.Projectile:
+                if(subPrefabID != 0) {
+                    return $"Bullet/{heroName}/Script_BulletProjectile{prefabID}_{subPrefabID}";
+                }
+                else {
+                    return $"Bullet/{heroName}/Script_BulletProjectile{prefabID}";
+                }
+            case PopType.Hit:
+                return $"Bullet/{heroName}/Script_BulletHit{prefabID}";
+        }
+        throw new Exception("key is not match");
     }
 
     private void CreateParticleInstance(string key, Transform parent = null, Action<GameObject> callback = null) {

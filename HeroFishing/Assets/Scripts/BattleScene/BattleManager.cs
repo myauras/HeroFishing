@@ -15,6 +15,17 @@ namespace HeroFishing.Battle {
 
         [SerializeField] Hero[] MyHeros;
         [SerializeField] public Transform MonsterParent;
+        [SerializeField]
+        private bool _rotateTest;
+        [SerializeField]
+        private int _rotateTestIndex;
+
+        public int Index {
+            get {
+                if (_rotateTest || AllocatedRoom.Instance == null) return _rotateTestIndex;
+                return AllocatedRoom.Instance.Index;
+            }
+        }
         private EntityManager _entityManager;
 
         public MonsterScheduler MyMonsterScheduler { get; private set; }
@@ -87,6 +98,7 @@ namespace HeroFishing.Battle {
                     RouteID = spawns[i].RouteJsonID,
                     SpawnTime = (float)spawns[i].SpawnTime,
                     IsBoss = spawns[i].IsBoss,
+                    PlayerIndex = Index,
                 });
                 _entityManager.AddComponent<RefreshSceneTag>(entity);
             }

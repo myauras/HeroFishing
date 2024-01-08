@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HeroFishing.Socket.Matchgame;
 using HeroFishing.Main;
+using HeroFishing.Battle;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -12,8 +13,8 @@ public class UpdateSceneGizmos : MonoBehaviour
     private static UpdateSceneGizmos _instance;
     public static UpdateSceneGizmos Instance => _instance;
 
-    [SerializeField]
-    private float _testIndex;
+    //[SerializeField]
+    //private float _testAngle;
 
     private Spawn[] _spawns;
     private void Start() {
@@ -40,9 +41,9 @@ public class UpdateSceneGizmos : MonoBehaviour
                 }
                 var monsterData = MonsterJsonData.GetData(monster.JsonID);
                 var deltaTime = GameTime.LastestOverride - spawn.SpawnTime;
-                var rotation = Quaternion.AngleAxis(_testIndex * 90, Vector3.up);
-                var direction = rotation * (routeData.TargetPos - routeData.SpawnPos).normalized;
-                var position = rotation * routeData.SpawnPos + (float)deltaTime * monsterData.Speed * direction;
+                var rotation = Quaternion.AngleAxis(BattleManager.Instance.Index * 90f, Vector3.up);
+                var direction = (routeData.TargetPos - routeData.SpawnPos).normalized;
+                var position = rotation * (routeData.SpawnPos + (float)deltaTime * monsterData.Speed * direction);
                 Gizmos.DrawSphere(position, monsterData.Radius);
             }
         }

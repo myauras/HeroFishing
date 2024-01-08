@@ -20,8 +20,12 @@ namespace HeroFishing.Battle {
         private Vector3 _originPos;
         private HeroMoveBehaviour _currentMove;
         private int _attackID = 0;
+        private float _scheduledNextAttackTime;
+        private float _scheduledRecoverTime;
+        private bool _isAttack;
 
         private const float MOVE_SCALE_FACTOR = 2;
+        private const float ATTACK_BUFFER_TIME = 0.2f;
         public bool ControlLock {
             get {
                 return _currentMove != null && _currentMove.IsMoving;
@@ -31,22 +35,42 @@ namespace HeroFishing.Battle {
         public bool IsSpellTest => BattleSceneManager.Instance != null && BattleSceneManager.Instance.IsSpellTest;
 
         private void Update() {
-            AttackDetect();
+            AttackInput();
+            Attack();
+            AttackRecover();
         }
+
         //普通攻擊
-        private void AttackDetect() {
+        //加入攻擊buffer，讓狂點的時候能維持最高的速度點擊
+        //簡單說就是將攻擊指令存0.2秒，如果0.2秒內可以再次發射，會立刻發射。
+        //比較不會導致狂點，但是射出時間有落差造成的卡頓感。
+        private void AttackInput() {
             if (!Input.GetMouseButtonDown(0)) return;
             if (ControlLock) return;
             if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
             if (!CheckSpell(SpellName.attack)) return;
+            _isAttack = true;
             //if (!IsSpellTest) return;
+            _scheduledRecoverTime = Time.time + ATTACK_BUFFER_TIME;
+        }
 
+        private void Attack() {
+            if (!_isAttack) return;
+            if (Time.time < _scheduledNextAttackTime) return;
+            _isAttack = false;
+            _scheduledNextAttackTime = Time.time + _spellData.CD;
             //攻擊方向
             var pos = UIPosition.GetMouseWorldPointOnYZero(0);
             var dir = (pos - _hero.transform.position).normalized;
             //設定技能
             OnSetSpell(_hero.transform.position, dir);
+        }
+
+        private void AttackRecover() {
+            if (!_isAttack) return;
+            if (Time.time < _scheduledRecoverTime) return;
+            _isAttack = false;
         }
 
         //施放技能-按下
@@ -74,7 +98,8 @@ namespace HeroFishing.Battle {
             if (_spellData.MyDragType == HeroSpellJsonData.DragType.Rot) {
                 float angle = Mathf.Atan2(_spellDir.x, _spellDir.z) * Mathf.Rad2Deg;
                 SpellIndicator.Instance.RotateIndicator(Quaternion.Euler(0, angle, 0));
-            } else {
+            }
+            else {
                 SpellIndicator.Instance.MoveIndicator(_spellPos);
             }
         }
