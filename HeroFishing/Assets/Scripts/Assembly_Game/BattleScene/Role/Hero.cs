@@ -1,12 +1,12 @@
 using DG.Tweening;
 using HeroFishing.Main;
 using JetBrains.Annotations;
-using Loxodon.Framework.Messaging;
 using Scoz.Func;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+
 
 namespace HeroFishing.Battle {
     public class Hero : Role {

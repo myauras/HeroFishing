@@ -5,10 +5,9 @@ using System;
 using System.Linq;
 using UnityEngine.Events;
 
-namespace MVVM
-{
-    public class DOTweenView : UIView
-    {
+
+namespace MVVM {
+    public class DOTweenView : UIView {
         // public
         public bool ControlChild = true;
         public ObservableProperty<bool> Toggle = new ObservableProperty<bool>();
@@ -20,48 +19,38 @@ namespace MVVM
         // private
         private DOTweenAnimation[] tweens = null;
 
-        public void SetToggle(bool toggle)
-        {
+        public void SetToggle(bool toggle) {
             Toggle.Value = toggle;
         }
 
-        void AddLastComplete(DOTweenAnimation[] tweenArray)
-        {
+        void AddLastComplete(DOTweenAnimation[] tweenArray) {
             if (tweenArray == null || tweenArray.Length == 0)
                 return;
-            if (OnComplete != null)
-            {
+            if (OnComplete != null) {
                 var lastTween = tweenArray.OrderBy(tween => tween.duration + tween.delay).Last();
                 if (lastTween != null) lastTween.onComplete?.AddListener(OnComplete);
             }
         }
 
-        void RemoveLastComplete(DOTweenAnimation[] tweenArray)
-        {
+        void RemoveLastComplete(DOTweenAnimation[] tweenArray) {
             if (tweenArray == null || tweenArray.Length == 0)
                 return;
             var lastTween = tweenArray.OrderBy(tween => tween.duration + tween.delay).Last();
             if (lastTween != null) lastTween.onComplete?.RemoveAllListeners();
         }
 
-        public void PlayForward(DOTweenAnimation[] tweenArray)
-        {
+        public void PlayForward(DOTweenAnimation[] tweenArray) {
             if (tweenArray == null)
                 return;
 
-            for (int i = 0; i < tweenArray.Length; ++i)
-            {
-                if (Restart)
-                {
+            for (int i = 0; i < tweenArray.Length; ++i) {
+                if (Restart) {
                     tweenArray[i].DORestart();
-                }
-                else
-                {
+                } else {
                     tweenArray[i].DOPlayForward();
                 }
-                
-                if (IgnoreAnimeOnFirstTime)
-                {
+
+                if (IgnoreAnimeOnFirstTime) {
                     tweenArray[i].DOComplete();
                 }
             }
@@ -69,16 +58,13 @@ namespace MVVM
             IgnoreAnimeOnFirstTime = false;
         }
 
-        public void PlayBackwards(DOTweenAnimation[] tweenArray)
-        {
+        public void PlayBackwards(DOTweenAnimation[] tweenArray) {
             if (tweenArray == null)
                 return;
 
-            for (int i = 0; i < tweenArray.Length; ++i)
-            {
+            for (int i = 0; i < tweenArray.Length; ++i) {
                 tweenArray[i].DOPlayBackwards();
-                if (IgnoreAnimeOnFirstTime)
-                {
+                if (IgnoreAnimeOnFirstTime) {
                     tweenArray[i].DORewind();
                 }
             }
@@ -86,23 +72,20 @@ namespace MVVM
             IgnoreAnimeOnFirstTime = false;
         }
 
-        protected override void Start()
-        {
+        protected override void Start() {
             tweens = ControlChild ? GetComponentsInChildren<DOTweenAnimation>() : GetComponents<DOTweenAnimation>();
             AddLastComplete(tweens);
             Toggle.ValueChanged += OnToggleChanged;
             if (Toggle.Value) PlayForward(tweens);
         }
 
-        protected override void OnDestroy()
-        {
+        protected override void OnDestroy() {
             Toggle.ValueChanged -= OnToggleChanged;
             RemoveLastComplete(tweens);
             tweens = null;
         }
 
-        private void OnToggleChanged(object sender, EventArgs e)
-        {
+        private void OnToggleChanged(object sender, EventArgs e) {
             if (Toggle)
                 PlayForward(tweens);
             else

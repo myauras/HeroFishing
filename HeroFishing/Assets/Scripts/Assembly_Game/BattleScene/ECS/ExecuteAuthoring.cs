@@ -15,6 +15,7 @@ namespace HeroFishing.Battle {
             public override void Bake(ExecuteAuthoring authoring) {
                 var entity = GetEntity(TransformUsageFlags.None);
 
+
                 //if (authoring.EnableCollisionSys) AddComponent<CollisionSys>(entity);
                 if (authoring.EnableMonsterSpawnSys) AddComponent<MonsterSpawnSys>(entity);
                 if (authoring.EnableBulletSpawnSys) AddComponent<BulletSpawnSys>(entity);

@@ -5,8 +5,8 @@ using FlutterUnityIntegration;
 using Scoz.Func;
 
 namespace HeroFishing.Main {
-    public class FlutterManager  {
-        public static void  Init() {
+    public class FlutterManager {
+        public static void Init() {
             UnityMessageManager.Instance.OnMessage += OnMsg;
         }
         public static void SendMsg(string _msg) {
@@ -14,7 +14,7 @@ namespace HeroFishing.Main {
             UnityMessageManager.Instance.SendMessageToFlutter(_msg);
         }
         public static void OnMsg(string _msg) {
-            WriteLog.LogColorFormat("¦¬¨ìFlutter: {0}", WriteLog.LogType.Flutter, _msg);
+            WriteLog.LogColorFormat("æ”¶åˆ°Flutter: {0}", WriteLog.LogType.Flutter, _msg);
         }
 
     }

@@ -4,8 +4,6 @@ using UnityEngine;
 using Scoz.Func;
 using System;
 using System.Linq;
-using UnityEngine.Purchasing.Security;
-using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Main {
 

@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using Service.Realms;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace HeroFishing.Main {
     public class StartSceneUI : BaseUI {
