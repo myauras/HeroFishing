@@ -96,7 +96,7 @@ namespace Scoz.Func {
             BG.SetActive(false);
             WriteLog.LogColor("LoadAsset-Start", WriteLog.LogType.Addressable);
             Keys.RemoveAll(a => a == "");
-            PopupUI_Local.ShowLoading(StringJsonData.GetUIString("AddressableLoading"));
+            PopupUI.ShowLoading(StringJsonData.GetUIString("AddressableLoading"));
             FinishedAction = _action;
             Downloader = StartCoroutine(LoadAssets());//不輕快取用這個(正式版)
         }
@@ -112,7 +112,7 @@ namespace Scoz.Func {
             yield return new WaitForSeconds(20);
             if (CheckInternetCoroutine != null)
                 StopCoroutine(CheckInternetCoroutine);
-            PopupUI_Local.ShowClickCancel(StringJsonData.GetUIString("NoInternetShutDown"), () => {
+            PopupUI.ShowClickCancel(StringJsonData.GetUIString("NoInternetShutDown"), () => {
                 Application.Quit();
             });
         }
@@ -123,7 +123,7 @@ namespace Scoz.Func {
             //WriteLog.Log(handle.Status);
             //WriteLog.Log(handle.Result);
 
-            PopupUI_Local.HideLoading();//開始抓到bundle包就取消loading
+            PopupUI.HideLoading();//開始抓到bundle包就取消loading
             yield return new WaitForSeconds(0.1f);
 
             //等待20秒若時間到還沒載到資源包需求內容就當網路錯誤
@@ -142,7 +142,7 @@ namespace Scoz.Func {
 
             if (totalSize > 0) {//有要下載跳訊息
                 string downloadStr = string.Format(StringJsonData.GetUIString("StartDownloadAsset"), MyMath.BytesToMB(totalSize).ToString("0.00"));
-                PopupUI_Local.ShowClickCancel(downloadStr, () => {
+                PopupUI.ShowClickCancel(downloadStr, () => {
                     //顯示下載條
                     ShowDownloadUI(true);
                     StartCoroutine(Loading(totalSize));

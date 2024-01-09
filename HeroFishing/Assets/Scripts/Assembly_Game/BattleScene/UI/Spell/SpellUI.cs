@@ -19,7 +19,7 @@ public class SpellUI : BaseUI {
     [SerializeField]
     private PlayerAttackController _attackController;
 
-    public bool IsSpellTest => BattleSceneManager.Instance != null && BattleSceneManager.Instance.IsSpellTest;
+    [SerializeField] public bool IsSpellTest = false;
     public int TotalSpellLevel => _spellBtn1.SpellLevel + _spellBtn2.SpellLevel + _spellBtn3.SpellLevel;
     private Hero _hero;
     private SpellBtn _pressingBtn;
@@ -70,8 +70,7 @@ public class SpellUI : BaseUI {
             CloseUpgradeBtn(_spellBtn1, spellName);
             CloseUpgradeBtn(_spellBtn2, spellName);
             CloseUpgradeBtn(_spellBtn3, spellName);
-        }
-        else {
+        } else {
             if (!CanUpgrade(_spellBtn1, _hero.Level))
                 CloseUpgradeBtn(_spellBtn1, spellName);
             if (!CanUpgrade(_spellBtn2, _hero.Level))

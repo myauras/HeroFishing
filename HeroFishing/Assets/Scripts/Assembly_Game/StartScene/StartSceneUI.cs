@@ -64,7 +64,7 @@ namespace HeroFishing.Main {
         /// 3. (已登入且是從大廳退回主介面)打開UI介面，讓玩家選擇回大廳,登出還是移除帳戶(Apple限定)
         /// </summary>
         void AuthChek() {
-            PopupUI_Local.HideLoading();
+            PopupUI.HideLoading();
 
 
             //※之後也要新增玩家註冊完但是初始化玩家資料失敗的流程(不太會發生 但要考慮這個可能性)
@@ -79,12 +79,11 @@ namespace HeroFishing.Main {
 
                 //是否第一次執行遊戲，第一次執行遊戲後會自動進大廳，之後透過從大廳的設定中點回到主介面就不會又自動進大廳了
                 if (FirstTimeLaunchGame) {
-                    PopupUI_Local.ShowLoading("Loading");
+                    PopupUI.ShowLoading("Loading");
                     UniTask.Void(async () => {
                         await RealmManager.OnSignin();
                         RealmManager.OnDataLoaded();
-                        PopupUI_Local.HideLoading();
-                        StartSceneManager.Instance.ShowInfo();//顯示下方文字
+                        PopupUI.HideLoading();
 
                         //如果是Dev版本不直接轉場景(Dev版以外會直接進Lobby)
 #if Dev
@@ -174,7 +173,7 @@ namespace HeroFishing.Main {
         public void OnSignupClick(string _authTypeStr) {
 
             if (!TermsOfUseToggle.isOn) {//沒有勾選同意使用者條款的話會跳彈窗並返回
-                PopupUI_Local.ShowClickCancel(StringJsonData.GetUIString("NeedToAgreeTersOfUse"), null);
+                PopupUI.ShowClickCancel(StringJsonData.GetUIString("NeedToAgreeTersOfUse"), null);
                 return;
             }
 
@@ -186,15 +185,14 @@ namespace HeroFishing.Main {
                 case AuthType.Guest:
 
                     if (RealmManager.MyApp.CurrentUser == null) {//玩家還沒登入
-                        PopupUI_Local.ShowLoading(string.Format("Loading"));
+                        PopupUI.ShowLoading(string.Format("Loading"));
 
                         UniTask.Void(async () => {
                             await RealmManager.AnonymousSignup();//Realm訪客註冊
                             ShowUI(Condition.HideAll);
-                            StartSceneManager.Instance.ShowInfo();//顯示下方文字
                             await InitPlayerData(authType);//初始化玩家資料
                             RealmManager.OnDataLoaded();
-                            PopupUI_Local.HideLoading();
+                            PopupUI.HideLoading();
                         });
 
                     } else {//如果本來就有登入，代表是UI顯示錯誤(登入中的玩家不該點的到訪客註冊)
@@ -206,7 +204,7 @@ namespace HeroFishing.Main {
                     //if (RealmManager.MyApp.CurrentUser == null) {//玩家還沒登入Realm，開始進行三方登入
                     //    FBAuth();
                     //} else {//如果玩家本來就有登入Firebase帳戶，代表是從大廳退回主畫面的，此時要登出後再進行三方登入
-                    //    PopupUI_Local.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
+                    //    PopupUI.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
                     //        StartCoroutine(FirebaseManager.Logout(() => {//登出
                     //            FBAuth();
                     //        }));
@@ -218,7 +216,7 @@ namespace HeroFishing.Main {
                     //if (RealmManager.MyApp.CurrentUser == null) {//玩家還沒登入Firebase，開始進行三方登入
                     //    AppleAuth();
                     //} else {//如果玩家本來就有登入Firebase帳戶，代表是從大廳退回主畫面的，此時要登出後再進行三方登入
-                    //    PopupUI_Local.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
+                    //    PopupUI.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
                     //        StartCoroutine(FirebaseManager.Logout(() => {//登出
                     //            AppleAuth();
                     //        }));
@@ -228,12 +226,12 @@ namespace HeroFishing.Main {
                 case AuthType.Google:
                     WriteLog.LogError("尚未實作Google登入");
                     //#if UNITY_EDITOR
-                    //                    PopupUI_Local.ShowClickCancel("Editor不能使用Google登入", null);
+                    //                    PopupUI.ShowClickCancel("Editor不能使用Google登入", null);
                     //#else
                     //                                                    if (RealmManager.MyApp.CurrentUser == null) {//玩家還沒登入Firebase，開始進行三方登入
                     //                                                        GoogleAuth();
                     //                                                    } else {//如果玩家本來就有登入Firebase帳戶，代表是從大廳退回主畫面的，此時要登出後再進行三方登入
-                    //                                                        PopupUI_Local.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
+                    //                                                        PopupUI.ShowConfirmCancel(StringJsonData.GetUIString("OverrideGuestAccountCheck"), () => {
                     //                                                            StartCoroutine(FirebaseManager.Logout(() => {//登出
                     //                                                                GoogleAuth();
                     //                                                            }));
@@ -263,7 +261,7 @@ namespace HeroFishing.Main {
         /// 登出帳戶，按下後會登出並顯示回需要登入狀態
         /// </summary>
         public void Logout() {
-            //PopupUI_Local.ShowConfirmCancel(StringData.GetUIString("LogoutAccountCheck"), GameSettingData.GetInt(GameSetting.LogoutCowndownSecs), () => {
+            //PopupUI.ShowConfirmCancel(StringData.GetUIString("LogoutAccountCheck"), GameSettingData.GetInt(GameSetting.LogoutCowndownSecs), () => {
             //    StartCoroutine(FirebaseManager.Logout(() => {//登出
             //        ShowUI(Condietion.BackFromLobby_ShowLoginBtn);
             //    }));
@@ -273,7 +271,7 @@ namespace HeroFishing.Main {
         /// 移除帳戶，按下後會解除所有平台綁定並登出並顯示回需要登入狀態
         /// </summary>
         public void DeleteAccount() {
-            PopupUI_Local.ShowConfirmCancel(StringJsonData.GetUIString("DeleteAccountCheck"), GameSettingJsonData.GetInt(GameSetting.LogoutCowndownSecs), () => {
+            PopupUI.ShowConfirmCancel(StringJsonData.GetUIString("DeleteAccountCheck"), GameSettingJsonData.GetInt(GameSetting.LogoutCowndownSecs), () => {
                 UnlinkAllPlatfromsAndLogout();
             }, null);
         }
@@ -283,44 +281,44 @@ namespace HeroFishing.Main {
         void UnlinkAllPlatfromsAndLogout() {
             //if (FirebaseManager.IsLinkingAnyThirdPart) {
             //    if (FirebaseManager.IsLinkingThrdPart(ThirdPartLink.Facebook)) {//還沒綁定就進行綁定
-            //        PopupUI_Local.ShowLoading(StringData.GetUIString("UnLinkingFB"));
+            //        PopupUI.ShowLoading(StringData.GetUIString("UnLinkingFB"));
             //        FirebaseManager.UnlinkFacebook(result => {
-            //            PopupUI_Local.HideLoading();
+            //            PopupUI.HideLoading();
             //            UnlinkAllPlatfromsAndLogout();
             //        });
             //        return;
             //    }
             //    if (FirebaseManager.IsLinkingThrdPart(ThirdPartLink.Apple)) {//還沒綁定就進行綁定
-            //        PopupUI_Local.ShowLoading(StringData.GetUIString("UnLinkingApple"));
+            //        PopupUI.ShowLoading(StringData.GetUIString("UnLinkingApple"));
             //        FirebaseManager.UnlinkApple(result => {
-            //            PopupUI_Local.HideLoading();
+            //            PopupUI.HideLoading();
             //            UnlinkAllPlatfromsAndLogout();
             //        });
             //        return;
             //    }
             //    if (FirebaseManager.IsLinkingThrdPart(ThirdPartLink.Google)) {//還沒綁定就進行綁定
-            //        PopupUI_Local.ShowLoading(StringData.GetUIString("UnLinkingGoogle"));
+            //        PopupUI.ShowLoading(StringData.GetUIString("UnLinkingGoogle"));
             //        FirebaseManager.UnlinkGoogle(result => {
-            //            PopupUI_Local.HideLoading();
+            //            PopupUI.HideLoading();
             //            UnlinkAllPlatfromsAndLogout();
             //        });
             //        return;
             //    }
             //} else {
-            //    PopupUI_Local.ShowLoading(StringData.GetUIString("Loading"));
+            //    PopupUI.ShowLoading(StringData.GetUIString("Loading"));
             //    StartCoroutine(FirebaseManager.Logout(() => {//登出
-            //        PopupUI_Local.HideLoading();
+            //        PopupUI.HideLoading();
             //        ShowUI(Condietion.BackFromLobby_ShowLoginBtn);
             //        PlayerPrefs.DeleteAll();//清除所有本機資料
             //    }));
             //}
         }
         void FBAuth() {
-            //PopupUI_Local.ShowLoading(string.Format("Loading"));
+            //PopupUI.ShowLoading(string.Format("Loading"));
             //FirebaseManager.SignInWithFacebook(result => {
-            //    PopupUI_Local.HideLoading();
+            //    PopupUI.HideLoading();
             //    if (!result) {
-            //        PopupUI_Local.ShowClickCancel(StringData.GetUIString("SigninFail"), null);
+            //        PopupUI.ShowClickCancel(StringData.GetUIString("SigninFail"), null);
             //    } else {
             //        OnThirdPartAuthFinished(AuthType.Facebook);
             //    }
@@ -328,22 +326,22 @@ namespace HeroFishing.Main {
         }
 
         void AppleAuth() {
-            //PopupUI_Local.ShowLoading(string.Format("Loading"));
+            //PopupUI.ShowLoading(string.Format("Loading"));
             //FirebaseManager.SignInWithApple(result => {
-            //    PopupUI_Local.HideLoading();
+            //    PopupUI.HideLoading();
             //    if (!result) {
-            //        PopupUI_Local.ShowClickCancel(StringData.GetUIString("SigninFail"), null);
+            //        PopupUI.ShowClickCancel(StringData.GetUIString("SigninFail"), null);
             //    } else {
             //        OnThirdPartAuthFinished(AuthType.Apple);
             //    }
             //});
         }
         void GoogleAuth() {
-            //PopupUI_Local.ShowLoading(string.Format("Loading"));
+            //PopupUI.ShowLoading(string.Format("Loading"));
             //FirebaseManager.SignInWithGoogle(result => {
-            //    PopupUI_Local.HideLoading();
+            //    PopupUI.HideLoading();
             //    if (!result) {
-            //        PopupUI_Local.ShowClickCancel(StringData.GetUIString("SigninFail"), null);
+            //        PopupUI.ShowClickCancel(StringData.GetUIString("SigninFail"), null);
             //    } else {
             //        OnThirdPartAuthFinished(AuthType.Google);
             //    }
@@ -366,7 +364,7 @@ namespace HeroFishing.Main {
         }
         public void StartDownloadingAssetAndGoNextScene() {
             ShowUI(Condition.HideAll);
-            StartSceneManager.Instance.StartDownloadingAsset();//進入下一個場景
+            //進入下一個場景
         }
 
 
@@ -375,9 +373,9 @@ namespace HeroFishing.Main {
         /// 使用者條款
         /// </summary>
         public void OnTermsOfUseClick() {
-            //PopupUI_Local.ShowLoading(StringData.GetUIString("Loading"));
+            //PopupUI.ShowLoading(StringData.GetUIString("Loading"));
             //FirebaseManager.GetDataByDocID(ColEnum.GameSetting, "BackendURL", (col, dic) => {
-            //    PopupUI_Local.HideLoading();
+            //    PopupUI.HideLoading();
             //    string backendAddress = dic[BackendURLType.BackendAddress.ToString()].ToString();
             //    string userContractURL = dic[BackendURLType.UserContractURL.ToString()].ToString();
             //    string showUrl = string.Concat(backendAddress, userContractURL);
@@ -391,9 +389,9 @@ namespace HeroFishing.Main {
         /// 隱私權條款
         /// </summary>
         public void OnProtectionPolicyClick() {
-            //PopupUI_Local.ShowLoading(StringData.GetUIString("Loading"));
+            //PopupUI.ShowLoading(StringData.GetUIString("Loading"));
             //FirebaseManager.GetDataByDocID(ColEnum.GameSetting, "BackendURL", (col, dic) => {
-            //    PopupUI_Local.HideLoading();
+            //    PopupUI.HideLoading();
             //    string backendAddress = dic[BackendURLType.BackendAddress.ToString()].ToString();
             //    string protectionPolicyURL = dic[BackendURLType.ProtectionPolicyURL.ToString()].ToString();
             //    string showUrl = string.Concat(backendAddress, protectionPolicyURL);
@@ -409,10 +407,10 @@ namespace HeroFishing.Main {
 
         public void OnQuestReportButtonClick() {
 
-            //PopupUI_Local.ShowLoading(StringData.GetUIString("Loading"));
+            //PopupUI.ShowLoading(StringData.GetUIString("Loading"));
             //string version = Application.version;
             //FirebaseManager.GetDataByDocID(ColEnum.GameSetting, "BackendURL", (col, dic) => {
-            //    PopupUI_Local.HideLoading();
+            //    PopupUI.HideLoading();
             //    string backendAddress = dic[BackendURLType.BackendAddress.ToString()].ToString();
             //    string customerServiceURL = dic[BackendURLType.CustomerServiceURL.ToString()].ToString();
             //    string uid = FirebaseManager.MyUser?.UserId ?? "";

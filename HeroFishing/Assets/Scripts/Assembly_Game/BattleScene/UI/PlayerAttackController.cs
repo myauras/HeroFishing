@@ -28,7 +28,7 @@ namespace HeroFishing.Battle {
             }
         }
 
-        public bool IsSpellTest => BattleSceneManager.Instance != null && BattleSceneManager.Instance.IsSpellTest;
+        [SerializeField] public bool IsSpellTest = false;
 
         private void Update() {
             AttackDetect();

@@ -7,6 +7,9 @@ using System;
 using UnityEngine.Rendering.Universal;
 using LitJson;
 using Cysharp.Threading.Tasks;
+using Service.Realms;
+using HeroFishing.Main;
+using HeroFishing.Socket;
 
 namespace Scoz.Func {
     public enum DataLoad {
@@ -144,8 +147,7 @@ namespace Scoz.Func {
             //建立遊戲資料字典
             GameDictionary.CreateNewInstance();//先初始化字典因為這樣會預先載入本機String表與GameSetting，之後在addressable載入後會取代本來String跟GameSetting
             MyText.RefreshActiveTexts();//刷新文字
-            //建立Popup_Local
-            PopupUI_Local.CreateNewInstance();
+
             //建立影片播放器
             MyVideoPlayer.CreateNewVideoPlayer();
             //建立TestTool
@@ -193,8 +195,7 @@ namespace Scoz.Func {
         /// 4. Callback
         /// </summary>
         public static void StartDownloadAddressable(Action _action) {
-            AddressableManage.Instance.StartLoadAsset(async () =>
-            {
+            AddressableManage.Instance.StartLoadAsset(async () => {
                 //await LoadAssembly();//載入GameDll
                 GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
                     MyText.RefreshActivityTextsAndFunctions();//更新介面的MyTex
@@ -221,11 +222,11 @@ namespace Scoz.Func {
             //載入PopupUI(這個UI東西較多會載較久，所以在載好前會先設定StartUI文字讓玩家不要覺得是卡住)
             if (SceneManager.GetActiveScene().name == MyScene.StartScene.ToString()) {
                 StartSceneUI.Instance?.SetMiddleText(StringJsonData.GetUIString("Login_WaitingForStartScene"));
-                PopupUI_Local.ShowLoading(StringJsonData.GetUIString("Login_WaitingForStartScene"));
+                PopupUI.ShowLoading(StringJsonData.GetUIString("Login_WaitingForStartScene"));
             }
 
             Addressables.LoadAssetAsync<GameObject>(Instance.PopupUIAsset).Completed += handle => {
-                PopupUI_Local.HideLoading();
+                PopupUI.HideLoading();
                 GameObject go = Instantiate(handle.Result);
                 go.transform.localPosition = Vector2.zero;
                 go.transform.localScale = Vector3.one;

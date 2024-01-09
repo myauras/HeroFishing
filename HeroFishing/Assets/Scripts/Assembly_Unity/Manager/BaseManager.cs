@@ -32,6 +32,9 @@ namespace HeroFishing.Main {
         void Init() {
             if (IsInit) return;
             IsInit = true;
+
+            //建立Popup_Local
+            PopupUI_Local.CreateNewInstance();
         }
 
 

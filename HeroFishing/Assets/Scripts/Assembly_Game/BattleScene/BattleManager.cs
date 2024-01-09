@@ -34,7 +34,7 @@ namespace HeroFishing.Battle {
 
         private void InitPlayerHero() {
             if (AllocatedRoom.Instance == null) //測試流程
-                GetHero(0).SetData(BattleSceneManager.Instance.HeroID, BattleSceneManager.Instance.HeroSkin);
+                GetHero(0).SetData(1, "1_1");
             else
                 GetHero(0).SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
         }
