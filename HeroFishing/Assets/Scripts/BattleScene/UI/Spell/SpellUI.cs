@@ -18,6 +18,10 @@ public class SpellUI : BaseUI {
     private Button _cancelBtn;
     [SerializeField]
     private PlayerAttackController _attackController;
+    [SerializeField]
+    private DOAnimationBtn _lockButton;
+    [SerializeField]
+    private DOAnimationBtn _autoButton;
 
     public bool IsSpellTest => BattleSceneManager.Instance != null && BattleSceneManager.Instance.IsSpellTest;
     public int TotalSpellLevel => _spellBtn1.SpellLevel + _spellBtn2.SpellLevel + _spellBtn3.SpellLevel;
@@ -46,6 +50,8 @@ public class SpellUI : BaseUI {
         _hero.OnLevelUp += OnLevelUp;
         _hero.OnSpellCharge += OnCharge;
         _hero.OnSpellPlay += OnPlay;
+
+        _lockButton.OnClick += SetLockAttack;
         OnLevelUp(1);
     }
 
@@ -138,6 +144,10 @@ public class SpellUI : BaseUI {
         if (spellName == SpellName.attack) return;
         var btn = GetSpellBtn(spellName);
         btn.Play();
+    }
+
+    private void SetLockAttack(bool lockAttack) {
+        _attackController.LockAttack = lockAttack;
     }
 
     private bool IsCancelBtnNearby() {

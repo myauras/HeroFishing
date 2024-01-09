@@ -7,6 +7,8 @@ using UnityEngine;
 using static HeroFishing.Battle.SpellIndicator;
 
 public struct SpellPlayData {
+    public bool lockAttack;
+    public int monsterIdx;
     public int attackID;
     public Vector3 attackPos;
     public Vector3 heroPos;

@@ -30,6 +30,7 @@ namespace HeroFishing.Battle {
 
 
         public static BattleSceneManager Instance { get; private set; }
+        public Camera BattleCam { get; private set; }
 
 
         void Start() {
@@ -91,8 +92,8 @@ namespace HeroFishing.Battle {
         /// 將目前攝影機加到CameraManager中，之後方便使用CameraManager的方法
         /// </summary>
         void SetCam() {
-            var camBrain = GameObject.FindGameObjectWithTag("SceneCam").GetComponent<Camera>().GetComponent<Cinemachine.CinemachineBrain>();
-            if (camBrain == null) return;
+            BattleCam = GameObject.FindGameObjectWithTag("SceneCam").GetComponent<Camera>();
+            if (!BattleCam.TryGetComponent<Cinemachine.CinemachineBrain>(out var camBrain)) return;
             CamManager.SetCam(camBrain);
             var vCam = camBrain.ActiveVirtualCamera as Cinemachine.CinemachineVirtualCamera;
             CamManager.AddVirtualCam(CamManager.CamNames.Battle, vCam);

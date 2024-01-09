@@ -10,6 +10,10 @@ namespace HeroFishing.Battle {
     public class PlayerAttackController : MonoBehaviour {
         [SerializeField]
         private bool _lockAttack = false;
+        public bool LockAttack {
+            get => _isAttack;
+            set => _lockAttack = value;
+        }
 
         private bool _isSkillMode = false;
         //Vector3 OriginPos;
@@ -23,6 +27,7 @@ namespace HeroFishing.Battle {
         private float _scheduledNextAttackTime;
         private float _scheduledRecoverTime;
         private bool _isAttack;
+        private int _targetMonsterIdx;
 
         private const float MOVE_SCALE_FACTOR = 2;
         private const float ATTACK_BUFFER_TIME = 0.2f;
@@ -60,11 +65,18 @@ namespace HeroFishing.Battle {
             if (Time.time < _scheduledNextAttackTime) return;
             _isAttack = false;
             _scheduledNextAttackTime = Time.time + _spellData.CD;
+            if (_lockAttack) {
+                var ray = BattleSceneManager.Instance.BattleCam.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out var hitInfo, 100, LayerMask.GetMask("Monster"), QueryTriggerInteraction.Ignore)) {
+                    _targetMonsterIdx = hitInfo.collider.GetComponentInParent<Monster>().MonsterIdx;
+                }
+            }
             //攻擊方向
             var pos = UIPosition.GetMouseWorldPointOnYZero(0);
+
             var dir = (pos - _hero.transform.position).normalized;
             //設定技能
-            OnSetSpell(_hero.transform.position, dir);
+            OnSetSpell(pos, dir);
         }
 
         private void AttackRecover() {
@@ -142,6 +154,8 @@ namespace HeroFishing.Battle {
             if (_spellData.Spell == null) return;
             var spell = _spellData.Spell;
             spell.Play(new SpellPlayData {
+                lockAttack = _lockAttack,
+                monsterIdx = _targetMonsterIdx,
                 attackID = _attackID,
                 attackPos = _attackPos,
                 heroPos = _hero.transform.position,

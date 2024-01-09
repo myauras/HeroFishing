@@ -186,6 +186,11 @@ public struct AreaCollisionData : IComponentData {
     public MonsterValue IgnoreMonster;
 }
 
+public struct LockMonsterData : IComponentData {
+    public int MonsterIdx;
+    public SpellBulletData BulletData;
+}
+
 [InternalBufferCapacity(16)]
 public struct MonsterBuffer : IBufferElementData, IComparable<MonsterBuffer> {
     public MonsterValue Monster;
