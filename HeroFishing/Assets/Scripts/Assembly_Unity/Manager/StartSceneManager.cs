@@ -34,7 +34,10 @@ namespace HeroFishing.Main {
         void OnConnected() {
             PopupUI_Local.HideLoading();
             PopupUI_Local.ShowLoading("Init Data");
-            StartDownloadingAsset(); //開始載包
+            BaseManager.CreateNewInstance();//建立BaseManager
+            BaseManager.Instance.StartDownloadAddressable(() => {
+
+            });
         }
 
 
@@ -47,16 +50,6 @@ namespace HeroFishing.Main {
         }
 
 
-        /// <summary>
-        /// 1. 開始下載資源包
-        /// 2. 載完後顯示準備開始遊戲文字
-        /// 3. 切至下一個場景
-        /// </summary>
-        public void StartDownloadingAsset() {
-            //GameManager.StartDownloadAddressable(() => {//下載完資源包後執行
-            //    SpawnAddressableAssets();
-            //});
-        }
         /// <summary>
         /// 載入UI
         /// </summary>

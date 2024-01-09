@@ -41,6 +41,7 @@ namespace HeroFishing.Main {
         public void StartDownloadAddressable(Action _action) {
             AddressableManage.Instance.StartLoadAsset(() => {
                 AddressablesLoader.GetAssetRef<GameObject>(GameManagerAsset, go => {
+                    WriteLog.LogError("下載好GameManagerAsset");
                 });
             });
         }
