@@ -60,9 +60,9 @@ namespace HeroFishing.Battle {
 
 #if UNITY_EDITOR
                     monster.name = monsterData.Ref;
-                    //monsterGO.hideFlags |= HideFlags.HideAndDontSave;
+                    //monster.hideFlags |= HideFlags.HideAndDontSave;
 #else
-                monsterGO.hideFlags |= HideFlags.HideAndDontSave;
+                monster.hideFlags |= HideFlags.HideAndDontSave;
 #endif
 
                     var monsterEntity = state.EntityManager.CreateEntity();
