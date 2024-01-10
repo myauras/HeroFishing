@@ -27,7 +27,14 @@ namespace HeroFishing.Battle {
         private float _scheduledNextAttackTime;
         private float _scheduledRecoverTime;
         private bool _isAttack;
-        private int _targetMonsterIdx;
+        private Monster _targetMonster;
+        public bool CanAttack {
+            get {
+                if(_lockAttack && _targetMonster != null)
+                    return _targetMonster.IsAlive;
+                return _isAttack;
+            }
+        }
 
         private const float MOVE_SCALE_FACTOR = 2;
         private const float ATTACK_BUFFER_TIME = 0.2f;
@@ -54,23 +61,29 @@ namespace HeroFishing.Battle {
             if (ControlLock) return;
             if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
-            if (!CheckSpell(SpellName.attack)) return;
-            _isAttack = true;
-            //if (!IsSpellTest) return;
-            _scheduledRecoverTime = Time.time + ATTACK_BUFFER_TIME;
-        }
 
-        private void Attack() {
-            if (!_isAttack) return;
-            if (Time.time < _scheduledNextAttackTime) return;
-            _isAttack = false;
-            _scheduledNextAttackTime = Time.time + _spellData.CD;
             if (_lockAttack) {
                 var ray = BattleSceneManager.Instance.BattleCam.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hitInfo, 100, LayerMask.GetMask("Monster"), QueryTriggerInteraction.Ignore)) {
-                    _targetMonsterIdx = hitInfo.collider.GetComponentInParent<Monster>().MonsterIdx;
+                    var monster = hitInfo.collider.GetComponentInParent<Monster>();
+                    if (monster.IsAlive) {
+                        _targetMonster = monster;
+                        monster.Lock(true);
+                    }
                 }
             }
+            else {
+                _isAttack = true;
+                _scheduledRecoverTime = Time.time + ATTACK_BUFFER_TIME;
+            }
+        }
+
+        private void Attack() {
+            if (!CanAttack) return;
+            if (Time.time < _scheduledNextAttackTime) return;
+            if (!CheckSpell(SpellName.attack)) return;
+            _isAttack = false;
+            _scheduledNextAttackTime = Time.time + _spellData.CD;
             //攻擊方向
             var pos = UIPosition.GetMouseWorldPointOnYZero(0);
 
@@ -80,7 +93,7 @@ namespace HeroFishing.Battle {
         }
 
         private void AttackRecover() {
-            if (!_isAttack) return;
+            if (!CanAttack) return;
             if (Time.time < _scheduledRecoverTime) return;
             _isAttack = false;
         }
@@ -155,7 +168,7 @@ namespace HeroFishing.Battle {
             var spell = _spellData.Spell;
             spell.Play(new SpellPlayData {
                 lockAttack = _lockAttack,
-                monsterIdx = _targetMonsterIdx,
+                monsterIdx = _targetMonster != null ? _targetMonster.MonsterIdx : -1,
                 attackID = _attackID,
                 attackPos = _attackPos,
                 heroPos = _hero.transform.position,

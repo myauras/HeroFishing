@@ -3,6 +3,7 @@ using System.Security.Principal;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace HeroFishing.Battle {
     public partial struct MonsterBehaviourSystem : ISystem {
@@ -71,12 +72,14 @@ namespace HeroFishing.Battle {
                 if (PosInGridBoundary(gridData, gridPosition)) {
                     gridData.GridMap.Add(gridPosition, monsterValue.ValueRW);
                     monsterValue.ValueRW.InField = true;
+                    monsterInstance.MyMonster.InField = true;
                 }
                 //將邊界外的怪物加入移除標籤
                 if (!PosInRemoveMonsterBoundary(boundaryData, monsterValue.ValueRO.Pos)) {
                     if (monsterValue.ValueRW.InField == true) {
                         //已經進入過區域的怪物離開區域才會被移除
                         monsterValue.ValueRW.InField = false;
+                        monsterInstance.MyMonster.InField = false;
                         ECB.AddComponent(monsterValue.ValueRW.MyEntity, new AutoDestroyTag { LifeTime = 1, ExistTime = 0 });
                     }
                 }
