@@ -5,15 +5,12 @@ using UnityEngine.EventSystems;
 using HeroFishing.Main;
 using Unity.Mathematics;
 using HeroFishing.Socket;
+using HeroFishing.Socket.Matchgame;
 
 namespace HeroFishing.Battle {
     public class PlayerAttackController : MonoBehaviour {
         [SerializeField]
         private bool _lockAttack = false;
-        public bool LockAttack {
-            get => _isAttack;
-            set => _lockAttack = value;
-        }
 
         private bool _isSkillMode = false;
         //Vector3 OriginPos;
@@ -26,11 +23,12 @@ namespace HeroFishing.Battle {
         private int _attackID = 0;
         private float _scheduledNextAttackTime;
         private float _scheduledRecoverTime;
+        private float _scheduledLockTime;
         private bool _isAttack;
         private Monster _targetMonster;
         public bool CanAttack {
             get {
-                if(_lockAttack && _targetMonster != null)
+                if (_lockAttack && _targetMonster != null)
                     return _targetMonster.IsAlive;
                 return _isAttack;
             }
@@ -38,6 +36,7 @@ namespace HeroFishing.Battle {
 
         private const float MOVE_SCALE_FACTOR = 2;
         private const float ATTACK_BUFFER_TIME = 0.2f;
+        private const float ATTACK_LOCK_TIME = 0.5f;
         public bool ControlLock {
             get {
                 return _currentMove != null && _currentMove.IsMoving;
@@ -48,6 +47,7 @@ namespace HeroFishing.Battle {
 
         private void Update() {
             AttackInput();
+            AttackLock();
             Attack();
             AttackRecover();
         }
@@ -62,19 +62,38 @@ namespace HeroFishing.Battle {
             if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
 
-            if (_lockAttack) {
+            _isAttack = true;
+            _scheduledRecoverTime = Time.time + ATTACK_BUFFER_TIME;
+        }
+
+        private void AttackLock() {
+            if (ControlLock) return;
+            if (_isSkillMode) return;
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
+            if (_targetMonster == null || !_targetMonster.IsAlive) {
+                _lockAttack = false;
+                _targetMonster = null;
+            }
+
+            if (Input.GetMouseButtonDown(0)) {
                 var ray = BattleSceneManager.Instance.BattleCam.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hitInfo, 100, LayerMask.GetMask("Monster"), QueryTriggerInteraction.Ignore)) {
                     var monster = hitInfo.collider.GetComponentInParent<Monster>();
                     if (monster.IsAlive) {
                         _targetMonster = monster;
-                        monster.Lock(true);
                     }
+                    _scheduledLockTime = Time.time + ATTACK_LOCK_TIME;
                 }
             }
-            else {
-                _isAttack = true;
-                _scheduledRecoverTime = Time.time + ATTACK_BUFFER_TIME;
+
+            if (_targetMonster != null) {
+                if (Input.GetMouseButtonUp(0) && Time.time <= _scheduledLockTime)
+                    _targetMonster = null;
+                else if (!_lockAttack && Time.time > _scheduledLockTime) {
+                    _lockAttack = true;
+                    _targetMonster.Lock(true);
+                }
             }
         }
 
@@ -168,7 +187,7 @@ namespace HeroFishing.Battle {
             var spell = _spellData.Spell;
             spell.Play(new SpellPlayData {
                 lockAttack = _lockAttack,
-                monsterIdx = _targetMonster != null ? _targetMonster.MonsterIdx : -1,
+                monsterIdx = _targetMonster != null && _lockAttack ? _targetMonster.MonsterIdx : -1,
                 attackID = _attackID,
                 attackPos = _attackPos,
                 heroPos = _hero.transform.position,
