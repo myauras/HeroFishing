@@ -36,7 +36,7 @@ namespace HeroFishing.Battle {
 
         private const float MOVE_SCALE_FACTOR = 2;
         private const float ATTACK_BUFFER_TIME = 0.2f;
-        private const float ATTACK_LOCK_TIME = 0.5f;
+        private const float ATTACK_LOCK_TIME = 1.5f;
         public bool ControlLock {
             get {
                 return _currentMove != null && _currentMove.IsMoving;
@@ -64,6 +64,12 @@ namespace HeroFishing.Battle {
 
             _isAttack = true;
             _scheduledRecoverTime = Time.time + ATTACK_BUFFER_TIME;
+
+            if (_lockAttack) {
+                _lockAttack = false;
+                _targetMonster.Lock(false);
+                _targetMonster = null;
+            }
         }
 
         private void AttackLock() {
