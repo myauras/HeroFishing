@@ -65,6 +65,7 @@ namespace HeroFishing.Battle {
             _isAttack = true;
             _scheduledRecoverTime = Time.time + ATTACK_BUFFER_TIME;
 
+            // 如果在鎖定狀態，解除鎖定狀態
             if (_lockAttack) {
                 _lockAttack = false;
                 _targetMonster.Lock(false);
@@ -77,11 +78,13 @@ namespace HeroFishing.Battle {
             if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
 
+            // 如果怪物死亡或不存在，解除鎖定狀態
             if (_targetMonster == null || !_targetMonster.IsAlive) {
                 _lockAttack = false;
                 _targetMonster = null;
             }
 
+            // 按下的時候檢查是否有抓到怪物，如果有的話就開始計時
             if (Input.GetMouseButtonDown(0)) {
                 var ray = BattleSceneManager.Instance.BattleCam.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hitInfo, 100, LayerMask.GetMask("Monster"), QueryTriggerInteraction.Ignore)) {
@@ -93,9 +96,12 @@ namespace HeroFishing.Battle {
                 }
             }
 
+            // 確認有按到怪物，判斷是否真的進入鎖定狀態
             if (_targetMonster != null) {
+                // 時間內放開，將怪物清空
                 if (Input.GetMouseButtonUp(0) && Time.time <= _scheduledLockTime)
                     _targetMonster = null;
+                // 超過指定時間，真的鎖定
                 else if (!_lockAttack && Time.time > _scheduledLockTime) {
                     _lockAttack = true;
                     _targetMonster.Lock(true);
