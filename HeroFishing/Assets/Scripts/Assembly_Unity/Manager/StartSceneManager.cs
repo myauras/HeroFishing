@@ -23,7 +23,7 @@ namespace HeroFishing.Main {
 
             Instance = this;
             //建立遊戲管理者
-            //GameManager.CreateNewInstance();
+            BaseManager.CreateNewInstance();
             //檢查網路
             PopupUI_Local.ShowLoading("Checking Internet");
             InternetChecker.StartCheckInternet(OnConnected);
@@ -34,9 +34,8 @@ namespace HeroFishing.Main {
         void OnConnected() {
             PopupUI_Local.HideLoading();
             PopupUI_Local.ShowLoading("Init Data");
-            BaseManager.CreateNewInstance();//建立BaseManager
             BaseManager.Instance.StartDownloadAddressable(() => {
-
+                SpawnAddressableAssets();
             });
         }
 

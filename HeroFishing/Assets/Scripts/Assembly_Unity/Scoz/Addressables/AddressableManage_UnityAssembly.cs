@@ -18,8 +18,8 @@ using Cysharp.Threading.Tasks;
 namespace Scoz.Func {
 
     [Serializable]
-    public sealed class AddressableManage : MonoBehaviour {
-        public static AddressableManage Instance;
+    public sealed class AddressableManage_UnityAssembly : MonoBehaviour {
+        public static AddressableManage_UnityAssembly Instance;
 
         public List<string> Keys = null;
         [SerializeField] Image ProgressImg = null;
@@ -58,13 +58,13 @@ namespace Scoz.Func {
         }
 
 
-        public static AddressableManage CreateNewAddressableManage() {
+        public static AddressableManage_UnityAssembly CreateNewAddressableManage() {
             if (Instance != null) {
             } else {
                 GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/AddressableManage");
                 GameObject go = Instantiate(prefab);
                 go.name = "AddressableManage";
-                Instance = go.GetComponent<AddressableManage>();
+                Instance = go.GetComponent<AddressableManage_UnityAssembly>();
                 DontDestroyOnLoad(Instance.gameObject);
             }
             return Instance;

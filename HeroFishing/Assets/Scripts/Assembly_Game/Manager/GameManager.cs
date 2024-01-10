@@ -85,11 +85,7 @@ namespace Scoz.Func {
             return Instance;
         }
 
-        public void SetJsonMapper() {
-            JsonMapper.RegisterImporter<int, long>((int value) => {
-                return (long)value;
-            });
-        }
+
 
         public void SetTime(DateTimeOffset _serverTime) {
             LastServerTime = _serverTime;
@@ -111,8 +107,6 @@ namespace Scoz.Func {
             Application.targetFrameRate = TargetFPS;
 #endif
             RealmManager.NewApp();//初始化Realm
-            //設定LiteJson的JsonMapper
-            SetJsonMapper();
             //產生一個新玩家
             new GamePlayer();
             //建立FirebaseManager

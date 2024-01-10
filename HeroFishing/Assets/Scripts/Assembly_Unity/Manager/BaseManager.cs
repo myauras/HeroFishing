@@ -1,4 +1,5 @@
 using DG.Tweening.Core.Easing;
+using LitJson;
 using Scoz.Func;
 using System;
 using System.Collections;
@@ -33,18 +34,31 @@ namespace HeroFishing.Main {
             if (IsInit) return;
             IsInit = true;
 
+            DontDestroyOnLoad(gameObject);
+            //設定LiteJson的JsonMapper
+            SetJsonMapper();
             //建立Popup_Local
             PopupUI_Local.CreateNewInstance();
+            //建立InternetChecker
+            gameObject.AddComponent<InternetChecker>().Init();
+            //建立CoroutineJob
+            gameObject.AddComponent<CoroutineJob>();
+            //建立AddressableManage
+            AddressableManage_UnityAssembly.CreateNewAddressableManage();
         }
 
+        public void SetJsonMapper() {
+            JsonMapper.RegisterImporter<int, long>((int value) => {
+                return (long)value;
+            });
+        }
 
         /// <summary>
         /// 下載Buindle, 下載好後之後都由GameAssembly的GameManager處理
         /// </summary>
         public void StartDownloadAddressable(Action _action) {
-            AddressableManage.Instance.StartLoadAsset(() => {
+            AddressableManage_UnityAssembly.Instance.StartLoadAsset(() => {
                 AddressablesLoader.GetAssetRef<GameObject>(GameManagerAsset, go => {
-                    WriteLog.LogError("下載好GameManagerAsset");
                 });
             });
         }
