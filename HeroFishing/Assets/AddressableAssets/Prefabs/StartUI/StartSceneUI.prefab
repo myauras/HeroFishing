@@ -1019,7 +1019,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 58, y: 15.249878}
-  m_SizeDelta: {x: -80, y: -15.500001}
+  m_SizeDelta: {x: -176, y: -15.500001}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &6231377435532460780
 CanvasRenderer:
@@ -2193,6 +2193,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c748a0ab34fe7b40bee934789abeb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TermsOfUseToggle: {fileID: 3518248746780259087}
+  VersionText: {fileID: 4397516801927740189}
+  GuestLoginBtn: {fileID: 1174850165814775460}
+  ThirdpartBtns: {fileID: 8610602106666554837}
+  AppleLoginGO: {fileID: 9064360271931399565}
+  LogutoutGO: {fileID: 9018726479126173688}
+  DeleteACGO: {fileID: 7561820680393411525}
+  BackToLobbyGO: {fileID: 3046200243490006148}
+  TestTool: {fileID: 0}
+  MiddleText: {fileID: 8267706490167459949}
+  QuestReportButton: {fileID: 4921233771354091729}
 --- !u!1 &7486481120031003068
 GameObject:
   m_ObjectHideFlags: 0
@@ -2227,7 +2238,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -642.1}
+  m_AnchoredPosition: {x: 50, y: -439.6}
   m_SizeDelta: {x: 560, y: 87}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3518248746780259087

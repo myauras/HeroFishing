@@ -30,11 +30,11 @@ namespace Scoz.Func {
         Action FinishedAction = null;
 
         static HashSet<AsyncOperationHandle> ResourcesToReleaseWhileChangingScene = new HashSet<AsyncOperationHandle>();//加入到此清單的資源Handle會在切場景時一起釋放
-        void Awake() {
+        public void Init() {
+            Instance = this;
+            DontDestroyOnLoad(Instance.gameObject);
             BG.SetActive(false);
             ShowDownloadUI(false);
-        }
-        void Start() {
             SceneManager.sceneLoaded += OnLevelFinishedLoading;
         }
 
@@ -58,17 +58,6 @@ namespace Scoz.Func {
         }
 
 
-        public static AddressableManage CreateNewAddressableManage() {
-            if (Instance != null) {
-            } else {
-                GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/AddressableManage");
-                GameObject go = Instantiate(prefab);
-                go.name = "AddressableManage";
-                Instance = go.GetComponent<AddressableManage>();
-                DontDestroyOnLoad(Instance.gameObject);
-            }
-            return Instance;
-        }
         IEnumerator ClearAllCache(Action _cb) {
             /*沒辦法清 常常會報錯 但偶爾又不會
             AsyncOperationHandle handler = Addressables.ClearDependencyCacheAsync(Keys, false);

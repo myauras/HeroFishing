@@ -10,6 +10,7 @@ using Cysharp.Threading.Tasks;
 using Service.Realms;
 using HeroFishing.Main;
 using HeroFishing.Socket;
+using Unity.Entities;
 
 namespace Scoz.Func {
     public enum DataLoad {
@@ -23,6 +24,7 @@ namespace Scoz.Func {
         public AssetReference PopupUIAsset;
         public AssetReference ResourcePreSetterAsset;
         public AssetReference PostPocessingAsset;
+        public AssetReference AddressableManageAsset;
         public int TargetFPS = 60;
         public static EnvVersion CurVersion {//取得目前版本
             get {
@@ -68,6 +70,11 @@ namespace Scoz.Func {
             if (!CDChecker.DoneCD("UnloadUnusedAssets", GameSettingJsonData.GetFloat(GameSetting.UnloadUnusedAssetsCD)))
                 return;
             Resources.UnloadUnusedAssets();
+        }
+
+        private void Start() {
+            Instance = this;
+            Instance.Init();
         }
 
 
@@ -151,13 +158,19 @@ namespace Scoz.Func {
             //建立AudioPlayer    
             AudioPlayer.CreateNewAudioPlayer();
             //建立AddressableManage
-            AddressableManage.CreateNewAddressableManage();
+            CreateAddressableManager();
             //建立PoolManager
             PoolManager.CreateNewInstance();
 
             //※設定本機資料要放最後(要在取得本機GameSetting後以及AudioPlayer.CreateNewAudioPlayer之後
             GamePlayer.Instance.LoadLocoData();
+
+            Debug.LogError("開始載包");
+            // 開始載包
+            StartDownloadAddressable(null);
         }
+
+
 
         public void OnAuthFinished(AuthType _authType) {
             // 初始化AppsFlyer
@@ -190,7 +203,8 @@ namespace Scoz.Func {
         /// </summary>
         public static void StartDownloadAddressable(Action _action) {
             AddressableManage.Instance.StartLoadAsset(async () => {
-                //await LoadAssembly();//載入GameDll
+                Debug.LogError("載包完成");
+                await LoadAssembly();//載入GameDll
                 GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
                     MyText.RefreshActivityTextsAndFunctions();//更新介面的MyTex
                     Instance.CreateResourcePreSetter();//載入ResourcePreSetter
@@ -204,12 +218,11 @@ namespace Scoz.Func {
         /// 載入GameDll
         /// </summary>
         static async UniTask LoadAssembly() {
-            WriteLog.LogColorFormat("開始載入熱更Dll", WriteLog.LogType.Addressable);
+            WriteLog.LogColorFormat("開始載入Game Assembly", WriteLog.LogType.Addressable);
             var result = await AddressablesLoader.GetResourceByFullPath_Async<TextAsset>("Assets/AddressableAssets/Dlls/Game.dll.bytes");
             TextAsset dll = result.Item1;
-            //AsyncOperationHandle handle = result.Item2;<-要釋放嗎?
             var gameAssembly = System.Reflection.Assembly.Load(dll.bytes);
-            WriteLog.LogColorFormat("載入熱更Dll完成", WriteLog.LogType.Addressable);
+            WriteLog.LogColorFormat("載入Game Assembly完成", WriteLog.LogType.Addressable);
         }
 
         public void CreateAddressableUIs(Action _ac) {
@@ -243,6 +256,15 @@ namespace Scoz.Func {
             };
         }
 
+        public void CreateAddressableManager() {
+            Addressables.LoadAssetAsync<GameObject>(Instance.ResourcePreSetterAsset).Completed += handle => {
+                GameObject go = Instantiate(handle.Result);
+                go.name = "AddressableManage";
+                var am = go.GetComponent<AddressableManage>();
+                am.Init();
+
+            };
+        }
 
         public void CreateResourcePreSetter() {
             Addressables.LoadAssetAsync<GameObject>(Instance.ResourcePreSetterAsset).Completed += handle => {

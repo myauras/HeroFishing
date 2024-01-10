@@ -126,8 +126,8 @@ namespace HeroFishing.Main {
         }
         public void OnVibrationChange() {
             GamePlayer.Instance.SetVibration(VibrationToggle.isOn);
-            if (VibrationToggle.isOn)
-                Vibrator.Vibrate(GameSettingJsonData.GetInt(GameSetting.VibrationOnVibrationMilliSecs));
+            //if (VibrationToggle.isOn)
+            //    Vibrator.Vibrate(GameSettingJsonData.GetInt(GameSetting.VibrationOnVibrationMilliSecs));
         }
 
         public void OnLanguageSelectClick() {

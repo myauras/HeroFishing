@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Scoz.Func;
 using LitJson;
-using UnityEditor.Experimental.GraphView;
 
 namespace HeroFishing.Main {
     public class DropJsonData : MyJsonData {

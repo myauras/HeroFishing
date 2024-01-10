@@ -361,7 +361,7 @@ namespace Scoz.Func {
                 return;
             if (!CanShowEvent)
                 return;
-            Vibrator.Vibrate(GameSettingJsonData.GetInt(GameSetting.PopupEventVibrationMilliSecs));//手機震動
+            //Vibrator.Vibrate(GameSettingJsonData.GetInt(GameSetting.PopupEventVibrationMilliSecs));//手機震動
             PopupEventItem item = Instance.GetAvailableItem();
             if (item == null)
                 item = Instance.SpawnNewItem();
@@ -372,7 +372,7 @@ namespace Scoz.Func {
                 return;
             if (!CanShowEvent)
                 return;
-            Vibrator.Vibrate(GameSettingJsonData.GetInt(GameSetting.PopupEventVibrationMilliSecs));//手機震動
+            //Vibrator.Vibrate(GameSettingJsonData.GetInt(GameSetting.PopupEventVibrationMilliSecs));//手機震動
             PopupEventItem item = Instance.GetAvailableItem();
             if (item == null)
                 item = Instance.SpawnNewItem();

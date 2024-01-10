@@ -1,15 +1,9 @@
-using DG.Tweening.Core.Easing;
 using LitJson;
 using Scoz.Func;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.Video;
 
 namespace HeroFishing.Main {
     public class BaseManager : MonoBehaviour {
@@ -59,6 +53,7 @@ namespace HeroFishing.Main {
         public void StartDownloadAddressable(Action _action) {
             AddressableManage_UnityAssembly.Instance.StartLoadAsset(() => {
                 AddressablesLoader_UnityAssebly.GetAssetRef<GameObject>(GameManagerAsset, go => {
+                    _action?.Invoke();
                 });
             });
         }

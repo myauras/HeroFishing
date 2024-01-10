@@ -135,7 +135,13 @@ namespace Scoz.Func {
         /// </summary>
         public static string GetUIString(string _id) {
             _id = "UI_" + _id;
-            return GetString_static(_id, GamePlayer.Instance.UsingLanguage.ToString());
+            if (GamePlayer.Instance != null)
+                return GetString_static(_id, GamePlayer.Instance.UsingLanguage.ToString());
+            else {
+                string defaultLangualge = GameSettingJsonData.GetStr(GameSetting.DefaultLanguage);
+                Debug.Log("defaultLangualge=" + defaultLangualge);
+                return GetString_static(_id, defaultLangualge);
+            }
         }
 
         /// <summary>
