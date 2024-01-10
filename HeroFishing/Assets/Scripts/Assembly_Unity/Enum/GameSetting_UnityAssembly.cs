@@ -1,4 +1,4 @@
-public enum GameSetting
+public enum GameSetting_UnityAssembly
 {
 	DefaultLanguage,
 	DefaultMusic,

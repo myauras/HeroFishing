@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Scoz.Func
 {
-    public static class Vector
+    public static class Vector_UnityAssembly
     {
         public static Vector3 GetCenterOfVectors(params Vector3[] vectors)
         {
@@ -38,11 +38,11 @@ namespace Scoz.Func
         }
         public static Vector2 GetRandomPosInCircleCol2D(CircleCollider2D _col)
         {
-            return Circle.GetRandomPosInCircle(_col.transform.position, _col.radius);
+            return Circle_UnityAssembly.GetRandomPosInCircle(_col.transform.position, _col.radius);
         }
         public static Vector2 GetRandomPosOnCircleCol2D(CircleCollider2D _col)
         {
-            return Circle.GetRandomPosOmCircle(_col.transform.position, _col.radius);
+            return Circle_UnityAssembly.GetRandomPosOmCircle(_col.transform.position, _col.radius);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Scoz.Editor {
         }
 
         protected override TResult DoBuild<TResult>(AddressablesDataBuilderInput builderInput, AddressableAssetsBuildContext aaContext) {
-            WriteLog.Log("Build Bund Version : " + VersionSetting.AppLargeVersion);
+            WriteLog_UnityAssembly.Log("Build Bund Version : " + VersionSetting.AppLargeVersion);
             return base.DoBuild<TResult>(builderInput, aaContext);
         }
     }

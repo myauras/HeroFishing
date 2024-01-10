@@ -9,7 +9,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 
 namespace Scoz.Func {
-    public sealed class AddressablesLoader {
+    public sealed class AddressablesLoader_UnityAssebly {
         public static void GetAssetRef<T>(AssetReference _ref, Action<T> _cb) {
             Addressables.LoadAssetAsync<T>(_ref).Completed += handle => {
 
@@ -47,7 +47,7 @@ namespace Scoz.Func {
         public static void GetPrefabByRef(AssetReference _ref, Action<GameObject, AsyncOperationHandle> _cb, Action _notExistCB = null) {
             if (!_ref.RuntimeKeyIsValid()) {
 #if UNITY_EDITOR
-                WriteLog.LogError("不合法的Prefab AssetReference:" + _ref.editorAsset.name);
+                WriteLog_UnityAssembly.LogError("不合法的Prefab AssetReference:" + _ref.editorAsset.name);
 #endif
                 return;
             }
@@ -60,17 +60,17 @@ namespace Scoz.Func {
                                     _cb?.Invoke(handle.Result, handle);
                                     break;
                                 default:
-                                    WriteLog.LogErrorFormat("載入失敗: " + _ref);
+                                    WriteLog_UnityAssembly.LogErrorFormat("載入失敗: " + _ref);
                                     _notExistCB?.Invoke();
                                     break;
                             }
                         };
                     } else {
-                        WriteLog.LogErrorFormat("找不到Prefab: " + _ref);
+                        WriteLog_UnityAssembly.LogErrorFormat("找不到Prefab: " + _ref);
                         _notExistCB?.Invoke();
                     }
                 } else {
-                    WriteLog.LogErrorFormat("找不到Prefab:" + _ref);
+                    WriteLog_UnityAssembly.LogErrorFormat("找不到Prefab:" + _ref);
                     _notExistCB?.Invoke();
                 }
             };
@@ -252,11 +252,11 @@ namespace Scoz.Func {
                             }
                         };
                     } else {
-                        WriteLog.LogErrorFormat("找不到Texture: " + _path);
+                        WriteLog_UnityAssembly.LogErrorFormat("找不到Texture: " + _path);
                         _notExistCB?.Invoke();
                     }
                 } else {
-                    WriteLog.LogErrorFormat("找不到Texture:" + _path);
+                    WriteLog_UnityAssembly.LogErrorFormat("找不到Texture:" + _path);
                     _notExistCB?.Invoke();
                 }
             };
@@ -281,11 +281,11 @@ namespace Scoz.Func {
                             }
                         };
                     } else {
-                        WriteLog.LogErrorFormat("找不到Texture: " + _path);
+                        WriteLog_UnityAssembly.LogErrorFormat("找不到Texture: " + _path);
                         _notExistCB?.Invoke();
                     }
                 } else {
-                    WriteLog.LogErrorFormat("找不到Texture:" + _path);
+                    WriteLog_UnityAssembly.LogErrorFormat("找不到Texture:" + _path);
                     _notExistCB?.Invoke();
                 }
             };
@@ -310,11 +310,11 @@ namespace Scoz.Func {
                             }
                         };
                     } else {
-                        WriteLog.LogErrorFormat("找不到Prefab: " + _path);
+                        WriteLog_UnityAssembly.LogErrorFormat("找不到Prefab: " + _path);
                         _notExistCB?.Invoke();
                     }
                 } else {
-                    WriteLog.LogErrorFormat("找不到Prefab:" + _path);
+                    WriteLog_UnityAssembly.LogErrorFormat("找不到Prefab:" + _path);
                     _notExistCB?.Invoke();
                 }
             };

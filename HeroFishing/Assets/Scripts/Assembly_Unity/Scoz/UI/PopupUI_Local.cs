@@ -57,7 +57,7 @@ namespace Scoz.Func {
             InitClickCamcel();
             InitConfirmCancel();
             //DontDestroyOnLoad(gameObject);
-            WriteLog.Log("初始化PopupUI_Local");
+            WriteLog_UnityAssembly.Log("初始化PopupUI_Local");
         }
 
 
@@ -82,9 +82,9 @@ namespace Scoz.Func {
             Instance.LoadingText.text = _text;
 
 
-            CoroutineJob.Instance.StopCoroutine(LoadingCoroutineID);
+            CoroutineJob_UnityAssembly.Instance.StopCoroutine(LoadingCoroutineID);
             if (_maxLoadingTime > 0) {
-                LoadingCoroutineID = CoroutineJob.Instance.StartNewAction(() => {
+                LoadingCoroutineID = CoroutineJob_UnityAssembly.Instance.StartNewAction(() => {
                     //ShowClickCancel(StringData.GetUIString("ConnectTimeout"), null);
                     HideLoading();
                 }, _maxLoadingTime);
@@ -93,7 +93,7 @@ namespace Scoz.Func {
         public static void HideLoading() {
             if (!Instance)
                 return;
-            CoroutineJob.Instance.StopCoroutine(LoadingCoroutineID);
+            CoroutineJob_UnityAssembly.Instance.StopCoroutine(LoadingCoroutineID);
             Instance.LoadingGo.SetActive(false);
         }
 
@@ -146,7 +146,7 @@ namespace Scoz.Func {
         Action<object> ConfirmCancelAction_Cancel_WithParam = null;
         object ConfirmCancel_ConfirmParam;
         object ConfirmCancel_CancelParam;
-        MyTimer ConfirmCancel_ConfirmBtnTimer;
+        MyTimer_UnityAssembly ConfirmCancel_ConfirmBtnTimer;
         int ConfirmCanClickCoundownSecs;
         void InitConfirmCancel() {
             ConfirmCancelGo.SetActive(false);
@@ -163,8 +163,8 @@ namespace Scoz.Func {
             Instance.ConfirmCancelAction_Cancel = _cancelAction;
             Instance.ConfirmCancelAction_Click_WithParam = null;
             Instance.ConfirmCancelAction_Cancel_WithParam = null;
-            Instance.ConfirmCancel_ConfirmBtnText.text = StringJsonData.GetUIString("Confirm");
-            Instance.ConfirmCancel_CancelBtnText.text = StringJsonData.GetUIString("Cancel");
+            Instance.ConfirmCancel_ConfirmBtnText.text = StringJsonData_UnityAssembly.GetUIString("Confirm");
+            Instance.ConfirmCancel_CancelBtnText.text = StringJsonData_UnityAssembly.GetUIString("Cancel");
             Instance.ConfirmCancel_ConfirmBtnTimer = null;
             Instance.ConfirmCancel_ConfirmBtn.interactable = true;
         }
@@ -178,13 +178,13 @@ namespace Scoz.Func {
                 Instance.ConfirmCanClickCoundownSecs = _confirmCanClickCoundownSecs;
                 Instance.ConfirmCancel_ConfirmBtn.interactable = false;
                 SetConfirmBtnText();
-                Instance.ConfirmCancel_ConfirmBtnTimer = new MyTimer(1, () => {
+                Instance.ConfirmCancel_ConfirmBtnTimer = new MyTimer_UnityAssembly(1, () => {
                     Instance.ConfirmCanClickCoundownSecs--;
                     SetConfirmBtnText();
                 }, true, true);
             } else {
                 Instance.ConfirmCancel_ConfirmBtnTimer = null;
-                Instance.ConfirmCancel_ConfirmBtnText.text = StringJsonData.GetUIString("Confirm");
+                Instance.ConfirmCancel_ConfirmBtnText.text = StringJsonData_UnityAssembly.GetUIString("Confirm");
                 Instance.ConfirmCancel_ConfirmBtn.interactable = true;
             }
 
@@ -194,16 +194,16 @@ namespace Scoz.Func {
             Instance.ConfirmCancelAction_Cancel = _cancelAction;
             Instance.ConfirmCancelAction_Click_WithParam = null;
             Instance.ConfirmCancelAction_Cancel_WithParam = null;
-            Instance.ConfirmCancel_CancelBtnText.text = StringJsonData.GetUIString("Cancel");
+            Instance.ConfirmCancel_CancelBtnText.text = StringJsonData_UnityAssembly.GetUIString("Cancel");
         }
         static void SetConfirmBtnText() {
             if (Instance.ConfirmCanClickCoundownSecs > 0) {
                 Instance.ConfirmCancel_ConfirmBtn.interactable = false;
-                Instance.ConfirmCancel_ConfirmBtnText.text = string.Format(StringJsonData.GetUIString("CowndownSec"), Instance.ConfirmCanClickCoundownSecs.ToString());
+                Instance.ConfirmCancel_ConfirmBtnText.text = string.Format(StringJsonData_UnityAssembly.GetUIString("CowndownSec"), Instance.ConfirmCanClickCoundownSecs.ToString());
             } else {
                 Instance.ConfirmCancel_ConfirmBtnTimer = null;
                 Instance.ConfirmCancel_ConfirmBtn.interactable = true;
-                Instance.ConfirmCancel_ConfirmBtnText.text = StringJsonData.GetUIString("Confirm");
+                Instance.ConfirmCancel_ConfirmBtnText.text = StringJsonData_UnityAssembly.GetUIString("Confirm");
             }
         }
         public static void ShowConfirmCancel(string _text, string _confirmText, string _cancelText, Action _confirmAction, Action _cancelAction) {
@@ -236,8 +236,8 @@ namespace Scoz.Func {
             Instance.ConfirmCancelAction_Cancel_WithParam = _cancelAction;
             Instance.ConfirmCancel_ConfirmParam = _confirmParam;
             Instance.ConfirmCancel_CancelParam = _cancelParam;
-            Instance.ConfirmCancel_ConfirmBtnText.text = StringJsonData.GetUIString("Confirm");
-            Instance.ConfirmCancel_CancelBtnText.text = StringJsonData.GetUIString("Cancel");
+            Instance.ConfirmCancel_ConfirmBtnText.text = StringJsonData_UnityAssembly.GetUIString("Confirm");
+            Instance.ConfirmCancel_CancelBtnText.text = StringJsonData_UnityAssembly.GetUIString("Cancel");
             Instance.ConfirmCancel_ConfirmBtnTimer = null;
             Instance.ConfirmCancel_ConfirmBtn.interactable = true;
         }

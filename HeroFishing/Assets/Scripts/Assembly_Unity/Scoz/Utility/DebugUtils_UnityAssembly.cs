@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 namespace Scoz.Func {
-    public static class DebugUtils {
+    public static class DebugUtils_UnityAssembly {
         public static string ObjToStr(object _obj) {
             if (_obj == null)
                 return "null";

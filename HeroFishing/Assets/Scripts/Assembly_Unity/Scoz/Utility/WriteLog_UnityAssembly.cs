@@ -4,7 +4,7 @@ using System.Diagnostics;
 using UnityEngine;
 
 namespace Scoz.Func {
-    public static class WriteLog {
+    public static class WriteLog_UnityAssembly {
 
         public enum LogType {
             Player,
@@ -43,11 +43,11 @@ namespace Scoz.Func {
         public static LogDelegate LogWarning { get { return UnityEngine.Debug.LogWarning; } }
         public static void LogColor(string format, LogType _type) {
             format = string.Format("[{0}] {1}", _type, format);
-            UnityEngine.Debug.Log(TextManager.GetColorText(format, LocColorCodes[_type]));
+            UnityEngine.Debug.Log(TextManager_UnityAssembly.GetColorText(format, LocColorCodes[_type]));
         }
         public static void LogColorFormat(string format, LogType _type, params object[] args) {
             format = string.Format("[{0}] {1}", _type, format);
-            UnityEngine.Debug.LogFormat(TextManager.GetColorText(format, LocColorCodes[_type]), args);
+            UnityEngine.Debug.LogFormat(TextManager_UnityAssembly.GetColorText(format, LocColorCodes[_type]), args);
         }
         public static void LogFormat(string format, params object[] args) {
             UnityEngine.Debug.LogFormat(format, args);

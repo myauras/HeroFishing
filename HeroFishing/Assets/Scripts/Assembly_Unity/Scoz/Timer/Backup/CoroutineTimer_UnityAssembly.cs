@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoroutineTimer 
+public class CoroutineTimer_UnityAssembly 
 {
     public float CircleTime;
     public delegate void MyDelegate();
     MyDelegate TimeOutFunc;
-    public CoroutineTimer(float _circleTime, MyDelegate _timeOutFunc)
+    public CoroutineTimer_UnityAssembly(float _circleTime, MyDelegate _timeOutFunc)
     {
         CircleTime = _circleTime;
         TimeOutFunc = _timeOutFunc;

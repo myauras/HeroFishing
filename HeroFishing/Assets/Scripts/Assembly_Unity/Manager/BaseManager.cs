@@ -19,7 +19,7 @@ namespace HeroFishing.Main {
         public static BaseManager CreateNewInstance() {
 
             if (Instance != null) {
-                WriteLog.Log("BaseManager之前已經被建立了");
+                WriteLog_UnityAssembly.Log("BaseManager之前已經被建立了");
             } else {
                 GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/BaseManager");
                 GameObject go = Instantiate(prefab);
@@ -40,9 +40,9 @@ namespace HeroFishing.Main {
             //建立Popup_Local
             PopupUI_Local.CreateNewInstance();
             //建立InternetChecker
-            gameObject.AddComponent<InternetChecker>().Init();
+            gameObject.AddComponent<InternetChecker_UnityAssembly>().Init();
             //建立CoroutineJob
-            gameObject.AddComponent<CoroutineJob>();
+            gameObject.AddComponent<CoroutineJob_UnityAssembly>();
             //建立AddressableManage
             AddressableManage_UnityAssembly.CreateNewAddressableManage();
         }
@@ -58,7 +58,7 @@ namespace HeroFishing.Main {
         /// </summary>
         public void StartDownloadAddressable(Action _action) {
             AddressableManage_UnityAssembly.Instance.StartLoadAsset(() => {
-                AddressablesLoader.GetAssetRef<GameObject>(GameManagerAsset, go => {
+                AddressablesLoader_UnityAssebly.GetAssetRef<GameObject>(GameManagerAsset, go => {
                 });
             });
         }

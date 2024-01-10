@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Scoz.Func
 {
-    public class Line
+    public class Line_Assembly
     {
         /// <summary>
         /// 依據X座標取得在兩點連成的直線上的座標點Y

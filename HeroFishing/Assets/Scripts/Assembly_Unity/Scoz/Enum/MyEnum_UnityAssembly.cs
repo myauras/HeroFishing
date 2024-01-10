@@ -6,12 +6,12 @@ using System;
 using UnityEditor;
 
 namespace Scoz.Func {
-    public static class MyEnum {
+    public static class MyEnum_UnityAssembly {
         public static T ParseEnum<T>(string _value) where T : struct {
             if (Enum.TryParse(_value, out T t)) {
                 return t;
             }
-            WriteLog.LogErrorFormat("傳入字串:{0} 無法轉為 {1} Enum", _value, typeof(T));
+            WriteLog_UnityAssembly.LogErrorFormat("傳入字串:{0} 無法轉為 {1} Enum", _value, typeof(T));
             return default(T);
         }
         public static bool TryParseEnum<T>(string _value, out T _t) where T : struct {
@@ -20,12 +20,12 @@ namespace Scoz.Func {
                 return true;
             }
             _t = default(T);
-            WriteLog.LogErrorFormat("傳入字串:{0} 無法轉為 {1} Enum", _value, typeof(T));
+            WriteLog_UnityAssembly.LogErrorFormat("傳入字串:{0} 無法轉為 {1} Enum", _value, typeof(T));
             return false;
         }
         public static bool TryParseEnum<T>(int _value, out T _t) where T : struct {
             if (!Enum.IsDefined(typeof(T), _value)) {
-                WriteLog.LogErrorFormat("傳入Int:{0} 無法轉為 {1} Enum", _value, typeof(T));
+                WriteLog_UnityAssembly.LogErrorFormat("傳入Int:{0} 無法轉為 {1} Enum", _value, typeof(T));
                 _t = default(T);
                 return false;
             }

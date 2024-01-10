@@ -3,20 +3,20 @@ using UnityEngine;
 namespace Scoz.Func
 {
     [System.Serializable]
-    public struct MinMaxF
+    public struct MinMax_UnityAssembly
     {
-        public float X;
-        public float Y;
-        public MinMaxF(float _x, float _y)
+        public int X;
+        public int Y;
+        public MinMax_UnityAssembly(int _x, int _y)
         {
             X = _x;
             Y = _y;
         }
         public override string ToString()
         {
-            return "Min:" + X.ToString() + " Max:" + Y.ToString();
+            return "Min:"+X.ToString() + " Max:" + Y.ToString();
         }
-        public float GetRandInRange()
+        public int GetRandInRange()
         {
             return Random.Range(X, Y);
         }

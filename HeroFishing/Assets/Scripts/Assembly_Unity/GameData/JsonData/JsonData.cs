@@ -10,7 +10,7 @@ namespace Scoz.Func {
     /// <summary>
     /// 這是Excel輸出的Json資料父類別，繼承自這個類的都是Excel表輸出的資料
     /// </summary>
-    public abstract partial class MyJsonData {
+    public abstract partial class MyJsonData_UnityAssembly {
         public static bool ShowLoadTime = true;
         public int ID { get; set; }
 
@@ -18,7 +18,7 @@ namespace Scoz.Func {
         /// <summary>
         /// 將字典傳入，依json表設定資料，字典索引類型為int
         /// </summary>
-        public static void SetData<T>(Dictionary<int, T> _dic, string _dataName) where T : MyJsonData, new() {
+        public static void SetData<T>(Dictionary<int, T> _dic, string _dataName) where T : MyJsonData_UnityAssembly, new() {
             DateTime startTime = DateTime.Now;
 
             string jsonStr = Resources.Load<TextAsset>(string.Format("Jsons/{0}", _dataName)).ToString();
@@ -31,19 +31,19 @@ namespace Scoz.Func {
                 if (!_dic.ContainsKey(id))
                     _dic.Add(id, data as T);
                 else
-                    WriteLog.LogError(string.Format("{0}表有重複的ID {1}", _dataName, id));
+                    WriteLog_UnityAssembly.LogError(string.Format("{0}表有重複的ID {1}", _dataName, id));
             }
             DateTime endTime = DateTime.Now;
             if (ShowLoadTime) {
                 TimeSpan spendTime = new TimeSpan(endTime.Ticks - startTime.Ticks);
-                WriteLog.LogFormat("<color=#008080>Load {0}.json:{1}s</color>", _dataName, spendTime.TotalSeconds);
+                WriteLog_UnityAssembly.LogFormat("<color=#008080>Load {0}.json:{1}s</color>", _dataName, spendTime.TotalSeconds);
             }
         }
 
         /// <summary>
         /// 將字典傳入，依json表設定資料，字典索引類型為string
         /// </summary>
-        public static void SetData<T>(Dictionary<string, T> _dic, string _dataName) where T : MyJsonData, new() {
+        public static void SetData<T>(Dictionary<string, T> _dic, string _dataName) where T : MyJsonData_UnityAssembly, new() {
             DateTime startTime = DateTime.Now;
             string jsonStr = Resources.Load<TextAsset>(string.Format("Jsons/{0}", _dataName)).ToString();
             JsonData jd = JsonMapper.ToObject(jsonStr);
@@ -55,28 +55,28 @@ namespace Scoz.Func {
                 if (!_dic.ContainsKey(id))
                     _dic.Add(id, data as T);
                 else
-                    WriteLog.LogError(string.Format("{0}表有重複的ID {1}", _dataName, id));
+                    WriteLog_UnityAssembly.LogError(string.Format("{0}表有重複的ID {1}", _dataName, id));
             }
             DateTime endTime = DateTime.Now;
             if (ShowLoadTime) {
                 TimeSpan spendTime = new TimeSpan(endTime.Ticks - startTime.Ticks);
-                WriteLog.LogFormat("<color=#008080>Load {0}.json:{1}s</color>", _dataName, spendTime.TotalSeconds);
+                WriteLog_UnityAssembly.LogFormat("<color=#008080>Load {0}.json:{1}s</color>", _dataName, spendTime.TotalSeconds);
             }
         }
 
         /// <summary>
         /// 依json表設定資料(Key為String)
         /// </summary>
-        public static Dictionary<string, MyJsonData> GetDataStringKey<T>(string _dataName) where T : MyJsonData, new() {
+        public static Dictionary<string, MyJsonData_UnityAssembly> GetDataStringKey<T>(string _dataName) where T : MyJsonData_UnityAssembly, new() {
             string jsonStr = Resources.Load<TextAsset>(string.Format("Jsons/{0}", _dataName)).ToString();
             JsonData jd = null;
             try {
                 jd = JsonMapper.ToObject(jsonStr);
             } catch (Exception _e) {
-                WriteLog.LogErrorFormat("{0}表的json格式錯誤: {1}", _dataName, _e);
+                WriteLog_UnityAssembly.LogErrorFormat("{0}表的json格式錯誤: {1}", _dataName, _e);
             }
             JsonData items = jd[_dataName];
-            Dictionary<string, MyJsonData> dic = new Dictionary<string, MyJsonData>();
+            Dictionary<string, MyJsonData_UnityAssembly> dic = new Dictionary<string, MyJsonData_UnityAssembly>();
             for (int i = 0; i < items.Count; i++) {
                 T data = new T();
                 data.GetDataFromJson(items[i], _dataName);
@@ -84,7 +84,7 @@ namespace Scoz.Func {
                 if (!dic.ContainsKey(id))
                     dic.Add(id, data);
                 else
-                    WriteLog.LogError(string.Format("{0}表有重複的ID {1}", _dataName, id));
+                    WriteLog_UnityAssembly.LogError(string.Format("{0}表有重複的ID {1}", _dataName, id));
             }
             return dic;
         }
@@ -93,7 +93,7 @@ namespace Scoz.Func {
         /// <summary>
         /// 依json表設定資料，不建立字典
         /// </summary>
-        public static void SetData<T>(string _dataName) where T : MyJsonData, new() {
+        public static void SetData<T>(string _dataName) where T : MyJsonData_UnityAssembly, new() {
             DateTime startTime = DateTime.Now;
             string jsonStr = Resources.Load<TextAsset>(string.Format("Jsons/{0}", _dataName)).ToString();
             JsonData jd = JsonMapper.ToObject(jsonStr);
@@ -105,13 +105,13 @@ namespace Scoz.Func {
             DateTime endTime = DateTime.Now;
             if (ShowLoadTime) {
                 TimeSpan spendTime = new TimeSpan(endTime.Ticks - startTime.Ticks);
-                WriteLog.LogFormat("<color=#008080>Load {0}.json:{1}s</color>", _dataName, spendTime.TotalSeconds);
+                WriteLog_UnityAssembly.LogFormat("<color=#008080>Load {0}.json:{1}s</color>", _dataName, spendTime.TotalSeconds);
             }
         }
         /// <summary>
         /// 依json表設定資料
         /// </summary>
-        public static void SetKeyValueData<T>(string _dataName) where T : MyJsonData, new() {
+        public static void SetKeyValueData<T>(string _dataName) where T : MyJsonData_UnityAssembly, new() {
             DateTime startTime = DateTime.Now;
             string jsonStr = Resources.Load<TextAsset>(string.Format("Jsons/{0}", _dataName)).ToString();
             JsonData jd = JsonMapper.ToObject(jsonStr);
@@ -123,12 +123,12 @@ namespace Scoz.Func {
             DateTime endTime = DateTime.Now;
             if (ShowLoadTime) {
                 TimeSpan spendTime = new TimeSpan(endTime.Ticks - startTime.Ticks);
-                WriteLog.LogFormat("<color=#008080>Load {0}.json:{1}s</color>", _dataName, spendTime.TotalSeconds);
+                WriteLog_UnityAssembly.LogFormat("<color=#008080>Load {0}.json:{1}s</color>", _dataName, spendTime.TotalSeconds);
             }
         }
 
         protected abstract void GetDataFromJson(JsonData _item, string _dataName);
-        static List<T> GetDataList<T>(string _dataName, string _jsonStr) where T : MyJsonData, new() {
+        static List<T> GetDataList<T>(string _dataName, string _jsonStr) where T : MyJsonData_UnityAssembly, new() {
             List<T> list = new List<T>();
             JsonData jd = JsonMapper.ToObject(_jsonStr);
             JsonData items = jd[_dataName];

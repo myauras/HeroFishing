@@ -7,7 +7,7 @@ using System;
 
 namespace Scoz.Func {
 
-    public class LoadingProgress {
+    public class LoadingProgress_UnityAssembly {
         Dictionary<string, bool> Progress;//讀取進度清單
         Action FinishCB;//進度完成時CallBack
         public bool IsFinished { get; private set; } = false;//進度完成時會設為true，且不能再新增Loading項目
@@ -15,7 +15,7 @@ namespace Scoz.Func {
         /// <summary>
         /// 傳入完成進度時的callBack與完成進度時callBack前的等待時間
         /// </summary>
-        public LoadingProgress(Action _cb, float _cbTime = 0) {
+        public LoadingProgress_UnityAssembly(Action _cb, float _cbTime = 0) {
             Progress = new Dictionary<string, bool>();
             FinishCB = _cb;
             CBTime = _cbTime;
@@ -31,18 +31,18 @@ namespace Scoz.Func {
         /// </summary>
         public void AddLoadingProgress(params string[] _loadingKeys) {
             if (IsFinished) {
-                WriteLog.LogError("LoadingProgress 已經完成 無法再新增Loading項目");
+                WriteLog_UnityAssembly.LogError("LoadingProgress 已經完成 無法再新增Loading項目");
                 return;
             }
             for (int i = 0; i < _loadingKeys.Length; i++) {
                 if (string.IsNullOrEmpty(_loadingKeys[i])) {
-                    WriteLog.LogErrorFormat("要加入的Key為空: {0}", _loadingKeys[i]);
+                    WriteLog_UnityAssembly.LogErrorFormat("要加入的Key為空: {0}", _loadingKeys[i]);
                     continue;
                 }
                 if (!Progress.ContainsKey(_loadingKeys[i]))
                     Progress.Add(_loadingKeys[i], false);
                 else
-                    WriteLog.LogError("嘗試新增重複的LoadingKey:" + _loadingKeys[i]);
+                    WriteLog_UnityAssembly.LogError("嘗試新增重複的LoadingKey:" + _loadingKeys[i]);
             }
         }
         /// <summary>
@@ -56,7 +56,7 @@ namespace Scoz.Func {
             }
             if (CheckIfProgressIsFinished()) {
                 IsFinished = true;
-                CoroutineJob.Instance.StartNewAction(() => { FinishCB?.Invoke(); }, CBTime);
+                CoroutineJob_UnityAssembly.Instance.StartNewAction(() => { FinishCB?.Invoke(); }, CBTime);
             }
         }
         bool CheckIfProgressIsFinished() {

@@ -26,7 +26,7 @@ namespace HeroFishing.Main {
             BaseManager.CreateNewInstance();
             //檢查網路
             PopupUI_Local.ShowLoading("Checking Internet");
-            InternetChecker.StartCheckInternet(OnConnected);
+            InternetChecker_UnityAssembly.StartCheckInternet(OnConnected);
         }
 
 
@@ -56,8 +56,8 @@ namespace HeroFishing.Main {
 
             DateTime now = DateTime.Now;
             //初始化ui            
-            AddressablesLoader.GetPrefabByRef(StartUIAsset, (prefab, handle) => {
-                WriteLog.LogFormat("載入StartUIAsset花費: {0}秒", (DateTime.Now - now).TotalSeconds);
+            AddressablesLoader_UnityAssebly.GetPrefabByRef(StartUIAsset, (prefab, handle) => {
+                WriteLog_UnityAssembly.LogFormat("載入StartUIAsset花費: {0}秒", (DateTime.Now - now).TotalSeconds);
                 HandleList.Add(handle);
                 GameObject go = Instantiate(prefab);
                 go.transform.SetParent(MyCanvas.transform);

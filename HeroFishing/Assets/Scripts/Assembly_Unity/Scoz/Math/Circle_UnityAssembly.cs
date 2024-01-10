@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Scoz.Func
 {
-    public class Circle
+    public class Circle_UnityAssembly
     {
         public static bool CheckIfPointInsiedTheCircle(float _r, Vector2 _circleCenter, Vector2 _point)
         {

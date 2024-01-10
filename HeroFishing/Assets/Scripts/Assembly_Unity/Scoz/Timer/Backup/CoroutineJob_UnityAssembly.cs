@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Scoz.Func {
 
-    public class CoroutineJob : MonoBehaviour {
+    public class CoroutineJob_UnityAssembly : MonoBehaviour {
         class AfterInitDoAction {
             public Action DoAction;
             float waitTime;
@@ -25,7 +25,7 @@ namespace Scoz.Func {
                 }
             }
         }
-        public static CoroutineJob Instance;
+        public static CoroutineJob_UnityAssembly Instance;
         Dictionary<int, Coroutine> MyCoroutines = new Dictionary<int, Coroutine>();
         int CoroutineID = 0;
         private void Awake() {

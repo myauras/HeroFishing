@@ -42,14 +42,14 @@ namespace Scoz.Editor {
             if (GOOGLE_PROJECT_DIC.TryGetValue(_envVersion, out string id)) {
                 googleProjectID = id;
             } else {
-                WriteLog.LogError("找不到GPC專案ID：" + _envVersion + " version.");
+                WriteLog_UnityAssembly.LogError("找不到GPC專案ID：" + _envVersion + " version.");
                 return;
             }
             string storagePath = "";
             if (GOOGLE_STORAGE_PATH_DIC.TryGetValue(_envVersion, out string path)) {
                 storagePath = path;
             } else {
-                WriteLog.LogError("找不到GPC專案ID：" + _envVersion + " version.");
+                WriteLog_UnityAssembly.LogError("找不到GPC專案ID：" + _envVersion + " version.");
                 return;
             }
 
@@ -59,7 +59,7 @@ namespace Scoz.Editor {
             Process process = new Process();
 
 
-            WriteLog.LogFormat("專案ID: {0}  StoragePath: {1}  BundleVersion: {2}", googleProjectID, storagePath, VersionSetting.AppLargeVersion);
+            WriteLog_UnityAssembly.LogFormat("專案ID: {0}  StoragePath: {1}  BundleVersion: {2}", googleProjectID, storagePath, VersionSetting.AppLargeVersion);
 #if UNITY_EDITOR_WIN
             // redirect the output stream of the child process.
             string fileName = "UploadBundle.bat";
@@ -98,7 +98,7 @@ namespace Scoz.Editor {
 #endif
             int exitCode = -1;
             //string output = null;
-            WriteLog.Log("命令檔位置：" + process.StartInfo.WorkingDirectory + process.StartInfo.FileName);
+            WriteLog_UnityAssembly.Log("命令檔位置：" + process.StartInfo.WorkingDirectory + process.StartInfo.FileName);
             try {
 
                 // 讀取外部執行檔Log
@@ -121,21 +121,21 @@ namespace Scoz.Editor {
 
                 // 顯示到 Unity 的 Console
                 foreach (var str in logStrs) {
-                    WriteLog.Log(str);
+                    WriteLog_UnityAssembly.Log(str);
                 }
 
             } catch (Exception e) {
-                WriteLog.LogError("發生錯誤：" + e.ToString()); // or throw new Exception
+                WriteLog_UnityAssembly.LogError("發生錯誤：" + e.ToString()); // or throw new Exception
             } finally {
                 exitCode = process.ExitCode;
                 process.Dispose();
                 process = null;
             }
             if (exitCode != 0) {
-                WriteLog.LogError("執行失敗 ExitCode：" + exitCode);
+                WriteLog_UnityAssembly.LogError("執行失敗 ExitCode：" + exitCode);
                 EditorUtility.DisplayDialog("執行" + fileName, "執行中斷，請查看Console Log", "嗚嗚嗚", "");
             } else {
-                WriteLog.Log("執行成功 ExitCode：" + exitCode);
+                WriteLog_UnityAssembly.Log("執行成功 ExitCode：" + exitCode);
                 EditorUtility.DisplayDialog("執行" + fileName, "執行成功，請查看Console Log確保無任何錯誤", "確認", "");
             }
         }

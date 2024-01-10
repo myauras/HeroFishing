@@ -5,7 +5,7 @@ using System.Numerics;
 using UnityEngine;
 
 namespace Scoz.Func {
-    public partial class GameDictionary : MonoBehaviour {
+    public partial class GameDictionary_UnityAssembly : MonoBehaviour {
 
         [SerializeField]
         List<Font> SysFonts = null;
@@ -13,20 +13,20 @@ namespace Scoz.Func {
         List<TMPro.TMP_FontAsset> SysFontAssets = null;
 
 
-        public static GameDictionary Instance;
+        public static GameDictionary_UnityAssembly Instance;
 
         public static bool IsInit { get; private set; }
 
 
 
-        public static GameDictionary CreateNewInstance() {
+        public static GameDictionary_UnityAssembly CreateNewInstance() {
             if (Instance != null) {
-                WriteLog.LogError("GameDictionary之前已經被建立了");
+                WriteLog_UnityAssembly.LogError("GameDictionary之前已經被建立了");
             } else {
                 GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/GameDictionary");
                 GameObject go = Instantiate(prefab);
                 go.name = "GameDictionary";
-                Instance = go.GetComponent<GameDictionary>();
+                Instance = go.GetComponent<GameDictionary_UnityAssembly>();
                 Instance.InitDic();
             }
             return Instance;
@@ -66,8 +66,8 @@ namespace Scoz.Func {
         /// 讀取本機的String表
         /// </summary>
         void LoadLocalJson() {
-            StringDic = StringJsonData.GetStringDic("String");
-            StrKeyJsonDic["GameSetting"] = MyJsonData.GetDataStringKey<GameSettingJsonData>("GameSetting");
+            StringDic = StringJsonData_UnityAssembly.GetStringDic("String");
+            StrKeyJsonDic["GameSetting"] = MyJsonData_UnityAssembly.GetDataStringKey<GameSettingJsonData_UnityAssembly>("GameSetting");
         }
     }
 }

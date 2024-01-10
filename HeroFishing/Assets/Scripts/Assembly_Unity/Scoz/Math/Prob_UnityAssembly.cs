@@ -5,7 +5,7 @@ using System.Linq;
 using SimpleJSON;
 
 namespace Scoz.Func {
-    public class Prob {
+    public class Prob_UnityAssembly {
         public static bool GetResult(float _probability) {
             int randomNum = Random.Range(0, 100);
             _probability = Mathf.Clamp(_probability, 0, 1);
@@ -26,7 +26,7 @@ namespace Scoz.Func {
                     return i;
                 }
             }
-            WriteLog.LogWarning("權重取得器錯誤");
+            WriteLog_UnityAssembly.LogWarning("權重取得器錯誤");
             return _weigthList.Count - 1;
         }
         /// <summary>
@@ -34,7 +34,7 @@ namespace Scoz.Func {
         /// </summary>
         public static int WeightIndexGetter(int[] _ids, int[] _weigths) {
             if (_ids.Length != _weigths.Length) {
-                WriteLog.Log("傳入計算器的ID陣列與權重陣列不一致");
+                WriteLog_UnityAssembly.Log("傳入計算器的ID陣列與權重陣列不一致");
                 return 0;
             }
             int index = 0;
@@ -57,7 +57,7 @@ namespace Scoz.Func {
         /// </summary>
         public static int WeightIDGetter(int[] _ids, int[] _weigths) {
             if (_ids.Length != _weigths.Length) {
-                WriteLog.Log("傳入計算器的ID陣列與權重陣列不一致");
+                WriteLog_UnityAssembly.Log("傳入計算器的ID陣列與權重陣列不一致");
                 return 0;
             }
             int index = 0;
@@ -149,13 +149,13 @@ namespace Scoz.Func {
 
         public static List<T> GetRandNoDuplicatedTFromTList<T>(List<T> _itemList, int _count) {
             if (_itemList == null || _itemList.Count == 0) {
-                WriteLog.LogError("傳入List錯誤");
+                WriteLog_UnityAssembly.LogError("傳入List錯誤");
                 return null;
             }
 
 
             if (_count > _itemList.Count) {
-                WriteLog.LogError("取的數量不可小於List");
+                WriteLog_UnityAssembly.LogError("取的數量不可小於List");
                 return null;
             } else if (_count == _itemList.Count) {
                 return _itemList;
@@ -175,7 +175,7 @@ namespace Scoz.Func {
         /// </summary>
         public static string GetRandomKeyFromJsNodeKeyWeight(JSONNode _jsNode) {
             if (_jsNode == null || _jsNode.Count == 0) {
-                WriteLog.LogError("GetRandomTFromJsNode傳入為空");
+                WriteLog_UnityAssembly.LogError("GetRandomTFromJsNode傳入為空");
                 return null;
             }
             int totalWeight = 0;

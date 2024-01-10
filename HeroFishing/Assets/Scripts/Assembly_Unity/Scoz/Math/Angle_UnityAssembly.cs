@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Scoz.Func
 {
-    public class Angle
+    public class Angle_UnityAssembly
     {
         public static float GetAngerFormTowPoint2D(Vector2 _form, Vector2 _to)
         {

@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Text;
 
 namespace Scoz.Func {
-    public class TextManager {
+    public class TextManager_UnityAssembly {
 
         /// <summary>
         /// 字串以字元分割轉int[]
@@ -58,16 +58,16 @@ namespace Scoz.Func {
             }
             return result;
         }
-        public static Int2D ParseTextToInt2D(string _text, char _char) {
+        public static Int2D_UnityAssembly ParseTextToInt2D(string _text, char _char) {
             int[] values = new int[2] { 0, 0 };
             try {
                 values = Array.ConvertAll(_text.Split(_char), a => int.Parse(a));
                 if (values.Length != 2)
-                    WriteLog.LogErrorFormat("Parse {0} to Vector2 失敗", _text);
+                    WriteLog_UnityAssembly.LogErrorFormat("Parse {0} to Vector2 失敗", _text);
             } catch {
-                WriteLog.LogErrorFormat("Parse {0} to Vector2 失敗", _text);
+                WriteLog_UnityAssembly.LogErrorFormat("Parse {0} to Vector2 失敗", _text);
             }
-            Int2D int2D = new Int2D(values[0], values[1]);
+            Int2D_UnityAssembly int2D = new Int2D_UnityAssembly(values[0], values[1]);
             return int2D;
         }
         public static Vector3 ParseTextToVector3(string _text, char _char) {
@@ -75,9 +75,9 @@ namespace Scoz.Func {
             try {
                 values = Array.ConvertAll(_text.Split(_char), a => float.Parse(a));
                 if (values.Length != 3)
-                    WriteLog.LogErrorFormat("Parse {0} to Vector3 失敗", _text);
+                    WriteLog_UnityAssembly.LogErrorFormat("Parse {0} to Vector3 失敗", _text);
             } catch {
-                WriteLog.LogErrorFormat("Parse {0} to Vector3 失敗", _text);
+                WriteLog_UnityAssembly.LogErrorFormat("Parse {0} to Vector3 失敗", _text);
                 return Vector3.zero;
             }
             Vector3 vector3 = new Vector3(values[0], values[1], values[2]);
@@ -88,9 +88,9 @@ namespace Scoz.Func {
             try {
                 values = Array.ConvertAll(_text.Split(_char), a => float.Parse(a));
                 if (values.Length != 4)
-                    WriteLog.LogErrorFormat("Parse {0} to Vector4 失敗", _text);
+                    WriteLog_UnityAssembly.LogErrorFormat("Parse {0} to Vector4 失敗", _text);
             } catch {
-                WriteLog.LogErrorFormat("Parse {0} to Vector4 失敗", _text);
+                WriteLog_UnityAssembly.LogErrorFormat("Parse {0} to Vector4 失敗", _text);
                 return Vector4.zero;
             }
             Vector4 vector4 = new Vector4(values[0], values[1], values[2], values[3]);
@@ -123,7 +123,7 @@ namespace Scoz.Func {
             HashSet<T> hashSet = new HashSet<T>();
             string[] strs = _s.Split(_char);
             for (int i = 0; i < strs.Length; i++) {
-                T t = MyEnum.ParseEnum<T>(strs[i]);
+                T t = MyEnum_UnityAssembly.ParseEnum<T>(strs[i]);
                 if (!hashSet.Contains(t))
                     hashSet.Add(t);
             }
@@ -196,9 +196,9 @@ namespace Scoz.Func {
             _str = string.Format("<color=#{0}>{1}</color>", _colorCode, _str);
             return _str;
         }
-        public static MinMax GetMinMax(string _str, char _splitChar) {
+        public static MinMax_UnityAssembly GetMinMax(string _str, char _splitChar) {
             int[] ints = Array.ConvertAll(_str.Split(_splitChar), a => int.Parse(a));
-            return new MinMax(ints[0], ints[1]);
+            return new MinMax_UnityAssembly(ints[0], ints[1]);
         }
         public static string GetScozTimeStr(DateTime _time) {
             return _time.ToString("dd/MM/yyyy HH:mm:ss");
@@ -280,7 +280,7 @@ namespace Scoz.Func {
                     case '\u007F': sb.Append("<DEL>"); break;
                     default:
                         if (c > '\u007F') {
-                            WriteLog.LogErrorFormat("{0} 為非可轉成ASCII的Char (in ASCII, any octet in the range 0x80-0xFF doesn't have a character glyph associated with it)", c);
+                            WriteLog_UnityAssembly.LogErrorFormat("{0} 為非可轉成ASCII的Char (in ASCII, any octet in the range 0x80-0xFF doesn't have a character glyph associated with it)", c);
                             sb.AppendFormat(@"\u{0:X4}", (ushort)c); // in ASCII, any octet in the range 0x80-0xFF doesn't have a character glyph associated with it
                         } else {
                             sb.Append(c);
@@ -350,7 +350,7 @@ namespace Scoz.Func {
                 case "!=":
                     return _value1 != _value2;
                 default:
-                    WriteLog.LogError("錯誤的運算子: " + _operator);
+                    WriteLog_UnityAssembly.LogError("錯誤的運算子: " + _operator);
                     break;
             }
             return result;

@@ -6,7 +6,7 @@ using System;
 
 namespace Scoz.Func
 {
-    public class TimeConvert
+    public class TimeConvert_UnityAssembly
     {        public static DateTime UnixTimeStampToDateTime(double _unixTimeStamp)
         {
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

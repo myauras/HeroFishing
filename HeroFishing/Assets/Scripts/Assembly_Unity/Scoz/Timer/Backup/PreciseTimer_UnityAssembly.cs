@@ -4,7 +4,7 @@ using UnityEngine;
 using Scoz.Func;
 
 namespace Scoz.Func {
-    public class PreciseTimer {
+    public class PreciseTimer_UnityAssembly {
         public float CurTimer;
         public float CircleTime { get; private set; }
         public bool StartRunTimer;
@@ -20,7 +20,7 @@ namespace Scoz.Func {
         int TriggerTimes = 0;
 
 
-        public PreciseTimer(float _circleTime, float _durationTime, MyDelegate _timeOutFunc, bool _startRunTimer, bool _loop) {
+        public PreciseTimer_UnityAssembly(float _circleTime, float _durationTime, MyDelegate _timeOutFunc, bool _startRunTimer, bool _loop) {
             CircleTime = _circleTime;
             CurTimer = CircleTime;
             TimeOutFunc = _timeOutFunc;
@@ -30,10 +30,10 @@ namespace Scoz.Func {
             Loop = _loop;
             TriggerTimes = 0;
             if (CircleTime == 0) {
-                WriteLog.LogWarning(string.Format("{0}'s CircleTime of MyTimer is 0", _timeOutFunc.Method.Name));
+                WriteLog_UnityAssembly.LogWarning(string.Format("{0}'s CircleTime of MyTimer is 0", _timeOutFunc.Method.Name));
             }
         }
-        public PreciseTimer(float _circleTime, float _durationTime, MyDelegate _timeOutFunc, MyDelegate _runTimeFunc, bool _startRunTimer, bool _loop) {
+        public PreciseTimer_UnityAssembly(float _circleTime, float _durationTime, MyDelegate _timeOutFunc, MyDelegate _runTimeFunc, bool _startRunTimer, bool _loop) {
             CircleTime = _circleTime;
             CurTimer = CircleTime;
             TimeOutFunc = _timeOutFunc;
@@ -44,9 +44,9 @@ namespace Scoz.Func {
             Loop = _loop;
             TriggerTimes = 0;
             if (CircleTime == 0)
-                WriteLog.LogWarning("CircleTime of MyTimer is 0");
+                WriteLog_UnityAssembly.LogWarning("CircleTime of MyTimer is 0");
         }
-        public PreciseTimer(float _circleTime, float _durationTime, MyParameterDelegate _timeOutFunc, MyDelegate _runTimeFunc, bool _startRunTimer, bool _loop, object _obj) {
+        public PreciseTimer_UnityAssembly(float _circleTime, float _durationTime, MyParameterDelegate _timeOutFunc, MyDelegate _runTimeFunc, bool _startRunTimer, bool _loop, object _obj) {
             CircleTime = _circleTime;
             CurTimer = CircleTime;
             TimeOutFuncWithObj = _timeOutFunc;
@@ -58,10 +58,10 @@ namespace Scoz.Func {
             Obj = _obj;
             TriggerTimes = 0;
             if (CircleTime == 0) {
-                WriteLog.LogWarning(string.Format("{0}'s CircleTime of MyTimer is 0", _timeOutFunc.Method.Name));
+                WriteLog_UnityAssembly.LogWarning(string.Format("{0}'s CircleTime of MyTimer is 0", _timeOutFunc.Method.Name));
             }
         }
-        public PreciseTimer(float _circleTime, float _durationTime, MyParameterDelegate _timeOutFunc, bool _startRunTimer, bool _loop, object _obj) {
+        public PreciseTimer_UnityAssembly(float _circleTime, float _durationTime, MyParameterDelegate _timeOutFunc, bool _startRunTimer, bool _loop, object _obj) {
             CircleTime = _circleTime;
             CurTimer = CircleTime;
             TimeOutFuncWithObj = _timeOutFunc;
@@ -72,7 +72,7 @@ namespace Scoz.Func {
             Obj = _obj;
             TriggerTimes = 0;
             if (CircleTime == 0) {
-                WriteLog.LogWarning(string.Format("{0}'s CircleTime of MyTimer is 0", _timeOutFunc.Method.Name));
+                WriteLog_UnityAssembly.LogWarning(string.Format("{0}'s CircleTime of MyTimer is 0", _timeOutFunc.Method.Name));
             }
         }
         public void RestartCountDown() {

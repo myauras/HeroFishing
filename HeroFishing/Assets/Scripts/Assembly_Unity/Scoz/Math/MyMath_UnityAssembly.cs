@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 namespace Scoz.Func {
-    public class MyMath : MonoBehaviour {
+    public class MyMath_UnityAssembly : MonoBehaviour {
         public static float Round(float _num, int _decimalPlaces) {
             return Mathf.Round(_num * (float)(10 ^ _decimalPlaces)) / (float)(10 ^ _decimalPlaces);
         }
@@ -59,7 +59,7 @@ namespace Scoz.Func {
                 case Operator.Divided:
                     if (_num2 == 0) {
                         result = 0;
-                        WriteLog.LogWarning("不可除以0");
+                        WriteLog_UnityAssembly.LogWarning("不可除以0");
                     } else
                         result = _num1 / _num2;
                     break;
@@ -150,7 +150,7 @@ namespace Scoz.Func {
         /// </summary>
         public static float GetSumOfQ1(int _a, float _r, int _n) {
             if (_r == 1) {
-                WriteLog.LogError("r不能等於1");
+                WriteLog_UnityAssembly.LogError("r不能等於1");
                 return 0;
             }
             float s = _a * ((1 - Mathf.Pow(_r, _n)) / (1 - _r));
@@ -177,7 +177,7 @@ namespace Scoz.Func {
         /// </summary>
         public static int Factorial(int _n) {
             if (_n < 0) {
-                WriteLog.LogError("階層不可傳入<0的值: " + _n);
+                WriteLog_UnityAssembly.LogError("階層不可傳入<0的值: " + _n);
                 return 0;
             } else if (_n == 0) return 1;
 

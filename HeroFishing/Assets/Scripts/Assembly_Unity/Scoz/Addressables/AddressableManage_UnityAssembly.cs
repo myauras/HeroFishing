@@ -43,7 +43,7 @@ namespace Scoz.Func {
         }
         void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
             //釋放資源
-            WriteLog.LogColorFormat("開始釋放{0}個Addressables資源", WriteLog.LogType.Addressable, ResourcesToReleaseWhileChangingScene.Count);
+            WriteLog_UnityAssembly.LogColorFormat("開始釋放{0}個Addressables資源", WriteLog_UnityAssembly.LogType.Addressable, ResourcesToReleaseWhileChangingScene.Count);
             foreach (var handle in ResourcesToReleaseWhileChangingScene) Addressables.Release(handle);
             ResourcesToReleaseWhileChangingScene.Clear();
         }
@@ -79,24 +79,24 @@ namespace Scoz.Func {
             //Addressables.ClearResourceLocators();
             //AssetBundle.UnloadAllAssetBundles(true);
             if (Caching.ClearCache()) {
-                WriteLog.Log("Successfully cleaned the cache");
+                WriteLog_UnityAssembly.Log("Successfully cleaned the cache");
                 _cb?.Invoke();
             } else {
-                WriteLog.Log("Cache is being used");
+                WriteLog_UnityAssembly.Log("Cache is being used");
                 _cb?.Invoke();
             }
 
             //ProgressImg.fillAmount = 0;
             //顯示載入進度文字
-            ProgressText.text = StringJsonData.GetUIString("ReDownload");
-            WriteLog.Log("重新載入中....................");
+            ProgressText.text = StringJsonData_UnityAssembly.GetUIString("ReDownload");
+            WriteLog_UnityAssembly.Log("重新載入中....................");
         }
         Coroutine Downloader;
         public void StartLoadAsset(Action _action) {
             BG.SetActive(false);
-            WriteLog.LogColor("LoadAsset-Start", WriteLog.LogType.Addressable);
+            WriteLog_UnityAssembly.LogColor("LoadAsset-Start", WriteLog_UnityAssembly.LogType.Addressable);
             Keys.RemoveAll(a => a == "");
-            PopupUI_Local.ShowLoading(StringJsonData.GetUIString("AddressableLoading"));
+            PopupUI_Local.ShowLoading(StringJsonData_UnityAssembly.GetUIString("AddressableLoading"));
             FinishedAction = _action;
             Downloader = StartCoroutine(LoadAssets());//不輕快取用這個(正式版)
         }
@@ -112,7 +112,7 @@ namespace Scoz.Func {
             yield return new WaitForSeconds(20);
             if (CheckInternetCoroutine != null)
                 StopCoroutine(CheckInternetCoroutine);
-            PopupUI_Local.ShowClickCancel(StringJsonData.GetUIString("NoInternetShutDown"), () => {
+            PopupUI_Local.ShowClickCancel(StringJsonData_UnityAssembly.GetUIString("NoInternetShutDown"), () => {
                 Application.Quit();
             });
         }
@@ -134,14 +134,14 @@ namespace Scoz.Func {
             AsyncOperationHandle<long> getDownloadSize = Addressables.GetDownloadSizeAsync(Keys);
             yield return getDownloadSize;
             long totalSize = getDownloadSize.Result;
-            WriteLog.LogColorFormat("LoadAsset-TotalSize={0}", WriteLog.LogType.Addressable, MyMath.BytesToMB(totalSize).ToString("0.00"));
+            WriteLog_UnityAssembly.LogColorFormat("LoadAsset-TotalSize={0}", WriteLog_UnityAssembly.LogType.Addressable, MyMath_UnityAssembly.BytesToMB(totalSize).ToString("0.00"));
 
             //已經抓到資料就取消Coroutine
             if (CheckInternetCoroutine != null)
                 StopCoroutine(CheckInternetCoroutine);
 
             if (totalSize > 0) {//有要下載跳訊息
-                string downloadStr = string.Format(StringJsonData.GetUIString("StartDownloadAsset"), MyMath.BytesToMB(totalSize).ToString("0.00"));
+                string downloadStr = string.Format(StringJsonData_UnityAssembly.GetUIString("StartDownloadAsset"), MyMath_UnityAssembly.BytesToMB(totalSize).ToString("0.00"));
                 PopupUI_Local.ShowClickCancel(downloadStr, () => {
                     //顯示下載條
                     ShowDownloadUI(true);
@@ -164,7 +164,7 @@ namespace Scoz.Func {
 
                 //顯示載入進度與文字
                 ProgressImg.fillAmount = curDownloadPercent;
-                ProgressText.text = string.Format(StringJsonData.GetUIString("AssetUpdating"), MyMath.BytesToMB(curDownloadSize).ToString("0.00"), MyMath.BytesToMB(_totalSize).ToString("0.00"));
+                ProgressText.text = string.Format(StringJsonData_UnityAssembly.GetUIString("AssetUpdating"), MyMath_UnityAssembly.BytesToMB(curDownloadSize).ToString("0.00"), MyMath_UnityAssembly.BytesToMB(_totalSize).ToString("0.00"));
                 //完成後跳出迴圈
 
                 if (curDownloading.GetDownloadStatus().IsDone) {
@@ -178,16 +178,16 @@ namespace Scoz.Func {
 
         void OnFinishedDownload() {
             ShowDownloadUI(false);
-            WriteLog.LogColorFormat("LoadAsset-Finished", WriteLog.LogType.Addressable);
+            WriteLog_UnityAssembly.LogColorFormat("LoadAsset-Finished", WriteLog_UnityAssembly.LogType.Addressable);
             FinishedAction?.Invoke();
 
         }
         public static void PreLoadToMemory(Action _ac = null) {
             DateTime now = DateTime.Now;
-            WriteLog.LogErrorFormat("開始下載MaJam資源圖");
+            WriteLog_UnityAssembly.LogErrorFormat("開始下載MaJam資源圖");
             //初始化UI
             Addressables.LoadAssetsAsync<Texture>("MaJam", null).Completed += handle => {
-                WriteLog.LogErrorFormat("載入MaJam花費: {0}秒", (DateTime.Now - now).TotalSeconds);
+                WriteLog_UnityAssembly.LogErrorFormat("載入MaJam花費: {0}秒", (DateTime.Now - now).TotalSeconds);
                 _ac?.Invoke();
             };
         }
@@ -195,7 +195,7 @@ namespace Scoz.Func {
             DownloadGO.gameObject.SetActive(_show);
             if (_show) {
                 ProgressImg.fillAmount = 0;
-                ProgressText.text = StringJsonData.GetUIString("Downloading");
+                ProgressText.text = StringJsonData_UnityAssembly.GetUIString("Downloading");
             }
         }
 
@@ -245,7 +245,7 @@ namespace Scoz.Func {
             AsyncOperationHandle<long> getDownloadSize = Addressables.GetDownloadSizeAsync(_keys);
             yield return getDownloadSize;
             long totalSize = getDownloadSize.Result;
-            float mb = MyMath.BytesToMB(totalSize);
+            float mb = MyMath_UnityAssembly.BytesToMB(totalSize);
             _cb?.Invoke(mb);
         }
 
@@ -273,9 +273,9 @@ namespace Scoz.Func {
 
 
             long totalSize = getDownloadSize.Result;
-            WriteLog.Log("Download TotalSize=" + totalSize);
+            WriteLog_UnityAssembly.Log("Download TotalSize=" + totalSize);
             if (totalSize > 0) {//有要下載跳訊息
-                string downloadStr = string.Format(StringJsonData.GetUIString("StartDownloadAsset"), MyMath.BytesToMB(totalSize).ToString("0.00"));
+                string downloadStr = string.Format(StringJsonData_UnityAssembly.GetUIString("StartDownloadAsset"), MyMath_UnityAssembly.BytesToMB(totalSize).ToString("0.00"));
                 //顯示下載條
                 ShowDownloadUI(true);
                 StartCoroutine(DownloadingAddressable(_keys, totalSize, _showBG, _cb));
@@ -304,7 +304,7 @@ namespace Scoz.Func {
 
                 //顯示載入進度與文字
                 ProgressImg.fillAmount = curDownloadPercent;
-                ProgressText.text = string.Format(StringJsonData.GetUIString("AssetUpdating"), MyMath.BytesToMB(curDownloadSize).ToString("0.00"), MyMath.BytesToMB(_totalSize).ToString("0.00"));
+                ProgressText.text = string.Format(StringJsonData_UnityAssembly.GetUIString("AssetUpdating"), MyMath_UnityAssembly.BytesToMB(curDownloadSize).ToString("0.00"), MyMath_UnityAssembly.BytesToMB(_totalSize).ToString("0.00"));
                 //完成後跳出迴圈
                 if (curDownloading.GetDownloadStatus().IsDone) {
                     Addressables.Release(curDownloading); // Addressable1.21.15版本更新後，必須要在載完資源後釋放，否則LoadAssetAsync會取不到資源

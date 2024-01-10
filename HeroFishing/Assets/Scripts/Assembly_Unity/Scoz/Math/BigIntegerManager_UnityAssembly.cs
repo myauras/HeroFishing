@@ -7,7 +7,7 @@ using Scoz.Func;
 using JetBrains.Annotations;
 using System.Linq;
 
-public class BigIntegerManager
+public class BigIntegerManager_UnityAssembly
 {
     public static string GetStr(BigInteger _bi)
     {
