@@ -42,7 +42,7 @@ namespace HeroFishing.Battle {
                     if (routeData != null) {
                         var rotation = Quaternion.AngleAxis(spawn.PlayerIndex * 90f, Vector3.up);
                         dir = rotation * (routeData.TargetPos - routeData.SpawnPos).normalized;
-                        dirQuaternion = rotation * Quaternion.LookRotation(dir);
+                        dirQuaternion = Quaternion.LookRotation(dir);
                         if (spawn.SpawnTime == 0)
                             pos = rotation * routeData.SpawnPos;
                         else {
