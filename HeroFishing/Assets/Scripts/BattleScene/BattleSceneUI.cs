@@ -10,10 +10,13 @@ public class BattleSceneUI : BaseUI {
     [Header("UI")]
     [SerializeField]
     private SpellUI _spellUI;
+    [SerializeField]
+    private LevelUI _levelUI;
 
     public override void Init() {
         base.Init();
         _spellUI.Init();
+        _levelUI.Init();
     }
 
     public override void RefreshText() {

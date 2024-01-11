@@ -15,9 +15,13 @@ namespace HeroFishing.Battle {
         HeroSkinJsonData MyHeroSkinData;
         private SpellActivationBehaviour ActivationBehaviour;
 
+        private int _exp;
+        public int Exp => _exp;
         private int _level = 1;
         public int Level => _level;
+
         public event Action<int> OnLevelUp;
+        public event Action<int, int> OnExpUpdate;
         public event Action<SpellName> OnSpellCharge;
         public event Action<SpellName> OnSpellPlay;
 
@@ -32,7 +36,6 @@ namespace HeroFishing.Battle {
             MyData = HeroJsonData.GetData(_heroID);
             MyHeroSkinData = HeroSkinJsonData.GetData(_heroSkinID);
             LoadModel();
-            OnLevelUp?.Invoke(_level);
         }
         void LoadModel() {
             string path = string.Format("Role/{0}/{1}.prefab", MyData.Ref, MyHeroSkinData.Prefab);
@@ -115,6 +118,17 @@ namespace HeroFishing.Battle {
                 PropertyBlock.SetFloat("_RimValue", x);
                 SetPropertyBlock(PropertyBlock);
             }, 0, spellData.HeroShaderSettings[10]);
+        }
+
+        public void AddExp(int exp) {
+            if (_level == MAX_LEVEL) return;
+            _exp += exp;
+            var nextLevelExp = HeroEXPJsonData.GetData(_level).EXP;
+            if (_exp >= nextLevelExp) {
+                LevelUp();
+                _exp -= nextLevelExp;
+            }
+            OnExpUpdate?.Invoke(_exp, nextLevelExp);
         }
 
         [ContextMenu("Level Up")]

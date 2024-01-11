@@ -11,7 +11,7 @@ public class SpellBtn : MonoBehaviour {
     [SerializeField]
     private Button _button;
     [SerializeField]
-    private LevelUI _levelButton;
+    private SpellLevelUI _levelButton;
     [SerializeField]
     private ChargeUI _chargeButton;
     [SerializeField]
