@@ -23,11 +23,11 @@ namespace HeroFishing.Socket.Matchgame {
         /// <summary>
         /// 攻擊施放位置
         /// </summary>
-        public float[] AttackPos { get; private set; }
+        public double[] AttackPos { get; private set; }
         /// <summary>
         /// 攻擊施放方向
         /// </summary>
-        public float[] AttackDir { get; private set; }
+        public double[] AttackDir { get; private set; }
         public ATTACK_TOCLIENT() {
         }
     }

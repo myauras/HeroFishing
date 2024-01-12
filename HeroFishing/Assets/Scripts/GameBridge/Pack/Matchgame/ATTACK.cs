@@ -17,30 +17,30 @@ namespace HeroFishing.Socket.Matchgame {
         /// 目標怪物索引, 沒有目標傳-1就可以
         /// </summary>
         public int MonsterIdx { get; private set; }
-        ///// <summary>
-        ///// 是否為鎖定攻擊
-        ///// </summary>
-        //public bool AttackLock { get; private set; }
-        ///// <summary>
-        ///// 攻擊施放位置
-        ///// </summary>
-        //public float[] AttackPos { get; private set; }
-        ///// <summary>
-        ///// 攻擊施放方向
-        ///// </summary>
-        //public float[] AttackDir { get; private set; }
+        /// <summary>
+        /// 是否為鎖定攻擊
+        /// </summary>
+        public bool AttackLock { get; private set; }
+        /// <summary>
+        /// 攻擊施放位置
+        /// </summary>
+        public double[] AttackPos { get; private set; }
+        /// <summary>
+        /// 攻擊施放方向
+        /// </summary>
+        public double[] AttackDir { get; private set; }
 
         public ATTACK(int _attackID, string _spellJsonID, int _monsterIdx, bool _attackLock, Vector3 _attackPos, Vector3 _attackDir) {
             AttackID = _attackID;
             SpellJsonID = _spellJsonID;
             MonsterIdx = _monsterIdx;
-            //AttackLock = _attackLock;
-            //AttackPos = new float[3];
-            //AttackDir = new float[3];
-            //for (int i = 0; i < 3; i++) {
-            //    AttackPos[i] = _attackPos[i];
-            //    AttackDir[i] = _attackDir[i];
-            //}
+            AttackLock = _attackLock;
+            AttackPos = new double[3];
+            AttackDir = new double[3];
+            for (int i = 0; i < 3; i++) {
+                AttackPos[i] = _attackPos[i];
+                AttackDir[i] = _attackDir[i];
+            }
         }
     }
 }
