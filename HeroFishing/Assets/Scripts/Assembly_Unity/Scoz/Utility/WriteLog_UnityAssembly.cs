@@ -100,10 +100,10 @@ namespace Scoz.Func {
 	}
 		[Conditional("DEBUG_LOG")]
         public static void LogColor(string format, LogType _type) {
-            UnityEngine.Debug.Log(TextManager.GetColorText(format, LocColorCodes[_type]));
+            UnityEngine.Debug.Log(TextManager_UnityAssembly.GetColorText(format, LocColorCodes[_type]));
         }
         public static void LogColorFormat(string format, LogType _type, params object[] args) {
-            UnityEngine.Debug.LogFormat(TextManager.GetColorText(format, LocColorCodes[_type]), args);
+            UnityEngine.Debug.LogFormat(TextManager_UnityAssembly.GetColorText(format, LocColorCodes[_type]), args);
         }
 
 	[Conditional("DEBUG_LOG")]

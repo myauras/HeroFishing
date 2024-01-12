@@ -57,12 +57,8 @@ namespace HeroFishing.Battle {
                     if (!TryCreateMonster(monsterID, out var monster)) continue;
                     int monsterIdx = spawn.Monsters[i].Idx;
 
-#if UNITY_EDITOR
                     monster.name = monsterData.Ref;
-                    //monsterGO.hideFlags |= HideFlags.HideAndDontSave;
-#else
-                monsterGO.hideFlags |= HideFlags.HideAndDontSave;
-#endif
+
 
                     var monsterEntity = state.EntityManager.CreateEntity();
                     //state.EntityManager.AddComponentObject(monsterEntity, monster.transform);
