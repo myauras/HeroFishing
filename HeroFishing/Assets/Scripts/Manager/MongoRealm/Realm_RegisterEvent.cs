@@ -131,24 +131,42 @@ namespace Service.Realms {
             var dbMatchgames = MyRealm.All<DBMatchgame>();
             var token_dbMatchgames = dbMatchgames.SubscribeForNotifications((sender, changes) => {
                 //※官方提到要按刪除->插入->修改的順序處理文件避免意外的錯誤發生
-
                 //第一次註冊通知事件時觸發
                 if (changes == null) {
                     return;
                 }
+                var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
+                if (dbPlayer == null) return;
+
                 //刪除
                 foreach (var i in changes.DeletedIndices) {
                 }
                 //插入
                 foreach (var i in changes.InsertedIndices) {
-                    DBMatchgame item = dbMatchgames.ElementAt(i);
-                    var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
-                    if (dbPlayer != null && item.ID == dbPlayer.InMatchgameID)
+                    DBMatchgame insertedDoc = dbMatchgames.ElementAt(i);
+                    WriteLog.LogError("插入doc: " + insertedDoc.ID);
+                    foreach (var playerID in insertedDoc.PlayerIDs) {
+                        WriteLog.Log("插入playerID=" + playerID);
+                    }
+                    //檢查插入的文件的PlayerIDs是否包含玩家自己
+                    if (insertedDoc.ID == dbPlayer.InMatchgameID) {//insertedDoc.PlayerIDs.Contains(dbPlayer.ID)
                         GameConnector.Instance.ConnToMatchgame();
+                    }
                 }
+
                 //修改
                 foreach (var i in changes.NewModifiedIndices) {
+                    DBMatchgame modifiedDoc = dbMatchgames.ElementAt(i);
+                    WriteLog.LogError("修改doc: " + modifiedDoc.ID);
+                    foreach (var playerID in modifiedDoc.PlayerIDs) {
+                        WriteLog.Log("修改playerID=" + playerID);
+                    }
+                    // 檢查修改的PlayerIDs是否包含玩家自己
+                    if (modifiedDoc.ID == dbPlayer.InMatchgameID) {//modifiedDoc.PlayerIDs.Contains(dbPlayer.ID)
+                        GameConnector.Instance.ConnToMatchgame();
+                    }
                 }
+
                 //Collection清空(對Collection下Clear()指令時)
                 if (changes.IsCleared) {
                 }
