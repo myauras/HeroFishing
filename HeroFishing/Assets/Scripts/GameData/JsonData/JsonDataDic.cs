@@ -75,6 +75,9 @@ namespace Scoz.Func {
             HeroEXPJsonData.DataName = "HeroEXP";
             MyJsonData.SetData_Remote<HeroEXPJsonData>(HeroEXPJsonData.DataName, SetDic);
 
+            DropSpellJsonData.DataName = "DropSpell";
+            MyJsonData.SetData_Remote<DropSpellJsonData>(DropSpellJsonData.DataName, SetDic);
+
             //設定X秒會顯示尚未載入的JsonData
             CoroutineJob.Instance.StartNewAction(ShowUnLoadedJsondata, 5);
 
