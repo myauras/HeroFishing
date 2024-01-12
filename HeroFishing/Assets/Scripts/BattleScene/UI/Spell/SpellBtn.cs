@@ -20,6 +20,8 @@ public class SpellBtn : MonoBehaviour {
     private RectTransform _dragBigCircle;
     [SerializeField]
     private RectTransform _dragSmallCircle;
+    [SerializeField]
+    private Image[] _imgIcons;
 
     private int _chargeValue;
     public int MaxChargeValue => _spellData.Cost;
@@ -56,6 +58,12 @@ public class SpellBtn : MonoBehaviour {
         _chargeButton.Init();
         _button.interactable = false;
         _rt = GetComponent<RectTransform>();
+
+        AddressablesLoader.GetSpriteAtlas("SpellIcon", atlas => {
+            for (int i = 0; i < _imgIcons.Length; i++) {
+                _imgIcons[i].sprite = atlas.GetSprite(_spellData.Ref);
+            }
+        });
     }
 
     public void OpenUpgradeBtn() {

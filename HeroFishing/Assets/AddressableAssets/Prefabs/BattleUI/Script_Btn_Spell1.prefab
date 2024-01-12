@@ -173,12 +173,6 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8198517418179860616, guid: 664b6d4814712f54d84c0c58c23e6646,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: a4c6eced5ccb3c040a8a5ff803ca3b36,
-        type: 3}
     - target: {fileID: 9080754527480067085, guid: 664b6d4814712f54d84c0c58c23e6646,
         type: 3}
       propertyPath: m_SortingLayer
@@ -205,6 +199,18 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 956008440443296396}
   m_SourcePrefab: {fileID: 100100000, guid: 664b6d4814712f54d84c0c58c23e6646, type: 3}
+--- !u!114 &1314250504083299346 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8198517418179860616, guid: 664b6d4814712f54d84c0c58c23e6646,
+    type: 3}
+  m_PrefabInstance: {fileID: 7204593894400836762}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1690887998414905380 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8398340656657343678, guid: 664b6d4814712f54d84c0c58c23e6646,
@@ -267,6 +273,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7204593894400836762}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4546005049240722293 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6696145076236967919, guid: 664b6d4814712f54d84c0c58c23e6646,
+    type: 3}
+  m_PrefabInstance: {fileID: 7204593894400836762}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5787673535946512009 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3722833753592074771, guid: 664b6d4814712f54d84c0c58c23e6646,
@@ -291,6 +309,10 @@ MonoBehaviour:
   _dragObject: {fileID: 1717091783594356528}
   _dragBigCircle: {fileID: 6383942302738808227}
   _dragSmallCircle: {fileID: 3675726420050472044}
+  _imgIcons:
+  - {fileID: 1314250504083299346}
+  - {fileID: 7232324948167593992}
+  - {fileID: 4546005049240722293}
 --- !u!114 &1177246501920558996
 MonoBehaviour:
   m_ObjectHideFlags: 0
