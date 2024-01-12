@@ -218,7 +218,7 @@ namespace HeroFishing.Battle {
             if (spell.ShakeCamera != null)
                 spell.ShakeCamera.Play();
             if (GameConnector.Connected)
-                GameConnector.Instance.Attack(_attackID, _spellData.ID, -1);
+                GameConnector.Instance.Attack(_attackID, _spellData.ID, -1, _lockAttack, _attackPos, _attackDir);
             _attackID++;
             //switch (TmpSpellData.MySpellType) {
             //    case HeroSpellJsonData.SpellType.SpreadLineShot:
