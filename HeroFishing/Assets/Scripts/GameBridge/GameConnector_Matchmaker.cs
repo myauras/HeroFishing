@@ -55,8 +55,7 @@ namespace HeroFishing.Socket {
             if (CurRetryTimes >= MAX_RETRY_TIMES || !InternetChecker.InternetConnected) {
                 WriteLog.LogColorFormat("嘗試連線{0}次都失敗，糟糕了", WriteLog.LogType.Connection, CurRetryTimes, RETRY_INTERVAL_SECS);
                 OnConnToMatchgameCB?.Invoke(false);
-            }
-            else {
+            } else {
                 WriteLog.LogColorFormat("第{0}次連線失敗，{0}秒後嘗試重連: ", WriteLog.LogType.Connection, CurRetryTimes, RETRY_INTERVAL_SECS);
                 //連線失敗有可能是TOKEN過期 刷Token後再連
                 var token = await RealmManager.GetValidAccessToken();
@@ -95,8 +94,7 @@ namespace HeroFishing.Socket {
                 CurRetryTimes++;
                 if (CurRetryTimes >= MAX_RETRY_TIMES || _exception.Message == "NOT_FOUR_PLAYER" || !InternetChecker.InternetConnected) {
                     OnConnToMatchgameCB?.Invoke(false);
-                }
-                else {
+                } else {
                     WriteLog.LogColor("[GameConnector] 建立房間失敗 再試1次", WriteLog.LogType.Connection);
                     // 再試一次
                     DG.Tweening.DOVirtual.DelayedCall(RETRY_INTERVAL_SECS, () => {
@@ -111,6 +109,8 @@ namespace HeroFishing.Socket {
         /// 偵聽到DBMatchgame表被建立後會跳BattleScene並開始跑ConnToMatchgame開始連線到Matchgame
         /// </summary>
         public void ConnToMatchgame() {
+            if (AllocatedRoom.Instance.InGame) return;
+            AllocatedRoom.Instance.SetInGame(true);
             WriteLog.LogColor("DBMatchgame已建立好, 開始連線到Matchgame", WriteLog.LogType.Connection);
             var dbMatchgame = GamePlayer.Instance.GetMatchGame();
             if (dbMatchgame == null) {

@@ -61,6 +61,8 @@ namespace HeroFishing.Main {
         /// 玩家自己在房間的索引(座位))
         /// </summary>
         public int Index { get; private set; }
+
+        public bool InGame { get; private set; } = false; //是否已經在遊戲房間中
         public static void Init() {
             Instance = new AllocatedRoom();
         }
@@ -118,7 +120,12 @@ namespace HeroFishing.Main {
             MyHeroID = _id;
             MyHeroSkinID = _heroSkinID;
         }
-
+        /// <summary>
+        /// 設定玩家是否在遊戲中, 連線到遊戲後要設定為true, 離開遊戲設定回false
+        /// </summary>
+        public void SetInGame(bool _value) {
+            InGame = _value;
+        }
         /// <summary>
         /// 清空配對房間(AllocatedRoom)資訊
         /// </summary>
