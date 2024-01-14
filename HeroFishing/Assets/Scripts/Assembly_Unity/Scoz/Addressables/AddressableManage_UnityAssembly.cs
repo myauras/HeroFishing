@@ -42,10 +42,6 @@ namespace Scoz.Func {
             SceneManager.sceneLoaded -= OnLevelFinishedLoading;
         }
         void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
-            //釋放資源
-            WriteLog_UnityAssembly.LogColorFormat("開始釋放{0}個Addressables資源", WriteLog_UnityAssembly.LogType.Addressable, ResourcesToReleaseWhileChangingScene.Count);
-            foreach (var handle in ResourcesToReleaseWhileChangingScene) Addressables.Release(handle);
-            ResourcesToReleaseWhileChangingScene.Clear();
         }
 
         /// <summary>

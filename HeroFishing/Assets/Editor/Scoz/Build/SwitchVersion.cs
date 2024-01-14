@@ -33,7 +33,7 @@ namespace Scoz.Editor {
         //    { EnvVersion.Release, 2},
         //};
 
-        static Dictionary<EnvVersion, string> ADDRESABALE_PROFILE_DIC = new Dictionary<EnvVersion, string>() {
+        public static Dictionary<EnvVersion, string> ADDRESABALE_PROFILE_DIC = new Dictionary<EnvVersion, string>() {
             { EnvVersion.Dev, "GoogleCloud-Dev"},
             { EnvVersion.Test, "GoogleCloud-Test"},
             { EnvVersion.Release, "GoogleCloud-Release"},

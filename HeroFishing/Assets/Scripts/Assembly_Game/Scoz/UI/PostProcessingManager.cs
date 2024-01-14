@@ -36,7 +36,6 @@ namespace Scoz.Func {
             SceneManager.sceneLoaded -= OnLevelFinishedLoading;
         }
         void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
-            Debug.Log(_scene.name);
             if (MyBloomSettingDic == null || MyBloomSettingDic.Count == 0) return;
             MyVolume.enabled = GamePlayer.Instance.PostProcessing;
             if (!GamePlayer.Instance.PostProcessing)//沒開後製效果就不用處理後續

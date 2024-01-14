@@ -969,8 +969,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7742395272049636117}
-        m_TargetAssemblyTypeName: MaJamPachinko.Main.StartUI, Assembly-CSharp
-        m_MethodName: StartDownloadingAssetAndGoNextScene
+        m_TargetAssemblyTypeName: HeroFishing.Main.StartSceneUI, Game
+        m_MethodName: GoLobby
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2201,7 +2201,6 @@ MonoBehaviour:
   LogutoutGO: {fileID: 9018726479126173688}
   DeleteACGO: {fileID: 7561820680393411525}
   BackToLobbyGO: {fileID: 3046200243490006148}
-  TestTool: {fileID: 0}
   MiddleText: {fileID: 8267706490167459949}
   QuestReportButton: {fileID: 4921233771354091729}
 --- !u!1 &7486481120031003068

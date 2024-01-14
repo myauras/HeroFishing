@@ -78,17 +78,16 @@ namespace HeroFishing.Main {
 
                 //是否第一次執行遊戲，第一次執行遊戲後會自動進大廳，之後透過從大廳的設定中點回到主介面就不會又自動進大廳了
                 if (FirstTimeLaunchGame) {
-                    PopupUI.ShowLoading("Loading");
+                    PopupUI.ShowLoading(StringJsonData.GetUIString("DataLoading"));
                     UniTask.Void(async () => {
                         await RealmManager.OnSignin();
                         RealmManager.OnDataLoaded();
                         PopupUI.HideLoading();
-
                         //如果是Dev版本不直接轉場景(Dev版以外會直接進Lobby)
 #if Dev
                         ShowUI(StartSceneUI.Condition.BackFromLobby_ShowLogoutBtn);
 #else
-                        StartDownloadingAssetAndGoNextScene();//開始載資源包並開始遊戲
+                        GoLobby();//進入下一個場景
 #endif
 
                     });
@@ -101,9 +100,8 @@ namespace HeroFishing.Main {
 
 
 
-        void GoLobby() {
-
-
+        public void GoLobby() {
+            ShowUI(Condition.HideAll);
             //繞過正式流程
             FirstTimeLaunchGame = false;
             PopupUI.InitSceneTransitionProgress(0);
@@ -162,9 +160,9 @@ namespace HeroFishing.Main {
         /// </summary>
         public void ShowInfo() {
             if (RealmManager.MyApp != null && RealmManager.MyApp.CurrentUser != null)
-                VersionText.text = string.Format("Ver: {0} {1} ", Application.version, RealmManager.MyApp.CurrentUser.Id);
+                VersionText.text = string.Format("版本: {0} {1} ", Application.version, RealmManager.MyApp.CurrentUser.Id);
             else
-                VersionText.text = string.Format("Ver: {0}", Application.version);
+                VersionText.text = string.Format("版本: {0}", Application.version);
         }
         /// <summary>
         /// 登入按鈕按下
@@ -252,7 +250,7 @@ namespace HeroFishing.Main {
 #if UNITY_EDITOR
             ShowUI(StartSceneUI.Condition.BackFromLobby_ShowLogoutBtn);
 #else
-            StartDownloadingAssetAndGoNextScene();//開始載資源包並開始遊戲
+            GoLobby();//進入下一個場景
 #endif
 
         }
@@ -361,11 +359,6 @@ namespace HeroFishing.Main {
         public void SetMiddleText(string _str) {
             MiddleText.text = _str;
         }
-        public void StartDownloadingAssetAndGoNextScene() {
-            ShowUI(Condition.HideAll);
-            //進入下一個場景
-        }
-
 
 
         /// <summary>

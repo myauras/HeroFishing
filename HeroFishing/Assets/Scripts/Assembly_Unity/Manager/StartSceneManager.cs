@@ -11,7 +11,6 @@ using UnityEngine.UI;
 
 namespace HeroFishing.Main {
     public class StartSceneManager : MonoBehaviour {
-        [SerializeField] Canvas MyCanvas;
 
         [HeaderAttribute("==============Addressable Assets==============")]
         public AssetReference GameManagerAsset;
@@ -55,29 +54,13 @@ namespace HeroFishing.Main {
         /// </summary>
         void SpawnAddressableAssets() {
 
-
             DateTime now = DateTime.Now;
             //載入GameManager
             AddressablesLoader_UnityAssebly.GetPrefabByRef(GameManagerAsset, (prefab, handle) => {
                 WriteLog_UnityAssembly.LogFormat("載入GameManagerAsset花費: {0}秒", (DateTime.Now - now).TotalSeconds);
                 HandleList.Add(handle);
                 GameObject go = Instantiate(prefab);
-
             });
-
-            ////載入StartUI
-            //AddressablesLoader_UnityAssebly.GetPrefabByRef(StartUIAsset, (prefab, handle) => {
-            //    WriteLog_UnityAssembly.LogFormat("載入StartUIAsset花費: {0}秒", (DateTime.Now - now).TotalSeconds);
-            //    HandleList.Add(handle);
-            //    GameObject go = Instantiate(prefab);
-            //    go.transform.SetParent(MyCanvas.transform);
-            //    go.transform.localPosition = prefab.transform.localPosition;
-            //    go.transform.localScale = prefab.transform.localScale;
-            //    RectTransform rect = go.GetComponent<RectTransform>();
-            //    rect.offsetMin = Vector2.zero;//left、bottom
-            //    rect.offsetMax = Vector2.zero;//right、top
-
-            //});
         }
 
     }

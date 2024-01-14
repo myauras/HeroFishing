@@ -20,11 +20,17 @@ namespace Scoz.Func {
     }
     public class GameManager : MonoBehaviour {
         public static GameManager Instance;
+        public AddressableManage MyAddressableManagerPrefab;
         public static bool IsInit { get; private set; } = false;
         public AssetReference PopupUIAsset;
         public AssetReference ResourcePreSetterAsset;
         public AssetReference PostPocessingAsset;
         public AssetReference AddressableManageAsset;
+        public AssetReference SceneCanvasAsset;
+
+        [Serializable] public class SceneUIAssetDicClass : SerializableDictionary<MyScene, AssetReference> { }
+        [SerializeField] SceneUIAssetDicClass MySceneUIAssetDic;//字典對應UI字典
+
         public int TargetFPS = 60;
         public static EnvVersion CurVersion {//取得目前版本
             get {
@@ -157,17 +163,14 @@ namespace Scoz.Func {
 #endif
             //建立AudioPlayer    
             AudioPlayer.CreateNewAudioPlayer();
-            //建立AddressableManage
-            CreateAddressableManager();
             //建立PoolManager
             PoolManager.CreateNewInstance();
 
             //※設定本機資料要放最後(要在取得本機GameSetting後以及AudioPlayer.CreateNewAudioPlayer之後
             GamePlayer.Instance.LoadLocoData();
 
-            Debug.LogError("開始載包");
-            // 開始載包
-            StartDownloadAddressable(null);
+            // 建立AddressableManage並開始載包
+            StartDownloadAddressable();
         }
 
 
@@ -201,18 +204,42 @@ namespace Scoz.Func {
         /// 3. 建立PopupUI
         /// 4. Callback
         /// </summary>
-        public static void StartDownloadAddressable(Action _action) {
+        public void StartDownloadAddressable() {
+            var addressableManager = Instantiate(MyAddressableManagerPrefab);
+            addressableManager.Init();
             AddressableManage.Instance.StartLoadAsset(async () => {
-                Debug.LogError("載包完成");
                 await LoadAssembly();//載入GameDll
                 GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
                     MyText.RefreshActivityTextsAndFunctions();//更新介面的MyTex
                     Instance.CreateResourcePreSetter();//載入ResourcePreSetter
                     Instance.CreateAddressableUIs(() => { //產生PopupUI
-                        _action?.Invoke();
+                        SpawnUI();
                     });
                 });
             });
+        }
+
+        /// <summary>
+        /// 根據所在Scene產生UI
+        /// </summary>
+        public void SpawnUI() {
+            var myScene = MyEnum.ParseEnum<MyScene>(SceneManager.GetActiveScene().name);
+            AddressablesLoader.GetPrefabByRef(SceneCanvasAsset, (canvasPrefab, handle) => {
+                GameObject canvas = Instantiate(canvasPrefab);
+                canvas.GetComponent<Canvas>().worldCamera = Camera.main;
+                //載入StartUI
+                AddressablesLoader.GetPrefabByRef(MySceneUIAssetDic[myScene], (prefab, handle) => {
+                    GameObject go = Instantiate(prefab);
+                    go.transform.SetParent(canvas.transform);
+                    go.transform.localPosition = prefab.transform.localPosition;
+                    go.transform.localScale = prefab.transform.localScale;
+                    RectTransform rect = go.GetComponent<RectTransform>();
+                    rect.offsetMin = Vector2.zero;//left、bottom
+                    rect.offsetMax = Vector2.zero;//right、top
+                });
+            });
+            
+
         }
         /// <summary>
         /// 載入GameDll
@@ -256,16 +283,6 @@ namespace Scoz.Func {
             };
         }
 
-        public void CreateAddressableManager() {
-            Addressables.LoadAssetAsync<GameObject>(Instance.ResourcePreSetterAsset).Completed += handle => {
-                GameObject go = Instantiate(handle.Result);
-                go.name = "AddressableManage";
-                var am = go.GetComponent<AddressableManage>();
-                am.Init();
-
-            };
-        }
-
         public void CreateResourcePreSetter() {
             Addressables.LoadAssetAsync<GameObject>(Instance.ResourcePreSetterAsset).Completed += handle => {
                 GameObject go = Instantiate(handle.Result);
@@ -275,7 +292,7 @@ namespace Scoz.Func {
         }
 
         /// <summary>
-        /// 將自己的camera加入到目前場景上的MainCameraStack中
+        /// 將指定camera加入到目前場景上的MainCameraStack中
         /// </summary>
         public void AddCamStack(Camera _cam) {
             if (_cam == null) return;
