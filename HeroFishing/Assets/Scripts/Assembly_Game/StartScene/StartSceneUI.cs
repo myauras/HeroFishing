@@ -71,10 +71,10 @@ namespace HeroFishing.Main {
             //※之後也要新增玩家註冊完但是初始化玩家資料失敗的流程(不太會發生 但要考慮這個可能性)
             //※之後也要新增玩家註冊完但是初始化玩家資料失敗的流程(不太會發生 但要考慮這個可能性)
 
-            if (RealmManager.MyApp.CurrentUser == null) {//玩家尚未登入
+            if (RealmManager.MyApp.CurrentUser == null) {//尚無Realm帳戶
                 WriteLog.LogColor("玩家尚未登入Realm", WriteLog.LogType.Realm);
                 ShowUI(Condition.NotLogin);
-            } else {//已經登入，就開始載包並進入遊戲
+            } else {//已經有Realm帳戶，就登入Realm
 
                 //是否第一次執行遊戲，第一次執行遊戲後會自動進大廳，之後透過從大廳的設定中點回到主介面就不會又自動進大廳了
                 if (FirstTimeLaunchGame) {

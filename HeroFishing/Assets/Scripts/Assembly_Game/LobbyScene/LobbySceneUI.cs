@@ -2,6 +2,8 @@ using UnityEngine;
 using Scoz.Func;
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Service.Realms;
 
 namespace HeroFishing.Main {
 
@@ -40,17 +42,40 @@ namespace HeroFishing.Main {
 
         public override void Init() {
             base.Init();
-            PopupUI.FinishSceneTransitionProgress("LobbyUILoaded");
-            //初始化UIs
-            MyMapUI.Init();
-            MyMapUI.LoadItemAsset();
-            UIs.Add(LobbyUIs.Map, MyMapUI);
-            MyHeroUI.Init();
-            MyHeroUI.LoadItemAsset();
-            UIs.Add(LobbyUIs.Hero, MyHeroUI);
-
-            SwitchUI(LobbyUIs.Lobby);
             Instance = this;
+
+
+            //檢查realmg登入檢查
+            RealmLoginCheck(() => {
+                //初始化UIs
+                PopupUI.FinishSceneTransitionProgress("LobbyUILoaded");
+                MyMapUI.Init();
+                MyMapUI.LoadItemAsset();
+                UIs.Add(LobbyUIs.Map, MyMapUI);
+                MyHeroUI.Init();
+                MyHeroUI.LoadItemAsset();
+                UIs.Add(LobbyUIs.Hero, MyHeroUI);
+                SwitchUI(LobbyUIs.Lobby);
+
+            });
+        }
+
+
+        void RealmLoginCheck(Action _ac) {
+            if (RealmManager.MyApp.CurrentUser == null) {//尚無Realm帳戶
+                PopupUI.ShowLoading("玩家尚未登入Realm 要先登入Realm才能從Lobby開始遊戲");
+                WriteLog.LogError("玩家尚未登入Realm 要先登入Realm才能從Lobby開始遊戲");
+                return;
+            } else {//已經有Realm帳戶，就登入Realm
+
+                PopupUI.ShowLoading(StringJsonData.GetUIString("DataLoading"));
+                UniTask.Void(async () => {
+                    await RealmManager.OnSignin();
+                    RealmManager.OnDataLoaded();
+                    PopupUI.HideLoading();
+                    _ac?.Invoke();
+                });
+            }
         }
 
         void CloseUIExcept(LobbyUIs _exceptUI) {
