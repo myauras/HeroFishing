@@ -132,6 +132,9 @@ namespace HeroFishing.Battle {
                     return;
                 }
 
+                IsNetwork &= _collisionData.HeroIndex == 0;
+                Entity networkEntity = Entity.Null;
+
                 foreach (var offset in OffsetGrids) {
                     int2 gridToCheck = gridIndex + offset;
 
@@ -197,24 +200,22 @@ namespace HeroFishing.Battle {
                                     ECB.AddComponent(7, hitEntity, bulletHitTag);
                                 }
 
-                                IsNetwork &= _collisionData.HeroIndex == 0;
-                                Entity networkEntity = Entity.Null;
                                 if (IsNetwork) {
-                                    networkEntity = ECB.CreateEntity(0);
-                                    ECB.AddComponent(1, networkEntity, new SpellHitNetworkData {
-                                        AttackID = _collisionData.AttackID,
-                                        StrIndex_SpellID = _collisionData.StrIndex_SpellID
+                                    if (networkEntity == Entity.Null) {
+                                        networkEntity = ECB.CreateEntity(0);
+                                        ECB.AddComponent(1, networkEntity, new SpellHitNetworkData {
+                                            AttackID = _collisionData.AttackID,
+                                            StrIndex_SpellID = _collisionData.StrIndex_SpellID
+                                        });
+                                        ECB.AddBuffer<MonsterHitNetworkData>(1, networkEntity);
+                                    }
+                                    ECB.AppendToBuffer(9, networkEntity, new MonsterHitNetworkData {
+                                        Monster = monsterValue,
                                     });
-                                    ECB.AddBuffer<MonsterHitNetworkData>(1, networkEntity);
                                 }
 
                                 if (_collisionData.Destroy) {
-                                    ECB.DestroyEntity(8, _entity);//銷毀子彈
-                                    if (IsNetwork) {
-                                        ECB.AppendToBuffer(9, networkEntity, new MonsterHitNetworkData {
-                                            Monster = monsterValue,
-                                        });
-                                    }
+                                    ECB.DestroyEntity(8, _entity);//銷毀子彈                                    
                                     return;
                                 }
                             }
