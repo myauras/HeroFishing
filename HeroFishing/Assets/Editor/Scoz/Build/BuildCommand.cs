@@ -91,7 +91,7 @@ namespace Scoz.Editor {
                 Debug.Log("ARG " + i + ": " + args[i]);
                 switch (args[i]) {
                     case "-enviorment":
-                        if (!MyEnum.TryParseEnum(args[i + 1], out envVersion)) {
+                        if (!MyEnum_UnityAssembly.TryParseEnum(args[i + 1], out envVersion)) {
                             Debug.LogError("傳入的版本參數錯誤");
                             Close();
                             return;
@@ -132,7 +132,7 @@ namespace Scoz.Editor {
                 Debug.Log("ARG " + i + ": " + args[i]);
                 switch (args[i]) {
                     case "-enviorment":
-                        if (!MyEnum.TryParseEnum(args[i + 1], out envVersion)) {
+                        if (!MyEnum_UnityAssembly.TryParseEnum(args[i + 1], out envVersion)) {
                             Debug.LogError("傳入的版本參數錯誤");
                             Close();
                             return;
@@ -175,7 +175,7 @@ namespace Scoz.Editor {
                 Debug.Log("ARG " + i + ": " + args[i]);
                 switch (args[i]) {
                     case "-enviorment":
-                        if (!MyEnum.TryParseEnum(args[i + 1], out envVersion)) {
+                        if (!MyEnum_UnityAssembly.TryParseEnum(args[i + 1], out envVersion)) {
                             Debug.LogError("傳入的版本參數錯誤");
                             Close();
                             return;
@@ -218,7 +218,7 @@ namespace Scoz.Editor {
                 Debug.Log("ARG " + i + ": " + args[i]);
                 switch (args[i]) {
                     case "-enviorment":
-                        if (!MyEnum.TryParseEnum(args[i + 1], out envVersion)) {
+                        if (!MyEnum_UnityAssembly.TryParseEnum(args[i + 1], out envVersion)) {
                             Debug.LogError("傳入的版本參數錯誤");
                             Close();
                             return;
@@ -330,7 +330,7 @@ namespace Scoz.Editor {
                 Debug.Log("ARG " + i + ": " + args[i]);
                 switch (args[i]) {
                     case "-enviorment":
-                        if (!MyEnum.TryParseEnum(args[i + 1], out envVersion)) {
+                        if (!MyEnum_UnityAssembly.TryParseEnum(args[i + 1], out envVersion)) {
                             Debug.LogError("傳入的版本參數錯誤");
                             Close();
                             return;

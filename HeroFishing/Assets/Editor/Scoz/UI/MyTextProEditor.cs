@@ -5,7 +5,7 @@ using System.Collections;
 using TMPro;
 
 namespace Scoz.Func {
-    [CustomEditor(typeof(MyTextPro))]
+    //[CustomEditor(typeof(MyTextPro))]
     public class MyTextProEditor : TMPro.EditorUtilities.TMP_EditorPanelUI {
         SerializedProperty UIString;
         protected override void OnEnable() {
@@ -21,11 +21,11 @@ namespace Scoz.Func {
         }
         [MenuItem("GameObject/Scoz/UI/MyTextPro", false, 10)]
         static void CreateCustomGameObject(MenuCommand menuCommand) {
-            GameObject go = new GameObject("MyTextPro");
-            go.AddComponent<MyTextPro>();
-            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
-            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
-            Selection.activeGameObject = go;
+            //GameObject go = new GameObject("MyTextPro");
+            //go.AddComponent<MyTextPro>();
+            //GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+            //Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            //Selection.activeGameObject = go;
         }
     }
 }

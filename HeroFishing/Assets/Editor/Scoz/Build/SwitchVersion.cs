@@ -33,7 +33,7 @@ namespace Scoz.Editor {
         //    { EnvVersion.Release, 2},
         //};
 
-        static Dictionary<EnvVersion, string> ADDRESABALE_PROFILE_DIC = new Dictionary<EnvVersion, string>() {
+        public static Dictionary<EnvVersion, string> ADDRESABALE_PROFILE_DIC = new Dictionary<EnvVersion, string>() {
             { EnvVersion.Dev, "GoogleCloud-Dev"},
             { EnvVersion.Test, "GoogleCloud-Test"},
             { EnvVersion.Release, "GoogleCloud-Release"},
@@ -64,9 +64,9 @@ namespace Scoz.Editor {
             if (isYes) {
                 RunSwitchVersion(EnvVersion.Dev, result => {
                     if (result) {
-                        WriteLog.Log(string.Format("<color=#8cff3f>切換版本 {0} 完成</color>", EnvVersion.Dev));
+                        WriteLog_UnityAssembly.Log(string.Format("<color=#8cff3f>切換版本 {0} 完成</color>", EnvVersion.Dev));
                     } else {
-                        WriteLog.Log(string.Format("<color=#ff3f3f>切換版本 {0} 發生錯誤</color>", EnvVersion.Dev));
+                        WriteLog_UnityAssembly.Log(string.Format("<color=#ff3f3f>切換版本 {0} 發生錯誤</color>", EnvVersion.Dev));
                     }
                 });
 
@@ -78,9 +78,9 @@ namespace Scoz.Editor {
             if (isYes) {
                 RunSwitchVersion(EnvVersion.Test, result => {
                     if (result) {
-                        WriteLog.Log(string.Format("<color=#8cff3f>切換版本 {0} 完成</color>", EnvVersion.Test));
+                        WriteLog_UnityAssembly.Log(string.Format("<color=#8cff3f>切換版本 {0} 完成</color>", EnvVersion.Test));
                     } else {
-                        WriteLog.Log(string.Format("<color=#ff3f3f>切換版本 {0} 發生錯誤</color>", EnvVersion.Test));
+                        WriteLog_UnityAssembly.Log(string.Format("<color=#ff3f3f>切換版本 {0} 發生錯誤</color>", EnvVersion.Test));
                     }
                 });
             }
@@ -91,9 +91,9 @@ namespace Scoz.Editor {
             if (isYes) {
                 RunSwitchVersion(EnvVersion.Release, result => {
                     if (result) {
-                        WriteLog.Log(string.Format("<color=#8cff3f>切換版本 {0} 完成</color>", EnvVersion.Release));
+                        WriteLog_UnityAssembly.Log(string.Format("<color=#8cff3f>切換版本 {0} 完成</color>", EnvVersion.Release));
                     } else {
-                        WriteLog.Log(string.Format("<color=#ff3f3f>切換版本 {0} 發生錯誤</color>", EnvVersion.Release));
+                        WriteLog_UnityAssembly.Log(string.Format("<color=#ff3f3f>切換版本 {0} 發生錯誤</color>", EnvVersion.Release));
                     }
                 });
 
@@ -142,12 +142,12 @@ namespace Scoz.Editor {
                     string remoteLoadPath = @"https://storage.googleapis.com/" + UploadBundle.GOOGLE_STORAGE_PATH_DIC[_version] + @"/{Scoz.Func.VersionSetting.AppLargeVersion}/[BuildTarget]";
                     settings.profileSettings.SetValue(prfileID, "RemoteLoadPath", remoteLoadPath);
                 } else {
-                    WriteLog.LogError("Addressable prfile setting error.");
+                    WriteLog_UnityAssembly.LogError("Addressable prfile setting error.");
                     _cb?.Invoke(false);
 
                 }
             } else {
-                WriteLog.LogError("Addressable prfile setting error.");
+                WriteLog_UnityAssembly.LogError("Addressable prfile setting error.");
                 _cb?.Invoke(false);
             }
             //修改Keystore
@@ -189,7 +189,7 @@ namespace Scoz.Editor {
                     bool anyVersionDefine = false;
 
                     for (int i = 0; i < defines.Count; i++) {
-                        if (MyEnum.IsTypeOfEnum<EnvVersion>(defines[i])) {
+                        if (MyEnum_UnityAssembly.IsTypeOfEnum<EnvVersion>(defines[i])) {
                             defines[i] = _envVersion.ToString();//將本來版本改為要設定的版本
                             anyVersionDefine = true;
                         }
