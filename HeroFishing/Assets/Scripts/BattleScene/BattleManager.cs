@@ -43,6 +43,10 @@ namespace HeroFishing.Battle {
                 if (GameConnector.Connected)
                     GameConnector.Instance.UpdateScene();
             });
+
+            if (GameConnector.Connected) {
+                GameConnector.Instance.UpdateScene();
+            }
         }
 
         private void InitPlayerHero() {
