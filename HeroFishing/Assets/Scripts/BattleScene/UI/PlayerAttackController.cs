@@ -148,7 +148,8 @@ namespace HeroFishing.Battle {
             var mousePos = UIPosition.GetMouseWorldPointOnYZero(0);
             _spellPos = (mousePos - _originPos) * MOVE_SCALE_FACTOR + _hero.transform.position;
             _spellDir = (mousePos - _originPos).normalized;
-            _hero.FaceDir(Quaternion.LookRotation(_spellDir));
+            if (_spellDir != Vector3.zero)
+                _hero.FaceDir(Quaternion.LookRotation(_spellDir));
 
             if (_spellData.MyDragType == HeroSpellJsonData.DragType.Rot) {
                 float angle = Mathf.Atan2(_spellDir.x, _spellDir.z) * Mathf.Rad2Deg;
@@ -167,11 +168,15 @@ namespace HeroFishing.Battle {
             // 回到原位，否則旋轉的Indicator會有錯誤
             SpellIndicator.Instance.MoveIndicator(_hero.transform.position);
 
+            cancel |= _spellDir == Vector3.zero;
+
             if (!cancel) {
                 var position = _spellData.MyDragType == HeroSpellJsonData.DragType.Rot ? _hero.transform.position : _spellPos;
                 //設定技能
                 OnSetSpell(position, _spellDir);
             }
+            _spellPos = Vector3.zero;
+            _spellDir = Vector3.zero;
         }
 
         public void OnSetSpell(Vector3 _attackerPos, Vector3 _attackDir) {

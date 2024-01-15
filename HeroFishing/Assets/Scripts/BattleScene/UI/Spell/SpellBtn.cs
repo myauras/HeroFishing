@@ -115,6 +115,8 @@ public class SpellBtn : MonoBehaviour {
 
     public void Release() {
         _dragObject.SetActive(false);
+        _dragSmallCircle.transform.localPosition = Vector3.zero;
+        _dragBigCircle.transform.localEulerAngles = Vector3.zero;
     }
 
     //[ContextMenu("Level Up")]
