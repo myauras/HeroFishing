@@ -46,7 +46,7 @@ namespace HeroFishing.Main {
             ShowInfo();//顯示資訊
             // Apple登入要打開
 #if UNITY_IOS
-                        AppleLoginGO.SetActive(true);
+            AppleLoginGO.SetActive(true);
 #else
             AppleLoginGO.SetActive(false);
 #endif

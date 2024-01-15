@@ -14,7 +14,6 @@ namespace HeroFishing.Main {
 
         [HeaderAttribute("==============Addressable Assets==============")]
         public AssetReference GameManagerAsset;
-        public AssetReference StartUIAsset;
 
         public static StartSceneManager Instance;
         List<AsyncOperationHandle> HandleList = new List<AsyncOperationHandle>();

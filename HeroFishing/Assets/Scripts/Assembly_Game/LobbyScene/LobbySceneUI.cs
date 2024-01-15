@@ -34,6 +34,10 @@ namespace HeroFishing.Main {
         ////後產生的UI實體
         //BattleUI MyBattleUI;
 
+        private void Start() {
+            Init();
+        }
+
         public override void Init() {
             base.Init();
             PopupUI.FinishSceneTransitionProgress("LobbyUILoaded");
