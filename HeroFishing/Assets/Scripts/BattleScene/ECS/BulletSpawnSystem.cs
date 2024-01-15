@@ -46,7 +46,7 @@ namespace HeroFishing.Battle {
                 //float collisionTime = spellData.CollisionTime == 0 ? spellData.LifeTime : spellData.CollisionTime;
                 //設定碰撞
                 ECB.AddComponent(entity, new BulletCollisionData {
-                    PlayerID = spellData.PlayerID,
+                    HeroIndex = spellData.HeroIndex,
                     AttackID = spellData.SpawnData.AttackID,
                     StrIndex_SpellID = spellData.StrIndex_SpellID,
                     SpellPrefabID = spellData.SpawnData.SpellPrefabID,
@@ -81,7 +81,7 @@ namespace HeroFishing.Battle {
                 float collisionTime = spellData.CollisionTime == 0 ? spellData.LifeTime : spellData.CollisionTime;
                 //設定碰撞
                 ECB.AddComponent(entity, new AreaCollisionData {
-                    PlayerID = spellData.PlayerID,
+                    HeroIndex = spellData.HeroIndex,
                     AttackID = spellData.SpawnData.AttackID,
                     StrIndex_SpellID = spellData.StrIndex_SpellID,
                     Position = spellData.SpawnData.InitPosition,

@@ -197,6 +197,7 @@ namespace HeroFishing.Battle {
                                     ECB.AddComponent(7, hitEntity, bulletHitTag);
                                 }
 
+                                IsNetwork &= _collisionData.HeroIndex == 0;
                                 Entity networkEntity = Entity.Null;
                                 if (IsNetwork) {
                                     networkEntity = ECB.CreateEntity(0);

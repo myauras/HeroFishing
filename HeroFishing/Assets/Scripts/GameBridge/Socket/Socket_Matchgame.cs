@@ -241,6 +241,8 @@ namespace HeroFishing.Socket {
 
         void HandleSETHERO(SocketCMD<SETHERO_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            AllocatedRoom.Instance.SetHeros(_packet.Content.HeroIDs, _packet.Content.HeroSkinIDs);
+            BattleManager.Instance.UpdateHeros();
         }
 
         void HandleHit(SocketCMD<HIT_TOCLIENT> _packet) {
@@ -254,7 +256,8 @@ namespace HeroFishing.Socket {
         }
         void HandleAttack(SocketCMD<ATTACK_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
-            WriteLog.Log(DebugUtils.ObjToStr(_packet.Content));
+            //WriteLog.Log(DebugUtils.ObjToStr(_packet.Content));
+            BattleManager.Instance.Attack(_packet.Content);
         }
         void HandleUpdateGame(SocketCMD<UPDATEGAME_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;

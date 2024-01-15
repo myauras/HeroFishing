@@ -44,7 +44,7 @@ public struct SpellSpawnData {
 }
 
 public struct SpellBulletData : IComponentData {
-    public int PlayerID;
+    public int HeroIndex;
     public uint StrIndex_SpellID;
     public SpellSpawnData SpawnData;
     public float Speed;
@@ -56,7 +56,7 @@ public struct SpellBulletData : IComponentData {
 }
 
 public struct SpellAreaData : IComponentData {
-    public int PlayerID;
+    public int HeroIndex;
     public uint StrIndex_SpellID;
     public SpellSpawnData SpawnData;
     public float Radius;
@@ -123,7 +123,7 @@ public struct KillMonsterData : IComponentData {
 }
 
 public struct SpellHitTag : IComponentData {
-    public int PlayerID;
+    public int HeroIndex;
     public int AttackID;
     public uint StrIndex_SpellID;
     public MonsterValue Monster;
@@ -133,7 +133,7 @@ public struct SpellHitTag : IComponentData {
 }
 
 public struct ChainHitData : IComponentData {
-    public int PlayerID;
+    public int HeroIndex;
     public int AttackID;
     public uint StrIndex_SpellID;
     public MonsterValue OnHitMonster;
@@ -158,7 +158,7 @@ public struct MoveData : IComponentData {
 }
 
 public struct BulletCollisionData : IComponentData {
-    public int PlayerID;
+    public int HeroIndex;
     public int AttackID;
     public uint StrIndex_SpellID;
     public int SpellPrefabID;
@@ -170,7 +170,7 @@ public struct BulletCollisionData : IComponentData {
 }
 
 public struct AreaCollisionData : IComponentData {
-    public int PlayerID;
+    public int HeroIndex;
     public int AttackID;
     public uint StrIndex_SpellID;
     public int SpellPrefabID;

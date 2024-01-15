@@ -74,6 +74,7 @@ public partial struct AreaCollisionSystem : ISystem {
             }
             _collisionData.WaveIndex++;
 
+            IsNetwork &= _collisionData.HeroIndex == 0;
             Entity networkEntity = Entity.Null;
             if (IsNetwork) {
                 networkEntity = ECB.CreateEntity(0);

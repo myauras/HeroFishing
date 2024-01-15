@@ -50,7 +50,7 @@ public class LineShotSpell : SpellBase {
         };
 
         var bulletData = new SpellBulletData {
-            PlayerID = 1,
+            HeroIndex = playData.heroIndex,
             StrIndex_SpellID = strIndex_SpellID,
             SpawnData = spawnData,
             Speed = _speed,

@@ -28,6 +28,9 @@ namespace HeroFishing.Battle {
         private const int SPELL_COUNT = 4;
         private const int MAX_LEVEL = 10;
 
+        private GameObject _model;
+        public bool IsLoaded => _model != null;
+
         public void Register(SpellActivationBehaviour activationBehaviour) {
             ActivationBehaviour = activationBehaviour;
         }
@@ -37,13 +40,20 @@ namespace HeroFishing.Battle {
             MyHeroSkinData = HeroSkinJsonData.GetData(_heroSkinID);
             LoadModel();
         }
+
+        public void ResetData() {
+            if (_model != null)
+                Destroy(_model);
+            _model = null;
+        }
+
         void LoadModel() {
             string path = string.Format("Role/{0}/{1}.prefab", MyData.Ref, MyHeroSkinData.Prefab);
             AddressablesLoader.GetPrefabResourceByPath<GameObject>(path, (prefab, handle) => {
-                var go = Instantiate(prefab, transform);
-                go.transform.localPosition = prefab.transform.localPosition;
-                go.transform.localRotation = prefab.transform.localRotation;
-                go.transform.localScale = prefab.transform.localScale;
+                _model = Instantiate(prefab, transform);
+                _model.transform.localPosition = prefab.transform.localPosition;
+                _model.transform.localRotation = prefab.transform.localRotation;
+                _model.transform.localScale = prefab.transform.localScale;
                 Addressables.Release(handle);
                 SetModel();
             });

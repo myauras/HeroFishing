@@ -44,7 +44,7 @@ public class SectorAreaSpell : SpellBase {
         };
 
         entityManager.AddComponentData(entity, new SpellAreaData {
-            PlayerID = 1,
+            HeroIndex = playData.heroIndex,
             StrIndex_SpellID = strIndex_SpellID,
             SpawnData = spawnData,
             Radius = _radius,

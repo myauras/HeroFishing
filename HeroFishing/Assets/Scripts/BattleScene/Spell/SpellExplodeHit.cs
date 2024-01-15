@@ -25,7 +25,7 @@ public class SpellExplodeHit : SpellHitBase {
     public override void OnHit(EntityCommandBuffer.ParallelWriter writer, SpellHitTag hitTag) {
         var entity = writer.CreateEntity(0);
         writer.AddComponent(entity.Index + 1, entity, new SpellAreaData() {
-            PlayerID = hitTag.PlayerID,
+            HeroIndex = hitTag.HeroIndex,
             StrIndex_SpellID = hitTag.StrIndex_SpellID,
             SpawnData = new SpellSpawnData {
                 AttackID = hitTag.AttackID,
