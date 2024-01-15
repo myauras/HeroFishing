@@ -85,11 +85,18 @@ namespace HeroFishing.Battle {
             for (int i = 0; i < MAX_HERO_COUNT; i++) {
                 int playerIndex = i;
                 if (Index == playerIndex) continue;
-                // id為0，代表沒有這個hero
-                int id = AllocatedRoom.Instance.HeroIDs[i];
-                if (id == 0) continue;
+
                 int heroIndex = GetHeroIndex(playerIndex);
                 Hero hero = GetHero(heroIndex);
+                // id為0，代表沒有這個hero
+                int id = AllocatedRoom.Instance.HeroIDs[i];
+                if (id == 0) {
+                    if (hero.IsLoaded) {
+                        hero.ResetData();
+                    }
+                    continue;
+                }
+
                 if (hero.IsLoaded) continue;
                 hero.SetData(id, AllocatedRoom.Instance.HeroSkinIDs[i]);
             }

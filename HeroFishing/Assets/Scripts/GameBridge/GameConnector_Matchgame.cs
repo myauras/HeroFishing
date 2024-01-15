@@ -58,5 +58,9 @@ namespace HeroFishing.Socket {
             Socket.TCPSend(cmd);
         }
 
+        public void Auto(bool isAuto) {
+            SocketCMD<AUTO> cmd = new SocketCMD<AUTO>(new AUTO(isAuto));
+            Socket.TCPSend(cmd);
+        }
     }
 }

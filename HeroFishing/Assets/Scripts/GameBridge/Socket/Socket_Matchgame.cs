@@ -219,6 +219,14 @@ namespace HeroFishing.Socket {
                             var monsterDiePacket = LitJson.JsonMapper.ToObject<SocketCMD<MONSTERDIE_TOCLIENT>>(_msg);
                             HandleMonsterDie(monsterDiePacket);
                             break;
+                        case SocketContent.MatchgameCMD_TCP.AUTO_TOCLIENT:
+                            var autoPacket = JsonMapper.ToObject<SocketCMD<AUTO_TOCLIENT>>(_msg);
+                            HandleAuto(autoPacket);
+                            break;
+                        case SocketContent.MatchgameCMD_TCP.LEAVE_TOCLIENT:
+                            var leavePacket = JsonMapper.ToObject<SocketCMD<LEAVE_TOCLIENT>>(_msg);
+                            HandleLeave(leavePacket);
+                            break;
                         default:
                             WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
                             break;
@@ -284,5 +292,16 @@ namespace HeroFishing.Socket {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
         }
 
+        void HandleAuto(SocketCMD<AUTO_TOCLIENT> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            Debug.Log(_packet.Content.IsAuto);
+        }
+
+        void HandleLeave(SocketCMD<LEAVE_TOCLIENT> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            //Debug.Log(_packet.Content.PlayerIdx);
+            AllocatedRoom.Instance.SetHero(_packet.Content.PlayerIdx, 0, string.Empty);
+            BattleManager.Instance.UpdateHeros();
+        }
     }
 }

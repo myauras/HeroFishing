@@ -49,6 +49,8 @@ namespace HeroFishing.Socket {
             SPAWN_TOCLIENT,//生怪
             UPDATESCENE_TOCLIENT,//場景狀態更新
             MONSTERDIE_TOCLIENT,//怪物死亡時送Client
+            AUTO_TOCLIENT,//Auto模式
+            LEAVE_TOCLIENT,//離開遊戲
         }
         public enum MatchgameCMD_UDP {
             //ATTACK_TOCLIENT,//攻擊
