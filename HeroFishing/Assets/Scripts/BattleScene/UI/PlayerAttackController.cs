@@ -116,8 +116,7 @@ namespace HeroFishing.Battle {
             _isAttack = false;
             _scheduledNextAttackTime = Time.time + _spellData.CD;
             //攻擊方向
-            var pos = UIPosition.GetMouseWorldPointOnYZero(0);
-
+            var pos = _lockAttack && _targetMonster != null ? _targetMonster.transform.position : UIPosition.GetMouseWorldPointOnYZero(0);
             var dir = (pos - _hero.transform.position).normalized;
             //設定技能
             OnSetSpell(pos, dir);
