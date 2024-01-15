@@ -197,9 +197,11 @@ namespace HeroFishing.Battle {
         private void SetECSSpellData(Vector3 _attackPos, Vector3 _attackDir) {
             if (_spellData.Spell == null) return;
             var spell = _spellData.Spell;
+            var monsterIdx = _targetMonster != null && _lockAttack ? _targetMonster.MonsterIdx : -1;
             spell.Play(new SpellPlayData {
                 lockAttack = _lockAttack,
-                monsterIdx = _targetMonster != null && _lockAttack ? _targetMonster.MonsterIdx : -1,
+                heroIndex = 0,
+                monsterIdx = monsterIdx,
                 attackID = _attackID,
                 attackPos = _attackPos,
                 heroPos = _hero.transform.position,
@@ -218,7 +220,7 @@ namespace HeroFishing.Battle {
             if (spell.ShakeCamera != null)
                 spell.ShakeCamera.Play();
             if (GameConnector.Connected)
-                GameConnector.Instance.Attack(_attackID, _spellData.ID, -1, _lockAttack, _attackPos, _attackDir);
+                GameConnector.Instance.Attack(_attackID, _spellData.ID, monsterIdx, _lockAttack, _attackPos, _attackDir);
             _attackID++;
             //switch (TmpSpellData.MySpellType) {
             //    case HeroSpellJsonData.SpellType.SpreadLineShot:
