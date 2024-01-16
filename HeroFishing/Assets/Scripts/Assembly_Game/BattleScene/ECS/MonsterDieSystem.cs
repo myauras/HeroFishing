@@ -3,18 +3,20 @@ using Unity.Entities;
 
 
 namespace HeroFishing.Battle {
+    [CreateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
     public partial struct MonsterDieSystem : ISystem {
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<MonsterInstance>();
             state.RequireForUpdate<MonsterDieTag>();
+            ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         public void OnDestroy(ref SystemState state) {
         }
 
         public void OnUpdate(ref SystemState state) {
-            ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+
             var ecbWriter = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
             //bool isFrozen = SystemAPI.HasSingleton<FreezeTag>();
             foreach (var (monsterInstance, _, entity) in SystemAPI.Query<MonsterInstance, MonsterDieTag>().WithEntityAccess()) {

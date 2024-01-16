@@ -12,6 +12,7 @@ namespace HeroFishing.Battle {
 
     [CreateAfter(typeof(BulletSpawnSystem))]
     [UpdateAfter(typeof(BulletSpawnSystem))]
+    [CreateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
     public partial struct SpellEffectSpawnSystem : ISystem {
 
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;

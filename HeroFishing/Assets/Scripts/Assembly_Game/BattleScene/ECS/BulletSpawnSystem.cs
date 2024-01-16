@@ -10,12 +10,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 namespace HeroFishing.Battle {
+    [CreateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
     public partial struct BulletSpawnSystem : ISystem {
 
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
 
-
-        [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<BulletSpawnSys>();
             var query = SystemAPI.QueryBuilder().WithAny<SpellBulletData, SpellAreaData>().Build();

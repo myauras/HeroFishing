@@ -4,11 +4,13 @@ using Unity.Entities;
 using UnityEngine;
 
 [BurstCompile]
+[CreateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
 public partial struct HitNetworkSystem : ISystem {
     private EndSimulationEntityCommandBufferSystem.Singleton _singleton;
     [BurstCompile]
     public void OnCreate(ref SystemState state) {
         state.RequireForUpdate<SpellHitNetworkData>();
+        _singleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
     }
 
     [BurstCompile]
@@ -17,7 +19,7 @@ public partial struct HitNetworkSystem : ISystem {
     }
 
     public void OnUpdate(ref SystemState state) {
-        _singleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+ 
         var writer = _singleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
         foreach (var (hitData, entity) in SystemAPI.Query<SpellHitNetworkData>().WithEntityAccess()) {
             var monsterData = SystemAPI.GetBuffer<MonsterHitNetworkData>(entity);

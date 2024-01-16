@@ -6,19 +6,21 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 namespace HeroFishing.Battle {
+    [CreateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
     public partial struct MonsterHitSystem : ISystem {
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
         Random random;
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<MonsterInstance>();
             state.RequireForUpdate<MonsterHitTag>();
+            ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         public void OnDestroy(ref SystemState state) {
         }
 
         public void OnUpdate(ref SystemState state) {
-            ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+
             var ecbWriter = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
 
             //確認是否是本地端處理死亡

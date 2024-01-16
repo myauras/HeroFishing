@@ -3,10 +3,12 @@ using System.Linq;
 using Unity.Burst;
 using Unity.Entities;
 
+[CreateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
 public partial struct SpellHitSystem : ISystem {
     EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
     public void OnCreate(ref SystemState state) {
         state.RequireForUpdate<SpellHitTag>();
+        ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
     }
 
     public void OnDestroy(ref SystemState state) {
@@ -14,7 +16,7 @@ public partial struct SpellHitSystem : ISystem {
     }
 
     public void OnUpdate(ref SystemState state) {
-        ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+
         var ecbWriter = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
         foreach (var (hitTag, entity) in SystemAPI.Query<SpellHitTag>().WithEntityAccess()) {
             // ¨ú±ohitªºspell data

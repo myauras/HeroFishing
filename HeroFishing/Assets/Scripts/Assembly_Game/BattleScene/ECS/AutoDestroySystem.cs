@@ -8,6 +8,7 @@ using Unity.Physics;
 using Unity.Transforms;
 
 namespace HeroFishing.Battle {
+    [CreateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
     public partial struct AutoDestroySystem : ISystem {
 
         EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
@@ -17,7 +18,7 @@ namespace HeroFishing.Battle {
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<AutoDestroyTag>();
             EntitiesToProcess = new NativeList<Entity>(Allocator.Persistent);
-
+            ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
         [BurstCompile]
         public void OnDestroy(ref SystemState state) {
@@ -25,7 +26,7 @@ namespace HeroFishing.Battle {
         }
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+
             float deltaTime = SystemAPI.Time.DeltaTime;
 
             new DestroyJob {

@@ -8,7 +8,7 @@ using Unity.Mathematics;
 using UnityEngine;
 
 namespace HeroFishing.Battle {
-
+    [CreateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
     public partial struct MonsterSpawnSystem : ISystem {
 
         private EndSimulationEntityCommandBufferSystem.Singleton _ecbSingleton;
@@ -17,10 +17,10 @@ namespace HeroFishing.Battle {
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<MonsterSpawnSys>();
             state.RequireForUpdate<SpawnTag>();
+            _ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         public void OnUpdate(ref SystemState state) {
-            _ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
             var ecbCommandBuffer = _ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
             bool isFreeze = SystemAPI.HasSingleton<FreezeTag>();
             foreach (var (spawn, entity) in SystemAPI.Query<SpawnData>().WithAll<SpawnTag>().WithEntityAccess()) {

@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [BurstCompile]
+[CreateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
 public partial struct ChainHitSystem : ISystem {
     EndSimulationEntityCommandBufferSystem.Singleton ECBSingleton;
     [ReadOnly] private BufferLookup<MonsterBuffer> monsterLookup;
@@ -16,6 +17,7 @@ public partial struct ChainHitSystem : ISystem {
     public void OnCreate(ref SystemState state) {
         state.RequireForUpdate<ChainHitData>();
         monsterLookup = state.GetBufferLookup<MonsterBuffer>();
+        ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
     }
 
     [BurstCompile]
@@ -26,7 +28,7 @@ public partial struct ChainHitSystem : ISystem {
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state) {
-        ECBSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+
         var writer = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
         var ecb = new EntityCommandBuffer(Allocator.Temp);
 
