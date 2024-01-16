@@ -21,7 +21,6 @@ namespace Scoz.Func {
         float LastFrameRate = 0.0f;
 
         MyTimer InfoRefreshTimer = null;
-        public Canvas MyCanvas { get; private set; }
 
 
         public Camera GetCamera() {
@@ -33,34 +32,14 @@ namespace Scoz.Func {
         public void Start() {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            MyCanvas = GetComponent<Canvas>();
-            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            MyCanvas.sortingLayerName = "UI";
-            SceneManager.sceneLoaded += OnLevelFinishedLoading;
             GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(Screen.width, Screen.height);
             VersionText.text = "Ver: " + Application.version;
-
         }
 
-
-        void GetNumber(int _n, Action<int> _callback) {
-            _callback?.Invoke(_n);
-        }
 
         void OnDestroy() {
-            SceneManager.sceneLoaded -= OnLevelFinishedLoading;
         }
 
-        void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
-            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            MyCanvas.sortingLayerName = "UI";
-
-        }
-
-        public void UpdateEnvVersionText() {
-            //if (FirebaseManager.MyFirebaseApp != null)
-            //    EnvVersion.text = "Env: " + FirebaseManager.MyFirebaseApp.Options.ProjectId;
-        }
         void InitTestTool() {
             IsInit = true;
             DontDestroyOnLoad(gameObject);
@@ -86,7 +65,6 @@ namespace Scoz.Func {
                 PassTimeByFrames += Time.deltaTime;
                 FrameCount++;
             } else {
-                //This code will break if you set your m_refreshTime to 0, which makes no sense.
                 LastFrameRate = (float)FrameCount / PassTimeByFrames;
                 FrameCount = 0;
                 PassTimeByFrames = 0.0f;

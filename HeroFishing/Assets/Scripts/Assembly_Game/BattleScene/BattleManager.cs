@@ -9,10 +9,11 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 namespace HeroFishing.Battle {
     public class BattleManager : MonoBehaviour {
         public static BattleManager Instance;
-
+        [SerializeField] Camera MyCam;
         [SerializeField] Hero[] MyHeros;
         [SerializeField] public Transform MonsterParent;
         [SerializeField]
@@ -33,6 +34,7 @@ namespace HeroFishing.Battle {
 
         public void Init() {
             Instance = this;
+            SetCam();//設定攝影機模式
             InitMonsterScheduler();
             InitPlayerHero();
             MonsterCollisionPosOffset = new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
@@ -41,6 +43,20 @@ namespace HeroFishing.Battle {
                 if (GameConnector.Connected)
                     GameConnector.Instance.UpdateScene();
             });
+        }
+        void SetCam() {
+            //因為戰鬥場景的攝影機有分為場景與UI, 要把場景攝影機設定為Base, UI設定為Overlay, 並在BaseCamera中加入Camera stack
+            UICam.Instance.SetRendererMode(CameraRenderType.Overlay);
+            AddCamStack(UICam.Instance.MyCam);
+        }
+        /// <summary>
+        /// 將指定camera加入到MyCam的CameraStack中
+        /// </summary>
+        void AddCamStack(Camera _cam) {
+            if (_cam == null) return;
+            var cameraData = MyCam.GetUniversalAdditionalCameraData();
+            if (cameraData == null) return;
+            cameraData.cameraStack.Add(_cam);
         }
 
         private void InitPlayerHero() {

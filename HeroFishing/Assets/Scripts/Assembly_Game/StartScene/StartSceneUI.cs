@@ -105,7 +105,7 @@ namespace HeroFishing.Main {
             //繞過正式流程
             FirstTimeLaunchGame = false;
             PopupUI.InitSceneTransitionProgress(0);
-            PopupUI.CallSceneTransition(MyScene.LobbyScene, () => { GameManager.Instance.SpawnSceneUI(); });
+            PopupUI.CallSceneTransition(MyScene.LobbyScene);
             return;
 
             /// 根據是否能進行遊戲來執行各種狀態

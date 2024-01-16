@@ -13,7 +13,6 @@ namespace Scoz.Func {
 
         public static bool IsInit { get; private set; }
         static PopupUI_Local Instance;
-        Canvas MyCanvas;
 
         //[HeaderAttribute("==============基本設定==============")]
 
@@ -32,31 +31,19 @@ namespace Scoz.Func {
             return Instance;
         }
         void Start() {
-            MyCanvas = GetComponent<Canvas>();
-            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            MyCanvas.sortingLayerName = "UI";
-            SceneManager.sceneLoaded += OnLevelFinishedLoading;
         }
 
         void OnDestroy() {
-            SceneManager.sceneLoaded -= OnLevelFinishedLoading;
         }
         private void Update() {
             if (ConfirmCancel_ConfirmBtnTimer != null) ConfirmCancel_ConfirmBtnTimer.RunTimer();
         }
 
-        void OnLevelFinishedLoading(Scene _scene, LoadSceneMode _mode) {
-            MyCanvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            MyCanvas.sortingLayerName = "UI";
-        }
         public void Init() {
             Instance = this;
-            BaseManager.Instance.AddCamStack(GetComponent<Camera>());//將自己的camera加入到目前場景上的MainCameraStack中
-            MyCanvas = GetComponent<Canvas>();
             InitLoading();
             InitClickCamcel();
             InitConfirmCancel();
-            //DontDestroyOnLoad(gameObject);
             WriteLog_UnityAssembly.Log("初始化PopupUI_Local");
         }
 
