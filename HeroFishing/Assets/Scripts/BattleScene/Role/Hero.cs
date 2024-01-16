@@ -101,24 +101,26 @@ namespace HeroFishing.Battle {
             if (spellData.HeroShaderSettings == null || spellData.HeroShaderSettings.Length == 0) return;
 
             Color32 specularColor = new Color32((byte)spellData.HeroShaderSettings[0], (byte)spellData.HeroShaderSettings[1], (byte)spellData.HeroShaderSettings[2], (byte)spellData.HeroShaderSettings[3]);
-            float hdrIntensity = spellData.HeroShaderSettings[4]; // hdr color intensity設定
+            float hdrIntensity = Mathf.Pow(2, spellData.HeroShaderSettings[4]); // hdr color intensity設定
             //設定HDR Color
-            Color32 specularHDRColor = new Color32(
-               (byte)(specularColor.r * hdrIntensity),
-               (byte)(specularColor.g * hdrIntensity),
-               (byte)(specularColor.b * hdrIntensity),
-               specularColor.a
+            Color specularHDRColor = new Color(
+               (specularColor.r * hdrIntensity / 255),
+               (specularColor.g * hdrIntensity / 255),
+               (specularColor.b * hdrIntensity / 255),
+               specularColor.a / 255
             );
+            //Debug.Log(specularHDRColor);
 
             Color32 rimColor = new Color32((byte)spellData.HeroShaderSettings[5], (byte)spellData.HeroShaderSettings[6], (byte)spellData.HeroShaderSettings[7], (byte)spellData.HeroShaderSettings[8]);
-            hdrIntensity = spellData.HeroShaderSettings[9]; // hdr color intensity設定
+            hdrIntensity = Mathf.Pow(2, spellData.HeroShaderSettings[9]); // hdr color intensity設定
             //設定HDR Color
-            Color32 rimHDRColor = new Color32(
-               (byte)(specularColor.r * hdrIntensity),
-               (byte)(specularColor.g * hdrIntensity),
-               (byte)(specularColor.b * hdrIntensity),
-               specularColor.a
+            Color rimHDRColor = new Color(
+               (rimColor.r * hdrIntensity / 255),
+               (rimColor.g * hdrIntensity / 255),
+               (rimColor.b * hdrIntensity / 255),
+               rimColor.a / 255
             );
+            //Debug.Log(rimHDRColor);
 
             PropertyBlock.SetColor("_SpecularColor", specularHDRColor);
             PropertyBlock.SetColor("_RimColor", rimHDRColor);
