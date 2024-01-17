@@ -89,21 +89,6 @@ namespace Scoz.Func {
         }
 
 
-        public static GameManager CreateNewInstance() {
-
-            if (Instance != null) {
-                WriteLog.Log("GameManager之前已經被建立了");
-            } else {
-                GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/GameManager");
-                GameObject go = Instantiate(prefab);
-                go.name = "GameManager";
-                Instance = go.GetComponent<GameManager>();
-                Instance.Init();
-            }
-            return Instance;
-        }
-
-
 
         public void SetTime(DateTimeOffset _serverTime) {
             LastServerTime = _serverTime;
