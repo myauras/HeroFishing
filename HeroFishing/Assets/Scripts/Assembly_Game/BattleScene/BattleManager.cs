@@ -31,6 +31,7 @@ namespace HeroFishing.Battle {
 
         public MonsterScheduler MyMonsterScheduler { get; private set; }
         public static float3 MonsterCollisionPosOffset { get; private set; }//因為怪物的位置是在地板 所以檢測碰撞半徑時以地板為圓心的話子彈會打不到 所以碰撞檢測時要將判定的圓心高度提高到子彈高度
+        public Camera BattleCam => MyCam;
 
         private const int MAX_HERO_COUNT = 4;
 

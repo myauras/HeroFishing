@@ -86,7 +86,7 @@ namespace HeroFishing.Battle {
 
             // 按下的時候檢查是否有抓到怪物，如果有的話就開始計時
             if (Input.GetMouseButtonDown(0)) {
-                var ray = BattleSceneManager.Instance.BattleCam.ScreenPointToRay(Input.mousePosition);
+                var ray = BattleManager.Instance.BattleCam.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hitInfo, 100, LayerMask.GetMask("Monster"), QueryTriggerInteraction.Ignore)) {
                     var monster = hitInfo.collider.GetComponentInParent<Monster>();
                     if (monster.IsAlive) {

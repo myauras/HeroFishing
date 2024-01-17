@@ -18,11 +18,9 @@ public class DeviceInfoUI : BaseUI {
 
     public override void Init() {
         base.Init();
-        Debug.Log("????");
 #if !UNITY_EDITOR && UNITY_ANDROID
         _networkInfoSource = new AndroidNetworkInfoSource();
 #endif
-        Debug.Log($"network info source {_networkInfoSource != null}" );
         if (_networkInfoSource != null) {
             _networkInfoSource.Init();
             _isInit = true;
