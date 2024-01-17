@@ -19,6 +19,10 @@ namespace HeroFishing.Battle {
         [SerializeField]
         private SpellIndicator _spellIndicator;
         [SerializeField]
+        private int _testHeroID;
+        //[SerializeField]
+        //private string _testHeroSkinID;
+        [SerializeField]
         private bool _rotateTest;
         [SerializeField]
         private int _rotateTestIndex;
@@ -71,7 +75,7 @@ namespace HeroFishing.Battle {
 
         private void InitPlayerHero() {
             if (AllocatedRoom.Instance == null) //測試流程
-                GetHero(0).SetData(1, "1_1");
+                GetHero(0).SetData(_testHeroID, $"{_testHeroID}_1");
             else
                 GetHero(0).SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
         }
