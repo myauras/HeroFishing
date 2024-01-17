@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing.Text;
 using UniRx;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class EffectConverter : EditorWindow {
     private GameObject _prefab;
@@ -36,8 +32,7 @@ public class EffectConverter : EditorWindow {
                         DestroyImmediate(srcABP, true);
                     });
 
-                }
-                else {
+                } else {
                     Debug.LogWarning("auto back pool no component copy");
                 }
 

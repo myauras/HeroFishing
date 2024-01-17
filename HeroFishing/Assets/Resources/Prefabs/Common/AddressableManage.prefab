@@ -197,11 +197,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3111858441061994181}
-  - component: {fileID: 2815913384627649158}
   - component: {fileID: 563314751397480145}
   - component: {fileID: 2542438599430650634}
   - component: {fileID: 273784996149399270}
   - component: {fileID: -7297698249932688610}
+  - component: {fileID: -2781995667651316451}
   m_Layer: 0
   m_Name: AddressableManage
   m_TagString: Untagged
@@ -230,27 +230,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &2815913384627649158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4123751140126476457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bd45fa18c0d1ca41a85d6620a0e0d55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Keys:
-  - Json
-  - Prefab
-  - Atlas
-  - Particle
-  ProgressImg: {fileID: 7133604689285230566}
-  ProgressText: {fileID: 3215396539149653434}
-  DownloadGO: {fileID: 544336827761566437}
-  BG: {fileID: 1022529387916937378}
 --- !u!223 &563314751397480145
 Canvas:
   m_ObjectHideFlags: 0
@@ -327,6 +306,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExpectedResolution: {x: 1266, y: 585}
+--- !u!114 &-2781995667651316451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4123751140126476457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f170bb464ae7c914281cbdef122f3eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Keys: []
+  ProgressImg: {fileID: 7133604689285230566}
+  ProgressText: {fileID: 3215396539149653434}
+  DownloadGO: {fileID: 544336827761566437}
+  BG: {fileID: 1022529387916937378}
 --- !u!1 &4816780101782336720
 GameObject:
   m_ObjectHideFlags: 0
