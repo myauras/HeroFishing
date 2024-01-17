@@ -1,4 +1,6 @@
-﻿namespace HeroFishing.Socket.Matchgame {
+﻿using UnityEngine;
+
+namespace HeroFishing.Socket.Matchgame {
     public class ATTACK_TOCLIENT : SocketContent {
         //class名稱就是封包的CMD名稱
 
@@ -13,7 +15,19 @@
         /// <summary>
         /// 目標怪物索引, 沒有目標傳-1就可以
         /// </summary>
-        public long MonsterIdx { get; private set; }
+        public int MonsterIdx { get; private set; }
+        /// <summary>
+        /// 是否為鎖定攻擊
+        /// </summary>
+        public bool AttackLock { get; private set; }
+        /// <summary>
+        /// 攻擊施放位置
+        /// </summary>
+        public double[] AttackPos { get; private set; }
+        /// <summary>
+        /// 攻擊施放方向
+        /// </summary>
+        public double[] AttackDir { get; private set; }
         public ATTACK_TOCLIENT() {
         }
     }

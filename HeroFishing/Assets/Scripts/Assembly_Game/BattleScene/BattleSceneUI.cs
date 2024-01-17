@@ -16,7 +16,12 @@ public class BattleSceneUI : BaseUI {
     private bool _isSpellTest;
 
     [HeaderAttribute("==============UI==============")]
-    [SerializeField] SpellUI _spellUI;
+    [SerializeField]
+    private SpellUI _spellUI;
+    [SerializeField]
+    private LevelUI _levelUI;
+    [SerializeField]
+    private DeviceInfoUI _deviceInfoUI;
 
     private void Start() {
         Init();
@@ -32,6 +37,8 @@ public class BattleSceneUI : BaseUI {
             var battleMaanger = go.GetComponent<BattleManager>();
             battleMaanger.Init();
             _spellUI.Init();
+            _levelUI.Init();
+            _deviceInfoUI.Init();
         });
     }
 

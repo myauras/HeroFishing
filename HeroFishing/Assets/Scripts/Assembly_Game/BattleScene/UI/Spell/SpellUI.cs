@@ -18,6 +18,8 @@ public class SpellUI : BaseUI {
     private Button _cancelBtn;
     [SerializeField]
     private PlayerAttackController _attackController;
+    [SerializeField]
+    private DOAnimationBtn _autoButton;
 
     [SerializeField] public bool IsSpellTest = false;
     public int TotalSpellLevel => _spellBtn1.SpellLevel + _spellBtn2.SpellLevel + _spellBtn3.SpellLevel;
@@ -46,6 +48,8 @@ public class SpellUI : BaseUI {
         _hero.OnLevelUp += OnLevelUp;
         _hero.OnSpellCharge += OnCharge;
         _hero.OnSpellPlay += OnPlay;
+
+        //_lockButton.OnClick += SetLockAttack;
         OnLevelUp(1);
     }
 

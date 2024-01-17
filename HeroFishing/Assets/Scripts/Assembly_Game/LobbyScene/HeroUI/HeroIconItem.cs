@@ -25,7 +25,7 @@ namespace HeroFishing.Main {
 
         void RefreshItem() {
             AddressablesLoader.GetSpriteAtlas("HeroIcon", atlas => {
-                HeroIconImg.sprite = atlas.GetSprite(MyJsonHero.Ref);
+                HeroIconImg.sprite = atlas.GetSprite($"Icon_{MyJsonHero.Ref}");
             });
         }
 
