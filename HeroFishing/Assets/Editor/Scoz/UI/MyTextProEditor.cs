@@ -5,7 +5,7 @@ using System.Collections;
 using TMPro;
 
 namespace Scoz.Func {
-    //[CustomEditor(typeof(MyTextPro))]
+    [CustomEditor(typeof(MyTextPro))]
     public class MyTextProEditor : TMPro.EditorUtilities.TMP_EditorPanelUI {
         SerializedProperty UIString;
         protected override void OnEnable() {

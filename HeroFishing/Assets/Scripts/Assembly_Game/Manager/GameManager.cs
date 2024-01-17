@@ -27,6 +27,7 @@ namespace Scoz.Func {
         [SerializeField] AssetReference PopupUIAsset;
         [SerializeField] AssetReference PostPocessingAsset;
         [SerializeField] AssetReference AddressableManageAsset;
+        [SerializeField] AssetReference GameDictionaryAsset;
         [SerializeField] AssetReference UICanvasAsset;
         [SerializeField] AssetReference UICamAsset;
         [SerializeField] AddressableManage MyAddressableManagerPrefab;
@@ -141,9 +142,6 @@ namespace Scoz.Func {
             StringReplacer.Init();
             //建立左右兩邊Banner
             //SideBanner.CreateNewInstance();
-            //建立遊戲資料字典
-            GameDictionary.CreateNewInstance();//先初始化字典因為這樣會預先載入本機String表與GameSetting，之後在addressable載入後會取代本來String跟GameSetting
-            MyText.RefreshActiveTexts();//刷新文字
 
             //建立影片播放器
             MyVideoPlayer.CreateNewVideoPlayer();
@@ -156,8 +154,8 @@ namespace Scoz.Func {
             //建立PoolManager
             PoolManager.CreateNewInstance();
 
-            //※設定本機資料要放最後(要在取得本機GameSetting後以及AudioPlayer.CreateNewAudioPlayer之後
-            GamePlayer.Instance.LoadLocoData();
+
+
 
             // 建立AddressableManage並開始載包
             StartDownloadAddressable();
@@ -206,22 +204,43 @@ namespace Scoz.Func {
         public void StartDownloadAddressable() {
             var addressableManager = Instantiate(MyAddressableManagerPrefab);
             addressableManager.Init();
+
+
+
+
             AddressableManage.Instance.StartLoadAsset(async () => {
                 await LoadAssembly();//載入GameDll
-                AddressablesLoader.GetPrefabByRef(UICamAsset, (sceneUIPrefab, handle) => {//載入UICam
-                    var camGo = Instantiate(sceneUIPrefab);
-                    camGo.GetComponent<UICam>().Init();
+
+
+                AddressablesLoader.GetPrefabByRef(GameDictionaryAsset, (prefab, handle) => {//建立遊戲資料字典
+                    var dicGO = Instantiate(prefab);
+                    dicGO.GetComponent<GameDictionary>().InitDic();
                     Addressables.Release(handle);
-                    Instance.CreateResourcePreSetter();//載入ResourcePreSetter
-                    GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
-                        MyText.RefreshActivityTextsAndFunctions();//更新介面的MyTex
-                        Instance.CreateAddressableUIs(() => { //產生PopupUI
-                            IsFinishedLoadAsset = true;
-                            SpawnSceneUI();
+                    MyText.RefreshActiveTexts();//刷新文字
+                    //※設定本機資料要放最後(要在取得本機GameSetting後以及AudioPlayer.CreateNewAudioPlayer之後
+                    GamePlayer.Instance.LoadLocoData();
+
+
+                    AddressablesLoader.GetPrefabByRef(UICamAsset, (sceneUIPrefab, handle) => {//載入UICam
+                        var camGo = Instantiate(sceneUIPrefab);
+                        camGo.GetComponent<UICam>().Init();
+                        Addressables.Release(handle);
+                        Instance.CreateResourcePreSetter();//載入ResourcePreSetter
+                        GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
+                            MyText.RefreshActivityTextsAndFunctions();//更新介面的MyTex
+                            Instance.CreateAddressableUIs(() => { //產生PopupUI
+                                IsFinishedLoadAsset = true;
+                                SpawnSceneUI();
+                            });
                         });
                     });
 
+
                 });
+
+
+
+
             });
         }
 

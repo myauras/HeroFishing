@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 namespace Scoz.Func {
-    //[CustomEditor(typeof(MyText))]
+    [CustomEditor(typeof(MyText))]
     public class MyTextEditor : UnityEditor.UI.TextEditor {
         SerializedProperty UIString;
 
