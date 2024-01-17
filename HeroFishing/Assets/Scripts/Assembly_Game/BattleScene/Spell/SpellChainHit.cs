@@ -40,7 +40,7 @@ public class SpellChainHit : SpellHitBase {
         var position = hitTag.HitPosition + new float3(0, monsterData.Radius, 0);
         Entity entity = entityManager.CreateEntity();
         writer.AddComponent(entity.Index, entity, new ChainHitData {
-            PlayerID = hitTag.PlayerID,
+            HeroIndex = hitTag.HeroIndex,
             AttackID = hitTag.AttackID,
             StrIndex_SpellID = hitTag.StrIndex_SpellID,
             HitPosition = position,

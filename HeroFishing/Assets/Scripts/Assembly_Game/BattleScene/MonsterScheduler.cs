@@ -75,6 +75,7 @@ namespace HeroFishing.Battle {
         /// </summary>
         void SpawnCheck() {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
+            int playerIndex = BattleManager.Instance.Index;
             foreach (var id in SpawnTimerDic.Keys.ToArray()) {
                 var spawnData = MonsterSpawnerJsonData.GetData(id);
                 if (spawnData == null) continue;
@@ -90,12 +91,12 @@ namespace HeroFishing.Battle {
                             var newSpawnData = MonsterSpawnerJsonData.GetData(newSpawnID);
                             if (newSpawnData == null) continue;
                             var monsterIdx = GetLocalMonsterIdx(newSpawnData.MonsterIDs.Length);
-                            EnqueueMonster(newSpawnData.MonsterIDs, monsterIdx, newSpawnData.GetRandRoute(), newSpawnData.MySpanwType == MonsterSpawnerJsonData.SpawnType.Boss, 0);
+                            EnqueueMonster(newSpawnData.MonsterIDs, monsterIdx, newSpawnData.GetRandRoute(), newSpawnData.MySpanwType == MonsterSpawnerJsonData.SpawnType.Boss, 0, playerIndex);
                             break;
                         case MonsterSpawnerJsonData.SpawnType.Minion:
                         case MonsterSpawnerJsonData.SpawnType.Boss:
                             monsterIdx = GetLocalMonsterIdx(spawnData.MonsterIDs.Length);
-                            EnqueueMonster(spawnData.MonsterIDs, monsterIdx, spawnData.GetRandRoute(), spawnData.MySpanwType == MonsterSpawnerJsonData.SpawnType.Boss, 0);
+                            EnqueueMonster(spawnData.MonsterIDs, monsterIdx, spawnData.GetRandRoute(), spawnData.MySpanwType == MonsterSpawnerJsonData.SpawnType.Boss, 0, playerIndex);
                             break;
                     }
                     SpawnTimerDic[id] = spawnData.GetRandSpawnSec();
@@ -106,7 +107,7 @@ namespace HeroFishing.Battle {
         /// <summary>
         /// 加入到要生怪物的排程中
         /// </summary>
-        public void EnqueueMonster(int[] _monsterIDs, int[] _monsterIdxs, int _routeID, bool _isBoss, float _spawnTime) {
+        public void EnqueueMonster(int[] _monsterIDs, int[] _monsterIdxs, int _routeID, bool _isBoss, float _spawnTime, int _playerIndex) {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
             if(_monsterIDs.Length != _monsterIdxs.Length) { WriteLog.LogError("monster id 數量跟 idx 數量不符"); }
 
@@ -123,7 +124,8 @@ namespace HeroFishing.Battle {
                 Monsters = monsters,
                 RouteID = _routeID,
                 IsBoss = _isBoss,
-                SpawnTime = _spawnTime
+                SpawnTime = _spawnTime,
+                PlayerIndex = _playerIndex,
             };
             //WriteLog.Log(DebugUtils.ObjToStr(spawn));
             SpawnMonsterQueue.Enqueue(spawnData);//加入排程

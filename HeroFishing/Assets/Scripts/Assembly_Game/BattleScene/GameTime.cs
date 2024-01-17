@@ -18,7 +18,7 @@ public static class GameTime {
     }
 
     public static void Override(float time) {
-        Debug.Log($"override: time {time} current {Current} Delta {Delta} Last Override {LastestOverride}");
+        //Debug.Log($"override: time {time} current {Current} Delta {Delta} Last Override {LastestOverride}");
         Delta = 0;
         Current = time;
         LastestOverride = time;

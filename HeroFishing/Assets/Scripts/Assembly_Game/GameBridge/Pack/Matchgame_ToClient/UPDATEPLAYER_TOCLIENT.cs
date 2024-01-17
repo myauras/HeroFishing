@@ -15,6 +15,14 @@ namespace HeroFishing.Socket.Matchgame {
         public string ID { get; private set; }
         public int Idx { get; private set; }
         public long GainPoints { get; private set; }
+        public PlayerBuff[] PlayerBuffs { get; private set; }
+    }
+
+    public class PlayerBuff {
+        public string Name { get; private set; }
+        public double Value { get; private set; }
+        public double AtTime { get; private set; }
+        public double Duration { get; private set; }
     }
     public class PlayerStatus {
 

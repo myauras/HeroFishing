@@ -4,7 +4,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelUI : MonoBehaviour {
+public class SpellLevelUI : MonoBehaviour {
     [SerializeField]
     private Animator _animator;
     [SerializeField]

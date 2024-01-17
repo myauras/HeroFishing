@@ -32,8 +32,8 @@ namespace HeroFishing.Socket {
         /// <summary>
         /// 攻擊
         /// </summary>
-        public void Attack(int _attackID, string _spellJsonID, int _monsterIdx) {
-            SocketCMD<ATTACK> cmd = new SocketCMD<ATTACK>(new ATTACK(_attackID, _spellJsonID, _monsterIdx));
+        public void Attack(int _attackID, string _spellJsonID, int _monsterIdx, bool _attackLock, Vector3 _attackPos, Vector3 _attackDir) {
+            SocketCMD<ATTACK> cmd = new SocketCMD<ATTACK>(new ATTACK(_attackID, _spellJsonID, _monsterIdx, _attackLock, _attackPos, _attackDir));
             Socket.TCPSend(cmd);
         }
         /// <summary>
@@ -58,5 +58,9 @@ namespace HeroFishing.Socket {
             Socket.TCPSend(cmd);
         }
 
+        public void Auto(bool isAuto) {
+            SocketCMD<AUTO> cmd = new SocketCMD<AUTO>(new AUTO(isAuto));
+            Socket.TCPSend(cmd);
+        }
     }
 }

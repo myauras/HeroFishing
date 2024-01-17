@@ -7,6 +7,10 @@ namespace HeroFishing.Socket.Matchgame {
         //class名稱就是封包的CMD名稱
 
         /// <summary>
+        /// 擊中的玩家Index
+        /// </summary>
+        public int PlayerIdx { get; private set; }
+        /// <summary>
         /// 擊殺怪物索引清單, [1,1,3]就是依次擊殺索引為1,1與3的怪物
         /// </summary>
         public int[] KillMonsterIdxs { get; private set; }

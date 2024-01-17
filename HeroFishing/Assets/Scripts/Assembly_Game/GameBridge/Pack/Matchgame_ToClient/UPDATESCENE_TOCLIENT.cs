@@ -35,7 +35,8 @@ namespace HeroFishing.Socket.Matchgame {
 
     public class SceneEffect {
         public string Name { get; private set; }
-        public float AtTime { get; private set; }
-        public float Duration { get; private set; }
+        public double Value { get; private set; }
+        public double AtTime { get; private set; }
+        public double Duration { get; private set; }
     }
 }

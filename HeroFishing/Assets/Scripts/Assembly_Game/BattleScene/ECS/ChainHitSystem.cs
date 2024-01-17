@@ -88,7 +88,7 @@ public partial struct ChainHitSystem : ISystem {
                     };
 
                     writer.AddComponent(0, spellEntity, new SpellBulletData {
-                        PlayerID = 1,
+                        HeroIndex = hitData.HeroIndex,
                         SpawnData = spawnData,
                         DestroyOnCollision = true,
                         StrIndex_SpellID = hitData.StrIndex_SpellID,
