@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using HeroFishing.Main;
 using Unity.Mathematics;
 using HeroFishing.Socket;
+using HeroFishing.Socket.Matchgame;
 
 namespace HeroFishing.Battle {
     public class PlayerAttackController : MonoBehaviour {
@@ -22,10 +23,20 @@ namespace HeroFishing.Battle {
         private int _attackID = 0;
         private float _scheduledNextAttackTime;
         private float _scheduledRecoverTime;
+        private float _scheduledLockTime;
         private bool _isAttack;
+        private Monster _targetMonster;
+        public bool CanAttack {
+            get {
+                if (_lockAttack && _targetMonster != null)
+                    return _targetMonster.IsAlive;
+                return _isAttack;
+            }
+        }
 
         private const float MOVE_SCALE_FACTOR = 2;
         private const float ATTACK_BUFFER_TIME = 0.2f;
+        private const float ATTACK_LOCK_TIME = 1.5f;
         public bool ControlLock {
             get {
                 return _currentMove != null && _currentMove.IsMoving;
@@ -36,6 +47,7 @@ namespace HeroFishing.Battle {
 
         private void Update() {
             AttackInput();
+            AttackLock();
             Attack();
             AttackRecover();
         }
@@ -49,26 +61,69 @@ namespace HeroFishing.Battle {
             if (ControlLock) return;
             if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
-            if (!CheckSpell(SpellName.attack)) return;
+
             _isAttack = true;
-            //if (!IsSpellTest) return;
             _scheduledRecoverTime = Time.time + ATTACK_BUFFER_TIME;
+
+            // 如果在鎖定狀態，解除鎖定狀態
+            if (_lockAttack) {
+                _lockAttack = false;
+                _targetMonster.Lock(false);
+                _targetMonster = null;
+            }
+        }
+
+        private void AttackLock() {
+            if (ControlLock) return;
+            if (_isSkillMode) return;
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
+            // 如果怪物死亡或不存在，解除鎖定狀態
+            if (_targetMonster == null || !_targetMonster.IsAlive) {
+                _lockAttack = false;
+                _targetMonster = null;
+            }
+
+            // 按下的時候檢查是否有抓到怪物，如果有的話就開始計時
+            if (Input.GetMouseButtonDown(0)) {
+                var ray = BattleManager.Instance.BattleCam.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out var hitInfo, 100, LayerMask.GetMask("Monster"), QueryTriggerInteraction.Ignore)) {
+                    var monster = hitInfo.collider.GetComponentInParent<Monster>();
+                    if (monster.IsAlive) {
+                        _targetMonster = monster;
+                    }
+                    _scheduledLockTime = Time.time + ATTACK_LOCK_TIME;
+                }
+            }
+
+            // 確認有按到怪物，判斷是否真的進入鎖定狀態
+            if (_targetMonster != null) {
+                // 時間內放開，將怪物清空
+                if (Input.GetMouseButtonUp(0) && Time.time <= _scheduledLockTime)
+                    _targetMonster = null;
+                // 超過指定時間，真的鎖定
+                else if (!_lockAttack && Time.time > _scheduledLockTime) {
+                    _lockAttack = true;
+                    _targetMonster.Lock(true);
+                }
+            }
         }
 
         private void Attack() {
-            if (!_isAttack) return;
+            if (!CanAttack) return;
             if (Time.time < _scheduledNextAttackTime) return;
+            if (!CheckSpell(SpellName.attack)) return;
             _isAttack = false;
             _scheduledNextAttackTime = Time.time + _spellData.CD;
             //攻擊方向
-            var pos = UIPosition.GetMouseWorldPointOnYZero(0);
+            var pos = _lockAttack && _targetMonster != null ? _targetMonster.transform.position : UIPosition.GetMouseWorldPointOnYZero(0);
             var dir = (pos - _hero.transform.position).normalized;
             //設定技能
-            OnSetSpell(_hero.transform.position, dir);
+            OnSetSpell(pos, dir);
         }
 
         private void AttackRecover() {
-            if (!_isAttack) return;
+            if (!CanAttack) return;
             if (Time.time < _scheduledRecoverTime) return;
             _isAttack = false;
         }
@@ -93,7 +148,8 @@ namespace HeroFishing.Battle {
             var mousePos = UIPosition.GetMouseWorldPointOnYZero(0);
             _spellPos = (mousePos - _originPos) * MOVE_SCALE_FACTOR + _hero.transform.position;
             _spellDir = (mousePos - _originPos).normalized;
-            _hero.FaceDir(Quaternion.LookRotation(_spellDir));
+            if (_spellDir != Vector3.zero)
+                _hero.FaceDir(Quaternion.LookRotation(_spellDir));
 
             if (_spellData.MyDragType == HeroSpellJsonData.DragType.Rot) {
                 float angle = Mathf.Atan2(_spellDir.x, _spellDir.z) * Mathf.Rad2Deg;
@@ -112,11 +168,15 @@ namespace HeroFishing.Battle {
             // 回到原位，否則旋轉的Indicator會有錯誤
             SpellIndicator.Instance.MoveIndicator(_hero.transform.position);
 
+            cancel |= _spellDir == Vector3.zero;
+
             if (!cancel) {
                 var position = _spellData.MyDragType == HeroSpellJsonData.DragType.Rot ? _hero.transform.position : _spellPos;
                 //設定技能
                 OnSetSpell(position, _spellDir);
             }
+            _spellPos = Vector3.zero;
+            _spellDir = Vector3.zero;
         }
 
         public void OnSetSpell(Vector3 _attackerPos, Vector3 _attackDir) {
@@ -141,7 +201,11 @@ namespace HeroFishing.Battle {
         private void SetECSSpellData(Vector3 _attackPos, Vector3 _attackDir) {
             if (_spellData.Spell == null) return;
             var spell = _spellData.Spell;
+            var monsterIdx = _targetMonster != null && _lockAttack ? _targetMonster.MonsterIdx : -1;
             spell.Play(new SpellPlayData {
+                lockAttack = _lockAttack,
+                heroIndex = 0,
+                monsterIdx = monsterIdx,
                 attackID = _attackID,
                 attackPos = _attackPos,
                 heroPos = _hero.transform.position,
@@ -160,7 +224,7 @@ namespace HeroFishing.Battle {
             if (spell.ShakeCamera != null)
                 spell.ShakeCamera.Play();
             if (GameConnector.Connected)
-                GameConnector.Instance.Attack(_attackID, _spellData.ID, -1);
+                GameConnector.Instance.Attack(_attackID, _spellData.ID, monsterIdx, _lockAttack, _attackPos, _attackDir);
             _attackID++;
             //switch (TmpSpellData.MySpellType) {
             //    case HeroSpellJsonData.SpellType.SpreadLineShot:

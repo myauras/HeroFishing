@@ -15,10 +15,12 @@ namespace HeroFishing.Battle {
         public int MonsterID => MyData.ID;
         public int MonsterIdx { get; private set; }
 
-        MonsterSpecialize MyMonsterSpecialize;
-        MonsterExplosion Explosion;
+        private MonsterSpecialize MyMonsterSpecialize;
+        private MonsterExplosion Explosion;
 
         private Vector3 _lastHitDirection;
+
+        private GameObject LockObj;
 
         private static readonly Dictionary<int, List<Material>> _originMatDic = new();
         private static readonly Dictionary<int, List<Material>> _frozenMatDic = new();
@@ -26,11 +28,24 @@ namespace HeroFishing.Battle {
         private const string MAT_FREEZE_OPAQUE = "FreezeMonOp";
         private const string MAT_FREEZE_TRANSPARENT = "FreezeMonTr";
 
+        private bool _inField;
+        public bool InField {
+            get => _inField;
+            set {
+                _inField = value;
+                if (!_inField) {
+                    Lock(false);
+                }
+            }
+        }
+        public bool IsAlive => s_aliveMonsters.Contains(this) && InField;
+
         public void SetData(int _monsterID, int _monsterIdx, Action _ac) {
             MyData = MonsterJsonData.GetData(_monsterID);
             MonsterIdx = _monsterIdx;
             LoadModel(_ac);
         }
+
         void LoadModel(Action _ac) {
             string path = string.Format("Monster/{0}/{0}.prefab", MyData.Ref);
             AddressablesLoader.GetPrefabResourceByPath<GameObject>(path, (prefab, handle) => {
@@ -84,6 +99,23 @@ namespace HeroFishing.Battle {
             }, 0f, GameSettingJsonData.GetFloat(GameSetting.HitEffect_DecaySec));
         }
 
+        public void Lock(bool active) {
+            if (active) {
+                if (LockObj == null) {
+                    AddressablesLoader.GetParticle("OtherEffect/Script_LockEffect", (go, handle) => {
+                        AddressableManage.SetToChangeSceneRelease(handle);
+                        LockObj = Instantiate(go, transform);
+                        LockObj.transform.localPosition = new Vector3(0, 1.19f, 0);
+                        Lock(active);
+                    });
+                }
+            }
+
+            if (LockObj != null) {
+                LockObj.SetActive(active);
+            }
+        }
+
         public void Explode() {
             if (Explosion == null) {
                 Die();
@@ -93,6 +125,8 @@ namespace HeroFishing.Battle {
             Explosion.Explode();
             if (s_aliveMonsters.Contains(this))
                 s_aliveMonsters.Remove(this);
+
+            Lock(false);
         }
 
         public void Die() {
@@ -104,6 +138,8 @@ namespace HeroFishing.Battle {
             }
             if (s_aliveMonsters.Contains(this))
                 s_aliveMonsters.Remove(this);
+
+            Lock(false);
         }
 
         // 如果要每個Instance都創建一個材質球會再第一次創建過久。所以讓材質球的創建跟怪物ID綁定

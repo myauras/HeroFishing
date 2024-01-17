@@ -18,6 +18,8 @@ namespace HeroFishing.Battle {
         NativeArray<int2> OffsetGrids;//定義碰撞檢定9宮格
         [ReadOnly] BufferLookup<HitInfoBuffer> HitInfoLookup;
         [ReadOnly] EntityStorageInfoLookup StorageInfoLookup;
+        [ReadOnly] ComponentLookup<MonsterValue> MonsterValueLookup;
+        [ReadOnly] ComponentLookup<AutoDestroyTag> AutoDestroyTagLookup;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
@@ -36,6 +38,8 @@ namespace HeroFishing.Battle {
             OffsetGrids[8] = new int2(-1, 1);// 左上
 
             HitInfoLookup = state.GetBufferLookup<HitInfoBuffer>(false);
+            MonsterValueLookup = state.GetComponentLookup<MonsterValue>(true);
+            AutoDestroyTagLookup = state.GetComponentLookup<AutoDestroyTag>(true);
             StorageInfoLookup = state.GetEntityStorageInfoLookup();
         }
         [BurstCompile]
@@ -54,6 +58,8 @@ namespace HeroFishing.Battle {
 
             HitInfoLookup.Update(ref state);
             StorageInfoLookup.Update(ref state);
+            MonsterValueLookup.Update(ref state);
+            AutoDestroyTagLookup.Update(ref state);
 
             new MoveJob {
                 ECB = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
@@ -65,6 +71,8 @@ namespace HeroFishing.Battle {
                 MonsterCollisionPosOffset = BattleManager.MonsterCollisionPosOffset,
                 HitInfoLookup = HitInfoLookup,
                 StorageInfoLookup = StorageInfoLookup,
+                MonsterValueLookup = MonsterValueLookup,
+                AutoDestroyTagLookup = AutoDestroyTagLookup,
                 IsNetwork = !localTest,
             }.ScheduleParallel();
 
@@ -80,6 +88,8 @@ namespace HeroFishing.Battle {
             [ReadOnly] public float3 MonsterCollisionPosOffset;
             [ReadOnly] public BufferLookup<HitInfoBuffer> HitInfoLookup;
             [ReadOnly] public EntityStorageInfoLookup StorageInfoLookup;
+            [ReadOnly] public ComponentLookup<MonsterValue> MonsterValueLookup;
+            [ReadOnly] public ComponentLookup<AutoDestroyTag> AutoDestroyTagLookup;
             [ReadOnly] public bool IsNetwork;
 
             public void Execute(ref BulletCollisionData _collisionData, ref MoveData _moveData, in Entity _entity) {
@@ -88,13 +98,21 @@ namespace HeroFishing.Battle {
                     return;
                 }
 
-                // 計算移動，如果有目標則朝著目標，沒有的話走直線
+                // 計算移動，如果有目標則朝著目標，沒有的話走直線，另外也檢查是否死亡。
                 bool hasTargetMonster = StorageInfoLookup.Exists(_moveData.TargetMonster.MyEntity);
-                if (!hasTargetMonster) {
+                // 如果直接取用的話 _moveData.TargetMonster.Pos 不會持續更新，需要用lookup拿最新的monster value
+                bool hasMonsterValue = MonsterValueLookup.TryGetComponent(_moveData.TargetMonster.MyEntity, out var targetMonster);
+                // 查看目標是否死亡，若是死亡，關閉target monster
+                bool isMonsterDead = AutoDestroyTagLookup.HasComponent(_moveData.TargetMonster.MyEntity);
+                if (isMonsterDead)
+                    hasTargetMonster = false;
+
+                if (!hasTargetMonster || !hasMonsterValue) {
                     _moveData.Position += _moveData.Direction * _moveData.Speed * DeltaTime;
                 }
                 else {
-                    var targetPos = _moveData.TargetMonster.Pos;
+                    //var targetPos = _moveData.TargetMonster.Pos;
+                    var targetPos = targetMonster.Pos;
                     var direction = math.normalize(targetPos - _moveData.Position);
                     direction.y = 0;
                     _moveData.Direction = direction;
@@ -114,6 +132,9 @@ namespace HeroFishing.Battle {
                     return;
                 }
 
+                IsNetwork &= _collisionData.HeroIndex == 0;
+                Entity networkEntity = Entity.Null;
+
                 foreach (var offset in OffsetGrids) {
                     int2 gridToCheck = gridIndex + offset;
 
@@ -126,6 +147,12 @@ namespace HeroFishing.Battle {
                             if (hasTargetMonster && _moveData.TargetMonster.MyEntity != monsterValue.MyEntity) {
                                 continue;
                             }
+
+                            // 如果是該目標，但是已經死亡，也不碰撞
+                            if (isMonsterDead && _moveData.TargetMonster.MyEntity == monsterValue.MyEntity) {
+                                continue;
+                            }
+
                             // 使用當前找到的value要做某些事情
                             float dist = math.distance(monsterValue.Pos + MonsterCollisionPosOffset, _moveData.Position);
                             if (dist < (_collisionData.Radius + monsterValue.Radius)) {//怪物在子彈的命中範圍內
@@ -173,23 +200,22 @@ namespace HeroFishing.Battle {
                                     ECB.AddComponent(7, hitEntity, bulletHitTag);
                                 }
 
-                                Entity networkEntity = Entity.Null;
                                 if (IsNetwork) {
-                                    networkEntity = ECB.CreateEntity(0);
-                                    ECB.AddComponent(1, networkEntity, new SpellHitNetworkData {
-                                        AttackID = _collisionData.AttackID,
-                                        StrIndex_SpellID = _collisionData.StrIndex_SpellID
+                                    if (networkEntity == Entity.Null) {
+                                        networkEntity = ECB.CreateEntity(0);
+                                        ECB.AddComponent(1, networkEntity, new SpellHitNetworkData {
+                                            AttackID = _collisionData.AttackID,
+                                            StrIndex_SpellID = _collisionData.StrIndex_SpellID
+                                        });
+                                        ECB.AddBuffer<MonsterHitNetworkData>(1, networkEntity);
+                                    }
+                                    ECB.AppendToBuffer(9, networkEntity, new MonsterHitNetworkData {
+                                        Monster = monsterValue,
                                     });
-                                    ECB.AddBuffer<MonsterHitNetworkData>(1, networkEntity);
                                 }
 
                                 if (_collisionData.Destroy) {
-                                    ECB.DestroyEntity(8, _entity);//銷毀子彈
-                                    if (IsNetwork) {
-                                        ECB.AppendToBuffer(9, networkEntity, new MonsterHitNetworkData {
-                                            Monster = monsterValue,
-                                        });
-                                    }
+                                    ECB.DestroyEntity(8, _entity);//銷毀子彈                                    
                                     return;
                                 }
                             }

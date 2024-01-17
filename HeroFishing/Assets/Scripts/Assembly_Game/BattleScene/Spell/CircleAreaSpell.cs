@@ -49,7 +49,7 @@ public class CircleAreaSpell : SpellBase {
         };
 
         entityManager.AddComponentData(entity, new SpellAreaData {
-            PlayerID = 1,
+            HeroIndex = playData.heroIndex,
             StrIndex_SpellID = strIndex_SpellID,
             SpawnData = spawnData,
             CollisionDelay = _collisionDelay,

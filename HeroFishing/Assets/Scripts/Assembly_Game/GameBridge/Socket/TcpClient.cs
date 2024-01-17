@@ -198,8 +198,10 @@ namespace HeroFishing.Socket {
                         packetNumber--;
                     }
                     for (int i = 0; i < packetNumber; i++) {
-                        if (!string.IsNullOrEmpty(packets[i]))
-                            syncContext.Post(state => OnReceiveMsg?.Invoke(msg), null);
+                        if (!string.IsNullOrEmpty(packets[i])) {
+                            string packet = packets[i];
+                            syncContext.Post(state => OnReceiveMsg?.Invoke(packet), null);
+                        }
                             //messageQueue.Enqueue(packets[i]);
                     }
                 }

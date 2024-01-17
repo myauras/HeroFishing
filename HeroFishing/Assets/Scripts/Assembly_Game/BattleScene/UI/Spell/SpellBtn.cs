@@ -11,7 +11,7 @@ public class SpellBtn : MonoBehaviour {
     [SerializeField]
     private Button _button;
     [SerializeField]
-    private LevelUI _levelButton;
+    private SpellLevelUI _levelButton;
     [SerializeField]
     private ChargeUI _chargeButton;
     [SerializeField]
@@ -20,6 +20,8 @@ public class SpellBtn : MonoBehaviour {
     private RectTransform _dragBigCircle;
     [SerializeField]
     private RectTransform _dragSmallCircle;
+    [SerializeField]
+    private Image[] _imgIcons;
 
     private int _chargeValue;
     public int MaxChargeValue => _spellData.Cost;
@@ -56,6 +58,12 @@ public class SpellBtn : MonoBehaviour {
         _chargeButton.Init();
         _button.interactable = false;
         _rt = GetComponent<RectTransform>();
+
+        AddressablesLoader.GetSpriteAtlas("SpellIcon", atlas => {
+            for (int i = 0; i < _imgIcons.Length; i++) {
+                _imgIcons[i].sprite = atlas.GetSprite(_spellData.Ref);
+            }
+        });
     }
 
     public void OpenUpgradeBtn() {
@@ -107,6 +115,8 @@ public class SpellBtn : MonoBehaviour {
 
     public void Release() {
         _dragObject.SetActive(false);
+        _dragSmallCircle.transform.localPosition = Vector3.zero;
+        _dragBigCircle.transform.localEulerAngles = Vector3.zero;
     }
 
     //[ContextMenu("Level Up")]

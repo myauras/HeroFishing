@@ -1,5 +1,6 @@
 using DG.Tweening;
 using MVVM;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class DOAnimationBtn : MonoBehaviour {
     [SerializeField]
     private DOTweenView _view;
     private bool _isActive;
+    public bool IsActive => _isActive;
+    public Action<bool> OnClick;
 
     private void Reset() {
         _button = GetComponent<Button>();
@@ -24,5 +27,6 @@ public class DOAnimationBtn : MonoBehaviour {
     private void Play() {
         _isActive = !_isActive;
         _view.SetToggle(_isActive);
+        OnClick?.Invoke(_isActive);
     }
 }
