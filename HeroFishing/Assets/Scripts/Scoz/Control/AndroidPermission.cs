@@ -10,10 +10,11 @@ namespace Scoz.Func {
         //推播權限
         static string[] LaunchPermissions = new string[] {
          //藍芽相關
-        "android.permission.BLUETOOTH_SCAN",
-        "android.permission.BLUETOOTH",
-        "android.permission.BLUETOOTH_ADMIN",
-        "android.permission.BLUETOOTH_CONNECT",
+        //"android.permission.BLUETOOTH_SCAN",
+        //"android.permission.BLUETOOTH",
+        //"android.permission.BLUETOOTH_ADMIN",
+        //"android.permission.BLUETOOTH_CONNECT",
+        "android.permission.ACCESS_WIFI_STATE",
 
         //"android.permission.ACCESS_COARSE_LOCATION",
         //"android.permission.ACCESS_FINE_LOCATION",

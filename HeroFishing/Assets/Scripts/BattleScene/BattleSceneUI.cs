@@ -12,11 +12,14 @@ public class BattleSceneUI : BaseUI {
     private SpellUI _spellUI;
     [SerializeField]
     private LevelUI _levelUI;
+    [SerializeField]
+    private DeviceInfoUI _deviceInfoUI;
 
     public override void Init() {
         base.Init();
         _spellUI.Init();
         _levelUI.Init();
+        _deviceInfoUI.Init();
     }
 
     public override void RefreshText() {
