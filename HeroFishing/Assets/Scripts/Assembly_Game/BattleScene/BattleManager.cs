@@ -17,6 +17,8 @@ namespace HeroFishing.Battle {
         [SerializeField] Hero[] MyHeros;
         [SerializeField] public Transform MonsterParent;
         [SerializeField]
+        private SpellIndicator _spellIndicator;
+        [SerializeField]
         private bool _rotateTest;
         [SerializeField]
         private int _rotateTestIndex;
@@ -42,6 +44,7 @@ namespace HeroFishing.Battle {
             InitPlayerHero();
             MonsterCollisionPosOffset = new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
             _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            _spellIndicator.Init();
             DeviceManager.AddOnFocusAction(() => {
                 if (GameConnector.Connected)
                     GameConnector.Instance.UpdateScene();
