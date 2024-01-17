@@ -132,7 +132,7 @@ namespace HeroFishing.Battle {
         public void OnPointerDown(SpellName spellName) {
             if (ControlLock) return;
             if (!CheckSpell(spellName)) return;
-            if (!IsSpellTest && !BaseUI.GetInstance<SpellUI>().CanUse(spellName)) return;
+            //if (!IsSpellTest && !BaseUI.GetInstance<SpellUI>().CanUse(spellName)) return;
 
             _originPos = UIPosition.GetMouseWorldPointOnYZero(0);//設定初始按下位置
             //    TmpHero.transform.position;
