@@ -18,8 +18,8 @@ namespace Scoz.Func {
         public static int CompareVersion(string _v1, string _v2) {
             string[] v1Numbers = _v1.Split('.');
             string[] v2Numbers = _v2.Split('.');
-            if (v1Numbers.Length != v2Numbers.Length)
-                WriteLog.LogError("Compare Version Error:  not the same version length.");
+            if (v1Numbers.Length != v2Numbers.Length) Debug.LogError("比對版本錯誤:  v1與v2版本長度不一致");
+
 
             try {
                 for (int i = 0; i < v1Numbers.Length; i++) {
@@ -33,7 +33,7 @@ namespace Scoz.Func {
                         return 1;
                 }
             } catch (Exception _e) {
-                WriteLog.LogError("Compare Version Error: " + _e);
+                Debug.LogError("比對版本錯誤:  " + _e);
             }
             return 0;
         }

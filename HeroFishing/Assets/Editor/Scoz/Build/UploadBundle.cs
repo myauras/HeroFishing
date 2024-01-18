@@ -45,6 +45,7 @@ namespace Scoz.Editor {
                 WriteLog.LogError("找不到GPC專案ID：" + _envVersion + " version.");
                 return;
             }
+
             string storagePath = "";
             if (GOOGLE_STORAGE_PATH_DIC.TryGetValue(_envVersion, out string path)) {
                 storagePath = path;

@@ -57,9 +57,9 @@ namespace Scoz.Func {
         public static AddressableManage_UnityAssembly CreateNewAddressableManage() {
             if (Instance != null) {
             } else {
-                GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/AddressableManage");
+                GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/AddressableManage_UnityAssembly");
                 GameObject go = Instantiate(prefab);
-                go.name = "AddressableManage";
+                go.name = "AddressableManage_UnityAssembly";
                 Instance = go.GetComponent<AddressableManage_UnityAssembly>();
                 DontDestroyOnLoad(Instance.gameObject);
             }

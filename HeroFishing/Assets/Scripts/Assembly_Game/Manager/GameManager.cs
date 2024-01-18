@@ -11,6 +11,7 @@ using Service.Realms;
 using HeroFishing.Main;
 using HeroFishing.Socket;
 using Unity.Entities;
+using UnityEditor.PackageManager;
 
 namespace Scoz.Func {
     public enum DataLoad {
@@ -85,6 +86,7 @@ namespace Scoz.Func {
         }
 
         private void Start() {
+            WriteLog.LogColor("GameAssembly的GameManager載入成功", WriteLog.LogType.Addressable);
             Instance = this;
             Instance.Init();
         }
@@ -195,11 +197,10 @@ namespace Scoz.Func {
         /// <summary>
         /// 依序執行以下
         /// 1. 下載Bundle包
-        /// 2. 載入遊戲包Dll
-        /// 3. 載入SceneCanvas
-        /// 4. 將Bundle包中的json資料存起來(JsonDataDic)
-        /// 5. 刷新文字介面(會刷新為StringJson的文字) 與 建立PopupUI 與 載入ResourcePreSetter
-        /// 6. 根據所在場景產生場景UI
+        /// 2. 載入SceneCanvas
+        /// 3. 將Bundle包中的json資料存起來(JsonDataDic)
+        /// 4. 刷新文字介面(會刷新為StringJson的文字) 與 建立PopupUI 與 載入ResourcePreSetter
+        /// 5. 根據所在場景產生場景UI
         /// </summary>
         public void StartDownloadAddressable() {
             var addressableManager = Instantiate(MyAddressableManagerPrefab);
@@ -208,8 +209,7 @@ namespace Scoz.Func {
 
 
 
-            AddressableManage.Instance.StartLoadAsset(async () => {
-                await LoadAssembly();//載入GameDll
+            AddressableManage.Instance.StartLoadAsset(() => {
 
 
                 AddressablesLoader.GetPrefabByRef(GameDictionaryAsset, (prefab, handle) => {//建立遊戲資料字典
@@ -264,16 +264,6 @@ namespace Scoz.Func {
                     rect.offsetMin = rect.offsetMax = Vector2.zero;
                 });
             });
-        }
-        /// <summary>
-        /// 載入GameDll
-        /// </summary>
-        static async UniTask LoadAssembly() {
-            WriteLog.LogColorFormat("開始載入Game Assembly", WriteLog.LogType.Addressable);
-            var result = await AddressablesLoader.GetResourceByFullPath_Async<TextAsset>("Assets/AddressableAssets/Dlls/Game.dll.bytes");
-            TextAsset dll = result.Item1;
-            var gameAssembly = System.Reflection.Assembly.Load(dll.bytes);
-            WriteLog.LogColorFormat("載入Game Assembly完成", WriteLog.LogType.Addressable);
         }
 
         public void CreateAddressableUIs(Action _ac) {

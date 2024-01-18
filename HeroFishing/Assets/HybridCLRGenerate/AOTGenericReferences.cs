@@ -41,7 +41,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<SendRestfulAPI>d__10,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.AddressablesLoader.<GetResourceByFullPath_Async>d__8<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.GameManager.<LoadAssembly>d__35>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.Poster.<Post>d__0,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.UniTaskManager.<OneTimesTask>d__11>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.UniTaskManager.<RepeatTask>d__9>
@@ -60,7 +59,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<SendRestfulAPI>d__10,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.AddressablesLoader.<GetResourceByFullPath_Async>d__8<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.GameManager.<LoadAssembly>d__35>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.Poster.<Post>d__0,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.UniTaskManager.<OneTimesTask>d__11>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.UniTaskManager.<RepeatTask>d__9>
@@ -1178,7 +1176,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,Scoz.Func.GameManager.<LoadAssembly>d__35>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,Scoz.Func.GameManager.<LoadAssembly>d__35&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,Service.Realms.RealmManager.<OnSignin>d__21>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,Service.Realms.RealmManager.<OnSignin>d__21&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,DBPlayer.<SetInMatchgameID>d__45>(System.Runtime.CompilerServices.TaskAwaiter&,DBPlayer.<SetInMatchgameID>d__45&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,Service.Realms.RealmManager.<OnSignin>d__21>(System.Runtime.CompilerServices.TaskAwaiter&,Service.Realms.RealmManager.<OnSignin>d__21&)
@@ -1198,7 +1195,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>(HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>(HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>(HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Scoz.Func.GameManager.<LoadAssembly>d__35>(Scoz.Func.GameManager.<LoadAssembly>d__35&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Scoz.Func.UniTaskManager.<OneTimesTask>d__11>(Scoz.Func.UniTaskManager.<OneTimesTask>d__11&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Scoz.Func.UniTaskManager.<RepeatTask>d__9>(Scoz.Func.UniTaskManager.<RepeatTask>d__9&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Service.Realms.RealmManager.<AnonymousSignup>d__17>(Service.Realms.RealmManager.<AnonymousSignup>d__17&)
@@ -1317,7 +1313,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,AutoBackPool.<OnEnable>d__2>(Cysharp.Threading.Tasks.UniTask.Awaiter&,AutoBackPool.<OnEnable>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,BulletInstance.<Dispose>d__3>(Cysharp.Threading.Tasks.UniTask.Awaiter&,BulletInstance.<Dispose>d__3&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Socket.TcpClient.<Thread_Connect>d__37>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Socket.TcpClient.<Thread_Connect>d__37&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Scoz.Func.GameManager.<<StartDownloadAddressable>b__33_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Scoz.Func.GameManager.<<StartDownloadAddressable>b__33_0>d&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<EmailPWSignup>d__18>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<EmailPWSignup>d__18&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,SpellActivationBehaviour.<OnSpellPlay>d__2>(Cysharp.Threading.Tasks.UniTask.Awaiter&,SpellActivationBehaviour.<OnSpellPlay>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,SpellShakeCamera.<Play>d__6>(Cysharp.Threading.Tasks.UniTask.Awaiter&,SpellShakeCamera.<Play>d__6&)
@@ -1326,7 +1321,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<AutoBackPool.<OnEnable>d__2>(AutoBackPool.<OnEnable>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<BulletInstance.<Dispose>d__3>(BulletInstance.<Dispose>d__3&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<HeroFishing.Socket.TcpClient.<Thread_Connect>d__37>(HeroFishing.Socket.TcpClient.<Thread_Connect>d__37&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Scoz.Func.GameManager.<<StartDownloadAddressable>b__33_0>d>(Scoz.Func.GameManager.<<StartDownloadAddressable>b__33_0>d&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Service.Realms.RealmManager.<EmailPWSignup>d__18>(Service.Realms.RealmManager.<EmailPWSignup>d__18&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<SpellActivationBehaviour.<OnSpellPlay>d__2>(SpellActivationBehaviour.<OnSpellPlay>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<SpellBtn.<Upgrade>d__32>(SpellBtn.<Upgrade>d__32&)
