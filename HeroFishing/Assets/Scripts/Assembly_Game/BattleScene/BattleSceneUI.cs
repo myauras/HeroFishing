@@ -37,7 +37,7 @@ public class BattleSceneUI : BaseUI {
             battleMaanger.Init();
             _spellUI.Init();
             _levelUI.Init();
-            _deviceInfoUI.Init();
+            //_deviceInfoUI.Init();
         });
     }
 

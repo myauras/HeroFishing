@@ -35,7 +35,7 @@ public class HybridCLRManager : MonoBehaviour {
             "FlutterUnityIntegration.dll",
             "LitJson.dll",
             "Loxodon.Framework.dll",
-            "Realm",
+            "Realm.dll",
             "SerializableDictionary.dll",
             "System.Core.dll",
             "System.dll",

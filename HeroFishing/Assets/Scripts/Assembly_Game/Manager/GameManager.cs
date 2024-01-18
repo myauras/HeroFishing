@@ -10,8 +10,6 @@ using Cysharp.Threading.Tasks;
 using Service.Realms;
 using HeroFishing.Main;
 using HeroFishing.Socket;
-using Unity.Entities;
-using UnityEditor.PackageManager;
 
 namespace Scoz.Func {
     public enum DataLoad {
@@ -33,6 +31,7 @@ namespace Scoz.Func {
         [SerializeField] AssetReference UICamAsset;
         [SerializeField] AddressableManage MyAddressableManagerPrefab;
         [SerializeField] AssetReference ResourcePreSetterAsset;
+        [SerializeField] AssetReference VideoPlayerAsset;
 
         [Serializable] public class SceneUIAssetDicClass : SerializableDictionary<MyScene, AssetReference> { }
         [HeaderAttribute("==============場景對應入口UI==============")]
@@ -145,8 +144,6 @@ namespace Scoz.Func {
             //建立左右兩邊Banner
             //SideBanner.CreateNewInstance();
 
-            //建立影片播放器
-            MyVideoPlayer.CreateNewVideoPlayer();
             //建立TestTool
 #if !Release
             TestTool.CreateNewInstance();
@@ -228,7 +225,7 @@ namespace Scoz.Func {
                         Instance.CreateResourcePreSetter();//載入ResourcePreSetter
                         GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
                             MyText.RefreshActivityTextsAndFunctions();//更新介面的MyTex
-                            Instance.CreateAddressableUIs(() => { //產生PopupUI
+                            Instance.CreateAddressableObjs(() => { //產生PopupUI
                                 IsFinishedLoadAsset = true;
                                 SpawnSceneUI();
                             });
@@ -266,35 +263,33 @@ namespace Scoz.Func {
             });
         }
 
-        public void CreateAddressableUIs(Action _ac) {
-            //載入PopupUI(這個UI東西較多會載較久，所以在載好前會先設定StartUI文字讓玩家不要覺得是卡住)
-            if (SceneManager.GetActiveScene().name == MyScene.StartScene.ToString()) {
-                StartSceneUI.Instance?.SetMiddleText(StringJsonData.GetUIString("Login_WaitingForStartScene"));
-                PopupUI.ShowLoading(StringJsonData.GetUIString("Login_WaitingForStartScene"));
-            }
-
-            Addressables.LoadAssetAsync<GameObject>(Instance.PopupUIAsset).Completed += handle => {
-                PopupUI.HideLoading();
-                GameObject go = Instantiate(handle.Result);
+        public void CreateAddressableObjs(Action _ac) {
+            //載入PopupUI
+            AddressablesLoader.GetPrefabByRef(Instance.PopupUIAsset, (prefab, handle) => {
+                GameObject go = Instantiate(prefab);
+                go.GetComponent<PopupUI>().Init();
                 go.transform.localPosition = Vector2.zero;
                 go.transform.localScale = Vector3.one;
                 RectTransform rect = go.GetComponent<RectTransform>();
                 rect.offsetMin = Vector2.zero;//Left、Bottom
                 rect.offsetMax = Vector2.zero;//Right、Top
-                PopupUI ui = go.GetComponent<PopupUI>();
-                ui.Init();
-                go.SetActive(true);
+                Addressables.Release(handle);
                 _ac?.Invoke();
-            };
+            });
             //載入PostProcessingManager
-            Addressables.LoadAssetAsync<GameObject>(Instance.PostPocessingAsset).Completed += handle => {
-                GameObject go = Instantiate(handle.Result);
-                go.transform.localPosition = Vector2.zero;
-                go.transform.localScale = Vector3.one;
-                PostProcessingManager manager = go.GetComponent<PostProcessingManager>();
-                manager.Init();
-                go.SetActive(true);
-            };
+            AddressablesLoader.GetPrefabByRef(Instance.PostPocessingAsset, (prefab, handle) => {
+                GameObject go = Instantiate(prefab);
+                go.GetComponent<PostProcessingManager>().Init();
+                Addressables.Release(handle);
+            });
+            //載入VideoPlayerManager
+            AddressablesLoader.GetPrefabByRef(Instance.VideoPlayerAsset, (prefab, handle) => {
+                GameObject go = Instantiate(prefab);
+                go.GetComponent<MyVideoPlayer>().Init();
+                Addressables.Release(handle);
+            });
+
+
         }
 
         /// <summary>
