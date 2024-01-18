@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 273784996149399270}
   - component: {fileID: -2781995667651316451}
   m_Layer: 0
-  m_Name: AddressableManage
+  m_Name: AddressableManage_UnityAssembly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -304,7 +304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f170bb464ae7c914281cbdef122f3eec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Keys: []
+  Keys:
+  - Dlls
   ProgressImg: {fileID: 7133604689285230566}
   ProgressText: {fileID: 2752299329465303318}
   DownloadGO: {fileID: 544336827761566437}

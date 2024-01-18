@@ -16,6 +16,7 @@ namespace Scoz.Func {
             Debug,
             Poster,
             Flutter,
+            HybridCLR,
         }
         public static Dictionary<LogType, string> LocColorCodes = new Dictionary<LogType, string>() {
             { LogType.Player,"db7777"},//紅
@@ -27,6 +28,7 @@ namespace Scoz.Func {
 			{ LogType.Debug,"bcbcbc"},//灰
 			{ LogType.Poster,"008080"},//藍綠
 			{ LogType.Flutter,"805400"},//土黃
+			{ LogType.HybridCLR,"008396"},//湖水藍
         };
 
 

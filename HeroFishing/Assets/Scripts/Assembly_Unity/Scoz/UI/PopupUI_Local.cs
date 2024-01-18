@@ -41,7 +41,6 @@ namespace Scoz.Func {
 
         public void Init() {
             Instance = this;
-            WriteLog_UnityAssembly.LogError("init popupui loacal LoadingText=" + LoadingText);
             InitLoading();
             InitClickCamcel();
             InitConfirmCancel();
@@ -61,26 +60,18 @@ namespace Scoz.Func {
             LoadingGo.SetActive(false);
         }
         public static void ShowLoading(string _text, float _maxLoadingTime = 0) {
-            WriteLog_UnityAssembly.LogError("ShowLoading: " + _text);
             if (!Instance)
                 return;
-            WriteLog_UnityAssembly.LogError("aa");
             if (_maxLoadingTime == 0)
                 _maxLoadingTime = LoadingMaxTime;
-            WriteLog_UnityAssembly.LogError("bb");
             Instance.LoadingGo.SetActive(true);
-            WriteLog_UnityAssembly.LogError("cc");
             Instance.LoadingText.text = _text;
 
-            WriteLog_UnityAssembly.LogError("dd");
             CoroutineJob_UnityAssembly.Instance.StopCoroutine(LoadingCoroutineID);
             if (_maxLoadingTime > 0) {
-                WriteLog_UnityAssembly.LogError("ee");
                 LoadingCoroutineID = CoroutineJob_UnityAssembly.Instance.StartNewAction(() => {
-                    WriteLog_UnityAssembly.LogError("ff");
                     //ShowClickCancel(StringData.GetUIString("ConnectTimeout"), null);
                     HideLoading();
-                    WriteLog_UnityAssembly.LogError("gg");
                 }, _maxLoadingTime);
             }
         }

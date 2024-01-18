@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using LitJson;
 using Scoz.Func;
 using System;
@@ -55,18 +56,18 @@ namespace HeroFishing.Main {
             SetJsonMapper();//設定LiteJson的JsonMapper    
             gameObject.AddComponent<CoroutineJob_UnityAssembly>();//建立CoroutineJob
             //建立AddressableManage並生成GameManager
-            AddressableManage_UnityAssembly.CreateNewAddressableManage();
             StartDownloadAddressablesAndSpawnGameManager();
         }
         /// <summary>
         /// 生成場景限定
         /// </summary>
         void SpawnSceneObjs() {
-            //建立Popup_Local
-            PopupUI_Local.CreateNewInstance();
+
             var myScene = MyEnum_UnityAssembly.ParseEnum<MyScene>(SceneManager.GetActiveScene().name);
             switch (myScene) {
                 case MyScene.StartScene:
+                    //建立Popup_Local
+                    PopupUI_Local.CreateNewInstance();
                     //建立InternetChecker
                     gameObject.AddComponent<InternetChecker_UnityAssembly>().Init();
                     break;
@@ -87,13 +88,19 @@ namespace HeroFishing.Main {
         /// 下載Buindle, 下載好後之後產生 GameManager, 之後都由GameAssembly的GameManager處理
         /// </summary>
         void StartDownloadAddressablesAndSpawnGameManager() {
+            AddressableManage_UnityAssembly.CreateNewAddressableManage();
             PopupUI_Local.ShowLoading(StringJsonData_UnityAssembly.GetUIString("DataLoading"));
-            AddressableManage_UnityAssembly.Instance.StartLoadAsset(() => {
-                AddressablesLoader_UnityAssebly.GetAssetRef<GameObject>(GameManagerAsset, gameManagerPrefab => {
-                    Instantiate(gameManagerPrefab);
+            WriteLog_UnityAssembly.LogColor("開始載Bundle包", WriteLog_UnityAssembly.LogType.Addressable);
+            AddressableManage_UnityAssembly.Instance.StartLoadAsset(async () => {
+                await HybridCLRManager.LoadAssembly();//載入GameDll
+                AddressablesLoader_UnityAssebly.GetPrefabByRef(GameManagerAsset, (gameManagerPrefab, handle) => {
+                    var gameManager = Instantiate(gameManagerPrefab);
+                    WriteLog_UnityAssembly.Log("gameManager=" + gameManager);
+                    //Addressables.Release(handle);
                 });
             });
         }
+
 
         /// <summary>
         /// 將自己的camera加入到目前場景上的MainCameraStack中
