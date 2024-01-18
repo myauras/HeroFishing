@@ -32,6 +32,9 @@ namespace Scoz.Func {
         [SerializeField] AddressableManage MyAddressableManagerPrefab;
         [SerializeField] AssetReference ResourcePreSetterAsset;
         [SerializeField] AssetReference VideoPlayerAsset;
+        [SerializeField] AssetReference TestToolAsset;
+        [SerializeField] AssetReference AudioPlayerAsset;
+        [SerializeField] AssetReference PoolManagerAsset;
 
         [Serializable] public class SceneUIAssetDicClass : SerializableDictionary<MyScene, AssetReference> { }
         [HeaderAttribute("==============場景對應入口UI==============")]
@@ -141,20 +144,6 @@ namespace Scoz.Func {
 #endif
             //初始化文字取代工具
             StringReplacer.Init();
-            //建立左右兩邊Banner
-            //SideBanner.CreateNewInstance();
-
-            //建立TestTool
-#if !Release
-            TestTool.CreateNewInstance();
-#endif
-            //建立AudioPlayer    
-            AudioPlayer.CreateNewAudioPlayer();
-            //建立PoolManager
-            PoolManager.CreateNewInstance();
-
-
-
 
             // 建立AddressableManage並開始載包
             StartDownloadAddressable();
@@ -203,42 +192,30 @@ namespace Scoz.Func {
             var addressableManager = Instantiate(MyAddressableManagerPrefab);
             addressableManager.Init();
 
-
-
-
-            AddressableManage.Instance.StartLoadAsset(() => {
-
-
-                AddressablesLoader.GetPrefabByRef(GameDictionaryAsset, (prefab, handle) => {//建立遊戲資料字典
-                    var dicGO = Instantiate(prefab);
-                    dicGO.GetComponent<GameDictionary>().InitDic();
-                    Addressables.Release(handle);
-                    MyText.RefreshActiveTexts();//刷新文字
-                    //※設定本機資料要放最後(要在取得本機GameSetting後以及AudioPlayer.CreateNewAudioPlayer之後
-                    GamePlayer.Instance.LoadLocoData();
-
-
+            AddressablesLoader.GetPrefabByRef(GameDictionaryAsset, (prefab, handle) => {//建立遊戲資料字典
+                var dicGO = Instantiate(prefab);
+                dicGO.GetComponent<GameDictionary>().InitDic();
+                Addressables.Release(handle);
+                GamePlayer.Instance.LoadLocoData();
+                GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
                     AddressablesLoader.GetPrefabByRef(UICamAsset, (sceneUIPrefab, handle) => {//載入UICam
                         var camGo = Instantiate(sceneUIPrefab);
                         camGo.GetComponent<UICam>().Init();
                         Addressables.Release(handle);
-                        Instance.CreateResourcePreSetter();//載入ResourcePreSetter
-                        GameDictionary.LoadJsonDataToDic(() => { //載入Bundle的json資料
-                            MyText.RefreshActivityTextsAndFunctions();//更新介面的MyTex
-                            Instance.CreateAddressableObjs(() => { //產生PopupUI
+                        Instance.SpawnPopupUI(() => { //載入PopupUI
+                            AddressableManage.Instance.StartLoadAsset(() => { //預載其他Addressable資源
+                                Instance.CreateResourcePreSetter();//載入ResourcePreSetter
+                                Instance.CreateAddressableObjs();
                                 IsFinishedLoadAsset = true;
                                 SpawnSceneUI();
+
                             });
                         });
                     });
-
-
                 });
-
-
-
-
             });
+
+
         }
 
         /// <summary>
@@ -246,6 +223,7 @@ namespace Scoz.Func {
         /// </summary>
         public static void SpawnSceneUI() {
             if (!IsFinishedLoadAsset) return;
+
             AddressablesLoader.GetPrefabByRef(Instance.UICanvasAsset, (canvasPrefab, handle) => {//載入UICanvas
                 GameObject canvasGO = Instantiate(canvasPrefab);
                 canvasGO.GetComponent<UICanvas>().Init();
@@ -263,7 +241,7 @@ namespace Scoz.Func {
             });
         }
 
-        public void CreateAddressableObjs(Action _ac) {
+        void SpawnPopupUI(Action _ac) {
             //載入PopupUI
             AddressablesLoader.GetPrefabByRef(Instance.PopupUIAsset, (prefab, handle) => {
                 GameObject go = Instantiate(prefab);
@@ -276,6 +254,10 @@ namespace Scoz.Func {
                 Addressables.Release(handle);
                 _ac?.Invoke();
             });
+        }
+
+        void CreateAddressableObjs() {
+
             //載入PostProcessingManager
             AddressablesLoader.GetPrefabByRef(Instance.PostPocessingAsset, (prefab, handle) => {
                 GameObject go = Instantiate(prefab);
@@ -289,6 +271,30 @@ namespace Scoz.Func {
                 Addressables.Release(handle);
             });
 
+            //建立AudioPlayer
+            AddressablesLoader.GetPrefabByRef(Instance.AudioPlayerAsset, (prefab, handle) => {
+                GameObject go = Instantiate(prefab);
+                go.GetComponent<AudioPlayer>().Init();
+                Addressables.Release(handle);
+            });
+
+            //建立PoolManager
+            AddressablesLoader.GetPrefabByRef(Instance.PoolManagerAsset, (prefab, handle) => {
+                GameObject go = Instantiate(prefab);
+                go.GetComponent<PoolManager>().Init();
+                Addressables.Release(handle);
+            });
+
+            
+
+#if !Release
+            //載入TestTool
+            AddressablesLoader.GetPrefabByRef(Instance.TestToolAsset, (prefab, handle) => {
+                GameObject go = Instantiate(prefab);
+                go.GetComponent<TestTool>().Init();
+                Addressables.Release(handle);
+            });            
+#endif
 
         }
 

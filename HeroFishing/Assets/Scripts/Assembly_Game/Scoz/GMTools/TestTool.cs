@@ -9,7 +9,6 @@ using System;
 
 namespace Scoz.Func {
     public partial class TestTool : MonoBehaviour {
-        public static bool IsInit;
         public static TestTool Instance;
         [SerializeField] Text EnvVersion;
         public Text Text_FPS;
@@ -26,36 +25,18 @@ namespace Scoz.Func {
         public Camera GetCamera() {
             return GetComponent<Camera>();
         }
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        public void Start() {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(Screen.width, Screen.height);
-            VersionText.text = "Ver: " + Application.version;
-        }
+
 
 
         void OnDestroy() {
         }
 
-        void InitTestTool() {
-            IsInit = true;
+        public void Init() {
+            Instance = this;
             DontDestroyOnLoad(gameObject);
+            GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(Screen.width, Screen.height);
+            VersionText.text = "Ver: " + Application.version;
 
-        }
-        public static TestTool CreateNewInstance() {
-            if (Instance != null) {
-                WriteLog.Log("TestTool之前已經被建立了");
-            } else {
-                GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/TestTool");
-                GameObject go = Instantiate(prefab);
-                go.name = "TestTool";
-                Instance = go.GetComponent<TestTool>();
-                Instance.InitTestTool();
-            }
-            return Instance;
         }
 
         void FPSCalc() {
