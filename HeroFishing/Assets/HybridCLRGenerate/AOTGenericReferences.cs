@@ -24,6 +24,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		"Unity.RenderPipelines.Core.Runtime.dll",
 		"Unity.ResourceManager.dll",
 		"Unity.VisualScripting.Core.dll",
+		"UnityEngine.AndroidJNIModule.dll",
 		"UnityEngine.CoreModule.dll",
 		"mscorlib.dll",
 	};
@@ -35,12 +36,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// {{ AOT generic types
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<DBPlayer.<SetInMatchgameID>d__45>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__21>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__28>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__23>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<SendRestfulAPI>d__10,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.AddressablesLoader.<GetResourceByFullPath_Async>d__8<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.GameManager.<LoadAssembly>d__33>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.GameManager.<LoadAssembly>d__35>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.Poster.<Post>d__0,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.UniTaskManager.<OneTimesTask>d__11>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.UniTaskManager.<RepeatTask>d__9>
@@ -54,12 +55,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<Subscribe_Matchgame>d__35>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<DBPlayer.<SetInMatchgameID>d__45>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__21>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__28>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__23>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<SendRestfulAPI>d__10,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.AddressablesLoader.<GetResourceByFullPath_Async>d__8<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.GameManager.<LoadAssembly>d__33>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.GameManager.<LoadAssembly>d__35>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.Poster.<Post>d__0,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.UniTaskManager.<OneTimesTask>d__11>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.UniTaskManager.<RepeatTask>d__9>
@@ -72,9 +73,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<Signout>d__24>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<Subscribe_Matchgame>d__35>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>
@@ -185,6 +188,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<UnityEngine.Vector3>
 	// System.Action<byte>
 	// System.Action<float>
+	// System.Action<int,int>
 	// System.Action<int>
 	// System.Action<long>
 	// System.Action<object,UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,int>
@@ -192,6 +196,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<object,object>
 	// System.Action<object>
 	// System.Action<ushort>
+	// System.ArraySegment.Enumerator<AutoDestroyTag>
 	// System.ArraySegment.Enumerator<ChainHitData>
 	// System.ArraySegment.Enumerator<HeroFishing.Battle.MapGridData>
 	// System.ArraySegment.Enumerator<HeroFishing.Battle.RemoveMonsterBoundaryData>
@@ -212,9 +217,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.ArraySegment.Enumerator<Unity.Entities.EntityQueryBuilder.QueryTypes>
 	// System.ArraySegment.Enumerator<Unity.Entities.TypeIndex>
 	// System.ArraySegment.Enumerator<Unity.Mathematics.int2>
+	// System.ArraySegment.Enumerator<UnityEngine.jvalue>
 	// System.ArraySegment.Enumerator<int>
 	// System.ArraySegment.Enumerator<uint>
 	// System.ArraySegment.Enumerator<ushort>
+	// System.ArraySegment<AutoDestroyTag>
 	// System.ArraySegment<ChainHitData>
 	// System.ArraySegment<HeroFishing.Battle.MapGridData>
 	// System.ArraySegment<HeroFishing.Battle.RemoveMonsterBoundaryData>
@@ -235,9 +242,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.ArraySegment<Unity.Entities.EntityQueryBuilder.QueryTypes>
 	// System.ArraySegment<Unity.Entities.TypeIndex>
 	// System.ArraySegment<Unity.Mathematics.int2>
+	// System.ArraySegment<UnityEngine.jvalue>
 	// System.ArraySegment<int>
 	// System.ArraySegment<uint>
 	// System.ArraySegment<ushort>
+	// System.ByReference<AutoDestroyTag>
 	// System.ByReference<ChainHitData>
 	// System.ByReference<HeroFishing.Battle.MapGridData>
 	// System.ByReference<HeroFishing.Battle.RemoveMonsterBoundaryData>
@@ -258,6 +267,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.ByReference<Unity.Entities.EntityQueryBuilder.QueryTypes>
 	// System.ByReference<Unity.Entities.TypeIndex>
 	// System.ByReference<Unity.Mathematics.int2>
+	// System.ByReference<UnityEngine.jvalue>
 	// System.ByReference<int>
 	// System.ByReference<uint>
 	// System.ByReference<ushort>
@@ -463,8 +473,10 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEnumerator<System.IntPtr>
 	// System.Collections.Generic.IEnumerator<System.ValueTuple<Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRW<MoveData>,object>>
 	// System.Collections.Generic.IEnumerator<System.ValueTuple<object,object>>
+	// System.Collections.Generic.IEnumerator<Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRO<MonsterValue>>
 	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<ChainHitData>>
 	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<HitParticleSpawnTag>>
+	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<LockMonsterData>>
 	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<MonsterDieNetworkData>>
 	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<MonsterValue>>
 	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<ParticleSpawnTag>>
@@ -475,7 +487,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<SpellHitTag>>
 	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRO<ChainHitData>>>
 	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRW<MonsterValue>,object>>
-	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRW<MonsterValue>>>
 	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<object,MonsterDieTag>>
 	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<object,MonsterHitTag>>
 	// System.Collections.Generic.IEnumerator<Unity.Entities.QueryEnumerableWithEntity<object>>
@@ -735,6 +746,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Predicate<int>
 	// System.Predicate<object>
 	// System.Predicate<ushort>
+	// System.ReadOnlySpan.Enumerator<AutoDestroyTag>
 	// System.ReadOnlySpan.Enumerator<ChainHitData>
 	// System.ReadOnlySpan.Enumerator<HeroFishing.Battle.MapGridData>
 	// System.ReadOnlySpan.Enumerator<HeroFishing.Battle.RemoveMonsterBoundaryData>
@@ -755,9 +767,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.ReadOnlySpan.Enumerator<Unity.Entities.EntityQueryBuilder.QueryTypes>
 	// System.ReadOnlySpan.Enumerator<Unity.Entities.TypeIndex>
 	// System.ReadOnlySpan.Enumerator<Unity.Mathematics.int2>
+	// System.ReadOnlySpan.Enumerator<UnityEngine.jvalue>
 	// System.ReadOnlySpan.Enumerator<int>
 	// System.ReadOnlySpan.Enumerator<uint>
 	// System.ReadOnlySpan.Enumerator<ushort>
+	// System.ReadOnlySpan<AutoDestroyTag>
 	// System.ReadOnlySpan<ChainHitData>
 	// System.ReadOnlySpan<HeroFishing.Battle.MapGridData>
 	// System.ReadOnlySpan<HeroFishing.Battle.RemoveMonsterBoundaryData>
@@ -778,6 +792,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.ReadOnlySpan<Unity.Entities.EntityQueryBuilder.QueryTypes>
 	// System.ReadOnlySpan<Unity.Entities.TypeIndex>
 	// System.ReadOnlySpan<Unity.Mathematics.int2>
+	// System.ReadOnlySpan<UnityEngine.jvalue>
 	// System.ReadOnlySpan<int>
 	// System.ReadOnlySpan<uint>
 	// System.ReadOnlySpan<ushort>
@@ -802,6 +817,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Runtime.CompilerServices.TaskAwaiter<long>
 	// System.Runtime.CompilerServices.TaskAwaiter<object>
 	// System.Runtime.CompilerServices.TrueReadOnlyCollection<object>
+	// System.Span<AutoDestroyTag>
 	// System.Span<ChainHitData>
 	// System.Span<HeroFishing.Battle.MapGridData>
 	// System.Span<HeroFishing.Battle.RemoveMonsterBoundaryData>
@@ -822,6 +838,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Span<Unity.Entities.EntityQueryBuilder.QueryTypes>
 	// System.Span<Unity.Entities.TypeIndex>
 	// System.Span<Unity.Mathematics.int2>
+	// System.Span<UnityEngine.jvalue>
 	// System.Span<int>
 	// System.Span<uint>
 	// System.Span<ushort>
@@ -862,6 +879,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// UniRx.InternalUtil.ImmutableList<object>
 	// UniRx.InternalUtil.ListObserver<UniRx.Unit>
 	// UniRx.InternalUtil.ListObserver<object>
+	// UniRx.Observable.<RepeatInfinite>d__130<long>
 	// UniRx.Observer.Subscribe<UniRx.TimeInterval<long>>
 	// UniRx.Observer.Subscribe<UniRx.Unit>
 	// UniRx.Observer.Subscribe<long>
@@ -876,6 +894,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// UniRx.Operators.OperatorObservableBase<long>
 	// UniRx.Operators.OperatorObserverBase<long,UniRx.TimeInterval<long>>
 	// UniRx.Operators.OperatorObserverBase<long,long>
+	// UniRx.Operators.RepeatUntilObservable.RepeatUntil.<SubscribeAfterEndOfFrame>d__13<long>
+	// UniRx.Operators.RepeatUntilObservable.RepeatUntil<long>
+	// UniRx.Operators.RepeatUntilObservable<long>
 	// UniRx.Operators.TakeUntilObservable.TakeUntil.TakeUntilOther<long,long>
 	// UniRx.Operators.TakeUntilObservable.TakeUntil<long,long>
 	// UniRx.Operators.TakeUntilObservable<long,long>
@@ -937,6 +958,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Collections.LowLevel.Unsafe.UnsafePtrList.ParallelWriter<Unity.Entities.Chunk>
 	// Unity.Collections.LowLevel.Unsafe.UnsafePtrList.ReadOnly<Unity.Entities.Chunk>
 	// Unity.Collections.LowLevel.Unsafe.UnsafePtrList<Unity.Entities.Chunk>
+	// Unity.Collections.NativeArray.Enumerator<AutoDestroyTag>
 	// Unity.Collections.NativeArray.Enumerator<ChainHitData>
 	// Unity.Collections.NativeArray.Enumerator<HeroFishing.Battle.MapGridData>
 	// Unity.Collections.NativeArray.Enumerator<HeroFishing.Battle.RemoveMonsterBoundaryData>
@@ -960,6 +982,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Collections.NativeArray.Enumerator<int>
 	// Unity.Collections.NativeArray.Enumerator<uint>
 	// Unity.Collections.NativeArray.Enumerator<ushort>
+	// Unity.Collections.NativeArray.ReadOnly.Enumerator<AutoDestroyTag>
 	// Unity.Collections.NativeArray.ReadOnly.Enumerator<ChainHitData>
 	// Unity.Collections.NativeArray.ReadOnly.Enumerator<HeroFishing.Battle.MapGridData>
 	// Unity.Collections.NativeArray.ReadOnly.Enumerator<HeroFishing.Battle.RemoveMonsterBoundaryData>
@@ -983,6 +1006,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Collections.NativeArray.ReadOnly.Enumerator<int>
 	// Unity.Collections.NativeArray.ReadOnly.Enumerator<uint>
 	// Unity.Collections.NativeArray.ReadOnly.Enumerator<ushort>
+	// Unity.Collections.NativeArray.ReadOnly<AutoDestroyTag>
 	// Unity.Collections.NativeArray.ReadOnly<ChainHitData>
 	// Unity.Collections.NativeArray.ReadOnly<HeroFishing.Battle.MapGridData>
 	// Unity.Collections.NativeArray.ReadOnly<HeroFishing.Battle.RemoveMonsterBoundaryData>
@@ -1006,6 +1030,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Collections.NativeArray.ReadOnly<int>
 	// Unity.Collections.NativeArray.ReadOnly<uint>
 	// Unity.Collections.NativeArray.ReadOnly<ushort>
+	// Unity.Collections.NativeArray<AutoDestroyTag>
 	// Unity.Collections.NativeArray<ChainHitData>
 	// Unity.Collections.NativeArray<HeroFishing.Battle.MapGridData>
 	// Unity.Collections.NativeArray<HeroFishing.Battle.RemoveMonsterBoundaryData>
@@ -1049,14 +1074,17 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Entities.BufferLookup<HitInfoBuffer>
 	// Unity.Entities.BufferLookup<MonsterBuffer>
 	// Unity.Entities.BufferLookup<MonsterHitNetworkData>
+	// Unity.Entities.ComponentLookup<AutoDestroyTag>
 	// Unity.Entities.ComponentLookup<HeroFishing.Battle.MapGridData>
 	// Unity.Entities.ComponentLookup<HeroFishing.Battle.RemoveMonsterBoundaryData>
 	// Unity.Entities.ComponentLookup<MonsterFreezeTag>
+	// Unity.Entities.ComponentLookup<MonsterValue>
 	// Unity.Entities.ComponentTypeHandle<AreaCollisionData>
 	// Unity.Entities.ComponentTypeHandle<AutoDestroyTag>
 	// Unity.Entities.ComponentTypeHandle<BulletCollisionData>
 	// Unity.Entities.ComponentTypeHandle<ChainHitData>
 	// Unity.Entities.ComponentTypeHandle<HitParticleSpawnTag>
+	// Unity.Entities.ComponentTypeHandle<LockMonsterData>
 	// Unity.Entities.ComponentTypeHandle<MonsterDieNetworkData>
 	// Unity.Entities.ComponentTypeHandle<MonsterHitTag>
 	// Unity.Entities.ComponentTypeHandle<MonsterValue>
@@ -1072,6 +1100,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Entities.DynamicBuffer<MonsterBuffer>
 	// Unity.Entities.DynamicBuffer<MonsterHitNetworkData>
 	// Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRO<ChainHitData>
+	// Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRO<MonsterValue>
 	// Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRW<MonsterValue>
 	// Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRW<MoveData>
 	// Unity.Entities.JobChunkExtensions.JobChunkProducer.ExecuteJobFunction<AreaCollisionSystem.CollisionJob>
@@ -1083,6 +1112,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Entities.ManagedComponentAccessor<object>
 	// Unity.Entities.QueryEnumerableWithEntity<ChainHitData>
 	// Unity.Entities.QueryEnumerableWithEntity<HitParticleSpawnTag>
+	// Unity.Entities.QueryEnumerableWithEntity<LockMonsterData>
 	// Unity.Entities.QueryEnumerableWithEntity<MonsterDieNetworkData>
 	// Unity.Entities.QueryEnumerableWithEntity<MonsterValue>
 	// Unity.Entities.QueryEnumerableWithEntity<ParticleSpawnTag>
@@ -1093,16 +1123,17 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Entities.QueryEnumerableWithEntity<SpellHitTag>
 	// Unity.Entities.QueryEnumerableWithEntity<Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRO<ChainHitData>>
 	// Unity.Entities.QueryEnumerableWithEntity<Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRW<MonsterValue>,object>
-	// Unity.Entities.QueryEnumerableWithEntity<Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRW<MonsterValue>>
 	// Unity.Entities.QueryEnumerableWithEntity<object,MonsterDieTag>
 	// Unity.Entities.QueryEnumerableWithEntity<object,MonsterHitTag>
 	// Unity.Entities.QueryEnumerableWithEntity<object>
+	// Unity.Entities.RefRO<AutoDestroyTag>
 	// Unity.Entities.RefRO<ChainHitData>
 	// Unity.Entities.RefRO<HeroFishing.Battle.MapGridData>
 	// Unity.Entities.RefRO<HeroFishing.Battle.RemoveMonsterBoundaryData>
 	// Unity.Entities.RefRO<MonsterFreezeTag>
 	// Unity.Entities.RefRO<MonsterValue>
 	// Unity.Entities.RefRO<MoveData>
+	// Unity.Entities.RefRW<AutoDestroyTag>
 	// Unity.Entities.RefRW<HeroFishing.Battle.MapGridData>
 	// Unity.Entities.RefRW<HeroFishing.Battle.RemoveMonsterBoundaryData>
 	// Unity.Entities.RefRW<MonsterFreezeTag>
@@ -1144,10 +1175,10 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<AnonymousSignup>d__17>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<AnonymousSignup>d__17&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<OnSignin>d__21>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<OnSignin>d__21&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__21>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__21&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__28>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__28&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__23>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__23&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,Scoz.Func.GameManager.<LoadAssembly>d__33>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,Scoz.Func.GameManager.<LoadAssembly>d__33&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,Scoz.Func.GameManager.<LoadAssembly>d__35>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,Scoz.Func.GameManager.<LoadAssembly>d__35&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,Service.Realms.RealmManager.<OnSignin>d__21>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,Service.Realms.RealmManager.<OnSignin>d__21&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,DBPlayer.<SetInMatchgameID>d__45>(System.Runtime.CompilerServices.TaskAwaiter&,DBPlayer.<SetInMatchgameID>d__45&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,Service.Realms.RealmManager.<OnSignin>d__21>(System.Runtime.CompilerServices.TaskAwaiter&,Service.Realms.RealmManager.<OnSignin>d__21&)
@@ -1164,10 +1195,10 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<GetValidAccessToken>d__19>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<GetValidAccessToken>d__19&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<DBPlayer.<SetInMatchgameID>d__45>(DBPlayer.<SetInMatchgameID>d__45&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28>(HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__21>(HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__21&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__28>(HeroFishing.Socket.GameConnector.<JoinMatchgame>d__28&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__23>(HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__23&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Scoz.Func.GameManager.<LoadAssembly>d__33>(Scoz.Func.GameManager.<LoadAssembly>d__33&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>(HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>(HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>(HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Scoz.Func.GameManager.<LoadAssembly>d__35>(Scoz.Func.GameManager.<LoadAssembly>d__35&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Scoz.Func.UniTaskManager.<OneTimesTask>d__11>(Scoz.Func.UniTaskManager.<OneTimesTask>d__11&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Scoz.Func.UniTaskManager.<RepeatTask>d__9>(Scoz.Func.UniTaskManager.<RepeatTask>d__9&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Service.Realms.RealmManager.<AnonymousSignup>d__17>(Service.Realms.RealmManager.<AnonymousSignup>d__17&)
@@ -1181,9 +1212,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__16>(Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__16&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<GetProvider>d__20>(Service.Realms.RealmManager.<GetProvider>d__20&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<GetValidAccessToken>d__19>(Service.Realms.RealmManager.<GetValidAccessToken>d__19&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>(HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d>(HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d>(HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>(Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d&)
@@ -1274,33 +1307,36 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Linq.IQueryable<object> System.Linq.Queryable.Where<object>(System.Linq.IQueryable<object>,System.Linq.Expressions.Expression<System.Func<object,bool>>)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<SetupConfig>d__23>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<SetupConfig>d__23&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<System.Threading.Tasks.VoidTaskResult>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<SetupConfig>d__23>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<SetupConfig>d__23&)
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<byte>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,LevelUI.<Upgrade>d__18>(System.Runtime.CompilerServices.TaskAwaiter&,LevelUI.<Upgrade>d__18&)
+		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<byte>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,SpellLevelUI.<Upgrade>d__18>(System.Runtime.CompilerServices.TaskAwaiter&,SpellLevelUI.<Upgrade>d__18&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<CallAtlasFunc>d__14>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<CallAtlasFunc>d__14&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.Start<Service.Realms.RealmManager.<SetupConfig>d__23>(Service.Realms.RealmManager.<SetupConfig>d__23&)
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<byte>.Start<LevelUI.<Upgrade>d__18>(LevelUI.<Upgrade>d__18&)
+		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<byte>.Start<SpellLevelUI.<Upgrade>d__18>(SpellLevelUI.<Upgrade>d__18&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<Realms.CollectionExtensions.<SubscribeAsync>d__18<object>>(Realms.CollectionExtensions.<SubscribeAsync>d__18<object>&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<Realms.Sync.User.FunctionsClient.<CallSerializedAsync>d__4<object>>(Realms.Sync.User.FunctionsClient.<CallSerializedAsync>d__4<object>&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<CallAtlasFunc>d__14>(Service.Realms.RealmManager.<CallAtlasFunc>d__14&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,AutoBackPool.<OnEnable>d__2>(Cysharp.Threading.Tasks.UniTask.Awaiter&,AutoBackPool.<OnEnable>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,BulletInstance.<Dispose>d__3>(Cysharp.Threading.Tasks.UniTask.Awaiter&,BulletInstance.<Dispose>d__3&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Socket.TcpClient.<Thread_Connect>d__37>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Socket.TcpClient.<Thread_Connect>d__37&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Scoz.Func.GameManager.<<StartDownloadAddressable>b__31_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Scoz.Func.GameManager.<<StartDownloadAddressable>b__31_0>d&)
+		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Scoz.Func.GameManager.<<StartDownloadAddressable>b__33_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Scoz.Func.GameManager.<<StartDownloadAddressable>b__33_0>d&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<EmailPWSignup>d__18>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<EmailPWSignup>d__18&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,SpellActivationBehaviour.<OnSpellPlay>d__2>(Cysharp.Threading.Tasks.UniTask.Awaiter&,SpellActivationBehaviour.<OnSpellPlay>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,SpellShakeCamera.<Play>d__6>(Cysharp.Threading.Tasks.UniTask.Awaiter&,SpellShakeCamera.<Play>d__6&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<byte>,SpellBtn.<Upgrade>d__31>(System.Runtime.CompilerServices.TaskAwaiter<byte>&,SpellBtn.<Upgrade>d__31&)
+		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<byte>,SpellBtn.<Upgrade>d__32>(System.Runtime.CompilerServices.TaskAwaiter<byte>&,SpellBtn.<Upgrade>d__32&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<EmailPWSignup>d__18>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<EmailPWSignup>d__18&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<AutoBackPool.<OnEnable>d__2>(AutoBackPool.<OnEnable>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<BulletInstance.<Dispose>d__3>(BulletInstance.<Dispose>d__3&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<HeroFishing.Socket.TcpClient.<Thread_Connect>d__37>(HeroFishing.Socket.TcpClient.<Thread_Connect>d__37&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Scoz.Func.GameManager.<<StartDownloadAddressable>b__31_0>d>(Scoz.Func.GameManager.<<StartDownloadAddressable>b__31_0>d&)
+		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Scoz.Func.GameManager.<<StartDownloadAddressable>b__33_0>d>(Scoz.Func.GameManager.<<StartDownloadAddressable>b__33_0>d&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Service.Realms.RealmManager.<EmailPWSignup>d__18>(Service.Realms.RealmManager.<EmailPWSignup>d__18&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<SpellActivationBehaviour.<OnSpellPlay>d__2>(SpellActivationBehaviour.<OnSpellPlay>d__2&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<SpellBtn.<Upgrade>d__31>(SpellBtn.<Upgrade>d__31&)
+		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<SpellBtn.<Upgrade>d__32>(SpellBtn.<Upgrade>d__32&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<SpellShakeCamera.<Play>d__6>(SpellShakeCamera.<Play>d__6&)
 		// object& System.Runtime.CompilerServices.Unsafe.As<object,object>(object&)
 		// System.Void* System.Runtime.CompilerServices.Unsafe.AsPointer<object>(object&)
 		// object System.Threading.Interlocked.CompareExchange<object>(object&,object,object)
+		// System.Collections.Generic.IEnumerable<System.IObservable<long>> UniRx.Observable.RepeatInfinite<long>(System.IObservable<long>)
+		// System.IObservable<long> UniRx.Observable.RepeatUntilCore<long>(System.Collections.Generic.IEnumerable<System.IObservable<long>>,System.IObservable<UniRx.Unit>,UnityEngine.GameObject)
+		// System.IObservable<long> UniRx.Observable.RepeatUntilDestroy<long>(System.IObservable<long>,UnityEngine.GameObject)
 		// System.IObservable<long> UniRx.Observable.TakeUntil<long,long>(System.IObservable<long>,System.IObservable<long>)
 		// System.IObservable<UniRx.TimeInterval<long>> UniRx.Observable.TimeInterval<long>(System.IObservable<long>)
 		// System.IObservable<UniRx.TimeInterval<long>> UniRx.Observable.TimeInterval<long>(System.IObservable<long>,UniRx.IScheduler)
@@ -1327,6 +1363,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// long Unity.Burst.BurstRuntime.GetHashCode64<HeroFishing.Battle.MonsterSpawnSystem>()
 		// long Unity.Burst.BurstRuntime.GetHashCode64<HeroFishing.Battle.SpellEffectSpawnSystem>()
 		// long Unity.Burst.BurstRuntime.GetHashCode64<HitNetworkSystem>()
+		// long Unity.Burst.BurstRuntime.GetHashCode64<LockMonsterSystem>()
 		// long Unity.Burst.BurstRuntime.GetHashCode64<MonsterDieNetworkSystem>()
 		// long Unity.Burst.BurstRuntime.GetHashCode64<MonsterFreezeSystem>()
 		// long Unity.Burst.BurstRuntime.GetHashCode64<RefreshSceneSystem>()
@@ -1360,6 +1397,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.CopyStructureToPtr<HeroFishing.Battle.RemoveMonsterBoundaryData>(HeroFishing.Battle.RemoveMonsterBoundaryData&,System.Void*)
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.CopyStructureToPtr<HitInfoBuffer>(HitInfoBuffer&,System.Void*)
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.CopyStructureToPtr<HitParticleSpawnTag>(HitParticleSpawnTag&,System.Void*)
+		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.CopyStructureToPtr<LockMonsterData>(LockMonsterData&,System.Void*)
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.CopyStructureToPtr<MonsterBuffer>(MonsterBuffer&,System.Void*)
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.CopyStructureToPtr<MonsterDieNetworkData>(MonsterDieNetworkData&,System.Void*)
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.CopyStructureToPtr<MonsterDieTag>(MonsterDieTag&,System.Void*)
@@ -1382,6 +1420,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.InternalCopyStructureToPtr<HeroFishing.Battle.RemoveMonsterBoundaryData>(HeroFishing.Battle.RemoveMonsterBoundaryData&,System.Void*)
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.InternalCopyStructureToPtr<HitInfoBuffer>(HitInfoBuffer&,System.Void*)
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.InternalCopyStructureToPtr<HitParticleSpawnTag>(HitParticleSpawnTag&,System.Void*)
+		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.InternalCopyStructureToPtr<LockMonsterData>(LockMonsterData&,System.Void*)
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.InternalCopyStructureToPtr<MonsterBuffer>(MonsterBuffer&,System.Void*)
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.InternalCopyStructureToPtr<MonsterDieNetworkData>(MonsterDieNetworkData&,System.Void*)
 		// System.Void Unity.Collections.LowLevel.Unsafe.UnsafeUtility.InternalCopyStructureToPtr<MonsterDieTag>(MonsterDieTag&,System.Void*)
@@ -1444,6 +1483,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadOnly<HeroFishing.Battle.RemoveMonsterBoundaryData>()
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadOnly<HitInfoBuffer>()
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadOnly<HitParticleSpawnTag>()
+		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadOnly<LockMonsterData>()
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadOnly<MonsterBuffer>()
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadOnly<MonsterDieNetworkData>()
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadOnly<MonsterDieTag>()
@@ -1477,6 +1517,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadWrite<HeroFishing.Battle.RemoveMonsterBoundaryData>()
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadWrite<HitInfoBuffer>()
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadWrite<HitParticleSpawnTag>()
+		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadWrite<LockMonsterData>()
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadWrite<MonsterBuffer>()
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadWrite<MonsterDieNetworkData>()
 		// Unity.Entities.ComponentType Unity.Entities.ComponentType.ReadWrite<MonsterDieTag>()
@@ -1507,6 +1548,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Entities.EntityCommandBuffer.AddComponent<MonsterValue>(Unity.Entities.Entity,MonsterValue)
 		// System.Void Unity.Entities.EntityCommandBuffer.AddComponent<MoveData>(Unity.Entities.Entity,MoveData)
 		// System.Void Unity.Entities.EntityCommandBuffer.AddComponent<SpawnTag>(Unity.Entities.Entity)
+		// System.Void Unity.Entities.EntityCommandBuffer.AddComponent<SpellBulletData>(Unity.Entities.Entity,SpellBulletData)
 		// System.Void Unity.Entities.EntityCommandBuffer.AppendToBuffer<MonsterBuffer>(Unity.Entities.Entity,MonsterBuffer)
 		// System.Void Unity.Entities.EntityCommandBuffer.RemoveComponent<AlreadyUpdateTag>(Unity.Entities.EntityQuery,Unity.Entities.EntityQueryCaptureMode)
 		// System.Void Unity.Entities.EntityCommandBuffer.RemoveComponent<MonsterFreezeTag>(Unity.Entities.Entity)
@@ -1556,6 +1598,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Entities.EntityDataAccess.SetComponentData<FreezeTag>(Unity.Entities.Entity,FreezeTag,Unity.Entities.SystemHandle&)
 		// System.Void Unity.Entities.EntityDataAccess.SetComponentData<HeroFishing.Battle.MapGridData>(Unity.Entities.Entity,HeroFishing.Battle.MapGridData,Unity.Entities.SystemHandle&)
 		// System.Void Unity.Entities.EntityDataAccess.SetComponentData<HeroFishing.Battle.RemoveMonsterBoundaryData>(Unity.Entities.Entity,HeroFishing.Battle.RemoveMonsterBoundaryData,Unity.Entities.SystemHandle&)
+		// System.Void Unity.Entities.EntityDataAccess.SetComponentData<LockMonsterData>(Unity.Entities.Entity,LockMonsterData,Unity.Entities.SystemHandle&)
 		// System.Void Unity.Entities.EntityDataAccess.SetComponentData<MonsterDieNetworkData>(Unity.Entities.Entity,MonsterDieNetworkData,Unity.Entities.SystemHandle&)
 		// System.Void Unity.Entities.EntityDataAccess.SetComponentData<SpawnData>(Unity.Entities.Entity,SpawnData,Unity.Entities.SystemHandle&)
 		// System.Void Unity.Entities.EntityDataAccess.SetComponentData<SpellAreaData>(Unity.Entities.Entity,SpellAreaData,Unity.Entities.SystemHandle&)
@@ -1565,6 +1608,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// bool Unity.Entities.EntityManager.AddComponentData<FreezeTag>(Unity.Entities.Entity,FreezeTag)
 		// bool Unity.Entities.EntityManager.AddComponentData<HeroFishing.Battle.MapGridData>(Unity.Entities.Entity,HeroFishing.Battle.MapGridData)
 		// bool Unity.Entities.EntityManager.AddComponentData<HeroFishing.Battle.RemoveMonsterBoundaryData>(Unity.Entities.Entity,HeroFishing.Battle.RemoveMonsterBoundaryData)
+		// bool Unity.Entities.EntityManager.AddComponentData<LockMonsterData>(Unity.Entities.Entity,LockMonsterData)
 		// bool Unity.Entities.EntityManager.AddComponentData<MonsterDieNetworkData>(Unity.Entities.Entity,MonsterDieNetworkData)
 		// bool Unity.Entities.EntityManager.AddComponentData<SpawnData>(Unity.Entities.Entity,SpawnData)
 		// bool Unity.Entities.EntityManager.AddComponentData<SpellAreaData>(Unity.Entities.Entity,SpellAreaData)
@@ -1573,6 +1617,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<HeroFishing.Battle.MapGridData>()
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<HeroFishing.Battle.RemoveMonsterBoundaryData>()
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<HitParticleSpawnTag>()
+		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<LockMonsterData>()
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<MonsterDieNetworkData>()
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<MonsterFreezeTag>()
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<MonsterHitTag>()
@@ -1593,17 +1638,22 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// Unity.Entities.BufferLookup<MonsterBuffer> Unity.Entities.EntityManager.GetBufferLookup<MonsterBuffer>(bool)
 		// Unity.Entities.BufferLookup<MonsterHitNetworkData> Unity.Entities.EntityManager.GetBufferLookup<MonsterHitNetworkData>(Unity.Entities.TypeIndex,bool)
 		// Unity.Entities.BufferLookup<MonsterHitNetworkData> Unity.Entities.EntityManager.GetBufferLookup<MonsterHitNetworkData>(bool)
+		// Unity.Entities.ComponentLookup<AutoDestroyTag> Unity.Entities.EntityManager.GetComponentLookup<AutoDestroyTag>(Unity.Entities.TypeIndex,bool)
+		// Unity.Entities.ComponentLookup<AutoDestroyTag> Unity.Entities.EntityManager.GetComponentLookup<AutoDestroyTag>(bool)
 		// Unity.Entities.ComponentLookup<HeroFishing.Battle.MapGridData> Unity.Entities.EntityManager.GetComponentLookup<HeroFishing.Battle.MapGridData>(Unity.Entities.TypeIndex,bool)
 		// Unity.Entities.ComponentLookup<HeroFishing.Battle.MapGridData> Unity.Entities.EntityManager.GetComponentLookup<HeroFishing.Battle.MapGridData>(bool)
 		// Unity.Entities.ComponentLookup<HeroFishing.Battle.RemoveMonsterBoundaryData> Unity.Entities.EntityManager.GetComponentLookup<HeroFishing.Battle.RemoveMonsterBoundaryData>(Unity.Entities.TypeIndex,bool)
 		// Unity.Entities.ComponentLookup<HeroFishing.Battle.RemoveMonsterBoundaryData> Unity.Entities.EntityManager.GetComponentLookup<HeroFishing.Battle.RemoveMonsterBoundaryData>(bool)
 		// Unity.Entities.ComponentLookup<MonsterFreezeTag> Unity.Entities.EntityManager.GetComponentLookup<MonsterFreezeTag>(Unity.Entities.TypeIndex,bool)
 		// Unity.Entities.ComponentLookup<MonsterFreezeTag> Unity.Entities.EntityManager.GetComponentLookup<MonsterFreezeTag>(bool)
+		// Unity.Entities.ComponentLookup<MonsterValue> Unity.Entities.EntityManager.GetComponentLookup<MonsterValue>(Unity.Entities.TypeIndex,bool)
+		// Unity.Entities.ComponentLookup<MonsterValue> Unity.Entities.EntityManager.GetComponentLookup<MonsterValue>(bool)
 		// Unity.Entities.ComponentTypeHandle<AreaCollisionData> Unity.Entities.EntityManager.GetComponentTypeHandle<AreaCollisionData>(bool)
 		// Unity.Entities.ComponentTypeHandle<AutoDestroyTag> Unity.Entities.EntityManager.GetComponentTypeHandle<AutoDestroyTag>(bool)
 		// Unity.Entities.ComponentTypeHandle<BulletCollisionData> Unity.Entities.EntityManager.GetComponentTypeHandle<BulletCollisionData>(bool)
 		// Unity.Entities.ComponentTypeHandle<ChainHitData> Unity.Entities.EntityManager.GetComponentTypeHandle<ChainHitData>(bool)
 		// Unity.Entities.ComponentTypeHandle<HitParticleSpawnTag> Unity.Entities.EntityManager.GetComponentTypeHandle<HitParticleSpawnTag>(bool)
+		// Unity.Entities.ComponentTypeHandle<LockMonsterData> Unity.Entities.EntityManager.GetComponentTypeHandle<LockMonsterData>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterDieNetworkData> Unity.Entities.EntityManager.GetComponentTypeHandle<MonsterDieNetworkData>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterHitTag> Unity.Entities.EntityManager.GetComponentTypeHandle<MonsterHitTag>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterValue> Unity.Entities.EntityManager.GetComponentTypeHandle<MonsterValue>(bool)
@@ -1620,6 +1670,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Entities.EntityManager.SetComponentData<FreezeTag>(Unity.Entities.Entity,FreezeTag)
 		// System.Void Unity.Entities.EntityManager.SetComponentData<HeroFishing.Battle.MapGridData>(Unity.Entities.Entity,HeroFishing.Battle.MapGridData)
 		// System.Void Unity.Entities.EntityManager.SetComponentData<HeroFishing.Battle.RemoveMonsterBoundaryData>(Unity.Entities.Entity,HeroFishing.Battle.RemoveMonsterBoundaryData)
+		// System.Void Unity.Entities.EntityManager.SetComponentData<LockMonsterData>(Unity.Entities.Entity,LockMonsterData)
 		// System.Void Unity.Entities.EntityManager.SetComponentData<MonsterDieNetworkData>(Unity.Entities.Entity,MonsterDieNetworkData)
 		// System.Void Unity.Entities.EntityManager.SetComponentData<SpawnData>(Unity.Entities.Entity,SpawnData)
 		// System.Void Unity.Entities.EntityManager.SetComponentData<SpellAreaData>(Unity.Entities.Entity,SpellAreaData)
@@ -1661,6 +1712,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayIntPtrWithoutChecks<MoveData>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<MoveData>&)
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<ChainHitData>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<ChainHitData>&)
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<HitParticleSpawnTag>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<HitParticleSpawnTag>&)
+		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<LockMonsterData>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<LockMonsterData>&)
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<MonsterDieNetworkData>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<MonsterDieNetworkData>&)
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<MonsterHitTag>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<MonsterHitTag>&)
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<MonsterValue>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<MonsterValue>&)
@@ -1672,6 +1724,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<SpellHitTag>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<SpellHitTag>&)
 		// ChainHitData Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<ChainHitData>(System.IntPtr,int)
 		// HitParticleSpawnTag Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<HitParticleSpawnTag>(System.IntPtr,int)
+		// LockMonsterData Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<LockMonsterData>(System.IntPtr,int)
 		// MonsterDieNetworkData Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<MonsterDieNetworkData>(System.IntPtr,int)
 		// MonsterHitTag Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<MonsterHitTag>(System.IntPtr,int)
 		// MonsterValue Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<MonsterValue>(System.IntPtr,int)
@@ -1687,6 +1740,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// BulletCollisionData& Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetRefToNativeArrayPtrElement<BulletCollisionData>(System.IntPtr,int)
 		// MoveData& Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetRefToNativeArrayPtrElement<MoveData>(System.IntPtr,int)
 		// Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRO<ChainHitData> Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetUncheckedRefRO<ChainHitData>(System.IntPtr,int)
+		// Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRO<MonsterValue> Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetUncheckedRefRO<MonsterValue>(System.IntPtr,int)
 		// Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRW<MonsterValue> Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetUncheckedRefRW<MonsterValue>(System.IntPtr,int)
 		// Unity.Entities.Internal.InternalCompilerInterface.UncheckedRefRW<MoveData> Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetUncheckedRefRW<MoveData>(System.IntPtr,int)
 		// System.Void Unity.Entities.JobChunkExtensions.EarlyJobInit<AreaCollisionSystem.CollisionJob>()
@@ -1707,14 +1761,17 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// Unity.Entities.BufferLookup<HitInfoBuffer> Unity.Entities.SystemState.GetBufferLookup<HitInfoBuffer>(bool)
 		// Unity.Entities.BufferLookup<MonsterBuffer> Unity.Entities.SystemState.GetBufferLookup<MonsterBuffer>(bool)
 		// Unity.Entities.BufferLookup<MonsterHitNetworkData> Unity.Entities.SystemState.GetBufferLookup<MonsterHitNetworkData>(bool)
+		// Unity.Entities.ComponentLookup<AutoDestroyTag> Unity.Entities.SystemState.GetComponentLookup<AutoDestroyTag>(bool)
 		// Unity.Entities.ComponentLookup<HeroFishing.Battle.MapGridData> Unity.Entities.SystemState.GetComponentLookup<HeroFishing.Battle.MapGridData>(bool)
 		// Unity.Entities.ComponentLookup<HeroFishing.Battle.RemoveMonsterBoundaryData> Unity.Entities.SystemState.GetComponentLookup<HeroFishing.Battle.RemoveMonsterBoundaryData>(bool)
 		// Unity.Entities.ComponentLookup<MonsterFreezeTag> Unity.Entities.SystemState.GetComponentLookup<MonsterFreezeTag>(bool)
+		// Unity.Entities.ComponentLookup<MonsterValue> Unity.Entities.SystemState.GetComponentLookup<MonsterValue>(bool)
 		// Unity.Entities.ComponentTypeHandle<AreaCollisionData> Unity.Entities.SystemState.GetComponentTypeHandle<AreaCollisionData>(bool)
 		// Unity.Entities.ComponentTypeHandle<AutoDestroyTag> Unity.Entities.SystemState.GetComponentTypeHandle<AutoDestroyTag>(bool)
 		// Unity.Entities.ComponentTypeHandle<BulletCollisionData> Unity.Entities.SystemState.GetComponentTypeHandle<BulletCollisionData>(bool)
 		// Unity.Entities.ComponentTypeHandle<ChainHitData> Unity.Entities.SystemState.GetComponentTypeHandle<ChainHitData>(bool)
 		// Unity.Entities.ComponentTypeHandle<HitParticleSpawnTag> Unity.Entities.SystemState.GetComponentTypeHandle<HitParticleSpawnTag>(bool)
+		// Unity.Entities.ComponentTypeHandle<LockMonsterData> Unity.Entities.SystemState.GetComponentTypeHandle<LockMonsterData>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterDieNetworkData> Unity.Entities.SystemState.GetComponentTypeHandle<MonsterDieNetworkData>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterHitTag> Unity.Entities.SystemState.GetComponentTypeHandle<MonsterHitTag>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterValue> Unity.Entities.SystemState.GetComponentTypeHandle<MonsterValue>(bool)
@@ -1734,9 +1791,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Entities.SystemState.RequireForUpdate<HeroFishing.Battle.CollisionSys>()
 		// System.Void Unity.Entities.SystemState.RequireForUpdate<HeroFishing.Battle.MonsterSpawnSys>()
 		// System.Void Unity.Entities.SystemState.RequireForUpdate<HitParticleSpawnTag>()
+		// System.Void Unity.Entities.SystemState.RequireForUpdate<LockMonsterData>()
 		// System.Void Unity.Entities.SystemState.RequireForUpdate<MonsterDieNetworkData>()
 		// System.Void Unity.Entities.SystemState.RequireForUpdate<MonsterDieTag>()
 		// System.Void Unity.Entities.SystemState.RequireForUpdate<MonsterHitTag>()
+		// System.Void Unity.Entities.SystemState.RequireForUpdate<MonsterValue>()
 		// System.Void Unity.Entities.SystemState.RequireForUpdate<MoveData>()
 		// System.Void Unity.Entities.SystemState.RequireForUpdate<ParticleSpawnTag>()
 		// System.Void Unity.Entities.SystemState.RequireForUpdate<RefreshSceneTag>()
@@ -1759,6 +1818,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// Unity.Entities.TypeIndex Unity.Entities.TypeManager.GetTypeIndex<HeroFishing.Battle.RemoveMonsterBoundaryData>()
 		// Unity.Entities.TypeIndex Unity.Entities.TypeManager.GetTypeIndex<HitInfoBuffer>()
 		// Unity.Entities.TypeIndex Unity.Entities.TypeManager.GetTypeIndex<HitParticleSpawnTag>()
+		// Unity.Entities.TypeIndex Unity.Entities.TypeManager.GetTypeIndex<LockMonsterData>()
 		// Unity.Entities.TypeIndex Unity.Entities.TypeManager.GetTypeIndex<MonsterBuffer>()
 		// Unity.Entities.TypeIndex Unity.Entities.TypeManager.GetTypeIndex<MonsterDieNetworkData>()
 		// Unity.Entities.TypeIndex Unity.Entities.TypeManager.GetTypeIndex<MonsterDieTag>()
@@ -1795,6 +1855,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Entities.TypeManager.ManagedException<HeroFishing.Battle.RemoveMonsterBoundaryData>()
 		// System.Void Unity.Entities.TypeManager.ManagedException<HitInfoBuffer>()
 		// System.Void Unity.Entities.TypeManager.ManagedException<HitParticleSpawnTag>()
+		// System.Void Unity.Entities.TypeManager.ManagedException<LockMonsterData>()
 		// System.Void Unity.Entities.TypeManager.ManagedException<MonsterBuffer>()
 		// System.Void Unity.Entities.TypeManager.ManagedException<MonsterDieNetworkData>()
 		// System.Void Unity.Entities.TypeManager.ManagedException<MonsterDieTag>()
@@ -1827,6 +1888,25 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Collections.Generic.IList<object>> UnityEngine.AddressableAssets.AddressablesImpl.LoadAssetsWithChain<object>(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,object,System.Action<object>,bool)
 		// System.Void UnityEngine.AddressableAssets.AddressablesImpl.Release<object>(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>)
 		// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object> UnityEngine.AddressableAssets.AddressablesImpl.TrackHandle<object>(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>)
+		// int UnityEngine.AndroidJNIHelper.ConvertFromJNIArray<int>(System.IntPtr)
+		// object UnityEngine.AndroidJNIHelper.ConvertFromJNIArray<object>(System.IntPtr)
+		// System.IntPtr UnityEngine.AndroidJNIHelper.GetFieldID<object>(System.IntPtr,string,bool)
+		// System.IntPtr UnityEngine.AndroidJNIHelper.GetMethodID<int>(System.IntPtr,string,object[],bool)
+		// System.IntPtr UnityEngine.AndroidJNIHelper.GetMethodID<object>(System.IntPtr,string,object[],bool)
+		// int UnityEngine.AndroidJavaObject.Call<int>(string,object[])
+		// object UnityEngine.AndroidJavaObject.Call<object>(string,object[])
+		// int UnityEngine.AndroidJavaObject.CallStatic<int>(string,object[])
+		// int UnityEngine.AndroidJavaObject.FromJavaArrayDeleteLocalRef<int>(System.IntPtr)
+		// object UnityEngine.AndroidJavaObject.FromJavaArrayDeleteLocalRef<object>(System.IntPtr)
+		// object UnityEngine.AndroidJavaObject.GetStatic<object>(string)
+		// int UnityEngine.AndroidJavaObject._Call<int>(System.IntPtr,object[])
+		// int UnityEngine.AndroidJavaObject._Call<int>(string,object[])
+		// object UnityEngine.AndroidJavaObject._Call<object>(System.IntPtr,object[])
+		// object UnityEngine.AndroidJavaObject._Call<object>(string,object[])
+		// int UnityEngine.AndroidJavaObject._CallStatic<int>(System.IntPtr,object[])
+		// int UnityEngine.AndroidJavaObject._CallStatic<int>(string,object[])
+		// object UnityEngine.AndroidJavaObject._GetStatic<object>(System.IntPtr)
+		// object UnityEngine.AndroidJavaObject._GetStatic<object>(string)
 		// object UnityEngine.Component.GetComponent<object>()
 		// object UnityEngine.Component.GetComponentInChildren<object>()
 		// object UnityEngine.Component.GetComponentInParent<object>()
@@ -1859,5 +1939,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object> UnityEngine.ResourceManagement.ResourceManager.StartOperation<object>(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase<object>,UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle)
 		// object UnityEngine.Resources.GetBuiltinResource<object>(string)
 		// object UnityEngine.Resources.Load<object>(string)
+		// int UnityEngine._AndroidJNIHelper.ConvertFromJNIArray<int>(System.IntPtr)
+		// object UnityEngine._AndroidJNIHelper.ConvertFromJNIArray<object>(System.IntPtr)
+		// System.IntPtr UnityEngine._AndroidJNIHelper.GetFieldID<object>(System.IntPtr,string,bool)
+		// System.IntPtr UnityEngine._AndroidJNIHelper.GetMethodID<int>(System.IntPtr,string,object[],bool)
+		// System.IntPtr UnityEngine._AndroidJNIHelper.GetMethodID<object>(System.IntPtr,string,object[],bool)
+		// string UnityEngine._AndroidJNIHelper.GetSignature<int>(object[])
+		// string UnityEngine._AndroidJNIHelper.GetSignature<object>(object[])
 	}
 }

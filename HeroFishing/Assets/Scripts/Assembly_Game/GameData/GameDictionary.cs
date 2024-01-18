@@ -19,19 +19,6 @@ namespace Scoz.Func {
 
 
 
-        public static GameDictionary CreateNewInstance() {
-            if (Instance != null) {
-                WriteLog.LogError("GameDictionary之前已經被建立了");
-            } else {
-                GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/GameDictionary");
-                GameObject go = Instantiate(prefab);
-                go.name = "GameDictionary";
-                Instance = go.GetComponent<GameDictionary>();
-                Instance.InitDic();
-            }
-            return Instance;
-        }
-
         public static Font GetUsingLanguageFont() {
             if (Instance == null)
                 return Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");

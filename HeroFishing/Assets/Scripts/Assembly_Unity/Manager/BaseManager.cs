@@ -46,8 +46,13 @@ namespace HeroFishing.Main {
             if (IsInit) return;
             IsInit = true;
             DontDestroyOnLoad(gameObject);
+
+            //建立遊戲資料字典
+            //先初始化字典因為這樣會預先載入本機String表與GameSetting，之後在addressable載入後會取代本來String跟GameSetting
+            GameDictionary_UnityAssembly.CreateNewInstance();
+
             SpawnSceneObjs();//生成場景限定
-            SetJsonMapper();//設定LiteJson的JsonMapper            
+            SetJsonMapper();//設定LiteJson的JsonMapper    
             gameObject.AddComponent<CoroutineJob_UnityAssembly>();//建立CoroutineJob
             //建立AddressableManage並生成GameManager
             AddressableManage_UnityAssembly.CreateNewAddressableManage();
@@ -57,11 +62,11 @@ namespace HeroFishing.Main {
         /// 生成場景限定
         /// </summary>
         void SpawnSceneObjs() {
+            //建立Popup_Local
+            PopupUI_Local.CreateNewInstance();
             var myScene = MyEnum_UnityAssembly.ParseEnum<MyScene>(SceneManager.GetActiveScene().name);
             switch (myScene) {
                 case MyScene.StartScene:
-                    //建立Popup_Local
-                    PopupUI_Local.CreateNewInstance();
                     //建立InternetChecker
                     gameObject.AddComponent<InternetChecker_UnityAssembly>().Init();
                     break;

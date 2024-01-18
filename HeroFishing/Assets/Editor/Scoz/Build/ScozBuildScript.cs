@@ -26,15 +26,15 @@ namespace Scoz.Editor {
         [MenuItem("Scoz/Build Bundle/NewBuild")]
         public static void NewBuild() {
             BuildDll();
-            // ¨ú±oAddressable Asset³]¸m
+            // å–å¾—Addressable Assetè¨­ç½®
             AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
             if (settings == null) {
-                Debug.LogError("§ä¤£¨ìAddressable Assets³]¸m¡C");
+                Debug.LogError("æ‰¾ä¸åˆ°Addressable Assetsè¨­ç½®ã€‚");
                 return;
             }
-            // ¶i¦ænew Build
+            // é€²è¡Œnew Build
             AddressableAssetSettings.BuildPlayerContent();
-            WriteLog_UnityAssembly.LogColor("New Build Bundle§¹¦¨", WriteLog_UnityAssembly.LogType.Addressable);
+            WriteLog.LogColor("New Build Bundleå®Œæˆ", WriteLog.LogType.Addressable);
         }
 
         [MenuItem("Scoz/Build Bundle/Update a previous build")]
@@ -46,10 +46,10 @@ namespace Scoz.Editor {
             var result = ContentUpdateScript.BuildContentUpdate(settings, path);
 
             if (!string.IsNullOrEmpty(result.Error)) {
-                WriteLog_UnityAssembly.LogError(result.Error);
+                WriteLog.LogError(result.Error);
                 Debug.LogError(result.Error);
             } else {
-                WriteLog_UnityAssembly.LogColor("§ó·sBundle§¹¦¨", WriteLog_UnityAssembly.LogType.Addressable);
+                WriteLog.LogColor("æ›´æ–°Bundleå®Œæˆ", WriteLog.LogType.Addressable);
             }
         }
         public static AddressableAssetGroup GetDefaultGroup() {
@@ -65,26 +65,26 @@ namespace Scoz.Editor {
             BuildTarget activeTarget = EditorUserBuildSettings.activeBuildTarget;
             string logPath = "ScozBuildLog";
             LogFile.AppendWrite(logPath, "\n");
-            LogFile.AppendWrite(logPath, $"¶}©l¥]ª©! ¥­¥x: {activeTarget}  ª©¥»: {VersionSetting.AppLargeVersion}");
+            LogFile.AppendWrite(logPath, $"é–‹å§‹åŒ…ç‰ˆ! å¹³å°: {activeTarget}  ç‰ˆæœ¬: {VersionSetting.AppLargeVersion}");
             LogFile.AppendWrite(logPath, "Build Game Assembly : " + VersionSetting.AppLargeVersion);
             HybridCLR.Editor.Commands.CompileDllCommand.CompileDllActiveBuildTarget();
-            LogFile.AppendWrite(logPath, $"½Æ»sDll¸ô®|¨ìAddressableAssets/Dlls/");
+            LogFile.AppendWrite(logPath, $"è¤‡è£½Dllè·¯å¾‘åˆ°AddressableAssets/Dlls/");
 
             string sourcePath = Path.Combine(Application.dataPath, $"../HybridCLRData/HotUpdateDlls/{activeTarget}/Game.dll");
             string targetPath = Path.Combine(Application.dataPath, "AddressableAssets/Dlls/Game.dll.bytes");
-            // ½T«O¥Ø¼Ğ¸ê®Æ§¨§¨¦s¦b
+            // ç¢ºä¿ç›®æ¨™è³‡æ–™å¤¾å¤¾å­˜åœ¨
             string targetDirectory = Path.GetDirectoryName(targetPath);
             if (!Directory.Exists(targetDirectory)) {
                 Directory.CreateDirectory(targetDirectory);
             }
-            // ¦pªG¥Ø¼ĞÀÉ®×¤w¸g¦s¦b¡A¥ı§R°£
+            // å¦‚æœç›®æ¨™æª”æ¡ˆå·²ç¶“å­˜åœ¨ï¼Œå…ˆåˆªé™¤
             if (File.Exists(targetPath)) {
                 File.Delete(targetPath);
             }
-            // ½Æ»s¨Ã­«·s©R¦WÀÉ®×
+            // è¤‡è£½ä¸¦é‡æ–°å‘½åæª”æ¡ˆ
             File.Copy(sourcePath, targetPath);
-            LogFile.AppendWrite(logPath, $"½Æ»sDll§¹¦¨ ±q {sourcePath} ¨ì {targetPath}");
-            LogFile.AppendWrite(logPath, "¶}©lBuild Bundle¥] : " + VersionSetting.AppLargeVersion);
+            LogFile.AppendWrite(logPath, $"è¤‡è£½Dllå®Œæˆ å¾ {sourcePath} åˆ° {targetPath}");
+            LogFile.AppendWrite(logPath, "é–‹å§‹Build BundleåŒ… : " + VersionSetting.AppLargeVersion);
         }
     }
 }
