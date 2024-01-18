@@ -115,6 +115,7 @@ public struct MonsterDieNetworkData : IComponentData, IDisposable {
 }
 
 public struct KillMonsterData : IComponentData {
+    public int HeroIndex;
     public int KillMonsterIdx;
     public long GainPoints;
     public int GainHeroExp;

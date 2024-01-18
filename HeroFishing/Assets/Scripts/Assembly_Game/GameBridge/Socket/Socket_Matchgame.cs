@@ -258,7 +258,7 @@ namespace HeroFishing.Socket {
             if (!string.IsNullOrEmpty(_packet.ErrMsg))
                 WriteLog.LogError("Hit Error: " + _packet.ErrMsg);
             if (_packet.Content.KillMonsterIdxs == null || _packet.Content.KillMonsterIdxs.Length == 0) return;
-            BattleManager.Instance.SetMonsterDead(_packet.Content.KillMonsterIdxs, _packet.Content.GainPoints, _packet.Content.GainHeroExps, _packet.Content.GainSpellCharges, _packet.Content.GainDrops);
+            BattleManager.Instance.SetMonsterDead(_packet.Content.PlayerIdx, _packet.Content.KillMonsterIdxs, _packet.Content.GainPoints, _packet.Content.GainHeroExps, _packet.Content.GainSpellCharges, _packet.Content.GainDrops);
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.KillMonsterIdxs));
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.GainGolds));
         }

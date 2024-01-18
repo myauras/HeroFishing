@@ -1,17 +1,36 @@
+using HeroFishing.Main;
 using Scoz.Func;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DeviceInfoUI : BaseUI {
+    [Header("Battery")]
+    [SerializeField]
+    private Image _imgBattery;
+    [SerializeField]
+    private Image _imgBatteryCharge;
+    [SerializeField]
+    private Color _normalColor;
+    [SerializeField]
+    private Color _emptyColor;
+    [Header("Network")]
+    [SerializeField]
+    private TextMeshProUGUI _txtPing;
     [SerializeField]
     private Image[] _imgWifi;
 
     private INetworkInfoSource _networkInfoSource;
     private bool _isInit;
+
+    private const int UPDATE_WIFI_MS = 1000;
+    private const int UPDATE_BATTERY_MS = 5000;
+
+    private const string TXT_PING_CONTENT = "{0}ms";
     public override void RefreshText() {
 
     }
@@ -24,12 +43,25 @@ public class DeviceInfoUI : BaseUI {
         if (_networkInfoSource != null) {
             _networkInfoSource.Init();
             _isInit = true;
-            Observable.Timer(TimeSpan.FromMilliseconds(1000)).RepeatUntilDestroy(gameObject).Subscribe(_ => {
+            Observable.Timer(TimeSpan.FromMilliseconds(UPDATE_WIFI_MS)).RepeatUntilDestroy(gameObject).Subscribe(_ => {
                 int signalStrength = _networkInfoSource.GetSignalStrength();
-                Debug.Log(signalStrength);
+                //Debug.Log(signalStrength);
                 UpdateWifiImage(signalStrength);
+                if (AllocatedRoom.Instance != null) {
+                    Ping ping = new Ping(AllocatedRoom.Instance.IP);
+                    Observable.ReturnUnit().SkipWhile(_ => !ping.isDone).Timeout(TimeSpan.FromMilliseconds(UPDATE_WIFI_MS)).Subscribe(_ => {
+                        Debug.Log($"ping {ping.time}");
+                        _txtPing.text = string.Format(TXT_PING_CONTENT, ping);
+                    }, ex => {
+                        _txtPing.text = string.Format(TXT_PING_CONTENT, 999);
+                    });
+                }
             });
         }
+
+        Observable.Timer(TimeSpan.FromMilliseconds(UPDATE_BATTERY_MS)).RepeatUntilDestroy(gameObject).Subscribe(_ => {
+            UpdateBattery(SystemInfo.batteryStatus, SystemInfo.batteryLevel);
+        });
     }
 
     private void UpdateWifiImage(int signalStrength) {
@@ -37,5 +69,12 @@ public class DeviceInfoUI : BaseUI {
             int index = i;
             _imgWifi[index].gameObject.SetActive(signalStrength > index);
         }
+    }
+
+    private void UpdateBattery(BatteryStatus status, float level) {
+        if (status == BatteryStatus.Unknown) return;
+        _imgBattery.fillAmount = level;
+        _imgBattery.color = status != BatteryStatus.Charging && level < 0.2f ? _emptyColor : _normalColor;
+        _imgBatteryCharge.gameObject.SetActive(status == BatteryStatus.Charging);
     }
 }
