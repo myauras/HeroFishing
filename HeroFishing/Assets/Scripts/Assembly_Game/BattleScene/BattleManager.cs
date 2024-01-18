@@ -182,12 +182,17 @@ namespace HeroFishing.Battle {
             }
         }
 
-        public void SetMonsterDead(int[] monsterIdxs, long[] gainPoints, int[] gainHeroExps, int[] gainSpellCharge, int[] gainDrops) {
+        public void SetMonsterDead(int playerIndex, int[] monsterIdxs, long[] gainPoints, int[] gainHeroExps, int[] gainSpellCharge, int[] gainDrops) {
+            int heroIndex = GetHeroIndex(playerIndex);
+
             var entity = _entityManager.CreateEntity();
 
+            long totalPoints = 0;
+            int totalExp = 0;
             NativeArray<KillMonsterData> killMonsters = new(monsterIdxs.Length, Allocator.Persistent);
             for (int i = 0; i < killMonsters.Length; i++) {
                 var killMonster = new KillMonsterData {
+                    HeroIndex = heroIndex,
                     KillMonsterIdx = monsterIdxs[i],
                     GainPoints = gainPoints[i],
                     GainHeroExp = gainHeroExps[i],
@@ -195,6 +200,8 @@ namespace HeroFishing.Battle {
                     GainDrop = gainDrops[i],
                 };
                 killMonsters[i] = killMonster;
+                totalPoints += gainPoints[i];
+                totalExp += gainHeroExps[i];
             }
 
             MonsterDieNetworkData monsterDieNetworkData = new MonsterDieNetworkData {
@@ -202,6 +209,10 @@ namespace HeroFishing.Battle {
             };
 
             _entityManager.AddComponentData(entity, monsterDieNetworkData);
+
+            var hero = GetHero(heroIndex);
+            hero.AddExp(totalExp);
+            hero.ChargeSpell(gainSpellCharge);
         }
     }
 }

@@ -152,6 +152,7 @@ namespace HeroFishing.Battle {
         public void ChargeSpell(int[] spellIndices) {
             for (int i = 0; i < spellIndices.Length; i++) {
                 int spellIndex = spellIndices[i];
+                if (spellIndex <= 0) continue;
                 OnSpellCharge?.Invoke((SpellName)spellIndex);
             }
         }
