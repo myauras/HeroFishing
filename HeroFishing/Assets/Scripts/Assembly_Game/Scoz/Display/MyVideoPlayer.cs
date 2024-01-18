@@ -26,6 +26,7 @@ namespace Scoz.Func {
 
 
         public void Init() {
+            Instance = this;
             TheVideoPlayer.gameObject.SetActive(true);
             DontDestroyOnLoad(gameObject);
             InitVideo();
