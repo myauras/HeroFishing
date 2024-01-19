@@ -18,7 +18,7 @@ public class FlyingCoin : MonoBehaviour {
     private float _timer;
     private float _progress;
 
-    private const string FLYING_COIN_KEY = "OtherEffect/Script_FlyCoinEffect";
+    private const string FLYING_COIN_KEY = "OtherEffect/Script_FlyingCoinEffect";
     private const string GET_COIN_KEY = "OtherEffect/Script_GetCoin";
 
     public void Init(MonsterJsonData.MonsterSize size, int heroIndex) {
