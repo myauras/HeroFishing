@@ -1,6 +1,6 @@
 # Dlls 說明
 
-這個資料夾下的Dlls會在打包時自動產生需要的依賴Dll檔案並打包到Bundle包中。請注意以下事項：
+Dlls底下的Dlls是打包資源時會自動產生的Dll檔案(不會進Git版控)。請注意以下事項：
 
-1. **Dlls不進版控：** Dlls底下的Dlls(裡面放每次需打包的Dll檔案)不會進Git版控。
-2. **父層的Dlls不可以刪：** Dlls父層是Addressable要設定Lebel用的, 不可以刪除或改名。
+1. **父層Dlls：** 父層Dlls是Addressable要抓Label用的，不可以刪掉。
+2. **子層Dlls：** 子層Dlls是打包資源時會自動產生的, 不會進Git版控。
