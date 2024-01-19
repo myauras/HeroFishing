@@ -25,20 +25,8 @@ namespace Scoz.Func {
         RawImage VideoImage = null;
 
 
-        public static MyVideoPlayer CreateNewVideoPlayer() {
-            if (Instance != null) {
-                //WriteLog.Log("VideoPlayer之前已經被建立了");
-            } else {
-                GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/MyVideoPlayer");
-                GameObject go = Instantiate(prefab);
-                go.name = "MyVideoPlayer";
-                Instance = go.GetComponent<MyVideoPlayer>();
-                Instance.Init();
-            }
-            return Instance;
-        }
-
-        void Init() {
+        public void Init() {
+            Instance = this;
             TheVideoPlayer.gameObject.SetActive(true);
             DontDestroyOnLoad(gameObject);
             InitVideo();

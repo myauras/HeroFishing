@@ -160,9 +160,9 @@ namespace HeroFishing.Main {
         /// </summary>
         public void ShowInfo() {
             if (RealmManager.MyApp != null && RealmManager.MyApp.CurrentUser != null)
-                VersionText.text = string.Format("版本: {0} {1} ", Application.version, RealmManager.MyApp.CurrentUser.Id);
+                VersionText.text = string.Format("new版本: {0} {1} ", Application.version, RealmManager.MyApp.CurrentUser.Id);
             else
-                VersionText.text = string.Format("版本: {0}", Application.version);
+                VersionText.text = string.Format("new版本: {0}", Application.version);
         }
         /// <summary>
         /// 登入按鈕按下

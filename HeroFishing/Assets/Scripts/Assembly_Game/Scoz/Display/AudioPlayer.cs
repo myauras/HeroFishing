@@ -30,22 +30,10 @@ namespace Scoz.Func {
         public static float VoiceVolumeRatio { get; private set; }
 
 
-        public static AudioPlayer CreateNewAudioPlayer() {
-            if (Instance != null) {
-                //WriteLog.Log("AudioPlayer之前已經被建立了");
-            } else {
-                GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/AudioPlayer");
-                GameObject go = Instantiate(prefab);
-                go.name = "AudioPlayer";
-                Instance = go.GetComponent<AudioPlayer>();
-                Instance.Init();
-
-            }
-            return Instance;
-        }
         public void Init() {
             if (IsInit)
                 return;
+            Instance = this;
             IsInit = true;
             MyAudioMixer = Resources.Load<AudioMixer>("Prefabs/Common/MyAudioMixer");
             DontDestroyOnLoad(gameObject);

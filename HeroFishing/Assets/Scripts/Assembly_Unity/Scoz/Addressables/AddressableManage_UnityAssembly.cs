@@ -92,6 +92,9 @@ namespace Scoz.Func {
             BG.SetActive(false);
             WriteLog_UnityAssembly.LogColor("LoadAsset-Start", WriteLog_UnityAssembly.LogType.Addressable);
             Keys.RemoveAll(a => a == "");
+#if UNITY_EDITOR
+            Keys.RemoveAll(a => a == "Dlls");//編輯器不需要載入Dlls
+#endif
             PopupUI_Local.ShowLoading(StringJsonData_UnityAssembly.GetUIString("AddressableLoading"));
             FinishedAction = _action;
             Downloader = StartCoroutine(LoadAssets());//不輕快取用這個(正式版)

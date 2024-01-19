@@ -111,7 +111,7 @@ namespace Scoz.Func {
             //yield return handle;  // 如果在協程中
             //WriteLog.Log(handle.Status);
             //WriteLog.Log(handle.Result);
-
+            
             PopupUI.HideLoading();//開始抓到bundle包就取消loading
             yield return new WaitForSeconds(0.1f);
 
@@ -137,6 +137,9 @@ namespace Scoz.Func {
                     StartCoroutine(Loading(totalSize));
                 });
             } else {//沒需要下載就直接跳到完成
+                string downloadStr = string.Format("test", MyMath.BytesToMB(totalSize).ToString("0.00"));
+                PopupUI.ShowClickCancel(downloadStr, () => {
+                });
                 OnFinishedDownload();
                 yield break;
             }

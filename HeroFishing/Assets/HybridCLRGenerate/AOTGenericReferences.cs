@@ -656,6 +656,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<System.IntPtr,int>
 	// System.Func<System.Threading.Tasks.VoidTaskResult>
 	// System.Func<System.ValueTuple<object,byte,object>,object>
+	// System.Func<UniRx.Unit,byte>
+	// System.Func<UniRx.Unit,int,byte>
 	// System.Func<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>>
 	// System.Func<byte,byte>
 	// System.Func<byte,ushort>
@@ -730,6 +732,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Nullable<Realms.Schema.Property>
 	// System.Nullable<System.DateTimeOffset>
 	// System.Nullable<System.Threading.CancellationToken>
+	// System.Nullable<System.TimeSpan>
 	// System.Nullable<byte>
 	// System.Nullable<float>
 	// System.Nullable<int>
@@ -887,19 +890,29 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// UniRx.Observer.Subscribe_<long>
 	// UniRx.Observer.Subscribe_<object>
 	// UniRx.Operators.OperatorObservableBase.<>c__DisplayClass3_0<UniRx.TimeInterval<long>>
+	// UniRx.Operators.OperatorObservableBase.<>c__DisplayClass3_0<UniRx.Unit>
 	// UniRx.Operators.OperatorObservableBase.<>c__DisplayClass3_0<long>
 	// UniRx.Operators.OperatorObservableBase<UniRx.TimeInterval<long>>
+	// UniRx.Operators.OperatorObservableBase<UniRx.Unit>
 	// UniRx.Operators.OperatorObservableBase<long>
+	// UniRx.Operators.OperatorObserverBase<UniRx.Unit,UniRx.Unit>
 	// UniRx.Operators.OperatorObserverBase<long,UniRx.TimeInterval<long>>
 	// UniRx.Operators.OperatorObserverBase<long,long>
 	// UniRx.Operators.RepeatUntilObservable.RepeatUntil.<SubscribeAfterEndOfFrame>d__13<long>
 	// UniRx.Operators.RepeatUntilObservable.RepeatUntil<long>
 	// UniRx.Operators.RepeatUntilObservable<long>
+	// UniRx.Operators.SkipWhileObservable.SkipWhile<UniRx.Unit>
+	// UniRx.Operators.SkipWhileObservable.SkipWhile_<UniRx.Unit>
+	// UniRx.Operators.SkipWhileObservable<UniRx.Unit>
 	// UniRx.Operators.TakeUntilObservable.TakeUntil.TakeUntilOther<long,long>
 	// UniRx.Operators.TakeUntilObservable.TakeUntil<long,long>
 	// UniRx.Operators.TakeUntilObservable<long,long>
 	// UniRx.Operators.TimeIntervalObservable.TimeInterval<long>
 	// UniRx.Operators.TimeIntervalObservable<long>
+	// UniRx.Operators.TimeoutObservable.Timeout.<>c__DisplayClass8_0<UniRx.Unit>
+	// UniRx.Operators.TimeoutObservable.Timeout<UniRx.Unit>
+	// UniRx.Operators.TimeoutObservable.Timeout_<UniRx.Unit>
+	// UniRx.Operators.TimeoutObservable<UniRx.Unit>
 	// UniRx.Subject.Subscription<UniRx.Unit>
 	// UniRx.Subject.Subscription<object>
 	// UniRx.Subject<UniRx.Unit>
@@ -1331,9 +1344,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Collections.Generic.IEnumerable<System.IObservable<long>> UniRx.Observable.RepeatInfinite<long>(System.IObservable<long>)
 		// System.IObservable<long> UniRx.Observable.RepeatUntilCore<long>(System.Collections.Generic.IEnumerable<System.IObservable<long>>,System.IObservable<UniRx.Unit>,UnityEngine.GameObject)
 		// System.IObservable<long> UniRx.Observable.RepeatUntilDestroy<long>(System.IObservable<long>,UnityEngine.GameObject)
+		// System.IObservable<UniRx.Unit> UniRx.Observable.SkipWhile<UniRx.Unit>(System.IObservable<UniRx.Unit>,System.Func<UniRx.Unit,bool>)
 		// System.IObservable<long> UniRx.Observable.TakeUntil<long,long>(System.IObservable<long>,System.IObservable<long>)
 		// System.IObservable<UniRx.TimeInterval<long>> UniRx.Observable.TimeInterval<long>(System.IObservable<long>)
 		// System.IObservable<UniRx.TimeInterval<long>> UniRx.Observable.TimeInterval<long>(System.IObservable<long>,UniRx.IScheduler)
+		// System.IObservable<UniRx.Unit> UniRx.Observable.Timeout<UniRx.Unit>(System.IObservable<UniRx.Unit>,System.TimeSpan)
+		// System.IObservable<UniRx.Unit> UniRx.Observable.Timeout<UniRx.Unit>(System.IObservable<UniRx.Unit>,System.TimeSpan,UniRx.IScheduler)
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<UniRx.TimeInterval<long>>(System.IObservable<UniRx.TimeInterval<long>>,System.Action<UniRx.TimeInterval<long>>,System.Action)
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<UniRx.Unit>(System.IObservable<UniRx.Unit>,System.Action<UniRx.Unit>,System.Action<System.Exception>)
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<long>(System.IObservable<long>,System.Action<long>)

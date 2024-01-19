@@ -19,18 +19,6 @@ public class PoolManager : MonoBehaviour {
     private const string POOL_BULLET = "bullet";
     public enum PopType { Fire, Projectile, Hit }
 
-    public static PoolManager CreateNewInstance() {
-        if (Instance != null) {
-            WriteLog.Log("PoolManager已經建立");
-        }
-        else {
-            GameObject prefab = Resources.Load<GameObject>("Prefabs/Common/PoolManager");
-            GameObject go = Instantiate(prefab);
-            _instance = go.GetComponent<PoolManager>();
-            _instance.Init();
-        }
-        return Instance;
-    }
 
     public void Init() {
         _instance = this;
