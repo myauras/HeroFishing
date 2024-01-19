@@ -10,6 +10,8 @@ using System.IO;
 using UnityEditor.AddressableAssets;
 using UnityEngine.AddressableAssets;
 using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Scoz.Editor {
 
@@ -70,8 +72,10 @@ namespace Scoz.Editor {
             LogFile.AppendWrite(logPath, $"開始更新Dll  平台: {activeTarget}  版本: {VersionSetting.AppLargeVersion}");
             HybridCLR.Editor.Commands.PrebuildCommand.GenerateAll();
             //HybridCLR.Editor.Commands.CompileDllCommand.CompileDllActiveBuildTarget();
-            LogFile.AppendWrite(logPath, $"將需要的Dlls並追加.bytes結尾 並複製到AddressableAssets/Dlls/");
+            FixNotDllPrefixItems();// 因為HybridCLR自動產生的AOTGenericReferences.PatchedAOTAssemblyList不知道為什麼唯獨Realm不是已.dll結果, 所以這邊要寫自動化來修正
+            UpdateHybridCLManagerMetaData();//更新GameAssembly的元數據資料(UnityAssembly載好GameAssembly資源後會透過反射去取需求的元數據dll清單)
 
+            LogFile.AppendWrite(logPath, $"將需要的Dlls並追加.bytes結尾 並複製到AddressableAssets/Dlls/");
             // 刪除舊資料並重新建立目標資料夾
             string directoryPath = Path.Combine(Application.dataPath, "AddressableAssets/Dlls/");
             // 檢查目標資料夾是否存在
@@ -118,5 +122,75 @@ namespace Scoz.Editor {
             }
             LogFile.AppendWrite(logPath, "結束更新Dlls : " + VersionSetting.AppLargeVersion);
         }
+
+        /// <summary>
+        /// 因為HybridCLR自動產生的AOTGenericReferences.PatchedAOTAssemblyList不知道為什麼唯獨Realm不是已.dll結果, 所以這邊要寫自動化來修正
+        /// </summary>
+        static void FixNotDllPrefixItems() {
+            string logPath = "ScozBuildLog";
+            string filePath = "Assets/HybridCLRGenerate/AOTGenericReferences.cs";
+            try {
+                // 讀取文字檔內容
+                using (StreamReader reader = new StreamReader(filePath)) {
+                    string content = reader.ReadToEnd();
+                    // 使用正則表達式替換獨立的單詞 將"Realm"改為"Realm.dll"
+                    content = Regex.Replace(content, "\"Realm\"", "\"Realm.dll\"");
+                    reader.Close();
+                    // 寫入修改後的內容
+                    using (StreamWriter writer = new StreamWriter(filePath)) {
+                        writer.Write(content);
+                    }
+                    LogFile.AppendWrite(logPath, $"FixNotDllPrefixItems完成");
+                }
+            } catch (Exception _e) {
+                LogFile.AppendWrite(logPath, $"FixNotDllPrefixItems錯誤：{_e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 更新UpdateHybridCLManager內的補充元數據內容
+        /// </summary>
+        static void UpdateHybridCLManagerMetaData() {
+            string logPath = "ScozBuildLog";
+            string copyPath = "Assets/HybridCLRGenerate/AOTGenericReferences.cs";
+            string pastePath = "Assets/Scripts/Assembly_Game/HybridCLR/AOTMetadata.cs";
+
+            try {
+                // 讀取第一份文字檔的內容
+                using (StreamReader firstReader = new StreamReader(copyPath)) {
+                    string firstContent = firstReader.ReadToEnd();
+
+                    // 使用正則表達式匹配PatchedAOTAssemblyList的內容
+                    Match match = Regex.Match(firstContent, @"public static readonly IReadOnlyList<string> PatchedAOTAssemblyList\s*=\s*new List<string>\s*{(.+?)};", RegexOptions.Singleline);
+                    if (match.Success) {
+                        // 取PatchedAOTAssemblyList的內容
+                        string patchedAOTAssemblyListContent = match.Groups[1].Value.Trim();
+                        // 取第二份文字檔的內容
+                        using (StreamReader secondReader = new StreamReader(pastePath)) {
+                            string secondContent = secondReader.ReadToEnd();
+
+                            // 使用正則表達式替換AotDllList的內容
+                            string updatedSecondContent = Regex.Replace(secondContent, @"public static List<string>\s+AotDllList\s*=\s*new List<string>\s*{(.+?)};", $"public static List<string> AotDllList = new List<string> {{{patchedAOTAssemblyListContent}}};", RegexOptions.Singleline);
+                            secondReader.Close();
+
+                            // 寫入修改後的內容
+                            using (StreamWriter writer = new StreamWriter(pastePath)) {
+                                writer.Write(updatedSecondContent);
+                            }
+                            LogFile.AppendWrite(logPath, $"UpdateHybridCLManagerMetaData完成");
+                        }
+                    } else {
+                        LogFile.AppendWrite(logPath, $"未找到PatchedAOTAssemblyList的內容");
+                    }
+
+                    // 關閉原來的檔案
+                    firstReader.Close();
+                }
+            } catch (Exception _e) {
+                LogFile.AppendWrite(logPath, $"UpdateHybridCLManagerMetaData錯誤：{_e.Message}");
+            }
+        }
+
+
     }
 }

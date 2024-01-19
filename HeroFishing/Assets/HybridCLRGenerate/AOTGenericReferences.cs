@@ -10,7 +10,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		"FlutterUnityIntegration.dll",
 		"LitJson.dll",
 		"Loxodon.Framework.dll",
-		"Realm",
+		"Realm.dll",
 		"SerializableDictionary.dll",
 		"System.Core.dll",
 		"System.dll",
@@ -35,7 +35,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 
 	// {{ AOT generic types
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<DBPlayer.<SetInMatchgameID>d__45>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>
@@ -53,7 +53,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<Signout>d__24>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<Subscribe_Matchgame>d__35>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<DBPlayer.<SetInMatchgameID>d__45>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>
@@ -72,12 +72,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<Subscribe_Matchgame>d__35>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.IStateMachineRunnerPromise<object>
 	// Cysharp.Threading.Tasks.ITaskPoolNode<object>
@@ -665,6 +665,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<float,byte>
 	// System.Func<int,object>
 	// System.Func<int>
+	// System.Func<long,byte>
+	// System.Func<long,int,byte>
 	// System.Func<long>
 	// System.Func<object,System.Nullable<int>>
 	// System.Func<object,System.Threading.Tasks.VoidTaskResult>
@@ -902,11 +904,17 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// UniRx.Operators.RepeatUntilObservable.RepeatUntil<long>
 	// UniRx.Operators.RepeatUntilObservable<long>
 	// UniRx.Operators.SkipWhileObservable.SkipWhile<UniRx.Unit>
+	// UniRx.Operators.SkipWhileObservable.SkipWhile<long>
 	// UniRx.Operators.SkipWhileObservable.SkipWhile_<UniRx.Unit>
+	// UniRx.Operators.SkipWhileObservable.SkipWhile_<long>
 	// UniRx.Operators.SkipWhileObservable<UniRx.Unit>
+	// UniRx.Operators.SkipWhileObservable<long>
 	// UniRx.Operators.TakeUntilObservable.TakeUntil.TakeUntilOther<long,long>
 	// UniRx.Operators.TakeUntilObservable.TakeUntil<long,long>
 	// UniRx.Operators.TakeUntilObservable<long,long>
+	// UniRx.Operators.TakeWhileObservable.TakeWhile<long>
+	// UniRx.Operators.TakeWhileObservable.TakeWhile_<long>
+	// UniRx.Operators.TakeWhileObservable<long>
 	// UniRx.Operators.TimeIntervalObservable.TimeInterval<long>
 	// UniRx.Operators.TimeIntervalObservable<long>
 	// UniRx.Operators.TimeoutObservable.Timeout.<>c__DisplayClass8_0<UniRx.Unit>
@@ -1097,6 +1105,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Entities.ComponentTypeHandle<HitParticleSpawnTag>
 	// Unity.Entities.ComponentTypeHandle<LockMonsterData>
 	// Unity.Entities.ComponentTypeHandle<MonsterDieNetworkData>
+	// Unity.Entities.ComponentTypeHandle<MonsterDieTag>
 	// Unity.Entities.ComponentTypeHandle<MonsterHitTag>
 	// Unity.Entities.ComponentTypeHandle<MonsterValue>
 	// Unity.Entities.ComponentTypeHandle<MoveData>
@@ -1185,7 +1194,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Scoz.Func.UniTaskManager.<RepeatTask>d__9>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Scoz.Func.UniTaskManager.<RepeatTask>d__9&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<AnonymousSignup>d__17>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<AnonymousSignup>d__17&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<OnSignin>d__21>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<OnSignin>d__21&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24&)
@@ -1204,7 +1213,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<GetProvider>d__20>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<GetProvider>d__20&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<GetValidAccessToken>d__19>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<GetValidAccessToken>d__19&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<DBPlayer.<SetInMatchgameID>d__45>(DBPlayer.<SetInMatchgameID>d__45&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28>(HeroFishing.Main.StartSceneUI.<InitPlayerData>d__28&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27>(HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>(HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>(HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>(HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24&)
@@ -1222,12 +1231,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<GetProvider>d__20>(Service.Realms.RealmManager.<GetProvider>d__20&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<GetValidAccessToken>d__19>(Service.Realms.RealmManager.<GetValidAccessToken>d__19&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>(HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d>(HeroFishing.Main.StartSceneUI.<<AuthChek>b__22_0>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d>(HeroFishing.Main.StartSceneUI.<>c__DisplayClass27_0.<<OnSignupClick>b__0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>(HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>(HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>(Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d&)
 		// Cysharp.Threading.Tasks.UniTask<object> Cysharp.Threading.Tasks.UniTaskExtensions.AsUniTask<object>(System.Threading.Tasks.Task<object>,bool)
 		// object LitJson.JsonMapper.ToObject<object>(string)
@@ -1345,7 +1354,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.IObservable<long> UniRx.Observable.RepeatUntilCore<long>(System.Collections.Generic.IEnumerable<System.IObservable<long>>,System.IObservable<UniRx.Unit>,UnityEngine.GameObject)
 		// System.IObservable<long> UniRx.Observable.RepeatUntilDestroy<long>(System.IObservable<long>,UnityEngine.GameObject)
 		// System.IObservable<UniRx.Unit> UniRx.Observable.SkipWhile<UniRx.Unit>(System.IObservable<UniRx.Unit>,System.Func<UniRx.Unit,bool>)
+		// System.IObservable<long> UniRx.Observable.SkipWhile<long>(System.IObservable<long>,System.Func<long,bool>)
 		// System.IObservable<long> UniRx.Observable.TakeUntil<long,long>(System.IObservable<long>,System.IObservable<long>)
+		// System.IObservable<long> UniRx.Observable.TakeWhile<long>(System.IObservable<long>,System.Func<long,bool>)
 		// System.IObservable<UniRx.TimeInterval<long>> UniRx.Observable.TimeInterval<long>(System.IObservable<long>)
 		// System.IObservable<UniRx.TimeInterval<long>> UniRx.Observable.TimeInterval<long>(System.IObservable<long>,UniRx.IScheduler)
 		// System.IObservable<UniRx.Unit> UniRx.Observable.Timeout<UniRx.Unit>(System.IObservable<UniRx.Unit>,System.TimeSpan)
@@ -1568,7 +1579,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Entities.EntityCommandBuffer.ParallelWriter.AddComponent<AutoDestroyTag>(int,Unity.Entities.Entity,AutoDestroyTag)
 		// System.Void Unity.Entities.EntityCommandBuffer.ParallelWriter.AddComponent<ChainHitData>(int,Unity.Entities.Entity,ChainHitData)
 		// System.Void Unity.Entities.EntityCommandBuffer.ParallelWriter.AddComponent<HitParticleSpawnTag>(int,Unity.Entities.Entity,HitParticleSpawnTag)
-		// System.Void Unity.Entities.EntityCommandBuffer.ParallelWriter.AddComponent<MonsterDieTag>(int,Unity.Entities.Entity)
+		// System.Void Unity.Entities.EntityCommandBuffer.ParallelWriter.AddComponent<MonsterDieTag>(int,Unity.Entities.Entity,MonsterDieTag)
 		// System.Void Unity.Entities.EntityCommandBuffer.ParallelWriter.AddComponent<MonsterHitTag>(int,Unity.Entities.Entity,MonsterHitTag)
 		// System.Void Unity.Entities.EntityCommandBuffer.ParallelWriter.AddComponent<SpellAreaData>(int,Unity.Entities.Entity,SpellAreaData)
 		// System.Void Unity.Entities.EntityCommandBuffer.ParallelWriter.AddComponent<SpellBulletData>(int,Unity.Entities.Entity,SpellBulletData)
@@ -1629,6 +1640,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<HitParticleSpawnTag>()
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<LockMonsterData>()
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<MonsterDieNetworkData>()
+		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<MonsterDieTag>()
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<MonsterFreezeTag>()
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<MonsterHitTag>()
 		// System.Void Unity.Entities.EntityManager.CompleteDependencyBeforeRO<MonsterValue>()
@@ -1665,6 +1677,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// Unity.Entities.ComponentTypeHandle<HitParticleSpawnTag> Unity.Entities.EntityManager.GetComponentTypeHandle<HitParticleSpawnTag>(bool)
 		// Unity.Entities.ComponentTypeHandle<LockMonsterData> Unity.Entities.EntityManager.GetComponentTypeHandle<LockMonsterData>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterDieNetworkData> Unity.Entities.EntityManager.GetComponentTypeHandle<MonsterDieNetworkData>(bool)
+		// Unity.Entities.ComponentTypeHandle<MonsterDieTag> Unity.Entities.EntityManager.GetComponentTypeHandle<MonsterDieTag>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterHitTag> Unity.Entities.EntityManager.GetComponentTypeHandle<MonsterHitTag>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterValue> Unity.Entities.EntityManager.GetComponentTypeHandle<MonsterValue>(bool)
 		// Unity.Entities.ComponentTypeHandle<MoveData> Unity.Entities.EntityManager.GetComponentTypeHandle<MoveData>(bool)
@@ -1724,6 +1737,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<HitParticleSpawnTag>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<HitParticleSpawnTag>&)
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<LockMonsterData>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<LockMonsterData>&)
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<MonsterDieNetworkData>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<MonsterDieNetworkData>&)
+		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<MonsterDieTag>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<MonsterDieTag>&)
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<MonsterHitTag>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<MonsterHitTag>&)
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<MonsterValue>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<MonsterValue>&)
 		// System.IntPtr Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetChunkNativeArrayReadOnlyIntPtrWithoutChecks<ParticleSpawnTag>(Unity.Entities.ArchetypeChunk&,Unity.Entities.ComponentTypeHandle<ParticleSpawnTag>&)
@@ -1736,6 +1750,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// HitParticleSpawnTag Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<HitParticleSpawnTag>(System.IntPtr,int)
 		// LockMonsterData Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<LockMonsterData>(System.IntPtr,int)
 		// MonsterDieNetworkData Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<MonsterDieNetworkData>(System.IntPtr,int)
+		// MonsterDieTag Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<MonsterDieTag>(System.IntPtr,int)
 		// MonsterHitTag Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<MonsterHitTag>(System.IntPtr,int)
 		// MonsterValue Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<MonsterValue>(System.IntPtr,int)
 		// ParticleSpawnTag Unity.Entities.Internal.InternalCompilerInterface.UnsafeGetCopyOfNativeArrayPtrElement<ParticleSpawnTag>(System.IntPtr,int)
@@ -1783,6 +1798,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// Unity.Entities.ComponentTypeHandle<HitParticleSpawnTag> Unity.Entities.SystemState.GetComponentTypeHandle<HitParticleSpawnTag>(bool)
 		// Unity.Entities.ComponentTypeHandle<LockMonsterData> Unity.Entities.SystemState.GetComponentTypeHandle<LockMonsterData>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterDieNetworkData> Unity.Entities.SystemState.GetComponentTypeHandle<MonsterDieNetworkData>(bool)
+		// Unity.Entities.ComponentTypeHandle<MonsterDieTag> Unity.Entities.SystemState.GetComponentTypeHandle<MonsterDieTag>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterHitTag> Unity.Entities.SystemState.GetComponentTypeHandle<MonsterHitTag>(bool)
 		// Unity.Entities.ComponentTypeHandle<MonsterValue> Unity.Entities.SystemState.GetComponentTypeHandle<MonsterValue>(bool)
 		// Unity.Entities.ComponentTypeHandle<MoveData> Unity.Entities.SystemState.GetComponentTypeHandle<MoveData>(bool)
