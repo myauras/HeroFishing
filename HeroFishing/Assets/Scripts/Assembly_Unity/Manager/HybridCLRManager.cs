@@ -22,7 +22,7 @@ public class HybridCLRManager : MonoBehaviour {
     }
     static async UniTask LoadGameAssembly() {
         WriteLog_UnityAssembly.LogColorFormat("開始載入Game Assembly", WriteLog_UnityAssembly.LogType.HybridCLR);
-        var result = await AddressablesLoader_UnityAssebly.GetResourceByFullPath_Async<TextAsset>("Assets/AddressableAssets/Dlls/Game.dll.bytes");
+        var result = await AddressablesLoader_UnityAssebly.GetResourceByFullPath_Async<TextAsset>("Assets/AddressableAssets/Dlls/Dlls/Game.dll.bytes");
         TextAsset dll = result.Item1;
         var gameAssembly = System.Reflection.Assembly.Load(dll.bytes);
         Addressables.Release(result.Item2);
@@ -32,7 +32,7 @@ public class HybridCLRManager : MonoBehaviour {
         WriteLog_UnityAssembly.LogColorFormat("開始補充元數據", WriteLog_UnityAssembly.LogType.HybridCLR);
         List<string> aotDllList = GetGameAssemblyAotMetaData();
         foreach (var aotDllName in aotDllList) {
-            string path = string.Format("Assets/AddressableAssets/Dlls/{0}.bytes", aotDllName);
+            string path = string.Format("Assets/AddressableAssets/Dlls/Dlls/{0}.bytes", aotDllName);
             WriteLog_UnityAssembly.LogColorFormat("載入元數據Dll: {0}", WriteLog_UnityAssembly.LogType.Addressable, path);
             var result = await AddressablesLoader_UnityAssebly.GetResourceByFullPath_Async<TextAsset>(path);
             TextAsset dll = result.Item1;

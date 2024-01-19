@@ -75,9 +75,9 @@ namespace Scoz.Editor {
             FixNotDllPrefixItems();// 因為HybridCLR自動產生的AOTGenericReferences.PatchedAOTAssemblyList不知道為什麼唯獨Realm不是已.dll結果, 所以這邊要寫自動化來修正
             UpdateHybridCLManagerMetaData();//更新GameAssembly的元數據資料(UnityAssembly載好GameAssembly資源後會透過反射去取需求的元數據dll清單)
 
-            LogFile.AppendWrite(logPath, $"將需要的Dlls並追加.bytes結尾 並複製到AddressableAssets/Dlls/");
+            LogFile.AppendWrite(logPath, $"將需要的Dlls並追加.bytes結尾 並複製到AddressableAssets/Dlls/Dlls/");
             // 刪除舊資料並重新建立目標資料夾
-            string directoryPath = Path.Combine(Application.dataPath, "AddressableAssets/Dlls/");
+            string directoryPath = Path.Combine(Application.dataPath, "AddressableAssets/Dlls/Dlls/");
             // 檢查目標資料夾是否存在
             if (Directory.Exists(directoryPath)) {
                 try {
@@ -96,7 +96,7 @@ namespace Scoz.Editor {
             LogFile.AppendWrite(logPath, $"開始複製DLLs");
             // Game
             string sourcePath = Path.Combine(Application.dataPath, $"../HybridCLRData/HotUpdateDlls/{activeTarget}/Game.dll");
-            string targetPath = Path.Combine(Application.dataPath, "AddressableAssets/Dlls/Game.dll.bytes");
+            string targetPath = Path.Combine(Application.dataPath, "AddressableAssets/Dlls/Dlls/Game.dll.bytes");
             try {
                 File.Copy(sourcePath, targetPath);
                 LogFile.AppendWrite(logPath, $"成功! 從 {sourcePath} 到 {targetPath}");
@@ -112,7 +112,7 @@ namespace Scoz.Editor {
                     LogFile.AppendWrite(logPath, $"PatchedAOTAssemblyList有資料不為.dll結尾 自動更名為.dll結尾 更名後{dllName}");
                 }
                 sourcePath = Path.Combine(Application.dataPath, $"../HybridCLRData/AssembliesPostIl2CppStrip/{activeTarget}/{dllName}");
-                targetPath = Path.Combine(Application.dataPath, $"AddressableAssets/Dlls/{dllName}.bytes");
+                targetPath = Path.Combine(Application.dataPath, $"AddressableAssets/Dlls/Dlls/{dllName}.bytes");
                 try {
                     File.Copy(sourcePath, targetPath);
                     LogFile.AppendWrite(logPath, $"成功! 從 {sourcePath} 到 {targetPath}");
