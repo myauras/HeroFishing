@@ -15,6 +15,8 @@ namespace HeroFishing.Battle {
         public int MonsterID => MyData.ID;
         public int MonsterIdx { get; private set; }
 
+        public int KillHeroIndex { get; private set; } = -1;
+
         private MonsterSpecialize MyMonsterSpecialize;
         private MonsterExplosion Explosion;
 
@@ -116,9 +118,10 @@ namespace HeroFishing.Battle {
             }
         }
 
-        public void Explode() {
+        public void Explode(int heroIndex) {
+            KillHeroIndex = heroIndex;
             if (Explosion == null) {
-                Die();
+                Die(heroIndex);
                 return;
             }
 
@@ -129,12 +132,13 @@ namespace HeroFishing.Battle {
             Lock(false);
         }
 
-        public void Die() {
+        public void Die(int heroIndex) {
+            KillHeroIndex = heroIndex;
             if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;
             SetAniTrigger("die");
             if (MyMonsterSpecialize != null) {
                 MyMonsterSpecialize.PlayDissolveEffect(MySkinnedMeshRenderers[0]);
-                MyMonsterSpecialize.PlayCoinEffect(MyData.CoinCount, _lastHitDirection);
+                MyMonsterSpecialize.PlayCoinEffect(MyData.MyMonsterSize, MySkinnedMeshRenderers[0], KillHeroIndex);
             }
             if (s_aliveMonsters.Contains(this))
                 s_aliveMonsters.Remove(this);

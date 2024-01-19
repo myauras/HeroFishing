@@ -40,7 +40,9 @@ namespace HeroFishing.Battle {
                     float threshold = SystemAPI.GetSingleton<LocalTestSys>().DeadThreshold;
                     float value = random.NextFloat();
                     if (value < threshold)
-                        ecbWriter.AddComponent<MonsterDieTag>(entity.Index, entity);
+                        ecbWriter.AddComponent(entity.Index, entity, new MonsterDieTag {
+                            HeroIndex = hitTag.HeroIndex,
+                        });
                 }
                 ecbWriter.RemoveComponent<MonsterHitTag>(entity.Index, entity);
             }

@@ -25,7 +25,9 @@ public partial struct MonsterDieNetworkSystem : ISystem {
                 foreach (var (monsterValue, monsterEntity) in SystemAPI.Query<MonsterValue>().WithEntityAccess()) {
                     //Debug.Log("compare: " + killMonster.KillMonsterIdx + " " + monsterValue.MonsterIdx);
                     if (killMonster.KillMonsterIdx != monsterValue.MonsterIdx) continue;
-                    ecbWriter.AddComponent(monsterEntity, new MonsterDieTag());
+                    ecbWriter.AddComponent(monsterEntity, new MonsterDieTag() {
+                        HeroIndex = killMonster.HeroIndex,
+                    });
                     //Debug.Log($"kill monster idx: {killMonster.KillMonsterIdx} poins: {killMonster.GainPoints} hero exp: {killMonster.GainHeroExp}" +
                     //    $"\nspell charge: {killMonster.GainSpellCharge} drop: {killMonster.GainDrop}");
                 }

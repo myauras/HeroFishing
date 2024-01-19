@@ -19,11 +19,14 @@ namespace HeroFishing.Battle {
         public int Exp => _exp;
         private int _level = 1;
         public int Level => _level;
+        private int _points;
+        public int Points => _points;
 
         public event Action<int> OnLevelUp;
         public event Action<int, int> OnExpUpdate;
         public event Action<SpellName> OnSpellCharge;
         public event Action<SpellName> OnSpellPlay;
+        public event Action<int> OnPointUpdate;
 
         private const int SPELL_COUNT = 4;
         private const int MAX_LEVEL = 10;
@@ -141,6 +144,10 @@ namespace HeroFishing.Battle {
                 _exp -= nextLevelExp;
             }
             OnExpUpdate?.Invoke(_exp, nextLevelExp);
+        }
+
+        public void AddPoints() {
+            OnPointUpdate?.Invoke(0);
         }
 
         [ContextMenu("Level Up")]

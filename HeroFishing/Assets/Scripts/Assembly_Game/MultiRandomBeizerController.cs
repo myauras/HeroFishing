@@ -46,10 +46,11 @@ public class MultiRandomBeizerController {
         uint seed = (uint)DateTime.Now.Ticks;
         Random random = new Random(seed);
         for (int i = 0; i < count; i++) {
-            if(!_beizerPositions.TryGetValue(i, out var positions)) {
+            if (!_beizerPositions.TryGetValue(i, out var positions)) {
                 positions = new List<Vector3>();
                 _beizerPositions[i] = positions;
             }
+            positions.Clear();
 
             var keyCount = random.NextInt(_minMaxKeyCount.x, _minMaxKeyCount.y + 1);
             bool reverse = random.NextBool();

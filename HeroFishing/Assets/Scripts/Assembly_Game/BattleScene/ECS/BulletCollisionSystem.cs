@@ -173,6 +173,7 @@ namespace HeroFishing.Battle {
 
                                 //加入本地擊中標籤，死亡標籤在擊中系統中處理，這樣才能在怪物死亡時知道最後的擊中方向。
                                 var hitTag = new MonsterHitTag {
+                                    HeroIndex = _collisionData.HeroIndex,
                                     MonsterID = monsterValue.MonsterID,
                                     StrIndex_SpellID = _collisionData.StrIndex_SpellID,
                                     HitDirection = _moveData.Direction

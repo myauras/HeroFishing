@@ -19,18 +19,18 @@ namespace HeroFishing.Battle {
 
             var ecbWriter = ECBSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
             //bool isFrozen = SystemAPI.HasSingleton<FreezeTag>();
-            foreach (var (monsterInstance, _, entity) in SystemAPI.Query<MonsterInstance, MonsterDieTag>().WithEntityAccess()) {
+            foreach (var (monsterInstance, dieTag, entity) in SystemAPI.Query<MonsterInstance, MonsterDieTag>().WithEntityAccess()) {
                 bool isFrozen = SystemAPI.HasComponent<MonsterFreezeTag>(entity);
                 // 如果是冰凍狀態被擊殺，較短時間就消失
                 if (isFrozen) {
-                    monsterInstance.MyMonster.Explode();
+                    monsterInstance.MyMonster.Explode(dieTag.HeroIndex);
                     //在怪物實體身上建立移除標籤元件
                     ecbWriter.AddComponent(entity.Index, entity, new AutoDestroyTag {
                         LifeTime = 1
                     });
                 }
                 else {
-                    monsterInstance.MyMonster.Die();
+                    monsterInstance.MyMonster.Die(dieTag.HeroIndex);
                     //在怪物實體身上建立移除標籤元件
                     ecbWriter.AddComponent(entity.Index, entity, new AutoDestroyTag {
                         LifeTime = 3.5f

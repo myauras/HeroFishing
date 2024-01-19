@@ -23,6 +23,12 @@ namespace HeroFishing.Main {
             Summon,
         }
         public MonsterType MyMonsterType { get; private set; }
+        public enum MonsterSize {
+            Small,
+            Mid,
+            Large,
+        }
+        public MonsterSize MyMonsterSize { get; private set; }
         public int DropID { get; private set; }
         public int[] SummonSkillID { get; private set; }
         public enum HitEffectPosType {
@@ -54,6 +60,9 @@ namespace HeroFishing.Main {
                         break;
                     case "MonsterType":
                         MyMonsterType = MyEnum.ParseEnum<MonsterType>(item[key].ToString());
+                        break;
+                    case "MonsterSize":
+                        MyMonsterSize = MyEnum.ParseEnum<MonsterSize>(item[key].ToString());
                         break;
                     case "DropID":
                         DropID = int.Parse(item[key].ToString());
