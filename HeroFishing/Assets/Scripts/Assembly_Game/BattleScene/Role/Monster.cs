@@ -4,6 +4,7 @@ using Scoz.Func;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -135,9 +136,15 @@ namespace HeroFishing.Battle {
         public void Die(int heroIndex) {
             KillHeroIndex = heroIndex;
             if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;
-            SetAniTrigger("die");
+            Observable.Timer(TimeSpan.FromMilliseconds(150)).Subscribe(_ => {
+                for (int i = 0; i < MySkinnedMeshRenderers.Length; i++) {
+                    MySkinnedMeshRenderers[i].enabled = false;
+                }
+            });
+
+            //SetAniTrigger("die");
             if (MyMonsterSpecialize != null) {
-                MyMonsterSpecialize.PlayDissolveEffect(MySkinnedMeshRenderers[0]);
+                //MyMonsterSpecialize.PlayDissolveEffect(MySkinnedMeshRenderers[0]);
                 MyMonsterSpecialize.PlayCoinEffect(MyData.MyMonsterSize, MySkinnedMeshRenderers[0], KillHeroIndex);
             }
             if (s_aliveMonsters.Contains(this))

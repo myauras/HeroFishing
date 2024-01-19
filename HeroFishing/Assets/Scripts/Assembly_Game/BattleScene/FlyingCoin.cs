@@ -19,6 +19,7 @@ public class FlyingCoin : MonoBehaviour {
     private float _progress;
 
     private const string FLYING_COIN_KEY = "OtherEffect/Script_FlyCoinEffect";
+    private const string GET_COIN_KEY = "OtherEffect/Script_GetCoin";
 
     public void Init(MonsterJsonData.MonsterSize size, int heroIndex) {
         Hero hero = BattleManager.Instance.GetHero(heroIndex);
@@ -52,6 +53,8 @@ public class FlyingCoin : MonoBehaviour {
             _flyingCoins.Clear();
             _progress = _timer = 0;
             PoolManager.Instance.Push(gameObject);
+            endPos.y = 0;
+            PoolManager.Instance.Pop(GET_COIN_KEY, endPos);
             hero.AddPoints();
         });
     }
