@@ -11,7 +11,6 @@ using UnityEngine.AddressableAssets;
 
 namespace HeroFishing.Battle {
     public class Monster : Role {
-        private static List<Monster> s_aliveMonsters = new List<Monster>();
         public MonsterJsonData MyData { get; private set; }
         public int MonsterID => MyData.ID;
         public int MonsterIdx { get; private set; }
@@ -25,8 +24,9 @@ namespace HeroFishing.Battle {
 
         private GameObject LockObj;
 
-        private static readonly Dictionary<int, List<Material>> _originMatDic = new();
-        private static readonly Dictionary<int, List<Material>> _frozenMatDic = new();
+        private static readonly List<Monster> s_aliveMonsters = new List<Monster>();
+        private static readonly Dictionary<int, List<Material>> s_originMatDic = new();
+        private static readonly Dictionary<int, List<Material>> s_frozenMatDic = new();
 
         private const string MAT_FREEZE_OPAQUE = "FreezeMonOp";
         private const string MAT_FREEZE_TRANSPARENT = "FreezeMonTr";
@@ -120,32 +120,31 @@ namespace HeroFishing.Battle {
         }
 
         public void Explode(int heroIndex) {
-            KillHeroIndex = heroIndex;
-            if (Explosion == null) {
-                Die(heroIndex);
-                return;
-            }
-
-            Explosion.Explode();
-            if (s_aliveMonsters.Contains(this))
-                s_aliveMonsters.Remove(this);
-
-            Lock(false);
+            if (Explosion != null)
+                Explosion.Explode();
+            DieInternal(heroIndex);
         }
 
         public void Die(int heroIndex) {
-            KillHeroIndex = heroIndex;
-            if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;
             Observable.Timer(TimeSpan.FromMilliseconds(150)).Subscribe(_ => {
                 for (int i = 0; i < MySkinnedMeshRenderers.Length; i++) {
                     MySkinnedMeshRenderers[i].enabled = false;
                 }
             });
+            DieInternal(heroIndex);
+        }
 
-            //SetAniTrigger("die");
+        private void DieInternal(int heroIndex) {
+            KillHeroIndex = heroIndex;
+
+            if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;
             if (MyMonsterSpecialize != null) {
-                //MyMonsterSpecialize.PlayDissolveEffect(MySkinnedMeshRenderers[0]);
+                MyMonsterSpecialize.CloseAddOnObjs();
                 MyMonsterSpecialize.PlayCoinEffect(MyData.MyMonsterSize, MySkinnedMeshRenderers[0], KillHeroIndex);
+                if (MyData.DropID > 0) {
+                    if (MyData.DropID == 5)
+                        MyMonsterSpecialize.PlayDropEffect(MyData.DropID, heroIndex);
+                }
             }
             if (s_aliveMonsters.Contains(this))
                 s_aliveMonsters.Remove(this);
@@ -157,9 +156,9 @@ namespace HeroFishing.Battle {
         public void Freeze() {
             int id = MyData.ID;
             // 如果原始材質尚未存過，做一次儲存。
-            if (!_originMatDic.ContainsKey(id)) {
+            if (!s_originMatDic.ContainsKey(id)) {
                 var matList = new List<Material>();
-                _originMatDic.Add(id, matList);
+                s_originMatDic.Add(id, matList);
 
                 foreach (var renderer in MySkinnedMeshRenderers) {
                     matList.AddRange(renderer.materials);
@@ -168,9 +167,9 @@ namespace HeroFishing.Battle {
 
             // 冰凍材質，如果沒有的話就要new後填入Dictionary裡，有的話直接取用
             int startIndex = 0;
-            if (!_frozenMatDic.TryGetValue(id, out var allMatList)) {
+            if (!s_frozenMatDic.TryGetValue(id, out var allMatList)) {
                 allMatList = new List<Material>();
-                _frozenMatDic.Add(id, allMatList);
+                s_frozenMatDic.Add(id, allMatList);
                 SetupFrozenDic();
             }
             else {
@@ -191,7 +190,7 @@ namespace HeroFishing.Battle {
         public void UnFreeze() {
             if (MyAni != null)
                 MyAni.enabled = true;
-            var allMatList = _originMatDic[MyData.ID];
+            var allMatList = s_originMatDic[MyData.ID];
             int matIndex = 0;
             foreach (var renderer in MySkinnedMeshRenderers) {
                 for (int j = 0; j < renderer.sharedMaterials.Length; j++) {
@@ -256,7 +255,7 @@ namespace HeroFishing.Battle {
                 // 設定renderer
                 renderer.SetSharedMaterials(matList);
                 Explosion.SetMaterials(index, matList);
-                _frozenMatDic[MyData.ID].AddRange(matList);
+                s_frozenMatDic[MyData.ID].AddRange(matList);
                 startIndex += renderer.materials.Length;
             }
         }
