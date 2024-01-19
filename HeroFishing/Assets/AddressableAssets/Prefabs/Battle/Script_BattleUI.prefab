@@ -647,6 +647,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 9066113206943863685}
+    - targetCorrespondingSourceObject: {fileID: 4408931024624727090, guid: 174261cfc784c124ba16d175d9656b85,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6595629104112178531}
     - targetCorrespondingSourceObject: {fileID: 8130838588033749116, guid: 174261cfc784c124ba16d175d9656b85,
         type: 3}
       insertIndex: -1
@@ -845,6 +849,7 @@ MonoBehaviour:
   _spellUI: {fileID: 1492728965685121167}
   _levelUI: {fileID: 9066113206943863685}
   _deviceInfoUI: {fileID: 3035199173976440666}
+  _coinUI: {fileID: 6595629104112178531}
 --- !u!114 &4711342390008998012 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2634774261812933968, guid: 174261cfc784c124ba16d175d9656b85,
@@ -946,6 +951,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _imgExp: {fileID: 6029044675328553027}
   _txtLevel: {fileID: 4850735736504653533}
+--- !u!114 &6595629104112178531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6403343111384131870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb7890d9fbd36c74a80b25e18b9ff6c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 8755067133343821291}
 --- !u!114 &6782671693369962897 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4310637752319454397, guid: 174261cfc784c124ba16d175d9656b85,
@@ -1006,6 +1024,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &8755067133343821291 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2049888665943781575, guid: 174261cfc784c124ba16d175d9656b85,
+    type: 3}
+  m_PrefabInstance: {fileID: 7346098638638701868}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8786883992828196236 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2018700761451292832, guid: 174261cfc784c124ba16d175d9656b85,

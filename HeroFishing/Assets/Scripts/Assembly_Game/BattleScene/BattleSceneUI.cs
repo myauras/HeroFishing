@@ -21,6 +21,8 @@ public class BattleSceneUI : BaseUI {
     private LevelUI _levelUI;
     [SerializeField]
     private DeviceInfoUI _deviceInfoUI;
+    [SerializeField]
+    private CoinUI _coinUI;
 
     private void Start() {
         Init();
@@ -37,7 +39,8 @@ public class BattleSceneUI : BaseUI {
             battleMaanger.Init();
             _spellUI.Init();
             _levelUI.Init();
-            //_deviceInfoUI.Init();
+            _deviceInfoUI.Init();
+            _coinUI.Init();
         });
     }
 

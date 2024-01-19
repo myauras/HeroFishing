@@ -236,6 +236,7 @@ public struct MonsterValue : IComponentData {
 /// 擊中標籤元件
 /// </summary>
 public struct MonsterHitTag : IComponentData {
+    public int HeroIndex;
     public int MonsterID;//受擊怪物ID 
     public uint StrIndex_SpellID;//ECSStrManager的技能ID字串索引
     public float3 HitDirection;
@@ -243,7 +244,9 @@ public struct MonsterHitTag : IComponentData {
 /// <summary>
 /// 死亡標籤元件
 /// </summary>
-public struct MonsterDieTag : IComponentData { }
+public struct MonsterDieTag : IComponentData {
+    public int HeroIndex;
+}
 public struct AutoDestroyTag : IComponentData {
     public float LifeTime;//生命週期
     public float ExistTime;//目前存活秒數(預設為0)
