@@ -7,6 +7,7 @@ namespace Scoz.Func {
         public void Init() {
             Instance = this;
             MyCam = GetComponent<Camera>();
+            DontDestroyOnLoad(gameObject);
         }
         public void SetRendererMode(CameraRenderType _type) {
             if (MyCam == null) return;

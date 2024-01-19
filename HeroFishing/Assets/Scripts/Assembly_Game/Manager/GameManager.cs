@@ -220,10 +220,11 @@ namespace Scoz.Func {
 
         /// <summary>
         /// 根據所在Scene產生UI
+        /// 1. 開始遊戲後GameManager跑StartDownloadAddressable完最後會跑這個func
+        /// 2. 切換場景會跑這個func(透過AOT反射呼叫)
         /// </summary>
         public static void SpawnSceneUI() {
             if (!IsFinishedLoadAsset) return;
-
             AddressablesLoader.GetPrefabByRef(Instance.UICanvasAsset, (canvasPrefab, handle) => {//載入UICanvas
                 GameObject canvasGO = Instantiate(canvasPrefab);
                 canvasGO.GetComponent<UICanvas>().Init();
@@ -285,7 +286,7 @@ namespace Scoz.Func {
                 Addressables.Release(handle);
             });
 
-            
+
 
 #if !Release
             //載入TestTool
@@ -293,7 +294,7 @@ namespace Scoz.Func {
                 GameObject go = Instantiate(prefab);
                 go.GetComponent<TestTool>().Init();
                 Addressables.Release(handle);
-            });            
+            });
 #endif
 
         }
