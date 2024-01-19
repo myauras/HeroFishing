@@ -16,7 +16,6 @@ namespace HeroFishing.Main {
         [SerializeField] GameObject LogutoutGO;//登出
         [SerializeField] GameObject DeleteACGO;//刪除帳戶(蘋果要求)
         [SerializeField] GameObject BackToLobbyGO;//返回大廳按鈕
-        [SerializeField] Text MiddleText;//等待登入文字
         [SerializeField] RectTransform QuestReportButton; // 問題回報的按鍵
 
         /// <summary>
@@ -51,7 +50,6 @@ namespace HeroFishing.Main {
             AppleLoginGO.SetActive(false);
 #endif
             ShowUI(Condition.HideAll);
-            SetMiddleText(StringJsonData.GetUIString("LoginType"));
             AuthChek();
 
         }
@@ -353,11 +351,6 @@ namespace HeroFishing.Main {
         void OnThirdPartAuthFinished(AuthType _authType) {
             // 通知分析註冊完成事件
             GameManager.Instance.OnAuthFinished(_authType);
-        }
-
-
-        public void SetMiddleText(string _str) {
-            MiddleText.text = _str;
         }
 
 

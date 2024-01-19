@@ -68,7 +68,8 @@ namespace Scoz.Editor {
             string logPath = "ScozBuildLog";
             LogFile.AppendWrite(logPath, "\n");
             LogFile.AppendWrite(logPath, $"開始更新Dll  平台: {activeTarget}  版本: {VersionSetting.AppLargeVersion}");
-            HybridCLR.Editor.Commands.CompileDllCommand.CompileDllActiveBuildTarget();
+            HybridCLR.Editor.Commands.PrebuildCommand.GenerateAll();
+            //HybridCLR.Editor.Commands.CompileDllCommand.CompileDllActiveBuildTarget();
             LogFile.AppendWrite(logPath, $"將需要的Dlls並追加.bytes結尾 並複製到AddressableAssets/Dlls/");
 
             // 刪除舊資料並重新建立目標資料夾

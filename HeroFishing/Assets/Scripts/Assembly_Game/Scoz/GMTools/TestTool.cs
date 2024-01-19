@@ -10,10 +10,11 @@ using System;
 namespace Scoz.Func {
     public partial class TestTool : MonoBehaviour {
         public static TestTool Instance;
-        [SerializeField] Text EnvVersion;
-        public Text Text_FPS;
+        [SerializeField] Text EnvText;
+        [SerializeField] Text Text_FPS;
+        [SerializeField] Text VersionText;
         public float InfoRefreshInterval = 0.5f;
-        public Text VersionText;
+
 
         int FrameCount = 0;
         float PassTimeByFrames = 0.0f;
@@ -36,7 +37,14 @@ namespace Scoz.Func {
             DontDestroyOnLoad(gameObject);
             GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(Screen.width, Screen.height);
             VersionText.text = "Ver: " + Application.version;
+#if Dev
+            EnvText.text = EnvVersion.Dev.ToString();
+#elif Test
+            EnvText.text = EnvVersion.Test.ToString();
+#elif Release
+            EnvText.text = EnvVersion.Release.ToString();
 
+#endif
         }
 
         void FPSCalc() {
