@@ -21,7 +21,7 @@ public class FlyingCoin : MonoBehaviour {
     private const string FLYING_COIN_KEY = "OtherEffect/Script_FlyingCoinEffect";
     private const string GET_COIN_KEY = "OtherEffect/Script_GetCoin";
 
-    public void Init(MonsterJsonData.MonsterSize size, int heroIndex) {
+    public void Init(MonsterJsonData.MonsterSize size, int heroIndex, int monsterIndex) {
         Hero hero = BattleManager.Instance.GetHero(heroIndex);
         Vector3 startPos = transform.position;
         Vector3 endPos = hero.transform.position;
@@ -55,7 +55,7 @@ public class FlyingCoin : MonoBehaviour {
             PoolManager.Instance.Push(gameObject);
             endPos.y = 0;
             PoolManager.Instance.Pop(GET_COIN_KEY, endPos);
-            hero.AddPoints();
+            hero.ReleaseStoredPoints(monsterIndex);
         });
     }
 

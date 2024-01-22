@@ -1,7 +1,9 @@
 using DG.Tweening;
 using HeroFishing.Main;
+using HeroFishing.Socket;
 using JetBrains.Annotations;
 using Scoz.Func;
+using Service.Realms;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +12,6 @@ using UnityEngine.AddressableAssets;
 
 namespace HeroFishing.Battle {
     public class Hero : Role {
-
         public HeroJsonData MyData { get; private set; }
         HeroSkinJsonData MyHeroSkinData;
         private SpellActivationBehaviour ActivationBehaviour;
@@ -21,18 +22,23 @@ namespace HeroFishing.Battle {
         public int Level => _level;
         private int _points;
         public int Points => _points;
+        private GameObject _model;
+        public bool IsLoaded => _model != null;
+        private Dictionary<int, int> _storedMonsterPoints = new Dictionary<int, int>();
+        private int _storedPoints;
+        public int TotalPoints => _points + _storedPoints;
+        private DBPlayer _dbPlayer;
 
         public event Action<int> OnLevelUp;
         public event Action<int, int> OnExpUpdate;
         public event Action<SpellName> OnSpellCharge;
         public event Action<SpellName> OnSpellPlay;
-        public event Action<int> OnPointUpdate;
+        public event Action<int, bool> OnPointUpdate;
+
+        public static int Bet => BattleManager.Instance.Bet;
 
         private const int SPELL_COUNT = 4;
         private const int MAX_LEVEL = 10;
-
-        private GameObject _model;
-        public bool IsLoaded => _model != null;
 
         public void Register(SpellActivationBehaviour activationBehaviour) {
             ActivationBehaviour = activationBehaviour;
@@ -146,8 +152,39 @@ namespace HeroFishing.Battle {
             OnExpUpdate?.Invoke(_exp, nextLevelExp);
         }
 
-        public void AddPoints() {
-            OnPointUpdate?.Invoke(0);
+        public void HoldStoredPoints(int monsterIdx, int points) {
+            _storedMonsterPoints.Add(monsterIdx, points);
+            _storedPoints += points;
+
+            if (GameConnector.Connected) {
+                var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
+                player.SetPoints(TotalPoints);
+            }
+        }
+
+        public void ReleaseStoredPoints(int monsterIdx) {
+            if (_storedMonsterPoints.TryGetValue(monsterIdx, out int points)) {
+                _points += points;
+                _storedMonsterPoints.Remove(monsterIdx);
+                _storedPoints -= points;
+
+                OnPointUpdate?.Invoke(_points, true);
+            }
+        }
+
+        public void UsePoints() {
+            _points -= Bet;
+            OnPointUpdate?.Invoke(_points, false);
+
+            if (GameConnector.Connected) {
+                var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
+                player.SetPoints(TotalPoints);
+            }
+        }
+
+        public void UpdatePoints(int points) {
+            _points = points;
+            OnPointUpdate?.Invoke(points, false);
         }
 
         [ContextMenu("Level Up")]

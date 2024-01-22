@@ -2,6 +2,7 @@ using HeroFishing.Main;
 using HeroFishing.Socket;
 using HeroFishing.Socket.Matchgame;
 using Scoz.Func;
+using Service.Realms;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +27,14 @@ namespace HeroFishing.Battle {
         private bool _rotateTest;
         [SerializeField]
         private int _rotateTestIndex;
+        [SerializeField, Min(1)]
+        private int _testBet;
+        [SerializeField]
+        private bool _isSpellTest;
+        public bool IsSpellTest => _isSpellTest;
+
+        private int _bet = 1;
+        public int Bet => _bet;
 
         public int Index {
             get {
@@ -74,10 +83,21 @@ namespace HeroFishing.Battle {
         }
 
         private void InitPlayerHero() {
-            if (AllocatedRoom.Instance == null) //測試流程
-                GetHero(0).SetData(_testHeroID, $"{_testHeroID}_1");
-            else
-                GetHero(0).SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
+            var hero = GetHero(0);
+            if (AllocatedRoom.Instance == null) {//測試流程
+
+                hero.SetData(_testHeroID, $"{_testHeroID}_1");
+                hero.UpdatePoints(10);
+                _bet = _testBet;
+            }
+            else {
+                hero.SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
+                var map = RealmManager.MyRealm.Find<DBMap>(AllocatedRoom.Instance.DBMapID);
+                _bet = map.Bet ?? 1;
+                var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
+                if (player != null && player.Point.HasValue)
+                    hero.UpdatePoints((int)player.Point.Value);
+            }
         }
 
         private void InitMonsterScheduler() {
@@ -210,9 +230,14 @@ namespace HeroFishing.Battle {
 
             _entityManager.AddComponentData(entity, monsterDieNetworkData);
 
-            var hero = GetHero(heroIndex);
-            hero.AddExp(totalExp);
-            hero.ChargeSpell(gainSpellCharge);
+            if (heroIndex == 0) {
+                var hero = GetHero(heroIndex);
+                hero.AddExp(totalExp);
+                hero.ChargeSpell(gainSpellCharge);
+                for (int i = 0; i < monsterIdxs.Length; i++) {
+                    hero.HoldStoredPoints(monsterIdxs[i], (int)gainPoints[i]);
+                }
+            }
         }
     }
 }

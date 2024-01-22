@@ -137,10 +137,15 @@ namespace HeroFishing.Battle {
         private void DieInternal(int heroIndex) {
             KillHeroIndex = heroIndex;
 
+            if (AllocatedRoom.Instance == null && KillHeroIndex == 0) {
+                var hero = BattleManager.Instance.GetHero(KillHeroIndex);
+                hero.HoldStoredPoints(MonsterIdx, (int)MyData.Odds * BattleManager.Instance.Bet);
+            }
+
             if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;
             if (MyMonsterSpecialize != null) {
                 MyMonsterSpecialize.CloseAddOnObjs();
-                MyMonsterSpecialize.PlayCoinEffect(MyData.MyMonsterSize, MySkinnedMeshRenderers[0], KillHeroIndex);
+                MyMonsterSpecialize.PlayCoinEffect(MyData.MyMonsterSize, MySkinnedMeshRenderers[0], KillHeroIndex, MonsterIdx);
                 if (MyData.DropID > 0) {
                     if (MyData.DropID == 5)
                         MyMonsterSpecialize.PlayDropEffect(MyData.DropID, heroIndex);

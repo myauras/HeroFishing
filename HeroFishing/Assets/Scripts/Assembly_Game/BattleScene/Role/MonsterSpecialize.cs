@@ -66,7 +66,7 @@ namespace HeroFishing.Battle {
             });
         }
 
-        public void PlayCoinEffect(MonsterJsonData.MonsterSize size, SkinnedMeshRenderer smr, int heroIndex) {
+        public void PlayCoinEffect(MonsterJsonData.MonsterSize size, SkinnedMeshRenderer smr, int heroIndex, int monsterIndex) {
             PoolManager.Instance.Pop(GetCoinEffectKey(size), popCallback: go => {
                 go.transform.position = transform.position;
                 if (size == MonsterJsonData.MonsterSize.Large) {
@@ -81,7 +81,7 @@ namespace HeroFishing.Battle {
             Observable.Timer(TimeSpan.FromMilliseconds(delay)).Subscribe(_ => {
                 PoolManager.Instance.Pop(FLYING_COIN_KEY, transform.position, Quaternion.identity, null, go => {
                     var flyingCoin = go.GetComponent<FlyingCoin>();
-                    flyingCoin.Init(size, heroIndex);
+                    flyingCoin.Init(size, heroIndex, monsterIndex);
                 });
             });
         }
