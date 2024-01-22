@@ -111,14 +111,14 @@ namespace HeroFishing.Battle {
 
         private void SpawnMonster() {
             if (MyMonsterScheduler == null) return;
-            if (!MyMonsterScheduler.TryDequeueMonster(out SpawnData spawnData)) return;
+            //if (!MyMonsterScheduler.TryDequeueMonster(out SpawnData spawnData)) return;
 
-            var entity = _entityManager.CreateEntity();
-            _entityManager.AddComponentData(entity, spawnData);
-            _entityManager.AddComponent<SpawnTag>(entity);
+            //var entity = _entityManager.CreateEntity();
+            //_entityManager.AddComponentData(entity, spawnData);
+            //_entityManager.AddComponent<SpawnTag>(entity);
 
             //是BOSS就會攝影機震動
-            if (spawnData.IsBoss)
+            //if (spawnData.IsBoss)
                 CamManager.ShakeCam(CamManager.CamNames.Battle,
                     GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_AmplitudeGain),
                     GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_FrequencyGain),
@@ -180,59 +180,59 @@ namespace HeroFishing.Battle {
 
         public void UpdateScene(Spawn[] spawns, SceneEffect[] effects) {
             for (int i = 0; i < spawns.Length; i++) {
-                NativeArray<MonsterData> monsterDatas = new NativeArray<MonsterData>(spawns[i].Monsters.Length, Allocator.Persistent);
-                for (int j = 0; j < monsterDatas.Length; j++) {
-                    var monster = spawns[i].Monsters[j];
-                    if (monster == null || monster.Death) continue;
-                    MonsterData monsterData = new MonsterData() {
-                        ID = monster.JsonID,
-                        Idx = monster.Idx,
-                    };
-                    monsterDatas[j] = monsterData;
-                }
-                var entity = _entityManager.CreateEntity();
-                _entityManager.AddComponentData(entity, new SpawnData {
-                    Monsters = monsterDatas,
-                    RouteID = spawns[i].RouteJsonID,
-                    SpawnTime = (float)spawns[i].SpawnTime,
-                    IsBoss = spawns[i].IsBoss,
-                    PlayerIndex = Index,
-                });
-                _entityManager.AddComponent<RefreshSceneTag>(entity);
+                //NativeArray<MonsterData> monsterDatas = new NativeArray<MonsterData>(spawns[i].Monsters.Length, Allocator.Persistent);
+                //for (int j = 0; j < monsterDatas.Length; j++) {
+                //    var monster = spawns[i].Monsters[j];
+                //    if (monster == null || monster.Death) continue;
+                //    MonsterData monsterData = new MonsterData() {
+                //        ID = monster.JsonID,
+                //        Idx = monster.Idx,
+                //    };
+                //    monsterDatas[j] = monsterData;
+                //}
+                //var entity = _entityManager.CreateEntity();
+                //_entityManager.AddComponentData(entity, new SpawnData {
+                //    Monsters = monsterDatas,
+                //    RouteID = spawns[i].RouteJsonID,
+                //    SpawnTime = (float)spawns[i].SpawnTime,
+                //    IsBoss = spawns[i].IsBoss,
+                //    PlayerIndex = Index,
+                //});
+                //_entityManager.AddComponent<RefreshSceneTag>(entity);
             }
         }
 
         public void SetMonsterDead(int playerIndex, int[] monsterIdxs, long[] gainPoints, int[] gainHeroExps, int[] gainSpellCharge, int[] gainDrops) {
             int heroIndex = GetHeroIndex(playerIndex);
 
-            var entity = _entityManager.CreateEntity();
+            //var entity = _entityManager.CreateEntity();
 
-            long totalPoints = 0;
-            int totalExp = 0;
-            NativeArray<KillMonsterData> killMonsters = new(monsterIdxs.Length, Allocator.Persistent);
-            for (int i = 0; i < killMonsters.Length; i++) {
-                var killMonster = new KillMonsterData {
-                    HeroIndex = heroIndex,
-                    KillMonsterIdx = monsterIdxs[i],
-                    GainPoints = gainPoints[i],
-                    GainHeroExp = gainHeroExps[i],
-                    GainSpellCharge = gainSpellCharge[i],
-                    GainDrop = gainDrops[i],
-                };
-                killMonsters[i] = killMonster;
-                totalPoints += gainPoints[i];
-                totalExp += gainHeroExps[i];
-            }
+            //long totalPoints = 0;
+            //int totalExp = 0;
+            //NativeArray<KillMonsterData> killMonsters = new(monsterIdxs.Length, Allocator.Persistent);
+            //for (int i = 0; i < killMonsters.Length; i++) {
+            //    var killMonster = new KillMonsterData {
+            //        HeroIndex = heroIndex,
+            //        KillMonsterIdx = monsterIdxs[i],
+            //        GainPoints = gainPoints[i],
+            //        GainHeroExp = gainHeroExps[i],
+            //        GainSpellCharge = gainSpellCharge[i],
+            //        GainDrop = gainDrops[i],
+            //    };
+            //    killMonsters[i] = killMonster;
+            //    totalPoints += gainPoints[i];
+            //    totalExp += gainHeroExps[i];
+            //}
 
-            MonsterDieNetworkData monsterDieNetworkData = new MonsterDieNetworkData {
-                KillMonsters = killMonsters,
-            };
+            //MonsterDieNetworkData monsterDieNetworkData = new MonsterDieNetworkData {
+            //    KillMonsters = killMonsters,
+            //};
 
-            _entityManager.AddComponentData(entity, monsterDieNetworkData);
+            //_entityManager.AddComponentData(entity, monsterDieNetworkData);
 
             if (heroIndex == 0) {
                 var hero = GetHero(heroIndex);
-                hero.AddExp(totalExp);
+                //hero.AddExp(totalExp);
                 hero.ChargeSpell(gainSpellCharge);
                 for (int i = 0; i < monsterIdxs.Length; i++) {
                     hero.HoldStoredPoints(monsterIdxs[i], (int)gainPoints[i]);

@@ -22,23 +22,26 @@ public class SpellExplodeHit : SpellHitBase {
         _waves = int.Parse(values[3]);
     }
 
-    public override void OnHit(EntityCommandBuffer.ParallelWriter writer, SpellHitTag hitTag) {
-        var entity = writer.CreateEntity(0);
-        writer.AddComponent(entity.Index + 1, entity, new SpellAreaData() {
-            HeroIndex = hitTag.HeroIndex,
-            StrIndex_SpellID = hitTag.StrIndex_SpellID,
-            SpawnData = new SpellSpawnData {
-                AttackID = hitTag.AttackID,
-                SpellPrefabID = _data.PrefabID,
-                SubSpellPrefabID = _data.SubPrefabID,
-                InitPosition = hitTag.BulletPosition,
-                IgnoreFireModel = true,
-                ProjectileDelay = _delay,
-            },
-            Radius = _radius,
-            LifeTime = _lifeTime,            
-            IgnoreMonster = hitTag.Monster,
-            Waves = _waves,
-        });
+    public override void OnHit(SpellHitInfo hitInfo) {
+        throw new System.NotImplementedException();
     }
+    //public override void OnHit(EntityCommandBuffer.ParallelWriter writer, SpellHitTag hitTag) {
+    //    var entity = writer.CreateEntity(0);
+    //    writer.AddComponent(entity.Index + 1, entity, new SpellAreaData() {
+    //        HeroIndex = hitTag.HeroIndex,
+    //        StrIndex_SpellID = hitTag.StrIndex_SpellID,
+    //        SpawnData = new SpellSpawnData {
+    //            AttackID = hitTag.AttackID,
+    //            SpellPrefabID = _data.PrefabID,
+    //            SubSpellPrefabID = _data.SubPrefabID,
+    //            InitPosition = hitTag.BulletPosition,
+    //            IgnoreFireModel = true,
+    //            ProjectileDelay = _delay,
+    //        },
+    //        Radius = _radius,
+    //        LifeTime = _lifeTime,            
+    //        IgnoreMonster = hitTag.Monster,
+    //        Waves = _waves,
+    //    });
+    //}
 }

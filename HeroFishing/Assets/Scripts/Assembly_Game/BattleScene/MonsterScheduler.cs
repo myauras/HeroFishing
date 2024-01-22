@@ -42,7 +42,7 @@ namespace HeroFishing.Battle {
         public bool IsInit { get; private set; }
         public static bool BossExist { get; set; }//BOSS是否存在場上的標記
 
-        Queue<SpawnData> SpawnMonsterQueue = new Queue<SpawnData>();//出怪排程
+        //Queue<SpawnData> SpawnMonsterQueue = new Queue<SpawnData>();//出怪排程
         Dictionary<int, int> SpawnTimerDic;//<MonsterSpawn表ID,出怪倒數秒數>
 
         MapJsonData CurMapJson;
@@ -111,59 +111,59 @@ namespace HeroFishing.Battle {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
             if(_monsterIDs.Length != _monsterIdxs.Length) { WriteLog.LogError("monster id 數量跟 idx 數量不符"); }
 
-            NativeArray<MonsterData> monsters = new NativeArray<MonsterData>(_monsterIDs.Length, Allocator.Persistent);
-            for (int i = 0; i < monsters.Length; i++) {
-                MonsterData monster = new MonsterData {
-                    ID = _monsterIDs[i],
-                    Idx = _monsterIdxs[i],                    
-                };
-                monsters[i] = monster;
-            }
+            //NativeArray<MonsterData> monsters = new NativeArray<MonsterData>(_monsterIDs.Length, Allocator.Persistent);
+            //for (int i = 0; i < monsters.Length; i++) {
+            //    MonsterData monster = new MonsterData {
+            //        ID = _monsterIDs[i],
+            //        Idx = _monsterIdxs[i],                    
+            //    };
+            //    monsters[i] = monster;
+            //}
 
-            var spawnData = new SpawnData() {
-                Monsters = monsters,
-                RouteID = _routeID,
-                IsBoss = _isBoss,
-                SpawnTime = _spawnTime,
-                PlayerIndex = _playerIndex,
-            };
-            //WriteLog.Log(DebugUtils.ObjToStr(spawn));
-            SpawnMonsterQueue.Enqueue(spawnData);//加入排程
+            //var spawnData = new SpawnData() {
+            //    Monsters = monsters,
+            //    RouteID = _routeID,
+            //    IsBoss = _isBoss,
+            //    SpawnTime = _spawnTime,
+            //    PlayerIndex = _playerIndex,
+            //};
+            ////WriteLog.Log(DebugUtils.ObjToStr(spawn));
+            //SpawnMonsterQueue.Enqueue(spawnData);//加入排程
         }
 
         public void EnqueueMonster(Spawn spawn) {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
 
-            NativeArray<MonsterData> monsters = new NativeArray<MonsterData>(spawn.Monsters.Length, Allocator.Persistent);
-            for (int i = 0; i < monsters.Length; i++) {
-                MonsterData monster = new MonsterData {
-                    ID = spawn.Monsters[i].JsonID,
-                    Idx = spawn.Monsters[i].Idx,
-                };
-                monsters[i] = monster;
-            }
+            //NativeArray<MonsterData> monsters = new NativeArray<MonsterData>(spawn.Monsters.Length, Allocator.Persistent);
+            //for (int i = 0; i < monsters.Length; i++) {
+            //    MonsterData monster = new MonsterData {
+            //        ID = spawn.Monsters[i].JsonID,
+            //        Idx = spawn.Monsters[i].Idx,
+            //    };
+            //    monsters[i] = monster;
+            //}
 
-            var spawnData = new SpawnData() {
-                Monsters = monsters,
-                RouteID = spawn.RouteJsonID,
-                IsBoss = spawn.IsBoss,
-                SpawnTime = (float)spawn.SpawnTime,
-            };
+            //var spawnData = new SpawnData() {
+            //    Monsters = monsters,
+            //    RouteID = spawn.RouteJsonID,
+            //    IsBoss = spawn.IsBoss,
+            //    SpawnTime = (float)spawn.SpawnTime,
+            //};
 
-            SpawnMonsterQueue.Enqueue(spawnData);
+            //SpawnMonsterQueue.Enqueue(spawnData);
         }
 
-        /// <summary>
-        /// ECS那邊出怪後會從排程中移除
-        /// </summary>
-        public bool TryDequeueMonster(out SpawnData spawn) {
-            //if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return null; }
-            bool result = SpawnMonsterQueue.TryDequeue(out spawn);
-            if (result) {
-                if (spawn.IsBoss) BossExist = true;
-            }
-            return result;
-        }
+        ///// <summary>
+        ///// ECS那邊出怪後會從排程中移除
+        ///// </summary>
+        //public bool TryDequeueMonster(out SpawnData spawn) {
+        //    //if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return null; }
+        //    bool result = SpawnMonsterQueue.TryDequeue(out spawn);
+        //    if (result) {
+        //        if (spawn.IsBoss) BossExist = true;
+        //    }
+        //    return result;
+        //}
 
         /// <summary>
         /// 需要local測試的時候，取得所需的int陣列使用

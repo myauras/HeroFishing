@@ -33,27 +33,30 @@ public class SpellChainHit : SpellHitBase {
         _maxChainCount = int.Parse(values[5]);
     }
 
-    public override void OnHit(EntityCommandBuffer.ParallelWriter writer, SpellHitTag hitTag) {
-        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        var monsterID = hitTag.Monster.MonsterID;
-        var monsterData = MonsterJsonData.GetData(monsterID);
-        var position = hitTag.HitPosition + new float3(0, monsterData.Radius, 0);
-        Entity entity = entityManager.CreateEntity();
-        writer.AddComponent(entity.Index, entity, new ChainHitData {
-            HeroIndex = hitTag.HeroIndex,
-            AttackID = hitTag.AttackID,
-            StrIndex_SpellID = hitTag.StrIndex_SpellID,
-            HitPosition = position,
-            HitDirection = hitTag.HitDirection,
-            MaxChainCount = _maxChainCount,
-            OnHitMonster = hitTag.Monster,
-            TriggerRange = _triggerRange,
-            Angle = _angle,
-            Radius = _radius,
-            SpellPrefabID = _data.PrefabID,
-            SubSpellPrefabID = _data.SubPrefabID,
-            Speed = _speed,
-            LifeTime = _lifeTime
-        });
+    public override void OnHit(SpellHitInfo hitInfo) {
+        throw new System.NotImplementedException();
     }
+    //public override void OnHit(EntityCommandBuffer.ParallelWriter writer, SpellHitTag hitTag) {
+    //    var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+    //    var monsterID = hitTag.Monster.MonsterID;
+    //    var monsterData = MonsterJsonData.GetData(monsterID);
+    //    var position = hitTag.HitPosition + new float3(0, monsterData.Radius, 0);
+    //    Entity entity = entityManager.CreateEntity();
+    //    writer.AddComponent(entity.Index, entity, new ChainHitData {
+    //        HeroIndex = hitTag.HeroIndex,
+    //        AttackID = hitTag.AttackID,
+    //        StrIndex_SpellID = hitTag.StrIndex_SpellID,
+    //        HitPosition = position,
+    //        HitDirection = hitTag.HitDirection,
+    //        MaxChainCount = _maxChainCount,
+    //        OnHitMonster = hitTag.Monster,
+    //        TriggerRange = _triggerRange,
+    //        Angle = _angle,
+    //        Radius = _radius,
+    //        SpellPrefabID = _data.PrefabID,
+    //        SubSpellPrefabID = _data.SubPrefabID,
+    //        Speed = _speed,
+    //        LifeTime = _lifeTime
+    //    });
+    //}
 }
