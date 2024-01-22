@@ -62,7 +62,10 @@ namespace HeroFishing.Battle {
             if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
             if (!CheckSpell(SpellName.attack)) return;
-            if (!IsSpellTest && _hero.TotalPoints < Hero.Bet) return;
+            if (!IsSpellTest && _hero.TotalPoints < Hero.Bet) {
+                PopupUI.ShowClickCancel("你的金幣不足", null);
+                return;
+            }
 
             _isAttack = true;
             _scheduledRecoverTime = Time.time + ATTACK_BUFFER_TIME;
