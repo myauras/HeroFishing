@@ -1,9 +1,34 @@
+using Cysharp.Threading.Tasks;
+using LitJson;
+using Scoz.Func;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Main {
     public class StartSceneManager : MonoBehaviour {
         private void Start() {
-            BaseManager.CreateNewInstance();
+            UniTask.Void(async () => {
+                var result = await SendRestfulAPI("game/getstate", "test"); //檢查是否需要同步Redis資料回玩家資料
+                JsonData jsonData = JsonMapper.ToObject(result.ToString());
+                string dataValue = jsonData["data"].ToString();
+                var review = bool.Parse(dataValue);
+                WriteLog_UnityAssembly.Log("review=" + review);
+                if (review) {
+                    SceneManager.LoadScene(MyScene.menu.ToString(), LoadSceneMode.Single);
+                } else {
+                    BaseManager.CreateNewInstance();
+                }
+            });
+        }
+        /// <summary>
+        /// 送RestfulAPI請求
+        /// </summary>
+        public static async UniTask<object> SendRestfulAPI(string _endPoint, string _valueJson) {
+            string baseURL = "https://aurafordev.com/";
+            string url = baseURL + _endPoint;
+            string jsonPayload = $"{{}}";
+            var result = await Poster.Post(url, jsonPayload);
+            return result;
         }
     }
 }
