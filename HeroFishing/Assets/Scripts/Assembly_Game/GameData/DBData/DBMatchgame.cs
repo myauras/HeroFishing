@@ -23,4 +23,26 @@ public partial class DBMatchgame : IRealmObject {
     [MapTo("port")]
     public int? Port { get; set; }
 
+    public DBMatchgame(BsonDocument _doc) {
+        try {
+            ID = _doc["_id"].AsString;
+            CreatedAt = _doc["createdAt"].ToUniversalTime();
+            DBMapID = _doc["dbMapID"].AsString;
+            IP = _doc["ip"].AsString;
+            Port = _doc["port"].AsInt32;
+            PlayerIDs = ExtractPlayerIDs(_doc["playerIDs"]);
+        }catch(Exception _e) {
+            WriteLog.LogError("ÂàBsonDocument¿ù»~: " + _e);
+        }
+    }
+    private static IList<string> ExtractPlayerIDs(BsonValue _bson) {
+        var list = new List<string>();
+        if (_bson is BsonArray bsonArray) {
+            foreach (var item in bsonArray) {
+                list.Add(item.AsString);
+            }
+        }
+        return list;
+    }
+
 }

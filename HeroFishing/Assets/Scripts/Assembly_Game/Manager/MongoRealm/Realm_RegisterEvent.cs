@@ -9,7 +9,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Service.Realms {
 
@@ -88,7 +90,7 @@ namespace Service.Realms {
             WriteLog.LogColor("註冊MongoDB異動事件", WriteLog.LogType.Realm);
             RegisterPropertyChanges_MyPlayer();
             RegisterPropertyChanges_GameSetting();
-            RegisterPropertyChanges_Matchgame();
+            //RegisterPropertyChanges_Matchgame();
             RegisterPropertyChanges_Map();
             DeviceManager.AddOnApplicationQuitAction(UnregisterAllRealmEvents);
         }
@@ -144,10 +146,10 @@ namespace Service.Realms {
                 //插入
                 foreach (var i in changes.InsertedIndices) {
                     DBMatchgame insertedDoc = dbMatchgames.ElementAt(i);
-                    WriteLog.LogError("插入doc: " + insertedDoc.ID);
-                    foreach (var playerID in insertedDoc.PlayerIDs) {
-                        WriteLog.Log("插入playerID=" + playerID);
-                    }
+                    //WriteLog.LogError("插入doc: " + insertedDoc.ID);
+                    //foreach (var playerID in insertedDoc.PlayerIDs) {
+                    //    WriteLog.Log("插入playerID=" + playerID);
+                    //}
                     //檢查插入的文件的PlayerIDs是否包含玩家自己
                     if (insertedDoc.ID == dbPlayer.InMatchgameID) {//insertedDoc.PlayerIDs.Contains(dbPlayer.ID)
                         GameConnector.Instance.ConnToMatchgame();
@@ -157,14 +159,14 @@ namespace Service.Realms {
                 //修改
                 foreach (var i in changes.NewModifiedIndices) {
                     DBMatchgame modifiedDoc = dbMatchgames.ElementAt(i);
-                    WriteLog.LogError("修改doc: " + modifiedDoc.ID);
-                    foreach (var playerID in modifiedDoc.PlayerIDs) {
-                        WriteLog.Log("修改playerID=" + playerID);
-                    }
+                    //WriteLog.LogError("修改doc: " + modifiedDoc.ID);
+                    //foreach (var playerID in modifiedDoc.PlayerIDs) {
+                    //    WriteLog.Log("修改playerID=" + playerID);
+                    //}
                     // 檢查修改的PlayerIDs是否包含玩家自己
-                    if (modifiedDoc.ID == dbPlayer.InMatchgameID) {//modifiedDoc.PlayerIDs.Contains(dbPlayer.ID)
-                        GameConnector.Instance.ConnToMatchgame();
-                    }
+                    //if (modifiedDoc.ID == dbPlayer.InMatchgameID) {//modifiedDoc.PlayerIDs.Contains(dbPlayer.ID)
+                    //    GameConnector.Instance.ConnToMatchgame();
+                    //}
                 }
 
                 //Collection清空(對Collection下Clear()指令時)

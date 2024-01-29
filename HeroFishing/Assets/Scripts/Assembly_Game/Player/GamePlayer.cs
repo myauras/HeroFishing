@@ -7,6 +7,8 @@ using System.Linq;
 using Service.Realms;
 using Realms;
 using System.Data.SqlTypes;
+using Cysharp.Threading.Tasks;
+using HeroFishing.Socket;
 
 namespace HeroFishing.Main {
 
@@ -34,7 +36,9 @@ namespace HeroFishing.Main {
         public bool InitDBPlayerDocs() {
             DBPlayerDatas.Clear();
             // DBPlayer
+            WriteLog.Log("a="+ RealmManager.MyApp.CurrentUser.Id);
             var dbPlayer = RealmManager.MyRealm.Find<DBPlayer>(RealmManager.MyApp.CurrentUser.Id);
+            WriteLog.Log("b");
             if (dbPlayer == null) {
                 WriteLog.LogError("InitDBPlayerDatas時，取得DBPlayer為null");
                 return false;
@@ -92,10 +96,12 @@ namespace HeroFishing.Main {
         /// <summary>
         /// 取得目前所在遊戲房資料，沒在遊戲房中就返回null
         /// </summary>
-        public DBMatchgame GetMatchGame() {
+        public async UniTask<DBMatchgame> GetMatchGame() {
             var dbPlayer = GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
             if (string.IsNullOrEmpty(dbPlayer.InMatchgameID)) return null;
-            var dbMatchgame = RealmManager.MyRealm.Find<DBMatchgame>(dbPlayer.InMatchgameID);
+            var bsonDoc = await RealmManager.Query_GetDoc(DBGameCol.matchgame.ToString(), dbPlayer.InMatchgameID);
+            if (bsonDoc == null) return null;
+            var dbMatchgame = new DBMatchgame(bsonDoc);
             return dbMatchgame;
         }
 
