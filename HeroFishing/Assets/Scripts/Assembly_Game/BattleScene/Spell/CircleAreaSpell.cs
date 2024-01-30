@@ -13,7 +13,7 @@ public class CircleAreaSpell : SpellBase {
     private float _lifeTime;
     private float _delay;
     private float _collisionDelay;
-    private float _collisionTime;
+    private float _collisionDuration;
 
     public override SpellIndicator.IndicatorType SpellIndicatorType => SpellIndicator.IndicatorType.Circle;
 
@@ -28,10 +28,34 @@ public class CircleAreaSpell : SpellBase {
         _lifeTime = float.Parse(values[2]);
         _delay = float.Parse(values[3]);
         _collisionDelay = float.Parse(values[4]);
-        _collisionTime = float.Parse(values[5]);
+        _collisionDuration = float.Parse(values[5]);
     }
 
     public override void Play(SpellPlayData playData) {
+        base.Play(playData);
+        var spawnBulletInfo = new SpawnBulletInfo {
+            PrefabID = _data.PrefabID,
+            ProjectileScale = _scale,
+            ProjectileDelay = _delay,
+            FirePosition = playData.heroPos,
+            InitPosition = playData.attackPos,
+            InitDirection = playData.direction,
+            IgnoreFireModel = false,
+            LifeTime = _lifeTime
+        };
+        if (!BulletSpawner.Spawn(spawnBulletInfo, out Bullet bullet)) return;
+        var collisionInfo = new AreaCollisionInfo {
+            HeroIndex = playData.heroIndex,
+            AttackID = playData.attackID,
+            SpellID = _data.ID,
+            Delay = _collisionDelay,
+            Duration = _collisionDuration,
+            Waves = _data.Waves,
+            Position = playData.attackPos,
+            Direction = playData.direction,
+            Radius = _radius,
+        };
+        BulletSpawner.AddCollisionComponent(collisionInfo, bullet);
         //base.Play(position, heroPosition, direction);
         //var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         //var entity = entityManager.CreateEntity();

@@ -39,6 +39,10 @@ namespace HeroFishing.Battle {
                 _inField = value;
                 if (!_inField) {
                     Lock(false);
+                    if (s_aliveMonsters.Contains(this)) {
+                        s_aliveMonsters.Remove(this);
+                        s_idxToMonsterMapping.Remove(MonsterIdx);
+                    }
                 }
             }
         }
@@ -270,7 +274,49 @@ namespace HeroFishing.Battle {
             }
         }
 
-        public static bool TryGetMonster(int idx, out Monster monster) {
+        public static int GetMonstersInRange(Vector3 position, float range, Monster[] monsters, Monster exclusiveMonster = null) {
+            int index = 0;
+            for (int i = 0; i < s_aliveMonsters.Count; i++) {
+                var monster = s_aliveMonsters[i];
+                if (monster == exclusiveMonster) continue;
+                var monsterPos = monster.transform.position;
+                monsterPos.y = position.y;
+
+                var sqrDistance = Vector3.SqrMagnitude(position - monsterPos);
+                var radius = monster.MyData.Radius + range;
+                if (sqrDistance < radius * radius) {
+                    monsters[index] = monster;
+                    index++;
+                    if (index == monsters.Length)
+                        break;
+                }
+            }
+            return index;
+        }
+
+        public static int GetMonstersInRangeWithAngle(Vector3 position, float range, Vector3 direction, float angle, Monster[] monsters, Monster exclusiveMonster = null) {
+            int index = 0;
+            for (int i = 0; i < s_aliveMonsters.Count; i++) {
+                var monster = s_aliveMonsters[i];
+                if (monster == exclusiveMonster) continue;
+                var monsterPos = monster.transform.position;
+                monsterPos.y = position.y;
+
+                if (Vector3.Angle(monsterPos - position, direction) > angle / 2) continue;
+
+                var sqrDistance = Vector3.SqrMagnitude(position - monsterPos);
+                var radius = monster.MyData.Radius + range;
+                if (sqrDistance < radius * radius) {
+                    monsters[index] = monster;
+                    index++;
+                    if (index == monsters.Length)
+                        break;
+                }
+            }
+            return index;
+        }
+
+        public static bool TryGetMonsterByIdx(int idx, out Monster monster) {
             return s_idxToMonsterMapping.TryGetValue(idx, out monster);
         }
 

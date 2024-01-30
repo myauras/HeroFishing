@@ -54,7 +54,7 @@ public class BulletCollision : CollisionBase {
         base.OnUpdate(deltaTime);
 
         bool hasTarget = _info.TargetMonsterIdx != -1;
-        bool isTargetMonsterAlive = Monster.TryGetMonster(_info.TargetMonsterIdx, out _targetMonster);
+        bool isTargetMonsterAlive = Monster.TryGetMonsterByIdx(_info.TargetMonsterIdx, out _targetMonster);
         if (hasTarget && !isTargetMonsterAlive)
             hasTarget = false;
 

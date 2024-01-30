@@ -30,6 +30,28 @@ public class SectorAreaSpell : SpellBase {
     }
 
     public override void Play(SpellPlayData playData) {
+        base.Play(playData);
+        var spawnBulletInfo = new SpawnBulletInfo {
+            PrefabID = _data.PrefabID,
+            ProjectileScale = _scale,
+            InitPosition = playData.attackPos,
+            InitDirection = playData.direction,
+            IgnoreFireModel = false,
+            LifeTime = _lifeTime,
+        };
+        if (!BulletSpawner.Spawn(spawnBulletInfo, out Bullet bullet)) return;
+        var collisionInfo = new AreaCollisionInfo {
+            HeroIndex = playData.heroIndex,
+            AttackID = playData.attackID,
+            SpellID = _data.ID,
+            Radius = _radius,
+            Waves = _data.Waves,
+            Position = playData.attackPos,
+            Direction = playData.direction,
+            Angle = _angle,
+            Duration = _lifeTime,
+        };
+        BulletSpawner.AddCollisionComponent(collisionInfo, bullet);
         //base.Play(position, heroPosition, direction);
         //var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         //var entity = entityManager.CreateEntity();

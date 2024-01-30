@@ -57,12 +57,18 @@ public static class BulletSpawner {
     }
 
     public static void AddCollisionComponent(BulletCollisionInfo info, Bullet bullet) {
-        if (!bullet.gameObject.TryGetComponent<BulletCollision>(out var collision))
-            collision = bullet.gameObject.AddComponent<BulletCollision>();
+        var collision = AddCollisionComponent<BulletCollision>(bullet);
         collision.Init(info);
     }
 
     public static void AddCollisionComponent(AreaCollisionInfo info, Bullet bullet) {
+        var collision = AddCollisionComponent<AreaCollision>(bullet);
+        collision.Init(info);
+    }
 
+    private static T AddCollisionComponent<T>(Bullet bullet) where T : MonoBehaviour {
+        if (!bullet.gameObject.TryGetComponent<T>(out var collision))
+            collision = bullet.gameObject.AddComponent<T>();
+        return collision;
     }
 }
