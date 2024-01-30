@@ -3,6 +3,7 @@ using HeroFishing.Main;
 using HeroFishing.Socket;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -24,6 +25,8 @@ public class BulletCollision : CollisionBase {
     private Transform _t;
     private Vector3 _position;
     private Monster _targetMonster;
+    private List<Monster> _alreadyHitMonsters;
+    //private Monster[] _waitToNetworkMonsters = new Monster[4];
 
     private static Vector2Int[] _offsetGrids;
     public void Init(BulletCollisionInfo info) {
@@ -43,14 +46,13 @@ public class BulletCollision : CollisionBase {
         _info = info;
         _t = transform;
         _position = _t.position;
+        if (!_info.DestroyOnCollision)
+            _alreadyHitMonsters = new List<Monster>();
     }
 
     public override void OnUpdate(float deltaTime) {
         base.OnUpdate(deltaTime);
-        //Debug.Log("bullet " + Time.frameCount);
-        //MonsterGrid.LogAllGridMonsters();
-        //Debug.Log(Time.frameCount);
-        //Debug.Log(_info.Speed + " " + deltaTime + " " + _info.Direction);
+
         bool hasTarget = _info.TargetMonsterIdx != -1;
         bool isTargetMonsterAlive = Monster.TryGetMonster(_info.TargetMonsterIdx, out _targetMonster);
         if (hasTarget && !isTargetMonsterAlive)
@@ -73,17 +75,19 @@ public class BulletCollision : CollisionBase {
         for (int i = 0; i < _offsetGrids.Length; i++) {
             var gridToCheck = gridPos + _offsetGrids[i];
             if (!MonsterGrid.TryGetMonsters(gridToCheck, out var monsters)) continue;
-            //Debug.Log(monsters.Count);
             for (int j = 0; j < monsters.Count; j++) {
                 var monster = monsters[j];
                 if (hasTarget && monster != _targetMonster) continue;
-                if (!isTargetMonsterAlive && monster == _targetMonster) continue;
+                //if (!isTargetMonsterAlive && monster == _targetMonster) continue;
+                if (!monster.IsAlive) continue;
+                if (_alreadyHitMonsters != null && _alreadyHitMonsters.Contains(monster)) continue;
 
                 var monsterPosition = monster.transform.position;
                 monsterPosition.y = _position.y;
                 var sqrDistance = Vector3.SqrMagnitude(monsterPosition - _position);
                 var radius = _info.Radius + monster.MyData.Radius;
                 if (sqrDistance < radius * radius) {
+                    _alreadyHitMonsters?.Add(monster);
                     monster.OnHit(_info.SpellID, transform.forward);
 
                     HitParticleSpawner.Spawn(new SpawnHitParticleInfo {
@@ -105,11 +109,20 @@ public class BulletCollision : CollisionBase {
                         spellData.Spell.OnHit(hitInfo);
                     }
 
-                    if (GameConnector.Connected) {
-                        // TODO: Network
-                    }
-                    else {
 
+                    if (!GameConnector.Connected) {
+                        float value = UnityEngine.Random.value;
+                        if (value < BattleManager.Instance.LocalDieThreshold) {
+                            if (WorldStateManager.Instance.IsFrozen) {
+                                monster.Explode(_info.HeroIndex);
+                            }
+                            else {
+                                monster.Die(_info.HeroIndex);
+                            }
+                        }
+                    }
+                    else /*if (_alreadyHitMonsters == null)*/ {
+                        GameConnector.Instance.Hit(_info.AttackID, new int[] { monster.MonsterIdx }, _info.SpellID);
                     }
 
                     if (_info.DestroyOnCollision) {
@@ -119,6 +132,12 @@ public class BulletCollision : CollisionBase {
                 }
             }
         }
+
+        // 原本想要大家蒐集後一起丟出，但不能用這方法，因為already不會清空，會一直丟封包出去
+        //if (GameConnector.Connected && _alreadyHitMonsters != null) {
+        //    int[] idxs = _alreadyHitMonsters.Select(m => m.MonsterIdx).ToArray();
+        //    GameConnector.Instance.Hit(_info.AttackID, _alreadyHitMonsters.Select(m => m.MonsterIdx).ToArray(), _info.SpellID);
+        //}
 
         _t.position = _position;
     }
