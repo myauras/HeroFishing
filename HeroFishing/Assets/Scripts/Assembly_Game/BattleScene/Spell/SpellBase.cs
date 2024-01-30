@@ -31,7 +31,11 @@ public abstract class SpellBase {
 
     public virtual void IndicatorCallback(GameObject go) { }
 
-    public void OnHit(EntityCommandBuffer.ParallelWriter writer, SpellHitTag hitTag) {
-        if (Hit != null) { Hit.OnHit(writer, hitTag); }
+    public void OnHit(SpellHitInfo hitInfo) {
+        if (Hit != null)
+            Hit.OnHit(hitInfo);
     }
+    //public void OnHit(EntityCommandBuffer.ParallelWriter writer, SpellHitTag hitTag) {
+    //    if (Hit != null) { Hit.OnHit(writer, hitTag); }
+    //}
 }

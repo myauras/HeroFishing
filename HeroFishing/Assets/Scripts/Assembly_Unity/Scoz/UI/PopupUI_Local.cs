@@ -83,11 +83,10 @@ namespace Scoz.Func {
         }
 
         [HeaderAttribute("==============點擊關閉彈窗==============")]
-        [SerializeField]
-        GameObject ClickCancelGo = null;
-        [SerializeField]
-        Text ClickCancelText = null;
-        Action ClickCancelAction = null;
+        [SerializeField]GameObject ClickCancelGo = null;
+        [SerializeField]Text ClickCancelText = null;
+        [SerializeField] Text ConfrimText = null;
+        [SerializeField]Action ClickCancelAction = null;
         Action<object> ClickCancelActionWithParam = null;
         object ClickCancelParam;
 
@@ -95,18 +94,22 @@ namespace Scoz.Func {
             ClickCancelGo.SetActive(false);
         }
 
-        public static void ShowClickCancel(string _text, Action _clickCancelAction) {
+        public static void ShowClickCancel(string _text, string _confirmText,Action _clickCancelAction) {
             if (!Instance)
                 return;
             Instance.ClickCancelGo.SetActive(true);
             Instance.ClickCancelText.text = _text;
+            if (_confirmText != "") Instance.ConfrimText.text = _confirmText;
+            else Instance.ConfrimText.text = StringJsonData_UnityAssembly.GetUIString("Confirm");
             Instance.ClickCancelAction = _clickCancelAction;
         }
-        public static void ShowClickCancel(string _text, Action<object> _clickCancelAction, object _param) {
+        public static void ShowClickCancel(string _text, string _confirmText, Action<object> _clickCancelAction, object _param) {
             if (!Instance)
                 return;
             Instance.ClickCancelGo.SetActive(true);
             Instance.ClickCancelText.text = _text;
+            if (_confirmText != "") Instance.ConfrimText.text = _confirmText;
+            else Instance.ConfrimText.text = StringJsonData_UnityAssembly.GetUIString("Confirm");
             Instance.ClickCancelActionWithParam = _clickCancelAction;
             Instance.ClickCancelParam = _param;
         }

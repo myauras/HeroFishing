@@ -16,20 +16,28 @@ public class HeroMoveBehaviour : MonoBehaviour {
     private Vector3 _targetPosition;
     private Quaternion _initRotation;
 
+    private Transform _moveTarget;
+
     private bool _isMoving;
     public bool IsMoving => _isMoving;
 
     private bool _isMovingBack;
     public void BeginMoving(float delay, float moveTime, float height, Vector3 targetPosition, float backTime) {
+        if (_moveTarget == null) {
+            _moveTarget = transform.GetChild(0);
+            if (_moveTarget == null)
+                throw new System.Exception("move target is null");
+        }
+
         _delay = delay;
         _moveTime = moveTime;
         _backTime = backTime;
         //var distance = (targetPosition - transform.position).magnitude;
         _height = height;
         GetABValue();
-        _initPosition = transform.position;
+        _initPosition = _moveTarget.position;
         _targetPosition = targetPosition;
-        _initRotation = transform.rotation;
+        _initRotation = _moveTarget.rotation;
         _startTime = Time.time;
         _startMovingTime = Time.time + _delay;
 
@@ -51,7 +59,7 @@ public class HeroMoveBehaviour : MonoBehaviour {
         float deltaTime = Time.deltaTime;
         if (_isMoving) {
             if (!_isMovingBack) {
-               
+
                 // 時間小於delay，不做動作
                 if (currentTime - _startTime < _delay) return;
 
@@ -59,41 +67,41 @@ public class HeroMoveBehaviour : MonoBehaviour {
                 var normalizedTime = (currentTime - _startMovingTime) / _moveTime;
                 // 如果不做跳躍，直接lerp起始位置與終點位置
                 if (_height == 0) {
-                    transform.position = Vector3.Lerp(_initPosition, _targetPosition, normalizedTime);
+                    _moveTarget.position = Vector3.Lerp(_initPosition, _targetPosition, normalizedTime);
                 }
                 // 需要跳躍，位置的y帶入 ax^2 + bx
                 else {
                     var position = Vector3.Lerp(_initPosition, _targetPosition, normalizedTime);
                     position.y = _a * normalizedTime * normalizedTime + _b * normalizedTime;
-                    transform.position = position;
+                    _moveTarget.position = position;
                     //Debug.Log("position " + position);
                 }
 
                 // 超過移動時間，重置位置，並且往回頭走
                 if (currentTime - _startMovingTime >= _moveTime) {
                     _isMovingBack = true;
-                    transform.position = _targetPosition;
+                    _moveTarget.position = _targetPosition;
                     //Debug.Log("finish");
                 }
             }
             else {
                 // 還沒旋轉到定位前，先不移動
-                if (transform.rotation != Quaternion.Euler(0, 180, 0) * _initRotation) {
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 180, 0) * _initRotation, 600 * deltaTime);
-                    if(transform.rotation == Quaternion.Euler(0, 180, 0) * _initRotation) {
+                if (_moveTarget.rotation != Quaternion.Euler(0, 180, 0) * _initRotation) {
+                    _moveTarget.rotation = Quaternion.RotateTowards(_moveTarget.rotation, Quaternion.Euler(0, 180, 0) * _initRotation, 600 * deltaTime);
+                    if (_moveTarget.rotation == Quaternion.Euler(0, 180, 0) * _initRotation) {
                         _startMovingTime = currentTime;
                     }
                 }
                 // 已經旋轉定位，回到原位
                 else {
                     var normalizedTime = (currentTime - _startMovingTime) / _backTime;
-                    transform.position = Vector3.Lerp(_targetPosition, _initPosition, normalizedTime);
+                    _moveTarget.position = Vector3.Lerp(_targetPosition, _initPosition, normalizedTime);
 
                     if (currentTime - _startMovingTime >= _backTime) {
                         _isMovingBack = false;
                         _isMoving = false;
-                        transform.position = _initPosition;
-                        transform.rotation = _initRotation;
+                        _moveTarget.position = _initPosition;
+                        _moveTarget.rotation = _initRotation;
                     }
                 }
 

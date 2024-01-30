@@ -83,9 +83,16 @@ namespace HeroFishing.Socket {
                 return;
             }
             // 建立房間成功
-            WriteLog.LogColor("建立房間成功", WriteLog.LogType.Connection);
-            //設定玩家目前所在遊戲房間的資料並開始偵聽DBMatchgame(偵聽到DBMatchgame好後會自動去連Matchgame socket)
+            WriteLog.LogColorFormat("建立房間成功: ", WriteLog.LogType.Connection, DebugUtils.ObjToStr(_reply));
+            //設定玩家目前所在遊戲房間的資料
             AllocatedRoom.Instance.SetRoom(_reply.CreaterID, _reply.PlayerIDs, _reply.DBMapID, _reply.DBMatchgameID, _reply.IP, _reply.Port, _reply.PodName);
+            UniTask.Void(async () => {
+                var bsonDoc = await RealmManager.Query_GetDoc(DBGameCol.matchgame.ToString(), _reply.DBMatchgameID);
+                if (bsonDoc != null) {
+                    var dbMatchgame = new DBMatchgame(bsonDoc);
+                    GameConnector.Instance.ConnToMatchgame();
+                }
+            });
         }
 
         private void OnCreateRoomError(Exception _exception) {
@@ -112,15 +119,16 @@ namespace HeroFishing.Socket {
             if (AllocatedRoom.Instance.InGame) return;
             AllocatedRoom.Instance.SetInGame(true);
             WriteLog.LogColor("DBMatchgame已建立好, 開始連線到Matchgame", WriteLog.LogType.Connection);
-            var dbMatchgame = GamePlayer.Instance.GetMatchGame();
-            if (dbMatchgame == null) {
-                WriteLog.LogError("JoinMatchgame失敗，dbMatchgame is null");
-                OnConnToMatchgameCB?.Invoke(false);
-                return;
-            }
-            JoinMatchgame().Forget(); //開始連線到Matchgame
-            //跳轉到BattleScene
-            PopupUI.CallSceneTransition(MyScene.BattleScene);
+            UniTask.Void(async () => {
+                var dbMatchgame = await GamePlayer.Instance.GetMatchGame();
+                if (dbMatchgame == null) {
+                    WriteLog.LogError("JoinMatchgame失敗，dbMatchgame is null");
+                    OnConnToMatchgameCB?.Invoke(false);
+                    return;
+                }
+                JoinMatchgame().Forget(); //開始連線到Matchgame                                          
+                PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
+            });
         }
         /// <summary>
         /// 加入Matchmage

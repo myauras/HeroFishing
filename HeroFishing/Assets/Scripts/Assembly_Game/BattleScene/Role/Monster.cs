@@ -25,6 +25,7 @@ namespace HeroFishing.Battle {
         private GameObject LockObj;
 
         private static readonly List<Monster> s_aliveMonsters = new List<Monster>();
+        private static readonly Dictionary<int, Monster> s_idxToMonsterMapping = new Dictionary<int, Monster>();
         private static readonly Dictionary<int, List<Material>> s_originMatDic = new();
         private static readonly Dictionary<int, List<Material>> s_frozenMatDic = new();
 
@@ -38,10 +39,17 @@ namespace HeroFishing.Battle {
                 _inField = value;
                 if (!_inField) {
                     Lock(false);
+                    if (s_aliveMonsters.Contains(this)) {
+                        s_aliveMonsters.Remove(this);
+                        s_idxToMonsterMapping.Remove(MonsterIdx);
+                    }
+                    Observable.Timer(TimeSpan.FromMilliseconds(1000)).Subscribe(_ => {
+                        Destroy(gameObject);
+                    });
                 }
             }
         }
-        public bool IsAlive => s_aliveMonsters.Contains(this) && InField;
+        public bool IsAlive => s_aliveMonsters.Contains(this);
 
         public void SetData(int _monsterID, int _monsterIdx, Action _ac) {
             MyData = MonsterJsonData.GetData(_monsterID);
@@ -62,8 +70,10 @@ namespace HeroFishing.Battle {
                 AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
                 SetModel();
                 LoadDone();
-                if (!s_aliveMonsters.Contains(this))
+                if (!s_aliveMonsters.Contains(this)) {
                     s_aliveMonsters.Add(this);
+                    s_idxToMonsterMapping.Add(MonsterIdx, this);
+                }
                 _ac?.Invoke();
             });
         }
@@ -123,6 +133,9 @@ namespace HeroFishing.Battle {
             if (Explosion != null)
                 Explosion.Explode();
             DieInternal(heroIndex);
+            Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ => {
+                Destroy(gameObject);
+            });
         }
 
         public void Die(int heroIndex) {
@@ -132,6 +145,9 @@ namespace HeroFishing.Battle {
                 }
             });
             DieInternal(heroIndex);
+            Observable.Timer(TimeSpan.FromSeconds(3.5)).Subscribe(_ => {
+                Destroy(gameObject);
+            });
         }
 
         private void DieInternal(int heroIndex) {
@@ -151,8 +167,10 @@ namespace HeroFishing.Battle {
                         MyMonsterSpecialize.PlayDropEffect(MyData.DropID, heroIndex);
                 }
             }
-            if (s_aliveMonsters.Contains(this))
+            if (s_aliveMonsters.Contains(this)) {
                 s_aliveMonsters.Remove(this);
+                s_idxToMonsterMapping.Remove(MonsterIdx);
+            }
 
             Lock(false);
         }
@@ -265,15 +283,50 @@ namespace HeroFishing.Battle {
             }
         }
 
-        public static bool TryGetMonster(int id, int idx, out Monster monster) {
-            monster = null;
-            foreach (var aliveMonster in s_aliveMonsters) {
-                if (aliveMonster.MonsterID == id && aliveMonster.MonsterIdx == idx) {
-                    monster = aliveMonster;
-                    return true;
+        public static int GetMonstersInRange(Vector3 position, float range, Monster[] monsters, Monster exclusiveMonster = null) {
+            int index = 0;
+            for (int i = 0; i < s_aliveMonsters.Count; i++) {
+                var monster = s_aliveMonsters[i];
+                if (monster == exclusiveMonster) continue;
+                var monsterPos = monster.transform.position;
+                monsterPos.y = position.y;
+
+                var sqrDistance = Vector3.SqrMagnitude(position - monsterPos);
+                var radius = monster.MyData.Radius + range;
+                if (sqrDistance < radius * radius) {
+                    monsters[index] = monster;
+                    index++;
+                    if (index == monsters.Length)
+                        break;
                 }
             }
-            return false;
+            return index;
+        }
+
+        public static int GetMonstersInRangeWithAngle(Vector3 position, float range, Vector3 direction, float angle, Monster[] monsters, Monster exclusiveMonster = null) {
+            int index = 0;
+            for (int i = 0; i < s_aliveMonsters.Count; i++) {
+                var monster = s_aliveMonsters[i];
+                if (monster == exclusiveMonster) continue;
+                var monsterPos = monster.transform.position;
+                monsterPos.y = position.y;
+
+                if (Vector3.Angle(monsterPos - position, direction) > angle / 2) continue;
+
+                var sqrDistance = Vector3.SqrMagnitude(position - monsterPos);
+                var radius = monster.MyData.Radius + range;
+                if (sqrDistance < radius * radius) {
+                    monsters[index] = monster;
+                    index++;
+                    if (index == monsters.Length)
+                        break;
+                }
+            }
+            return index;
+        }
+
+        public static bool TryGetMonsterByIdx(int idx, out Monster monster) {
+            return s_idxToMonsterMapping.TryGetValue(idx, out monster);
         }
 
 #if UNITY_EDITOR
