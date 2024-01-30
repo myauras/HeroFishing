@@ -111,6 +111,8 @@ namespace HeroFishing.Battle {
 
         private void SpawnMonster() {
             if (MyMonsterScheduler == null) return;
+            if (!MyMonsterScheduler.TryDequeueMonster(out var monsterInfo)) return;
+            MonsterSpawner.Spawn(monsterInfo, out var monster);
             //if (!MyMonsterScheduler.TryDequeueMonster(out SpawnData spawnData)) return;
 
             //var entity = _entityManager.CreateEntity();

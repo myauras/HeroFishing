@@ -42,6 +42,7 @@ namespace HeroFishing.Battle {
         public bool IsInit { get; private set; }
         public static bool BossExist { get; set; }//BOSS是否存在場上的標記
 
+        Queue<SpawnMonsterInfo> SpawnMonsterQueue = new Queue<SpawnMonsterInfo>();
         //Queue<SpawnData> SpawnMonsterQueue = new Queue<SpawnData>();//出怪排程
         Dictionary<int, int> SpawnTimerDic;//<MonsterSpawn表ID,出怪倒數秒數>
 
@@ -110,7 +111,21 @@ namespace HeroFishing.Battle {
         public void EnqueueMonster(int[] _monsterIDs, int[] _monsterIdxs, int _routeID, bool _isBoss, float _spawnTime, int _playerIndex) {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
             if(_monsterIDs.Length != _monsterIdxs.Length) { WriteLog.LogError("monster id 數量跟 idx 數量不符"); }
-
+            List<SpawnMonsterInfo.MonsterInfo> monsters = new List<SpawnMonsterInfo.MonsterInfo>(_monsterIDs.Length);
+            for (int i = 0; i < _monsterIDs.Length; i++) {
+                monsters.Add(new SpawnMonsterInfo.MonsterInfo {
+                    ID = _monsterIDs[i],
+                    Idx = _monsterIdxs[i],
+                });
+            }
+            SpawnMonsterInfo spawnMonsterInfo = new SpawnMonsterInfo() {
+                Monsters = monsters,
+                RouteID = _routeID,
+                IsBoss = _isBoss,
+                SpawnTime = _spawnTime,
+                PlayerIndex = _playerIndex,
+            };
+            SpawnMonsterQueue.Enqueue(spawnMonsterInfo);
             //NativeArray<MonsterData> monsters = new NativeArray<MonsterData>(_monsterIDs.Length, Allocator.Persistent);
             //for (int i = 0; i < monsters.Length; i++) {
             //    MonsterData monster = new MonsterData {
@@ -151,6 +166,14 @@ namespace HeroFishing.Battle {
             //};
 
             //SpawnMonsterQueue.Enqueue(spawnData);
+        }
+
+        public bool TryDequeueMonster(out SpawnMonsterInfo spawn) {
+            bool result = SpawnMonsterQueue.TryDequeue(out spawn);
+            if (result) {
+                if (spawn.IsBoss) BossExist = true;
+            }
+            return result;
         }
 
         ///// <summary>

@@ -25,6 +25,7 @@ namespace HeroFishing.Battle {
         private GameObject LockObj;
 
         private static readonly List<Monster> s_aliveMonsters = new List<Monster>();
+        private static readonly Dictionary<int, Monster> s_idxToMonsterMapping = new Dictionary<int, Monster>();
         private static readonly Dictionary<int, List<Material>> s_originMatDic = new();
         private static readonly Dictionary<int, List<Material>> s_frozenMatDic = new();
 
@@ -62,8 +63,10 @@ namespace HeroFishing.Battle {
                 AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
                 SetModel();
                 LoadDone();
-                if (!s_aliveMonsters.Contains(this))
+                if (!s_aliveMonsters.Contains(this)) {
                     s_aliveMonsters.Add(this);
+                    s_idxToMonsterMapping.Add(MonsterIdx, this);
+                }
                 _ac?.Invoke();
             });
         }
@@ -151,8 +154,10 @@ namespace HeroFishing.Battle {
                         MyMonsterSpecialize.PlayDropEffect(MyData.DropID, heroIndex);
                 }
             }
-            if (s_aliveMonsters.Contains(this))
+            if (s_aliveMonsters.Contains(this)) {
                 s_aliveMonsters.Remove(this);
+                s_idxToMonsterMapping.Remove(MonsterIdx);
+            }
 
             Lock(false);
         }
@@ -265,15 +270,8 @@ namespace HeroFishing.Battle {
             }
         }
 
-        public static bool TryGetMonster(int id, int idx, out Monster monster) {
-            monster = null;
-            foreach (var aliveMonster in s_aliveMonsters) {
-                if (aliveMonster.MonsterID == id && aliveMonster.MonsterIdx == idx) {
-                    monster = aliveMonster;
-                    return true;
-                }
-            }
-            return false;
+        public static bool TryGetMonster(int idx, out Monster monster) {
+            return s_idxToMonsterMapping.TryGetValue(idx, out monster);
         }
 
 #if UNITY_EDITOR
