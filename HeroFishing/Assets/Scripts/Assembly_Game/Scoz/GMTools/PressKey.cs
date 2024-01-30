@@ -32,9 +32,6 @@ namespace Scoz.Func {
 
             } else if (Input.GetKeyDown(KeyCode.I)) {
 
-                var dbMatchgames = RealmManager.MyRealm.All<DBMatchgame>();//DBMatchgame在PopulateInitialSubscriptions中只取有自己在內的遊戲房所以直接用All不用再篩選
-                WriteLog.LogColor("文件數量:" + dbMatchgames.Count(), WriteLog.LogType.Realm);
-
                 var dbMaps = RealmManager.MyRealm.All<DBMap>();
                 WriteLog.LogColor("文件數量:" + dbMaps.Count(), WriteLog.LogType.Realm);
 

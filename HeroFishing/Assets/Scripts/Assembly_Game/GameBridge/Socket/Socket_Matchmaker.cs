@@ -20,7 +20,7 @@ namespace HeroFishing.Socket {
         readonly Subject<CREATEROOM_TOCLIENT> CreateRoomSubject = new Subject<CREATEROOM_TOCLIENT>();
         public IObservable<Unit> LogInObservable => LogInSubject;
         public IObservable<CREATEROOM_TOCLIENT> CreateRoomObservable => CreateRoomSubject;
-     
+
         public void CreateMatchmaker(string _ip, int _port) {
             if (TCP_MatchmakerClient != null)
                 TCP_MatchmakerClient.Close();
@@ -74,8 +74,7 @@ namespace HeroFishing.Socket {
             if (!string.IsNullOrEmpty(packet.ErrMsg)) {
                 //WriteLog.LogError("Create MatchmakerRoom Fail : " + packet.ErrMsg);
                 CreateRoomSubject?.OnError(new Exception(packet.ErrMsg));
-            }
-            else
+            } else
                 CreateRoomSubject?.OnNext(packet.Content);
         }
 
@@ -96,17 +95,9 @@ namespace HeroFishing.Socket {
                         WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
                         return;
                     }
-                    switch (cmdType) {
-                        case SocketContent.MatchmakerCMD_TCP.AUTH_TOCLIENT:
-                            WriteLog.LogColor("AUTH_REPLY", WriteLog.LogType.Connection);
-                            break;
-                        case SocketContent.MatchmakerCMD_TCP.CREATEROOM_TOCLIENT:
-                            WriteLog.LogColor("CREATEROOM_REPLY", WriteLog.LogType.Connection);
-                            break;
-                    }
+                    WriteLog.LogWarningFormat("收到未登錄的訊息: {0}", cmdType);
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 WriteLog.LogError("Parse收到的封包時出錯 : " + e.ToString());
                 if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) {
                     WriteLog.LogErrorFormat("不在{0}就釋放資源: ", MyScene.BattleScene, e.ToString());
