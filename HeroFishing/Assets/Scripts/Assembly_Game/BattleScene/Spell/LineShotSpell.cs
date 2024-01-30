@@ -34,6 +34,31 @@ public class LineShotSpell : SpellBase {
     }
 
     public override void Play(SpellPlayData playData) {
+        base.Play(playData);
+        var position = playData.heroPos + new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);//子彈高度固定調整
+        var spawnData = new SpawnBulletInfo() {
+            PrefabID = _data.PrefabID,
+            SubPrefabID = _data.SubPrefabID,
+            InitPosition = position,
+            InitDirection = playData.direction,
+            IgnoreFireModel = false,
+            ProjectileDelay = _delay,
+            LifeTime = _lifeTime,
+        };
+        if (!BulletSpawner.Spawn(spawnData, out Bullet bullet)) return;
+        var bulletCollisionInfo = new BulletCollisionInfo() {
+            HeroIndex = playData.heroIndex,
+            AttackID = playData.attackID,
+            SpellID = _data.ID,
+            Speed = _speed,
+            Direction = playData.direction,
+            Radius = _radius,
+            IsSub = false,
+            DestroyOnCollision = _data.DestroyOnCollision,
+            TargetMonsterIdx = playData.monsterIdx,
+        };
+
+        BulletSpawner.AddCollisionComponent(bulletCollisionInfo, bullet);
         //base.Play(position, heroPosition, direction);
         //var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         //var entity = entityManager.CreateEntity();
