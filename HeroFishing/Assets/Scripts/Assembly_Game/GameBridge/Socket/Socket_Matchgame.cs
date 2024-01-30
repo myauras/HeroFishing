@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using HeroFishing.Battle;
 using HeroFishing.Main;
 using HeroFishing.Socket.Matchgame;
@@ -52,18 +53,20 @@ namespace HeroFishing.Socket {
             if (UDP_MatchgameClient != null && UDP_MatchgameClient.CheckTimerInTime()) {
                 UDP_MatchgameClient.Close();
                 UDP_MatchgameClient = new GameObject("GameUdpSocket").AddComponent<UdpSocket>();
-                var dbMatchgame = GamePlayer.Instance.GetMatchGame();
-                if (dbMatchgame == null) { WriteLog.LogError("OnMatchgameUDPDisconnect時重連失敗，dbMatchgame is null"); return; }
-                UDP_MatchgameClient.Init(dbMatchgame.IP, dbMatchgame.Port ?? 0);
-                UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
-                    WriteLog.LogColor("OnMatchgameUDPDisconnect後重連結果 :" + connected, WriteLog.LogType.Connection);
-                    if (connected)
-                        UDP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameUDPMsg;
-                    else {
-                        this.MatchgameDisconnect();
-                    }
+                UniTask.Void(async () => {
+                    var dbMatchgame = await GamePlayer.Instance.GetMatchGame();
+                    if (dbMatchgame == null) { WriteLog.LogError("OnMatchgameUDPDisconnect時重連失敗，dbMatchgame is null"); return; }
+                    UDP_MatchgameClient.Init(dbMatchgame.IP, dbMatchgame.Port ?? 0);
+                    UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
+                        WriteLog.LogColor("OnMatchgameUDPDisconnect後重連結果 :" + connected, WriteLog.LogType.Connection);
+                        if (connected)
+                            UDP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameUDPMsg;
+                        else {
+                            this.MatchgameDisconnect();
+                        }
+                    });
+                    UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
                 });
-                UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
             } else {
                 WriteLog.LogError("OnUDPDisconnect");
                 this.MatchgameDisconnect();

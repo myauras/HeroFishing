@@ -60,7 +60,7 @@ namespace Scoz.Func {
                 return IntKeyJsonDic[_name].ToDictionary(a => a.Key, a => a.Value as T);
             } else {
                 string log = string.Format("{0}表不存IntKeyJsonDic中", _name);
-                PopupUI_Local.ShowClickCancel(log, null);
+                PopupUI_Local.ShowClickCancel(log, "",null);
                 WriteLog_UnityAssembly.LogErrorFormat(log);
                 return null;
             }
@@ -73,7 +73,7 @@ namespace Scoz.Func {
                 return StrKeyJsonDic[_name].ToDictionary(a => a.Key, a => a.Value as T);
             } else {
                 string log = string.Format("{0}表不存StrKeyJsonDic中", _name);
-                PopupUI_Local.ShowClickCancel(log, null);
+                PopupUI_Local.ShowClickCancel(log, "", null);
                 WriteLog_UnityAssembly.LogErrorFormat(log);
                 return null;
             }
@@ -89,7 +89,7 @@ namespace Scoz.Func {
             else {
                 string log = string.Format("{0}表不存在ID:{1}的資料", _name, _id);
                 if (showErrorMsg) {
-                    PopupUI_Local.ShowClickCancel(log, null);
+                    PopupUI_Local.ShowClickCancel(log, "", null);
                 }
                 WriteLog_UnityAssembly.LogErrorFormat(log);
                 return null;
@@ -105,7 +105,7 @@ namespace Scoz.Func {
                 return StrKeyJsonDic[_name][_id] as T;
             else {
                 string log = string.Format("{0}表不存在ID:{1}的資料", _name, _id);
-                PopupUI_Local.ShowClickCancel(log, null);
+                PopupUI_Local.ShowClickCancel(log, "", null);
                 WriteLog_UnityAssembly.LogErrorFormat(log);
                 return null;
             }

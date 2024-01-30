@@ -111,7 +111,7 @@ namespace Scoz.Func {
             yield return new WaitForSeconds(20);
             if (CheckInternetCoroutine != null)
                 StopCoroutine(CheckInternetCoroutine);
-            PopupUI_Local.ShowClickCancel(StringJsonData_UnityAssembly.GetUIString("NoInternetShutDown"), () => {
+            PopupUI_Local.ShowClickCancel(StringJsonData_UnityAssembly.GetUIString("NoInternetShutDown"), "",() => {
                 Application.Quit();
             });
         }
@@ -141,7 +141,7 @@ namespace Scoz.Func {
 
             if (totalSize > 0) {//有要下載跳訊息
                 string downloadStr = string.Format(StringJsonData_UnityAssembly.GetUIString("StartDownloadAsset"), MyMath_UnityAssembly.BytesToMB(totalSize).ToString("0.00"));
-                PopupUI_Local.ShowClickCancel(downloadStr, () => {
+                PopupUI_Local.ShowClickCancel(downloadStr,"", () => {
                     //顯示下載條
                     ShowDownloadUI(true);
                     StartCoroutine(Loading(totalSize));
