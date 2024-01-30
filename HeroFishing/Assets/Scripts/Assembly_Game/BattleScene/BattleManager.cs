@@ -31,7 +31,10 @@ namespace HeroFishing.Battle {
         private int _testBet;
         [SerializeField]
         private bool _isSpellTest;
+        [SerializeField]
+        private float _localDieThreshold;
         public bool IsSpellTest => _isSpellTest;
+        public float LocalDieThreshold => _localDieThreshold;
 
         private int _bet = 1;
         public int Bet => _bet;
