@@ -43,10 +43,13 @@ namespace HeroFishing.Battle {
                         s_aliveMonsters.Remove(this);
                         s_idxToMonsterMapping.Remove(MonsterIdx);
                     }
+                    Observable.Timer(TimeSpan.FromMilliseconds(1000)).Subscribe(_ => {
+                        Destroy(gameObject);
+                    });
                 }
             }
         }
-        public bool IsAlive => s_aliveMonsters.Contains(this) && InField;
+        public bool IsAlive => s_aliveMonsters.Contains(this);
 
         public void SetData(int _monsterID, int _monsterIdx, Action _ac) {
             MyData = MonsterJsonData.GetData(_monsterID);
@@ -130,6 +133,9 @@ namespace HeroFishing.Battle {
             if (Explosion != null)
                 Explosion.Explode();
             DieInternal(heroIndex);
+            Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ => {
+                Destroy(gameObject);
+            });
         }
 
         public void Die(int heroIndex) {
@@ -139,6 +145,9 @@ namespace HeroFishing.Battle {
                 }
             });
             DieInternal(heroIndex);
+            Observable.Timer(TimeSpan.FromSeconds(3.5)).Subscribe(_ => {
+                Destroy(gameObject);
+            });
         }
 
         private void DieInternal(int heroIndex) {

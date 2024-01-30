@@ -45,7 +45,7 @@ public class MonsterGrid : MonoBehaviour, IUpdate {
             s_currentFrameCount = Time.frameCount;
         }
 
-        if (_monster.MyData.Speed != 0 && !WorldStateManager.Instance.IsFrozen) {
+        if (_monster.MyData.Speed != 0 && !WorldStateManager.Instance.IsFrozen && _monster.IsAlive) {
             _position += _monster.MyData.Speed * deltaTime * transform.forward;
             _t.position = _position;
         }
@@ -67,9 +67,6 @@ public class MonsterGrid : MonoBehaviour, IUpdate {
         if (!PosInRemovalBoundary(_position)) {
             if (_monster.InField) {
                 _monster.InField = false;
-                Observable.Timer(TimeSpan.FromMilliseconds(1000)).Subscribe(_ => {
-                    Destroy(gameObject);
-                });
             }
         }
     }

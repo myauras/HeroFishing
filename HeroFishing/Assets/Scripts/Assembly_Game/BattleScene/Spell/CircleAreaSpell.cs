@@ -48,7 +48,7 @@ public class CircleAreaSpell : SpellBase {
             HeroIndex = playData.heroIndex,
             AttackID = playData.attackID,
             SpellID = _data.ID,
-            Delay = _collisionDelay,
+            Delay = _collisionDelay - _delay,
             Duration = _collisionDuration,
             Waves = _data.Waves,
             Position = playData.attackPos,

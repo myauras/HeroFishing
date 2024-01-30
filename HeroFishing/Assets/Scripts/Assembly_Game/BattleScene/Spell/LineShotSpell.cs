@@ -38,7 +38,6 @@ public class LineShotSpell : SpellBase {
         var position = playData.heroPos + new Vector3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);//子彈高度固定調整
         var spawnData = new SpawnBulletInfo() {
             PrefabID = _data.PrefabID,
-            SubPrefabID = _data.SubPrefabID,
             InitPosition = position,
             InitDirection = playData.direction,
             IgnoreFireModel = false,

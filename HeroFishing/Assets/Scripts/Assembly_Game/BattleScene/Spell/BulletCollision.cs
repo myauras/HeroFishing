@@ -79,7 +79,7 @@ public class BulletCollision : CollisionBase {
                 var monster = monsters[j];
                 if (hasTarget && monster != _targetMonster) continue;
                 //if (!isTargetMonsterAlive && monster == _targetMonster) continue;
-                if (!monster.IsAlive) continue;
+                if (!monster.IsAlive || !monster.InField) continue;
                 if (_alreadyHitMonsters != null && _alreadyHitMonsters.Contains(monster)) continue;
 
                 var monsterPosition = monster.transform.position;

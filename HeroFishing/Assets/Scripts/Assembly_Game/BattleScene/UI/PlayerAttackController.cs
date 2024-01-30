@@ -29,7 +29,7 @@ namespace HeroFishing.Battle {
         public bool CanAttack {
             get {
                 if (_lockAttack && _targetMonster != null)
-                    return _targetMonster.IsAlive;
+                    return _targetMonster.IsAlive && _targetMonster.InField;
                 return _isAttack;
             }
         }
@@ -84,7 +84,7 @@ namespace HeroFishing.Battle {
             if (EventSystem.current.IsPointerOverGameObject()) return;
 
             // 如果怪物死亡或不存在，解除鎖定狀態
-            if (_targetMonster == null || !_targetMonster.IsAlive) {
+            if (_targetMonster == null || !_targetMonster.IsAlive || !_targetMonster.InField) {
                 _lockAttack = false;
                 _targetMonster = null;
             }

@@ -1,3 +1,4 @@
+using HeroFishing.Battle;
 using HeroFishing.Main;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +24,28 @@ public class SpellExplodeHit : SpellHitBase {
     }
 
     public override void OnHit(SpellHitInfo hitInfo) {
-        throw new System.NotImplementedException();
+        var position = hitInfo.HitPosition;
+        position.y = 0;
+        var spawnBulletInfo = new SpawnBulletInfo {
+            PrefabID = _data.PrefabID,
+            SubPrefabID = _data.SubPrefabID,
+            InitPosition = position,
+            InitDirection = hitInfo.HitRotation * Vector3.forward,
+            IgnoreFireModel = true,
+            ProjectileDelay = _delay,
+            LifeTime = _lifeTime,
+        };
+        if (!BulletSpawner.Spawn(spawnBulletInfo, out Bullet bullet)) return;
+        var collisionInfo = new AreaCollisionInfo {
+            HeroIndex = hitInfo.HeroIndex,
+            AttackID = hitInfo.AttackID,
+            Position = hitInfo.HitPosition,
+            Direction = hitInfo.HitRotation * Vector3.forward,
+            Radius = _radius,
+            IgnoreMonsterIdx = hitInfo.Monster.MonsterIdx,
+            Waves = _waves,
+        };
+        BulletSpawner.AddCollisionComponent(collisionInfo, bullet);
     }
     //public override void OnHit(EntityCommandBuffer.ParallelWriter writer, SpellHitTag hitTag) {
     //    var entity = writer.CreateEntity(0);

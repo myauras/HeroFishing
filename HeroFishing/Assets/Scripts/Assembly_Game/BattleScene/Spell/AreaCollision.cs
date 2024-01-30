@@ -53,11 +53,10 @@ public class AreaCollision : CollisionBase {
             return;
         _waveIndex++;
 
-        int count = 0;
+        int count;
         Monster.TryGetMonsterByIdx(_info.IgnoreMonsterIdx, out Monster ignoreMonster);
         if (_info.Angle > 0) {
             count = Monster.GetMonstersInRangeWithAngle(_info.Position, _info.Radius, _info.Direction, _info.Angle, _hitMonsters, ignoreMonster);
-            Debug.Log(count);
         }
         else {
             count = Monster.GetMonstersInRange(_info.Position, _info.Radius, _hitMonsters);
@@ -67,6 +66,7 @@ public class AreaCollision : CollisionBase {
         for (int i = 0; i < count; i++) {
             var monster = _hitMonsters[i];
             monster.OnHit(_info.SpellID, _info.Direction);
+
             var monsterPos = monster.transform.position;
             monsterPos.y = _info.Position.y;
 
