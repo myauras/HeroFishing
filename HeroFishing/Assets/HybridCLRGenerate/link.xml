@@ -46,7 +46,9 @@
     <type fullname="RayFire.RayfireRigid" preserve="all" />
   </assembly>
   <assembly fullname="Realm">
+    <type fullname="MongoDB.Bson.BsonArray" preserve="all" />
     <type fullname="MongoDB.Bson.BsonDocument" preserve="all" />
+    <type fullname="MongoDB.Bson.BsonValue" preserve="all" />
     <type fullname="Realms.ChangeSet" preserve="all" />
     <type fullname="Realms.CollectionExtensions" preserve="all" />
     <type fullname="Realms.DynamicObjectApi" preserve="all" />
@@ -80,13 +82,15 @@
     <type fullname="Realms.Sync.Credentials/AuthProvider" preserve="all" />
     <type fullname="Realms.Sync.FlexibleSyncConfiguration" preserve="all" />
     <type fullname="Realms.Sync.FlexibleSyncConfiguration/InitialSubscriptionsDelegate" preserve="all" />
+    <type fullname="Realms.Sync.MongoClient" preserve="all" />
+    <type fullname="Realms.Sync.MongoClient/Collection`1" preserve="all" />
+    <type fullname="Realms.Sync.MongoClient/Database" preserve="all" />
     <type fullname="Realms.Sync.Session" preserve="all" />
     <type fullname="Realms.Sync.Subscription" preserve="all" />
     <type fullname="Realms.Sync.SubscriptionOptions" preserve="all" />
     <type fullname="Realms.Sync.SubscriptionSet" preserve="all" />
     <type fullname="Realms.Sync.User" preserve="all" />
     <type fullname="Realms.Sync.User/FunctionsClient" preserve="all" />
-    <type fullname="Realms.Sync.WaitForSyncMode" preserve="all" />
     <type fullname="Realms.UnmanagedAccessor" preserve="all" />
     <type fullname="Realms.Weaving.IRealmObjectHelper" preserve="all" />
     <type fullname="Realms.WovenAssemblyAttribute" preserve="all" />
@@ -532,6 +536,7 @@
     <type fullname="System.Collections.Generic.Dictionary`2/KeyCollection/Enumerator" preserve="all" />
     <type fullname="System.Collections.Generic.Dictionary`2/ValueCollection" preserve="all" />
     <type fullname="System.Collections.Generic.Dictionary`2/ValueCollection/Enumerator" preserve="all" />
+    <type fullname="System.Collections.Generic.EqualityComparer`1" preserve="all" />
     <type fullname="System.Collections.Generic.ICollection`1" preserve="all" />
     <type fullname="System.Collections.Generic.IDictionary`2" preserve="all" />
     <type fullname="System.Collections.Generic.IEnumerable`1" preserve="all" />
@@ -559,6 +564,8 @@
     <type fullname="System.Diagnostics.ConditionalAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute/DebuggingModes" preserve="all" />
+    <type fullname="System.Diagnostics.DebuggerBrowsableAttribute" preserve="all" />
+    <type fullname="System.Diagnostics.DebuggerBrowsableState" preserve="all" />
     <type fullname="System.Diagnostics.DebuggerHiddenAttribute" preserve="all" />
     <type fullname="System.Double" preserve="all" />
     <type fullname="System.Enum" preserve="all" />

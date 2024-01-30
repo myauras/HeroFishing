@@ -35,6 +35,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 
 	// {{ AOT generic types
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<DBPlayer.<SetInMatchgameID>d__45>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Main.GamePlayer.<GetMatchGame>d__16,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>
@@ -44,15 +45,16 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.Poster.<Post>d__0,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.UniTaskManager.<OneTimesTask>d__11>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Scoz.Func.UniTaskManager.<RepeatTask>d__9>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<AnonymousSignup>d__17>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__16,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<GetProvider>d__20,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<GetServerTime>d__22>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<GetValidAccessToken>d__19,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<OnSignin>d__21>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<Signout>d__24>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<Subscribe_Matchgame>d__35>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<AnonymousSignup>d__26>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__25,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<GetProvider>d__29,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<GetServerTime>d__31>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<GetValidAccessToken>d__28,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<OnSignin>d__30>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<Query_GetDoc>d__34,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<Signout>d__33>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<DBPlayer.<SetInMatchgameID>d__45>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Main.GamePlayer.<GetMatchGame>d__16,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>
@@ -62,23 +64,29 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.Poster.<Post>d__0,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.UniTaskManager.<OneTimesTask>d__11>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Scoz.Func.UniTaskManager.<RepeatTask>d__9>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<AnonymousSignup>d__17>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__16,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<GetProvider>d__20,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<GetServerTime>d__22>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<GetValidAccessToken>d__19,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<OnSignin>d__21>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<Signout>d__24>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<Subscribe_Matchgame>d__35>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<AnonymousSignup>d__26>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__25,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<GetProvider>d__29,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<GetServerTime>d__31>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<GetValidAccessToken>d__28,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<OnSignin>d__30>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<Query_GetDoc>d__34,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<Signout>d__33>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__28_0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Socket.GameConnector.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Socket.HeroFishingSocket.<<OnMatchgameUDPDisconnect>b__18_0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__28_0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Socket.GameConnector.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Socket.HeroFishingSocket.<<OnMatchgameUDPDisconnect>b__18_0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.IStateMachineRunnerPromise<object>
 	// Cysharp.Threading.Tasks.ITaskPoolNode<object>
 	// Cysharp.Threading.Tasks.IUniTaskSource<System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>>>>>
@@ -167,6 +175,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Realms.RealmCollectionBase<object>
 	// Realms.RealmList<object>
 	// Realms.RealmResults<object>
+	// Realms.Sync.MongoClient.Collection<object>
 	// SerializableDictionary<int,Scoz.Func.BloomSetting>
 	// SerializableDictionary<int,object>
 	// SerializableDictionary<object,object>
@@ -672,7 +681,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<object,System.Threading.Tasks.VoidTaskResult>
 	// System.Func<object,byte>
 	// System.Func<object,float>
-	// System.Func<object,int,object>
 	// System.Func<object,int>
 	// System.Func<object,long>
 	// System.Func<object,object,byte,object,object>
@@ -733,7 +741,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Nullable<Realms.RealmValue.HandlesToCleanup>
 	// System.Nullable<Realms.Schema.Property>
 	// System.Nullable<System.DateTimeOffset>
-	// System.Nullable<System.Threading.CancellationToken>
 	// System.Nullable<System.TimeSpan>
 	// System.Nullable<byte>
 	// System.Nullable<float>
@@ -1189,29 +1196,29 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	public void RefMethods()
 	{
 		// object Cinemachine.CinemachineVirtualCamera.GetCinemachineComponent<object>()
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,DBPlayer.<SetInMatchgameID>d__45>(Cysharp.Threading.Tasks.UniTask.Awaiter&,DBPlayer.<SetInMatchgameID>d__45&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Scoz.Func.UniTaskManager.<OneTimesTask>d__11>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Scoz.Func.UniTaskManager.<OneTimesTask>d__11&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Scoz.Func.UniTaskManager.<RepeatTask>d__9>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Scoz.Func.UniTaskManager.<RepeatTask>d__9&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<AnonymousSignup>d__17>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<AnonymousSignup>d__17&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<OnSignin>d__21>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<OnSignin>d__21&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<AnonymousSignup>d__26>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<AnonymousSignup>d__26&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<OnSignin>d__30>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<OnSignin>d__30&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__29&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,Service.Realms.RealmManager.<OnSignin>d__21>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,Service.Realms.RealmManager.<OnSignin>d__21&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,Service.Realms.RealmManager.<OnSignin>d__30>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,Service.Realms.RealmManager.<OnSignin>d__30&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,DBPlayer.<SetInMatchgameID>d__45>(System.Runtime.CompilerServices.TaskAwaiter&,DBPlayer.<SetInMatchgameID>d__45&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,Service.Realms.RealmManager.<OnSignin>d__21>(System.Runtime.CompilerServices.TaskAwaiter&,Service.Realms.RealmManager.<OnSignin>d__21&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,Service.Realms.RealmManager.<Signout>d__24>(System.Runtime.CompilerServices.TaskAwaiter&,Service.Realms.RealmManager.<Signout>d__24&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<AnonymousSignup>d__17>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<AnonymousSignup>d__17&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<GetServerTime>d__22>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<GetServerTime>d__22&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<Subscribe_Matchgame>d__35>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<Subscribe_Matchgame>d__35&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,Service.Realms.RealmManager.<OnSignin>d__30>(System.Runtime.CompilerServices.TaskAwaiter&,Service.Realms.RealmManager.<OnSignin>d__30&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,Service.Realms.RealmManager.<Signout>d__33>(System.Runtime.CompilerServices.TaskAwaiter&,Service.Realms.RealmManager.<Signout>d__33&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<AnonymousSignup>d__26>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<AnonymousSignup>d__26&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<GetServerTime>d__31>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<GetServerTime>d__31&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Scoz.Func.AddressablesLoader.<GetResourceByFullPath_Async>d__8<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Scoz.Func.AddressablesLoader.<GetResourceByFullPath_Async>d__8<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__16>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__16&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__25>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__25&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Main.GamePlayer.<GetMatchGame>d__16>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Main.GamePlayer.<GetMatchGame>d__16&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<SendRestfulAPI>d__10>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<SendRestfulAPI>d__10&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__16>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__16&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__25>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__25&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UnityAsyncExtensions.UnityWebRequestAsyncOperationAwaiter,Scoz.Func.Poster.<Post>d__0>(Cysharp.Threading.Tasks.UnityAsyncExtensions.UnityWebRequestAsyncOperationAwaiter&,Scoz.Func.Poster.<Post>d__0&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<GetProvider>d__20>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<GetProvider>d__20&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<GetValidAccessToken>d__19>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<GetValidAccessToken>d__19&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<GetProvider>d__29>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<GetProvider>d__29&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<GetValidAccessToken>d__28>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<GetValidAccessToken>d__28&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<Query_GetDoc>d__34>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<Query_GetDoc>d__34&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<DBPlayer.<SetInMatchgameID>d__45>(DBPlayer.<SetInMatchgameID>d__45&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27>(HeroFishing.Main.StartSceneUI.<InitPlayerData>d__27&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22>(HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__22&)
@@ -1219,31 +1226,37 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24>(HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__24&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Scoz.Func.UniTaskManager.<OneTimesTask>d__11>(Scoz.Func.UniTaskManager.<OneTimesTask>d__11&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Scoz.Func.UniTaskManager.<RepeatTask>d__9>(Scoz.Func.UniTaskManager.<RepeatTask>d__9&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Service.Realms.RealmManager.<AnonymousSignup>d__17>(Service.Realms.RealmManager.<AnonymousSignup>d__17&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Service.Realms.RealmManager.<GetServerTime>d__22>(Service.Realms.RealmManager.<GetServerTime>d__22&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Service.Realms.RealmManager.<OnSignin>d__21>(Service.Realms.RealmManager.<OnSignin>d__21&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Service.Realms.RealmManager.<Signout>d__24>(Service.Realms.RealmManager.<Signout>d__24&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Service.Realms.RealmManager.<Subscribe_Matchgame>d__35>(Service.Realms.RealmManager.<Subscribe_Matchgame>d__35&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Service.Realms.RealmManager.<AnonymousSignup>d__26>(Service.Realms.RealmManager.<AnonymousSignup>d__26&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Service.Realms.RealmManager.<GetServerTime>d__31>(Service.Realms.RealmManager.<GetServerTime>d__31&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Service.Realms.RealmManager.<OnSignin>d__30>(Service.Realms.RealmManager.<OnSignin>d__30&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<Service.Realms.RealmManager.<Signout>d__33>(Service.Realms.RealmManager.<Signout>d__33&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<HeroFishing.Main.GamePlayer.<GetMatchGame>d__16>(HeroFishing.Main.GamePlayer.<GetMatchGame>d__16&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<HeroFishing.Socket.GameConnector.<SendRestfulAPI>d__10>(HeroFishing.Socket.GameConnector.<SendRestfulAPI>d__10&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Scoz.Func.AddressablesLoader.<GetResourceByFullPath_Async>d__8<object>>(Scoz.Func.AddressablesLoader.<GetResourceByFullPath_Async>d__8<object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Scoz.Func.Poster.<Post>d__0>(Scoz.Func.Poster.<Post>d__0&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__16>(Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__16&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<GetProvider>d__20>(Service.Realms.RealmManager.<GetProvider>d__20&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<GetValidAccessToken>d__19>(Service.Realms.RealmManager.<GetValidAccessToken>d__19&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__25>(Service.Realms.RealmManager.<CallAtlasFunc_InitPlayerData>d__25&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<GetProvider>d__29>(Service.Realms.RealmManager.<GetProvider>d__29&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<GetValidAccessToken>d__28>(Service.Realms.RealmManager.<GetValidAccessToken>d__28&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<Query_GetDoc>d__34>(Service.Realms.RealmManager.<Query_GetDoc>d__34&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__28_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__28_0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.HeroFishingSocket.<<OnMatchgameUDPDisconnect>b__18_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.HeroFishingSocket.<<OnMatchgameUDPDisconnect>b__18_0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>(HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>(HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>(HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d>(Service.Realms.RealmManager.<>c__DisplayClass15_0.<<CallAtlasFuncNoneAsync>b__0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__28_0>d>(HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__28_0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Socket.GameConnector.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d>(HeroFishing.Socket.GameConnector.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Socket.HeroFishingSocket.<<OnMatchgameUDPDisconnect>b__18_0>d>(HeroFishing.Socket.HeroFishingSocket.<<OnMatchgameUDPDisconnect>b__18_0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d>(Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d&)
 		// Cysharp.Threading.Tasks.UniTask<object> Cysharp.Threading.Tasks.UniTaskExtensions.AsUniTask<object>(System.Threading.Tasks.Task<object>,bool)
 		// object LitJson.JsonMapper.ToObject<object>(string)
 		// Realms.IRealmCollection<object> Realms.CollectionExtensions.AsRealmCollection<object>(System.Linq.IQueryable<object>)
 		// System.Void Realms.CollectionExtensions.PopulateCollection<object>(System.Collections.Generic.ICollection<object>,System.Collections.Generic.ICollection<object>,bool,bool)
 		// System.Void Realms.CollectionExtensions.PopulateCollectionCore<object>(System.Collections.Generic.ICollection<object>,System.Collections.Generic.ICollection<object>,bool,bool,System.Func<object,object>)
-		// System.Threading.Tasks.Task<System.Linq.IQueryable<object>> Realms.CollectionExtensions.SubscribeAsync<object>(System.Linq.IQueryable<object>,Realms.Sync.SubscriptionOptions,Realms.Sync.WaitForSyncMode,System.Nullable<System.Threading.CancellationToken>)
 		// System.IDisposable Realms.CollectionExtensions.SubscribeForNotifications<object>(System.Linq.IQueryable<object>,Realms.NotificationCallbackDelegate<object>)
 		// object Realms.Helpers.Argument.EnsureType<object>(object,string,string)
 		// System.Collections.Generic.IList<object> Realms.ManagedAccessor.GetListValue<object>(string)
@@ -1254,6 +1267,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// object Realms.Realm.Find<object>(string)
 		// object Realms.Realm.FindCore<object>(Realms.RealmValue)
 		// object Realms.RealmValue.AsRealmObject<object>()
+		// Realms.Sync.MongoClient.Collection<object> Realms.Sync.MongoClient.Database.GetCollection<object>(string)
 		// Realms.Sync.Subscription Realms.Sync.SubscriptionSet.Add<object>(System.Linq.IQueryable<object>,Realms.Sync.SubscriptionOptions)
 		// System.Threading.Tasks.Task<object> Realms.Sync.User.FunctionsClient.CallAsync<object>(string,object[])
 		// System.Threading.Tasks.Task<object> Realms.Sync.User.FunctionsClient.CallSerializedAsync<object>(string,string,string)
@@ -1319,31 +1333,28 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Linq.Expressions.Expression<object> System.Linq.Expressions.Expression.Lambda<object>(System.Linq.Expressions.Expression,string,bool,System.Collections.Generic.IEnumerable<System.Linq.Expressions.ParameterExpression>)
 		// System.Linq.IQueryable<object> System.Linq.IQueryProvider.CreateQuery<object>(System.Linq.Expressions.Expression)
 		// int System.Linq.IQueryProvider.Execute<int>(System.Linq.Expressions.Expression)
-		// object System.Linq.IQueryProvider.Execute<object>(System.Linq.Expressions.Expression)
 		// int System.Linq.Queryable.Count<object>(System.Linq.IQueryable<object>)
-		// object System.Linq.Queryable.ElementAt<object>(System.Linq.IQueryable<object>,int)
 		// System.Linq.IQueryable<object> System.Linq.Queryable.Where<object>(System.Linq.IQueryable<object>,System.Linq.Expressions.Expression<System.Func<object,bool>>)
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<SetupConfig>d__23>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<SetupConfig>d__23&)
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<System.Threading.Tasks.VoidTaskResult>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<SetupConfig>d__23>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<SetupConfig>d__23&)
+		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<SetupConfig>d__32>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<SetupConfig>d__32&)
+		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<System.Threading.Tasks.VoidTaskResult>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<SetupConfig>d__32>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<SetupConfig>d__32&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<byte>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,SpellLevelUI.<Upgrade>d__18>(System.Runtime.CompilerServices.TaskAwaiter&,SpellLevelUI.<Upgrade>d__18&)
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<CallAtlasFunc>d__14>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<CallAtlasFunc>d__14&)
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.Start<Service.Realms.RealmManager.<SetupConfig>d__23>(Service.Realms.RealmManager.<SetupConfig>d__23&)
+		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<CallAtlasFunc>d__23>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<CallAtlasFunc>d__23&)
+		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.Start<Service.Realms.RealmManager.<SetupConfig>d__32>(Service.Realms.RealmManager.<SetupConfig>d__32&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<byte>.Start<SpellLevelUI.<Upgrade>d__18>(SpellLevelUI.<Upgrade>d__18&)
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<Realms.CollectionExtensions.<SubscribeAsync>d__18<object>>(Realms.CollectionExtensions.<SubscribeAsync>d__18<object>&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<Realms.Sync.User.FunctionsClient.<CallSerializedAsync>d__4<object>>(Realms.Sync.User.FunctionsClient.<CallSerializedAsync>d__4<object>&)
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<CallAtlasFunc>d__14>(Service.Realms.RealmManager.<CallAtlasFunc>d__14&)
+		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<CallAtlasFunc>d__23>(Service.Realms.RealmManager.<CallAtlasFunc>d__23&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,AutoBackPool.<OnEnable>d__2>(Cysharp.Threading.Tasks.UniTask.Awaiter&,AutoBackPool.<OnEnable>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,BulletInstance.<Dispose>d__3>(Cysharp.Threading.Tasks.UniTask.Awaiter&,BulletInstance.<Dispose>d__3&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Socket.TcpClient.<Thread_Connect>d__37>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Socket.TcpClient.<Thread_Connect>d__37&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<EmailPWSignup>d__18>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<EmailPWSignup>d__18&)
+		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<EmailPWSignup>d__27>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<EmailPWSignup>d__27&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,SpellActivationBehaviour.<OnSpellPlay>d__2>(Cysharp.Threading.Tasks.UniTask.Awaiter&,SpellActivationBehaviour.<OnSpellPlay>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,SpellShakeCamera.<Play>d__6>(Cysharp.Threading.Tasks.UniTask.Awaiter&,SpellShakeCamera.<Play>d__6&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<byte>,SpellBtn.<Upgrade>d__32>(System.Runtime.CompilerServices.TaskAwaiter<byte>&,SpellBtn.<Upgrade>d__32&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<EmailPWSignup>d__18>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<EmailPWSignup>d__18&)
+		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<EmailPWSignup>d__27>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<EmailPWSignup>d__27&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<AutoBackPool.<OnEnable>d__2>(AutoBackPool.<OnEnable>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<BulletInstance.<Dispose>d__3>(BulletInstance.<Dispose>d__3&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<HeroFishing.Socket.TcpClient.<Thread_Connect>d__37>(HeroFishing.Socket.TcpClient.<Thread_Connect>d__37&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Service.Realms.RealmManager.<EmailPWSignup>d__18>(Service.Realms.RealmManager.<EmailPWSignup>d__18&)
+		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Service.Realms.RealmManager.<EmailPWSignup>d__27>(Service.Realms.RealmManager.<EmailPWSignup>d__27&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<SpellActivationBehaviour.<OnSpellPlay>d__2>(SpellActivationBehaviour.<OnSpellPlay>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<SpellBtn.<Upgrade>d__32>(SpellBtn.<Upgrade>d__32&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<SpellShakeCamera.<Play>d__6>(SpellShakeCamera.<Play>d__6&)
