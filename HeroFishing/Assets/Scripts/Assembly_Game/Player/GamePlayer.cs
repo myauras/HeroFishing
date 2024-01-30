@@ -36,9 +36,7 @@ namespace HeroFishing.Main {
         public bool InitDBPlayerDocs() {
             DBPlayerDatas.Clear();
             // DBPlayer
-            WriteLog.Log("a="+ RealmManager.MyApp.CurrentUser.Id);
             var dbPlayer = RealmManager.MyRealm.Find<DBPlayer>(RealmManager.MyApp.CurrentUser.Id);
-            WriteLog.Log("b");
             if (dbPlayer == null) {
                 WriteLog.LogError("InitDBPlayerDatas時，取得DBPlayer為null");
                 return false;
