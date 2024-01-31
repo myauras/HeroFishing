@@ -115,7 +115,6 @@ namespace Scoz.Func {
             Application.targetFrameRate = TargetFPS;
 #endif
             RealmManager.NewApp();//初始化Realm
-            RealmManager.InitDB();//初始化RealmDB
             //產生一個新玩家
             new GamePlayer();
             //建立FirebaseManager
