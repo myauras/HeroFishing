@@ -155,11 +155,6 @@ namespace HeroFishing.Battle {
         public void HoldStoredPoints(int monsterIdx, int points) {
             _storedMonsterPoints.Add(monsterIdx, points);
             _storedPoints += points;
-
-            if (GameConnector.Connected) {
-                var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
-                player.SetPoints(TotalPoints);
-            }
         }
 
         public void ReleaseStoredPoints(int monsterIdx) {
@@ -175,11 +170,6 @@ namespace HeroFishing.Battle {
         public void UsePoints() {
             _points -= Bet;
             OnPointUpdate?.Invoke(_points, false);
-
-            if (GameConnector.Connected) {
-                var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
-                player.SetPoints(TotalPoints);
-            }
         }
 
         public void UpdatePoints(int points) {

@@ -45,7 +45,8 @@ namespace HeroFishing.Battle {
                 return AllocatedRoom.Instance.Index;
             }
         }
-        private EntityManager _entityManager;
+        //private EntityManager _entityManager;
+        private List<int> _updateSceneIdxs = new List<int>();
 
         public MonsterScheduler MyMonsterScheduler { get; private set; }
         public static float3 MonsterCollisionPosOffset { get; private set; }//因為怪物的位置是在地板 所以檢測碰撞半徑時以地板為圓心的話子彈會打不到 所以碰撞檢測時要將判定的圓心高度提高到子彈高度
@@ -59,7 +60,7 @@ namespace HeroFishing.Battle {
             InitMonsterScheduler();
             InitPlayerHero();
             MonsterCollisionPosOffset = new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
-            _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            //_entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             _spellIndicator.Init();
             DeviceManager.AddOnFocusAction(() => {
                 if (GameConnector.Connected)
@@ -67,6 +68,7 @@ namespace HeroFishing.Battle {
             });
 
             if (GameConnector.Connected) {
+                UpdateHeros();
                 GameConnector.Instance.UpdateScene();
             }
         }
@@ -124,13 +126,14 @@ namespace HeroFishing.Battle {
 
             //是BOSS就會攝影機震動
             //if (spawnData.IsBoss)
-                CamManager.ShakeCam(CamManager.CamNames.Battle,
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_AmplitudeGain),
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_FrequencyGain),
-                    GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_Duration));
+            CamManager.ShakeCam(CamManager.CamNames.Battle,
+                GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_AmplitudeGain),
+                GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_FrequencyGain),
+                GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_Duration));
         }
 
         public void UpdateHeros() {
+            if (AllocatedRoom.Instance == null || AllocatedRoom.Instance.HeroIDs == null) return;
             for (int i = 0; i < MAX_HERO_COUNT; i++) {
                 int playerIndex = i;
                 if (Index == playerIndex) continue;
@@ -184,32 +187,78 @@ namespace HeroFishing.Battle {
         }
 
         public void UpdateScene(Spawn[] spawns, SceneEffect[] effects) {
-            for (int i = 0; i < spawns.Length; i++) {
-                //NativeArray<MonsterData> monsterDatas = new NativeArray<MonsterData>(spawns[i].Monsters.Length, Allocator.Persistent);
-                //for (int j = 0; j < monsterDatas.Length; j++) {
-                //    var monster = spawns[i].Monsters[j];
-                //    if (monster == null || monster.Death) continue;
-                //    MonsterData monsterData = new MonsterData() {
-                //        ID = monster.JsonID,
-                //        Idx = monster.Idx,
-                //    };
-                //    monsterDatas[j] = monsterData;
-                //}
-                //var entity = _entityManager.CreateEntity();
-                //_entityManager.AddComponentData(entity, new SpawnData {
-                //    Monsters = monsterDatas,
-                //    RouteID = spawns[i].RouteJsonID,
-                //    SpawnTime = (float)spawns[i].SpawnTime,
-                //    IsBoss = spawns[i].IsBoss,
-                //    PlayerIndex = Index,
-                //});
-                //_entityManager.AddComponent<RefreshSceneTag>(entity);
+            try {
+                if (spawns == null || spawns.Length == 0) return;
+                _updateSceneIdxs.Clear();
+                for (int i = 0; i < spawns.Length; i++) {
+                    var spawn = spawns[i];
+                    var routeData = RouteJsonData.GetData(spawn.RouteJsonID);
+                    var rotation = Quaternion.AngleAxis(Index * 90f, Vector3.up);
+                    var initRotation = Quaternion.LookRotation(routeData.TargetPos - routeData.SpawnPos);
+                    bool found = false;
+                    for (int j = 0; j < spawn.Monsters.Length; j++) {
+                        var spawnMonster = spawn.Monsters[j];
+                        // update
+                        if (Monster.TryGetMonsterByIdx(spawnMonster.Idx, out Monster monster)) {
+                            var monsterData = monster.MyData;
+                            float deltaTime = GameTime.Current - (float)spawn.SpawnTime;
+                            Vector3 deltaPosition = deltaTime * monsterData.Speed * (initRotation * Vector3.forward);
+                            if (Vector3.SqrMagnitude(deltaPosition) > Vector3.SqrMagnitude(routeData.TargetPos - routeData.SpawnPos))
+                                break;
+                            monster.GetComponent<MonsterGrid>().Teleport(rotation * (routeData.SpawnPos + deltaPosition));
+                            found = true;
+                            _updateSceneIdxs.Add(spawnMonster.Idx);
+                            break;
+                        }
+                    }
+                    // add
+                    if (!found) {
+                        MyMonsterScheduler.EnqueueMonster(spawn, Index);
+                    }
+
+                    //NativeArray<MonsterData> monsterDatas = new NativeArray<MonsterData>(spawns[i].Monsters.Length, Allocator.Persistent);
+                    //for (int j = 0; j < monsterDatas.Length; j++) {
+                    //    var monster = spawns[i].Monsters[j];
+                    //    if (monster == null || monster.Death) continue;
+                    //    MonsterData monsterData = new MonsterData() {
+                    //        ID = monster.JsonID,
+                    //        Idx = monster.Idx,
+                    //    };
+                    //    monsterDatas[j] = monsterData;
+                    //}
+                    //var entity = _entityManager.CreateEntity();
+                    //_entityManager.AddComponentData(entity, new SpawnData {
+                    //    Monsters = monsterDatas,
+                    //    RouteID = spawns[i].RouteJsonID,
+                    //    SpawnTime = (float)spawns[i].SpawnTime,
+                    //    IsBoss = spawns[i].IsBoss,
+                    //    PlayerIndex = Index,
+                    //});
+                    //_entityManager.AddComponent<RefreshSceneTag>(entity);
+                }
+
+                // remove
+                var idxs = Monster.GetExceptMonsterIdxs(_updateSceneIdxs);
+                for (int i = 0; i < idxs.Count; i++) {
+                    if (Monster.TryGetMonsterByIdx(idxs[i], out var monster)) {
+                        monster.DestroyGOAfterDelay(0.1f * i);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                Debug.LogError("update scene error " + ex);
             }
         }
 
         public void SetMonsterDead(int playerIndex, int[] monsterIdxs, long[] gainPoints, int[] gainHeroExps, int[] gainSpellCharge, int[] gainDrops) {
             int heroIndex = GetHeroIndex(playerIndex);
-
+            int totalExp = 0;
+            for (int i = 0; i < monsterIdxs.Length; i++) {
+                if (Monster.TryGetMonsterByIdx(monsterIdxs[i], out Monster monster)) {
+                    monster.Die(heroIndex);
+                }
+                totalExp += gainHeroExps[i];
+            }
             //var entity = _entityManager.CreateEntity();
 
             //long totalPoints = 0;
@@ -237,7 +286,7 @@ namespace HeroFishing.Battle {
 
             if (heroIndex == 0) {
                 var hero = GetHero(heroIndex);
-                //hero.AddExp(totalExp);
+                hero.AddExp(totalExp);
                 hero.ChargeSpell(gainSpellCharge);
                 for (int i = 0; i < monsterIdxs.Length; i++) {
                     hero.HoldStoredPoints(monsterIdxs[i], (int)gainPoints[i]);

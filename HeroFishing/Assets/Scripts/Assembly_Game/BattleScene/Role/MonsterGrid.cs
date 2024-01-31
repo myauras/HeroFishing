@@ -71,6 +71,11 @@ public class MonsterGrid : MonoBehaviour, IUpdate {
         }
     }
 
+    public void Teleport(Vector3 position) {
+        _position = position;
+        _t.position = _position;
+    }
+
     public static bool TryGetMonsters(Vector2Int gridPos, out List<Monster> monsters) {
         return s_gridMap.TryGetValue(gridPos, out monsters);
     }

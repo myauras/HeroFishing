@@ -1,5 +1,6 @@
 using DG.Tweening;
 using HeroFishing.Main;
+using HeroFishing.Socket;
 using Scoz.Func;
 using System;
 using System.Collections.Generic;
@@ -39,13 +40,7 @@ namespace HeroFishing.Battle {
                 _inField = value;
                 if (!_inField) {
                     Lock(false);
-                    if (s_aliveMonsters.Contains(this)) {
-                        s_aliveMonsters.Remove(this);
-                        s_idxToMonsterMapping.Remove(MonsterIdx);
-                    }
-                    Observable.Timer(TimeSpan.FromMilliseconds(1000)).Subscribe(_ => {
-                        Destroy(gameObject);
-                    });
+                    DestroyGOAfterDelay(1.0f);
                 }
             }
         }
@@ -129,31 +124,25 @@ namespace HeroFishing.Battle {
             }
         }
 
-        public void Explode(int heroIndex) {
-            if (Explosion != null)
-                Explosion.Explode();
-            DieInternal(heroIndex);
-            Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ => {
-                Destroy(gameObject);
-            });
-        }
-
         public void Die(int heroIndex) {
-            Observable.Timer(TimeSpan.FromMilliseconds(150)).Subscribe(_ => {
-                for (int i = 0; i < MySkinnedMeshRenderers.Length; i++) {
-                    MySkinnedMeshRenderers[i].enabled = false;
-                }
-            });
+            if (WorldStateManager.Instance.IsFrozen) {
+                if (Explosion != null)
+                    Explosion.Explode();
+            }
+            else {
+                Observable.Timer(TimeSpan.FromMilliseconds(150)).Subscribe(_ => {
+                    for (int i = 0; i < MySkinnedMeshRenderers.Length; i++) {
+                        MySkinnedMeshRenderers[i].enabled = false;
+                    }
+                });
+            }
             DieInternal(heroIndex);
-            Observable.Timer(TimeSpan.FromSeconds(3.5)).Subscribe(_ => {
-                Destroy(gameObject);
-            });
         }
 
         private void DieInternal(int heroIndex) {
             KillHeroIndex = heroIndex;
 
-            if (AllocatedRoom.Instance == null && KillHeroIndex == 0) {
+            if (!GameConnector.Connected && KillHeroIndex == 0) {
                 var hero = BattleManager.Instance.GetHero(KillHeroIndex);
                 hero.HoldStoredPoints(MonsterIdx, (int)MyData.Odds * BattleManager.Instance.Bet);
             }
@@ -167,12 +156,27 @@ namespace HeroFishing.Battle {
                         MyMonsterSpecialize.PlayDropEffect(MyData.DropID, heroIndex);
                 }
             }
+
+            Lock(false);
+            DestroyGOAfterDelay(3.5f);
+        }
+
+        public void DestroyGOAfterDelay(float delay) {
             if (s_aliveMonsters.Contains(this)) {
                 s_aliveMonsters.Remove(this);
                 s_idxToMonsterMapping.Remove(MonsterIdx);
             }
-
-            Lock(false);
+            Observable.Timer(TimeSpan.FromSeconds(delay)).Subscribe(_ => {
+                Destroy(gameObject);
+            });
+            //Observable.Timer(TimeSpan.FromSeconds(delay)).Subscribe(_ => {
+            //    try {
+            //        Debug.Log(MonsterIdx);
+            //        Destroy(gameObject);
+            //    }catch(Exception ex) {
+            //        Debug.LogException(ex);
+            //    }
+            //});
         }
 
         // 如果要每個Instance都創建一個材質球會再第一次創建過久。所以讓材質球的創建跟怪物ID綁定
@@ -323,6 +327,14 @@ namespace HeroFishing.Battle {
                 }
             }
             return index;
+        }
+
+        public static List<int> GetExceptMonsterIdxs(List<int> idxs) {
+            List<int> exceptIdxs = new List<int>();
+            foreach(var idx in s_idxToMonsterMapping.Keys) {
+                if(!idxs.Contains(idx)) exceptIdxs.Add(idx);
+            }
+            return exceptIdxs;
         }
 
         public static bool TryGetMonsterByIdx(int idx, out Monster monster) {

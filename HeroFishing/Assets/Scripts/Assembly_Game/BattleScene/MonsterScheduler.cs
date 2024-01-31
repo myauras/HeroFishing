@@ -110,7 +110,7 @@ namespace HeroFishing.Battle {
         /// </summary>
         public void EnqueueMonster(int[] _monsterIDs, int[] _monsterIdxs, int _routeID, bool _isBoss, float _spawnTime, int _playerIndex) {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
-            if(_monsterIDs.Length != _monsterIdxs.Length) { WriteLog.LogError("monster id 數量跟 idx 數量不符"); }
+            if (_monsterIDs.Length != _monsterIdxs.Length) { WriteLog.LogError("monster id 數量跟 idx 數量不符"); }
             List<SpawnMonsterInfo.MonsterInfo> monsters = new List<SpawnMonsterInfo.MonsterInfo>(_monsterIDs.Length);
             for (int i = 0; i < _monsterIDs.Length; i++) {
                 monsters.Add(new SpawnMonsterInfo.MonsterInfo {
@@ -146,8 +146,25 @@ namespace HeroFishing.Battle {
             //SpawnMonsterQueue.Enqueue(spawnData);//加入排程
         }
 
-        public void EnqueueMonster(Spawn spawn) {
+        public void EnqueueMonster(Spawn spawn, int playerIndex) {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
+            List<SpawnMonsterInfo.MonsterInfo> monsters = new List<SpawnMonsterInfo.MonsterInfo>(spawn.Monsters.Length);
+            for (int i = 0; i < monsters.Count; i++) {
+                var spawnMonster = spawn.Monsters[i];
+                if (spawnMonster == null || spawnMonster.Death) continue;
+                monsters.Add(new SpawnMonsterInfo.MonsterInfo {
+                    ID = spawnMonster.JsonID,
+                    Idx = spawnMonster.Idx,
+                });
+            }
+            SpawnMonsterInfo info = new SpawnMonsterInfo {
+                RouteID = spawn.RouteJsonID,
+                SpawnTime = (float)spawn.SpawnTime,
+                IsBoss = spawn.IsBoss,
+                PlayerIndex = playerIndex,
+                Monsters = monsters,
+            };
+            SpawnMonsterQueue.Enqueue(info);
 
             //NativeArray<MonsterData> monsters = new NativeArray<MonsterData>(spawn.Monsters.Length, Allocator.Persistent);
             //for (int i = 0; i < monsters.Length; i++) {

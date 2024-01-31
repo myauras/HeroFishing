@@ -82,10 +82,7 @@ public class AreaCollision : CollisionBase {
             if (!GameConnector.Connected) {
                 float value = Random.value;
                 if (value < BattleManager.Instance.LocalDieThreshold) {
-                    if (WorldStateManager.Instance.IsFrozen)
-                        monster.Explode(_info.HeroIndex);
-                    else
-                        monster.Die(_info.HeroIndex);
+                    monster.Die(_info.HeroIndex);
                 }
             }
         }

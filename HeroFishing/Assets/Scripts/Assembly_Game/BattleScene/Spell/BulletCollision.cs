@@ -113,12 +113,7 @@ public class BulletCollision : CollisionBase {
                     if (!GameConnector.Connected) {
                         float value = UnityEngine.Random.value;
                         if (value < BattleManager.Instance.LocalDieThreshold) {
-                            if (WorldStateManager.Instance.IsFrozen) {
-                                monster.Explode(_info.HeroIndex);
-                            }
-                            else {
-                                monster.Die(_info.HeroIndex);
-                            }
+                            monster.Die(_info.HeroIndex);
                         }
                     }
                     else /*if (_alreadyHitMonsters == null)*/ {
