@@ -27,7 +27,6 @@ public class AreaCollision : CollisionBase {
     private Bullet _bullet;
     public void Init(AreaCollisionInfo info) {
         _info = info;
-        Debug.Log(_info.Angle);
         _hitMonsters = new Monster[8];
         _timer = 0;
         _waveIndex = 0;

@@ -33,6 +33,7 @@ namespace HeroFishing.Battle {
         public event Action<int, int> OnExpUpdate;
         public event Action<SpellName> OnSpellCharge;
         public event Action<SpellName> OnSpellPlay;
+        public event Action<int, int> OnPointGet;
         public event Action<int, bool> OnPointUpdate;
 
         public static int Bet => BattleManager.Instance.Bet;
@@ -155,6 +156,8 @@ namespace HeroFishing.Battle {
         public void HoldStoredPoints(int monsterIdx, int points) {
             _storedMonsterPoints.Add(monsterIdx, points);
             _storedPoints += points;
+
+            OnPointGet?.Invoke(monsterIdx, points);
         }
 
         public void ReleaseStoredPoints(int monsterIdx) {
