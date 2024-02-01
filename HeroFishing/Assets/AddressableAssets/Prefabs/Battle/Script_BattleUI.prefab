@@ -1,5 +1,53 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4393991947036625957
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6981450785231702051}
+  - component: {fileID: 5541927585289327332}
+  m_Layer: 5
+  m_Name: CoinEffect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6981450785231702051
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4393991947036625957}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7747228548541763285}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5541927585289327332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4393991947036625957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9045ff0470fd4d74291590e13138411b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7346098638638701868
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -633,7 +681,11 @@ PrefabInstance:
     - {fileID: 4426939448630882412, guid: 174261cfc784c124ba16d175d9656b85, type: 3}
     - {fileID: 8531715220953099092, guid: 174261cfc784c124ba16d175d9656b85, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1040677426773005305, guid: 174261cfc784c124ba16d175d9656b85,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6981450785231702051}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5665564989570562366, guid: 174261cfc784c124ba16d175d9656b85,
         type: 3}
@@ -809,6 +861,18 @@ MonoBehaviour:
   - {fileID: 1109827655110159011}
   - {fileID: 5270527909478839944}
   - {fileID: 2213574157913775199}
+--- !u!114 &2335989112617246783 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5015194084691770643, guid: 174261cfc784c124ba16d175d9656b85,
+    type: 3}
+  m_PrefabInstance: {fileID: 7346098638638701868}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3121756079436096530 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5665564989570562366, guid: 174261cfc784c124ba16d175d9656b85,
@@ -828,7 +892,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lockAttack: 0
-  IsSpellTest: 0
 --- !u!114 &4436542817351657517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -850,6 +913,7 @@ MonoBehaviour:
   _levelUI: {fileID: 9066113206943863685}
   _deviceInfoUI: {fileID: 3035199173976440666}
   _coinUI: {fileID: 6595629104112178531}
+  _coinEffectUI: {fileID: 5541927585289327332}
 --- !u!114 &4711342390008998012 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2634774261812933968, guid: 174261cfc784c124ba16d175d9656b85,
@@ -964,6 +1028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 8755067133343821291}
+  _txtCoin: {fileID: 2335989112617246783}
 --- !u!114 &6782671693369962897 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4310637752319454397, guid: 174261cfc784c124ba16d175d9656b85,
@@ -1012,6 +1077,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d3c25780007aa84e93fe22202d0c483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &7747228548541763285 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1040677426773005305, guid: 174261cfc784c124ba16d175d9656b85,
+    type: 3}
+  m_PrefabInstance: {fileID: 7346098638638701868}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8305714779237542028 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1635165502527518112, guid: 174261cfc784c124ba16d175d9656b85,

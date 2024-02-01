@@ -45,9 +45,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _beizerController:
+    _directionType: 0
     _minMaxKeyCount: {x: 1, y: 2}
     _minMaxKeyValues: {x: 0.25, y: 0.75}
-    _minMaxDistance: {x: 0.8, y: 1}
+    _minMaxDistance: {x: 0.4, y: 1}
+    _minMaxXDirDistanceOnYType: {x: 0, y: 0}
     _distanceMultiplier: 0.5
   _speed: 15
   _flyingCoins: []

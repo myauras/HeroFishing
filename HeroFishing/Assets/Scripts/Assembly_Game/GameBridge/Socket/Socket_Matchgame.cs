@@ -67,7 +67,8 @@ namespace HeroFishing.Socket {
                     });
                     UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
                 });
-            } else {
+            }
+            else {
                 WriteLog.LogError("OnUDPDisconnect");
                 this.MatchgameDisconnect();
             }
@@ -110,14 +111,16 @@ namespace HeroFishing.Socket {
                     ConnectUDPMatchgame(packet.Content.ConnToken, packet.Content.Index);
 
                     JoinRoomSubject?.OnNext(Unit.Default);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     WriteLog.LogError($"UDP error: " + e);
                     JoinRoomSubject?.OnError(e);
                 }
                 if (TimeSyncer == null)
                     TimeSyncer = new GameObject("TimeSyncer").AddComponent<ServerTimeSyncer>();
                 TimeSyncer.StartCountTime();
-            } else {
+            }
+            else {
                 JoinRoomSubject?.OnError(new Exception("auth is invalid"));
             }
         }
@@ -168,7 +171,8 @@ namespace HeroFishing.Socket {
                         WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
                         break;
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 WriteLog.LogError("Parse UDP Message with Error : " + e.ToString());
             }
         }
@@ -182,7 +186,8 @@ namespace HeroFishing.Socket {
                 if (CMDCallback.TryGetValue(cmdID, out Action<string> _cb)) {
                     CMDCallback.Remove(cmdID);
                     _cb?.Invoke(_msg);
-                } else {
+                }
+                else {
                     SocketContent.MatchgameCMD_TCP cmdType;
                     if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
                         WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
@@ -235,7 +240,8 @@ namespace HeroFishing.Socket {
                             break;
                     }
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 WriteLog.LogError("Parse收到的封包時出錯 : " + e.ToString());
                 if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) {
                     WriteLog.LogErrorFormat("不在{0}就釋放資源: ", MyScene.BattleScene, e.ToString());
@@ -253,7 +259,7 @@ namespace HeroFishing.Socket {
         void HandleSETHERO(SocketCMD<SETHERO_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             AllocatedRoom.Instance.SetHeros(_packet.Content.HeroIDs, _packet.Content.HeroSkinIDs);
-            BattleManager.Instance.UpdateHeros();
+            BattleManager.Instance?.UpdateHeros();
         }
 
         void HandleHit(SocketCMD<HIT_TOCLIENT> _packet) {
@@ -261,14 +267,14 @@ namespace HeroFishing.Socket {
             if (!string.IsNullOrEmpty(_packet.ErrMsg))
                 WriteLog.LogError("Hit Error: " + _packet.ErrMsg);
             if (_packet.Content.KillMonsterIdxs == null || _packet.Content.KillMonsterIdxs.Length == 0) return;
-            BattleManager.Instance.SetMonsterDead(_packet.Content.PlayerIdx, _packet.Content.KillMonsterIdxs, _packet.Content.GainPoints, _packet.Content.GainHeroExps, _packet.Content.GainSpellCharges, _packet.Content.GainDrops);
+            BattleManager.Instance?.SetMonsterDead(_packet.Content.PlayerIdx, _packet.Content.KillMonsterIdxs, _packet.Content.GainPoints, _packet.Content.GainHeroExps, _packet.Content.GainSpellCharges, _packet.Content.GainDrops);
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.KillMonsterIdxs));
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.GainGolds));
         }
         void HandleAttack(SocketCMD<ATTACK_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             //WriteLog.Log(DebugUtils.ObjToStr(_packet.Content));
-            BattleManager.Instance.Attack(_packet.Content);
+            BattleManager.Instance?.Attack(_packet.Content);
         }
         void HandleUpdateGame(SocketCMD<UPDATEGAME_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
@@ -286,10 +292,9 @@ namespace HeroFishing.Socket {
         }
         void HandleUpdateScene(SocketCMD<UPDATESCENE_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
-            BattleManager.Instance.UpdateScene(_packet.Content.Spawns, _packet.Content.SceneEffects);
+            BattleManager.Instance?.UpdateScene(_packet.Content.Spawns, _packet.Content.SceneEffects);
             if (UpdateSceneGizmos.Instance != null)
                 UpdateSceneGizmos.Instance.SetUpdateScene(_packet.Content);
-            //BattleManager.Instance.MyMonsterScheduler.EnqueueMonster(_packet.Content.Spawns);
         }
         void HandleMonsterDie(SocketCMD<MONSTERDIE_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
@@ -304,7 +309,7 @@ namespace HeroFishing.Socket {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             //Debug.Log(_packet.Content.PlayerIdx);
             AllocatedRoom.Instance.SetHero(_packet.Content.PlayerIdx, 0, string.Empty);
-            BattleManager.Instance.UpdateHeros();
+            BattleManager.Instance?.UpdateHeros();
         }
     }
 }

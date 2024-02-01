@@ -342,7 +342,7 @@ namespace Scoz.Func {
         public static void PlayAudioByAudioAsset(MyAudioType _type, AssetReference _clip, bool _loop = false, float _pitch = 1, Action<AudioClip, AsyncOperationHandle> _cb = null) {
             if (!IsInit)
                 return;
-            if (_clip == null) {
+            if (_clip == null || !_clip.IsValid()) {
                 WriteLog.LogWarning("不存在的音檔");
                 return;
             }

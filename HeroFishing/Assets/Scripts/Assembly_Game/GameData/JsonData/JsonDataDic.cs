@@ -75,6 +75,9 @@ namespace Scoz.Func {
             HeroEXPJsonData.DataName = "HeroEXP";
             MyJsonData.SetData_Remote<HeroEXPJsonData>(HeroEXPJsonData.DataName, SetDic);
 
+            DropSpellJsonData.DataName = "Drop";
+            MyJsonData.SetData_Remote<DropJsonData>(DropSpellJsonData.DataName, SetDic);
+
             DropSpellJsonData.DataName = "DropSpell";
             MyJsonData.SetData_Remote<DropSpellJsonData>(DropSpellJsonData.DataName, SetDic);
 

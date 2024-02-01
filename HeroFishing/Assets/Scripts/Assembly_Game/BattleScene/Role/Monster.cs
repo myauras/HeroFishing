@@ -1,5 +1,6 @@
 using DG.Tweening;
 using HeroFishing.Main;
+using HeroFishing.Socket;
 using Scoz.Func;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,6 @@ using UnityEngine.AddressableAssets;
 
 namespace HeroFishing.Battle {
     public class Monster : Role {
-        private static List<Monster> s_aliveMonsters = new List<Monster>();
         public MonsterJsonData MyData { get; private set; }
         public int MonsterID => MyData.ID;
         public int MonsterIdx { get; private set; }
@@ -25,8 +25,10 @@ namespace HeroFishing.Battle {
 
         private GameObject LockObj;
 
-        private static readonly Dictionary<int, List<Material>> _originMatDic = new();
-        private static readonly Dictionary<int, List<Material>> _frozenMatDic = new();
+        private static readonly List<Monster> s_aliveMonsters = new List<Monster>();
+        private static readonly Dictionary<int, Monster> s_idxToMonsterMapping = new Dictionary<int, Monster>();
+        private static readonly Dictionary<int, List<Material>> s_originMatDic = new();
+        private static readonly Dictionary<int, List<Material>> s_frozenMatDic = new();
 
         private const string MAT_FREEZE_OPAQUE = "FreezeMonOp";
         private const string MAT_FREEZE_TRANSPARENT = "FreezeMonTr";
@@ -38,10 +40,11 @@ namespace HeroFishing.Battle {
                 _inField = value;
                 if (!_inField) {
                     Lock(false);
+                    DestroyGOAfterDelay(1.0f);
                 }
             }
         }
-        public bool IsAlive => s_aliveMonsters.Contains(this) && InField;
+        public bool IsAlive => s_aliveMonsters.Contains(this);
 
         public void SetData(int _monsterID, int _monsterIdx, Action _ac) {
             MyData = MonsterJsonData.GetData(_monsterID);
@@ -62,8 +65,10 @@ namespace HeroFishing.Battle {
                 AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
                 SetModel();
                 LoadDone();
-                if (!s_aliveMonsters.Contains(this))
+                if (!s_aliveMonsters.Contains(this)) {
                     s_aliveMonsters.Add(this);
+                    s_idxToMonsterMapping.Add(MonsterIdx, this);
+                }
                 _ac?.Invoke();
             });
         }
@@ -119,47 +124,68 @@ namespace HeroFishing.Battle {
             }
         }
 
-        public void Explode(int heroIndex) {
-            KillHeroIndex = heroIndex;
-            if (Explosion == null) {
-                Die(heroIndex);
-                return;
+        public void Die(int heroIndex) {
+            if (WorldStateManager.Instance.IsFrozen) {
+                if (Explosion != null)
+                    Explosion.Explode();
             }
-
-            Explosion.Explode();
-            if (s_aliveMonsters.Contains(this))
-                s_aliveMonsters.Remove(this);
-
-            Lock(false);
+            else {
+                Observable.Timer(TimeSpan.FromMilliseconds(150)).Subscribe(_ => {
+                    for (int i = 0; i < MySkinnedMeshRenderers.Length; i++) {
+                        MySkinnedMeshRenderers[i].enabled = false;
+                    }
+                });
+            }
+            DieInternal(heroIndex);
         }
 
-        public void Die(int heroIndex) {
+        private void DieInternal(int heroIndex) {
             KillHeroIndex = heroIndex;
-            if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;
-            Observable.Timer(TimeSpan.FromMilliseconds(150)).Subscribe(_ => {
-                for (int i = 0; i < MySkinnedMeshRenderers.Length; i++) {
-                    MySkinnedMeshRenderers[i].enabled = false;
-                }
-            });
 
-            //SetAniTrigger("die");
-            if (MyMonsterSpecialize != null) {
-                //MyMonsterSpecialize.PlayDissolveEffect(MySkinnedMeshRenderers[0]);
-                MyMonsterSpecialize.PlayCoinEffect(MyData.MyMonsterSize, MySkinnedMeshRenderers[0], KillHeroIndex);
+            if (!GameConnector.Connected && KillHeroIndex == 0) {
+                var hero = BattleManager.Instance.GetHero(KillHeroIndex);
+                hero.HoldStoredPoints(MonsterIdx, (int)MyData.Odds * BattleManager.Instance.Bet);
             }
-            if (s_aliveMonsters.Contains(this))
-                s_aliveMonsters.Remove(this);
+
+            if (MyData.MyMonsterType == MonsterJsonData.MonsterType.Boss) MonsterScheduler.BossExist = false;
+            if (MyMonsterSpecialize != null) {
+                MyMonsterSpecialize.CloseAddOnObjs();
+                MyMonsterSpecialize.PlayCoinEffect(MyData.MyMonsterSize, MySkinnedMeshRenderers[0], KillHeroIndex, MonsterIdx);
+                if (MyData.DropID > 0) {
+                    if (MyData.DropID == 5)
+                        MyMonsterSpecialize.PlayDropEffect(MyData.DropID, heroIndex);
+                }
+            }
 
             Lock(false);
+            DestroyGOAfterDelay(3.5f);
+        }
+
+        public void DestroyGOAfterDelay(float delay) {
+            if (s_aliveMonsters.Contains(this)) {
+                s_aliveMonsters.Remove(this);
+                s_idxToMonsterMapping.Remove(MonsterIdx);
+            }
+            Observable.Timer(TimeSpan.FromSeconds(delay)).Subscribe(_ => {
+                Destroy(gameObject);
+            });
+            //Observable.Timer(TimeSpan.FromSeconds(delay)).Subscribe(_ => {
+            //    try {
+            //        Debug.Log(MonsterIdx);
+            //        Destroy(gameObject);
+            //    }catch(Exception ex) {
+            //        Debug.LogException(ex);
+            //    }
+            //});
         }
 
         // 如果要每個Instance都創建一個材質球會再第一次創建過久。所以讓材質球的創建跟怪物ID綁定
         public void Freeze() {
             int id = MyData.ID;
             // 如果原始材質尚未存過，做一次儲存。
-            if (!_originMatDic.ContainsKey(id)) {
+            if (!s_originMatDic.ContainsKey(id)) {
                 var matList = new List<Material>();
-                _originMatDic.Add(id, matList);
+                s_originMatDic.Add(id, matList);
 
                 foreach (var renderer in MySkinnedMeshRenderers) {
                     matList.AddRange(renderer.materials);
@@ -168,9 +194,9 @@ namespace HeroFishing.Battle {
 
             // 冰凍材質，如果沒有的話就要new後填入Dictionary裡，有的話直接取用
             int startIndex = 0;
-            if (!_frozenMatDic.TryGetValue(id, out var allMatList)) {
+            if (!s_frozenMatDic.TryGetValue(id, out var allMatList)) {
                 allMatList = new List<Material>();
-                _frozenMatDic.Add(id, allMatList);
+                s_frozenMatDic.Add(id, allMatList);
                 SetupFrozenDic();
             }
             else {
@@ -191,7 +217,7 @@ namespace HeroFishing.Battle {
         public void UnFreeze() {
             if (MyAni != null)
                 MyAni.enabled = true;
-            var allMatList = _originMatDic[MyData.ID];
+            var allMatList = s_originMatDic[MyData.ID];
             int matIndex = 0;
             foreach (var renderer in MySkinnedMeshRenderers) {
                 for (int j = 0; j < renderer.sharedMaterials.Length; j++) {
@@ -256,20 +282,63 @@ namespace HeroFishing.Battle {
                 // 設定renderer
                 renderer.SetSharedMaterials(matList);
                 Explosion.SetMaterials(index, matList);
-                _frozenMatDic[MyData.ID].AddRange(matList);
+                s_frozenMatDic[MyData.ID].AddRange(matList);
                 startIndex += renderer.materials.Length;
             }
         }
 
-        public static bool TryGetMonster(int id, int idx, out Monster monster) {
-            monster = null;
-            foreach (var aliveMonster in s_aliveMonsters) {
-                if (aliveMonster.MonsterID == id && aliveMonster.MonsterIdx == idx) {
-                    monster = aliveMonster;
-                    return true;
+        public static int GetMonstersInRange(Vector3 position, float range, Monster[] monsters, Monster exclusiveMonster = null) {
+            int index = 0;
+            for (int i = 0; i < s_aliveMonsters.Count; i++) {
+                var monster = s_aliveMonsters[i];
+                if (monster == exclusiveMonster) continue;
+                var monsterPos = monster.transform.position;
+                monsterPos.y = position.y;
+
+                var sqrDistance = Vector3.SqrMagnitude(position - monsterPos);
+                var radius = monster.MyData.Radius + range;
+                if (sqrDistance < radius * radius) {
+                    monsters[index] = monster;
+                    index++;
+                    if (index == monsters.Length)
+                        break;
                 }
             }
-            return false;
+            return index;
+        }
+
+        public static int GetMonstersInRangeWithAngle(Vector3 position, float range, Vector3 direction, float angle, Monster[] monsters, Monster exclusiveMonster = null) {
+            int index = 0;
+            for (int i = 0; i < s_aliveMonsters.Count; i++) {
+                var monster = s_aliveMonsters[i];
+                if (monster == exclusiveMonster) continue;
+                var monsterPos = monster.transform.position;
+                monsterPos.y = position.y;
+
+                if (Vector3.Angle(monsterPos - position, direction) > angle / 2) continue;
+
+                var sqrDistance = Vector3.SqrMagnitude(position - monsterPos);
+                var radius = monster.MyData.Radius + range;
+                if (sqrDistance < radius * radius) {
+                    monsters[index] = monster;
+                    index++;
+                    if (index == monsters.Length)
+                        break;
+                }
+            }
+            return index;
+        }
+
+        public static List<int> GetExceptMonsterIdxs(List<int> idxs) {
+            List<int> exceptIdxs = new List<int>();
+            foreach(var idx in s_idxToMonsterMapping.Keys) {
+                if(!idxs.Contains(idx)) exceptIdxs.Add(idx);
+            }
+            return exceptIdxs;
+        }
+
+        public static bool TryGetMonsterByIdx(int idx, out Monster monster) {
+            return s_idxToMonsterMapping.TryGetValue(idx, out monster);
         }
 
 #if UNITY_EDITOR

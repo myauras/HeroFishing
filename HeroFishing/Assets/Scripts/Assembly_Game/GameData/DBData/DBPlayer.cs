@@ -53,5 +53,9 @@ public partial class DBPlayer : IRealmObject {
         //}
     }
 
-
+    public void SetPoints(int points) {
+        RealmManager.MyRealm.WriteAsync(() => {
+            Point = points;
+        });
+    }
 }

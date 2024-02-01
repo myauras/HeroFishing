@@ -1,7 +1,9 @@
 using DG.Tweening;
 using HeroFishing.Main;
+using JetBrains.Annotations;
 using Scoz.Func;
 using System;
+using System.Security.Cryptography;
 using UniRx;
 using UnityEngine;
 
@@ -9,15 +11,27 @@ namespace HeroFishing.Battle {
     public class MonsterSpecialize : MonoBehaviour {
         [SerializeField] ParticleSystem DieDissolveParticle;
         [SerializeField] ParticleSystem CoinParticle;
+        [SerializeField]
+        private GameObject[] AddOnObjs;
 
         private const float COIN_EFFECT_STRENGTH = 1f;
         private const string COIN_EFFECT_KEY = "OtherEffect/Script_CoinEffect0{0}";
         private const string COIN_EFFECT_HIT_KEY = "OtherEffect/Script_CoinHitEffect0{0}";
-        private const string FLYING_COIN = "OtherEffect/Script_FlyingCoin";
+        private const string FLYING_COIN_KEY = "OtherEffect/Script_FlyingCoin";
+
+        private const string DROP_EFFECT_HIT_KEY = "OtherEffect/Script_Hit{0}";
+        private const string FLYING_DROP_KEY = "OtherEffect/Script_FlyingDrop";
 
         void Start() {
             if (DieDissolveParticle != null) DieDissolveParticle.gameObject.SetActive(false);
         }
+
+        public void CloseAddOnObjs() {
+            for (int i = 0; i < AddOnObjs.Length; i++) {
+                AddOnObjs[i].SetActive(false);
+            }
+        }
+
         public void PlayDissolveEffect(SkinnedMeshRenderer _renderer) {
             //if (DieDissolveParticle != null) DieDissolveParticle.gameObject.SetActive(true);
 
@@ -37,10 +51,22 @@ namespace HeroFishing.Battle {
                 }
             }
             _renderer.materials = materials;  // 將修改後的材質陣列設回Renderer的材質陣列
-
         }
 
-        public void PlayCoinEffect(MonsterJsonData.MonsterSize size, SkinnedMeshRenderer smr, int heroIndex) {
+        public void PlayDropEffect(int dropID, int heroIndex) {
+            var dropData = DropJsonData.GetData(dropID);
+            string key = string.Format(DROP_EFFECT_HIT_KEY, dropData.Ref);
+            PoolManager.Instance.Pop(key, transform.position);
+
+            Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(_ => {
+                PoolManager.Instance.Pop(FLYING_DROP_KEY, transform.position, popCallback: go => {
+                    var flyingDrop = go.GetComponent<FlyingDrop>();
+                    flyingDrop.Init(dropData.Ref, heroIndex);
+                });
+            });
+        }
+
+        public void PlayCoinEffect(MonsterJsonData.MonsterSize size, SkinnedMeshRenderer smr, int heroIndex, int monsterIndex) {
             PoolManager.Instance.Pop(GetCoinEffectKey(size), popCallback: go => {
                 go.transform.position = transform.position;
                 if (size == MonsterJsonData.MonsterSize.Large) {
@@ -51,25 +77,13 @@ namespace HeroFishing.Battle {
             });
             PoolManager.Instance.Pop(GetCoinHitEffectKey(size), transform.position);
 
-            double delay = size == MonsterJsonData.MonsterSize.Large ? 2000 : 1700;
+            double delay = size == MonsterJsonData.MonsterSize.Large ? 1900 : 1700;
             Observable.Timer(TimeSpan.FromMilliseconds(delay)).Subscribe(_ => {
-                PoolManager.Instance.Pop(FLYING_COIN, transform.position, Quaternion.identity, null, go => {
+                PoolManager.Instance.Pop(FLYING_COIN_KEY, transform.position, Quaternion.identity, null, go => {
                     var flyingCoin = go.GetComponent<FlyingCoin>();
-                    flyingCoin.Init(size, heroIndex);
+                    flyingCoin.Init(size, heroIndex, monsterIndex);
                 });
             });
-            //if (CoinParticle == null) return;
-            ////Debug.Log("coin hit direction " + hitDirection);
-            //var deltaPos = hitDirection.normalized * COIN_EFFECT_STRENGTH;
-            ////設定力道
-            //var velocity = CoinParticle.velocityOverLifetime;
-            //velocity.x = new ParticleSystem.MinMaxCurve(velocity.x.constantMin + deltaPos.x, velocity.x.constantMax + deltaPos.x);
-            //velocity.z = new ParticleSystem.MinMaxCurve(velocity.z.constantMin + deltaPos.z, velocity.z.constantMax + deltaPos.z);
-            ////設定數量
-            //var emission = CoinParticle.emission;
-            //emission.SetBurst(0, new ParticleSystem.Burst(0, emitCount));
-
-            //CoinParticle.transform.parent.gameObject.SetActive(true);
         }
 
         private string GetCoinEffectKey(MonsterJsonData.MonsterSize size) {
