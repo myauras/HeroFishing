@@ -1,9 +1,6 @@
 using HeroFishing.Battle;
 using HeroFishing.Main;
-using PlasticPipe.PlasticProtocol.Messages;
 using Scoz.Func;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public struct SpawnHitParticleInfo {
