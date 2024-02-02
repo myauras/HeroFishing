@@ -121,7 +121,7 @@ namespace HeroFishing.Battle {
             _hero.UsePoints();
 
             _isAttack = false;
-            _scheduledNextAttackTime = Time.time + _spellData.CD;
+            _scheduledNextAttackTime = Time.time + _spellData.CD / _hero.AttackSpeedMultiplier;
             //攻擊方向
             var pos = _lockAttack && _targetMonster != null ? _targetMonster.transform.position : UIPosition.GetMouseWorldPointOnYZero(0);
             var dir = (pos - _hero.transform.position).normalized;

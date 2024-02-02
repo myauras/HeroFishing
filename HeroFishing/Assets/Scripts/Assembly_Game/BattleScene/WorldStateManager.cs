@@ -1,3 +1,4 @@
+using HeroFishing.Battle;
 using Scoz.Func;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,27 +26,28 @@ public class WorldStateManager : MonoBehaviour {
 
     public bool IsFrozen { get; private set; }
 
-    private Entity _worldStateEntity;
-    private EntityManager _entityManager;
+    //private Entity _worldStateEntity;
+    //private EntityManager _entityManager;
 
     private void Init() {
-        _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        _worldStateEntity = _entityManager.CreateEntity();
+        //_entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        //_worldStateEntity = _entityManager.CreateEntity();
     }
 
     public void Freeze(bool active) {
+        IsFrozen = active;
         if (_freezeEffect == null) {
             SetupFreezeModel(active);
         }
         else {
             _freezeEffect.SetActive(active);
-
+            Monster.Freeze(active);
             if (active) {
-                _entityManager.AddComponentData(_worldStateEntity, new FreezeTag());
+                //_entityManager.AddComponentData(_worldStateEntity, new FreezeTag());
                 SceneMaterialConverter.Instance.Freeze();
             }
             else {
-                _entityManager.RemoveComponent<FreezeTag>(_worldStateEntity);
+                //_entityManager.RemoveComponent<FreezeTag>(_worldStateEntity);
                 SceneMaterialConverter.Instance.Unfreeze();
             }
         }

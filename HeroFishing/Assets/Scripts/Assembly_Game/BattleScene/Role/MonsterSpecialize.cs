@@ -61,7 +61,7 @@ namespace HeroFishing.Battle {
             Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(_ => {
                 PoolManager.Instance.Pop(FLYING_DROP_KEY, transform.position, popCallback: go => {
                     var flyingDrop = go.GetComponent<FlyingDrop>();
-                    flyingDrop.Init(dropData.Ref, heroIndex);
+                    flyingDrop.Init(dropID, dropData.Ref, heroIndex);
                 });
             });
         }

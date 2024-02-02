@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace HeroFishing.Main {
     public class DropSpellJsonData : MyJsonData {
-        public enum EffectType { Frozen, Speedup, Spell }
+        public enum EffectType { Frozen, Speedup, Circle }
         public static string DataName { get; set; }
         public string Name => StringJsonData.GetString_static(DataName + "_" + ID, "Name");
         public float RTP { get; private set; }

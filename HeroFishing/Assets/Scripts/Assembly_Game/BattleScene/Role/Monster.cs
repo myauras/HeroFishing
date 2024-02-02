@@ -217,7 +217,7 @@ namespace HeroFishing.Battle {
         public void UnFreeze() {
             if (MyAni != null)
                 MyAni.enabled = true;
-            var allMatList = s_originMatDic[MyData.ID];
+            if (!s_originMatDic.TryGetValue(MyData.ID, out var allMatList)) return;
             int matIndex = 0;
             foreach (var renderer in MySkinnedMeshRenderers) {
                 for (int j = 0; j < renderer.sharedMaterials.Length; j++) {
@@ -287,6 +287,18 @@ namespace HeroFishing.Battle {
             }
         }
 
+        public static void Freeze(bool active) {
+            for (int i = 0; i < s_aliveMonsters.Count; i++) {
+                var monster = s_aliveMonsters[i];
+                if (active) {
+                    monster.Freeze();
+                }
+                else {
+                    monster.UnFreeze();
+                }
+            }
+        }
+
         public static int GetMonstersInRange(Vector3 position, float range, Monster[] monsters, Monster exclusiveMonster = null) {
             int index = 0;
             for (int i = 0; i < s_aliveMonsters.Count; i++) {
@@ -331,8 +343,8 @@ namespace HeroFishing.Battle {
 
         public static List<int> GetExceptMonsterIdxs(List<int> idxs) {
             List<int> exceptIdxs = new List<int>();
-            foreach(var idx in s_idxToMonsterMapping.Keys) {
-                if(!idxs.Contains(idx)) exceptIdxs.Add(idx);
+            foreach (var idx in s_idxToMonsterMapping.Keys) {
+                if (!idxs.Contains(idx)) exceptIdxs.Add(idx);
             }
             return exceptIdxs;
         }
