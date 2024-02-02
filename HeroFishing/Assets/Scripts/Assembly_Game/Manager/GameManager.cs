@@ -159,25 +159,8 @@ namespace Scoz.Func {
 
 
         public void OnAuthFinished(AuthType _authType) {
-            // 初始化AppsFlyer
-            SetAppsFlyer();
         }
 
-        public void SetAppsFlyer() {
-            // 詢問IOS玩家是否要開啟透明追蹤(Appsflyer會用到)
-#if APPSFLYER && UNITY_IOS && !UNITY_EDITOR
-             AppsFlyerManager.Inst.IOSAskATTUserTrack();
-#endif
-
-            //完成分析相關的註冊事件
-#if APPSFLYER
-                        // 設定玩家UID
-                        AppsFlyerManager.Inst.SetCustomerUserId(RealmManager.MyApp.CurrentUser.Id);
-                        // AppsFlyer紀錄玩家登入
-                        AppsFlyerManager.Inst.Login(RealmManager.MyApp.CurrentUser.Id);
-#endif
-
-        }
 
 
         /// <summary>
