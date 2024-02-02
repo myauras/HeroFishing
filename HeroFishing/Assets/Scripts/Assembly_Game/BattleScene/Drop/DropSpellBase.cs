@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class DropBase {
+    public virtual float Duration { get; }
     protected DropJsonData _data;
     public DropBase(DropJsonData data) {
         _data = data;

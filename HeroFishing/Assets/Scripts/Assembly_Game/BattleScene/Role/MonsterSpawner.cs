@@ -21,6 +21,7 @@ public struct SpawnMonsterInfo {
 public static class MonsterSpawner {
     public static bool Spawn(SpawnMonsterInfo spawn, out Monster monster) {
         monster = null;
+        if (WorldStateManager.Instance.IsFrozen) return false;
         bool hasSpawn = false;
         for (int i = 0; i < spawn.Monsters.Count; i++) {
             var spawnMonster = spawn.Monsters[i];

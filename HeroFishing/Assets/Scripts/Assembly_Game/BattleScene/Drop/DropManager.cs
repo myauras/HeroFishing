@@ -1,7 +1,9 @@
 using HeroFishing.Main;
+using HeroFishing.Socket;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 public class DropManager : MonoBehaviour {
@@ -46,9 +48,18 @@ public class DropManager : MonoBehaviour {
     }
 
     public void PlayDrop(int dropID) {
-        if(_dropSpells.TryGetValue(dropID, out var drop) && _currentDrops.Contains(dropID)) {
+        if (_dropSpells.TryGetValue(dropID, out var drop) && _currentDrops.Contains(dropID)) {
             if (drop.PlayDrop()) {
-                _currentDrops.Remove(dropID);
+
+                if (drop.Duration == 0)
+                    _currentDrops.Remove(dropID);
+                else {
+                    Observable.Timer(TimeSpan.FromSeconds(drop.Duration)).Subscribe(_ => _currentDrops.Remove(dropID));
+                }
+
+                if (GameConnector.Connected) {
+                    GameConnector.Instance.DropSpell(dropID);
+                }
             }
         }
     }

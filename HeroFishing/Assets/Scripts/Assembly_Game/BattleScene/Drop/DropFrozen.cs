@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class DropFrozen : DropSpellBase {
     private float _duration;
+
+    public override float Duration => _duration;
     public DropFrozen(DropJsonData data, DropSpellJsonData spellData) : base(data, spellData) {
         _duration = spellData.EffectValue1;
     }

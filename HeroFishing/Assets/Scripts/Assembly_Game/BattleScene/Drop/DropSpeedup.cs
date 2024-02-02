@@ -9,18 +9,30 @@ using UnityEngine;
 public class DropSpeedup : DropSpellBase {
     private float _duration;
     private float _speedupMultiplier;
+    private Hero _hero;
+    private GameObject _buffGO;
+
+    public override float Duration => _duration;
+
+    private const string DROP_BUFF = "OtherEffect/Script_{0}";
 
     public DropSpeedup(DropJsonData data, DropSpellJsonData spellData) : base(data, spellData) {
         _duration = spellData.EffectValue1;
         _speedupMultiplier = spellData.EffectValue2;
+        _hero = BattleManager.Instance.GetHero(0);
     }
 
     public override bool PlayDrop() {
-        Debug.Log("play speed up");
-        BattleManager.Instance.GetHero(0).AttackSpeedMultiplier = _speedupMultiplier;
+        _hero.AttackSpeedMultiplier = _speedupMultiplier;
         _dropUI.OnDropPlay(_data.ID, _duration);
+        string path = string.Format(DROP_BUFF, _data.Ref);
+        PoolManager.Instance.Pop(path, _hero.transform.position, Quaternion.identity, null, go => _buffGO = go);
         Observable.Timer(TimeSpan.FromSeconds(_duration)).Subscribe(_ => {
-            BattleManager.Instance.GetHero(0).AttackSpeedMultiplier = 1;
+            _hero.AttackSpeedMultiplier = 1;
+            if (_buffGO != null) {
+                PoolManager.Instance.Push(_buffGO);
+                _buffGO = null;
+            }
         });
         return true;
     }
