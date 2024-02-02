@@ -29,7 +29,7 @@ namespace HeroFishing.Battle {
         public bool CanAttack {
             get {
                 if (_lockAttack && _targetMonster != null)
-                    return _targetMonster.IsAlive;
+                    return _targetMonster.IsAlive && _targetMonster.InField;
                 return _isAttack;
             }
         }
@@ -43,7 +43,7 @@ namespace HeroFishing.Battle {
             }
         }
 
-        [SerializeField] public bool IsSpellTest = false;
+        public bool IsSpellTest => BattleManager.Instance.IsSpellTest;
 
         private void Update() {
             AttackInput();
@@ -61,6 +61,11 @@ namespace HeroFishing.Battle {
             if (ControlLock) return;
             if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
+            if (!CheckSpell(SpellName.attack)) return;
+            if (!IsSpellTest && _hero.TotalPoints < Hero.Bet) {
+                PopupUI.ShowClickCancel("你的金幣不足", null);
+                return;
+            }
 
             _isAttack = true;
             _scheduledRecoverTime = Time.time + ATTACK_BUFFER_TIME;
@@ -79,13 +84,14 @@ namespace HeroFishing.Battle {
             if (EventSystem.current.IsPointerOverGameObject()) return;
 
             // 如果怪物死亡或不存在，解除鎖定狀態
-            if (_targetMonster == null || !_targetMonster.IsAlive) {
+            if (_targetMonster == null || !_targetMonster.IsAlive || !_targetMonster.InField) {
                 _lockAttack = false;
                 _targetMonster = null;
             }
 
             // 按下的時候檢查是否有抓到怪物，如果有的話就開始計時
             if (Input.GetMouseButtonDown(0)) {
+                if (BattleManager.Instance == null) return;
                 var ray = BattleManager.Instance.BattleCam.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hitInfo, 100, LayerMask.GetMask("Monster"), QueryTriggerInteraction.Ignore)) {
                     var monster = hitInfo.collider.GetComponentInParent<Monster>();
@@ -112,7 +118,8 @@ namespace HeroFishing.Battle {
         private void Attack() {
             if (!CanAttack) return;
             if (Time.time < _scheduledNextAttackTime) return;
-            if (!CheckSpell(SpellName.attack)) return;
+            _hero.UsePoints();
+
             _isAttack = false;
             _scheduledNextAttackTime = Time.time + _spellData.CD;
             //攻擊方向

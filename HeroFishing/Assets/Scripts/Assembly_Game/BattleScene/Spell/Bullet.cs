@@ -3,12 +3,13 @@ using HeroFishing.Main;
 using HeroFishing.Socket;
 using Scoz.Func;
 using System;
+using UniRx;
 using Unity.Entities;
 using Unity.VisualScripting;
 using UnityEngine;
 
 namespace HeroFishing.Battle {
-    public struct BulletInit {
+    public struct BulletInfo {
         public Vector3 FirePosition;
         public int PrefabID;
         public int SubPrefabID;
@@ -25,11 +26,7 @@ namespace HeroFishing.Battle {
     }
 #endif
     public class Bullet : MonoBehaviour {
-
-        int SpellPrefabID;
-        int SubSpellPrefabID;
-        Vector3 FirePosition;
-        float Delay;
+        private BulletInfo _info;
 
 #if UNITY_EDITOR
         BulletGizmoData gizmoData;
@@ -50,16 +47,15 @@ namespace HeroFishing.Battle {
         //        AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
         //    });
         //}
-        public void Create(BulletInit bulletInit) {
-            SpellPrefabID = bulletInit.PrefabID;
-            SubSpellPrefabID = bulletInit.SubPrefabID;
-            FirePosition = bulletInit.FirePosition;
-            Delay = bulletInit.Delay;
+        public void Create(BulletInfo bulletInfo) {
+            _info = bulletInfo;
             gameObject.SetActive(false);
-            if (!bulletInit.IgnoreFireModel)
+            if (!bulletInfo.IgnoreFireModel)
                 LoadFireModel();
-            if (Delay > 0) {
-                DOVirtual.DelayedCall(Delay, LoadProjetileModel);
+            if (_info.Delay > 0) {
+                Observable.Timer(TimeSpan.FromSeconds(_info.Delay)).Subscribe(_ => {
+                    LoadProjetileModel();
+                });
             }
             else
                 LoadProjetileModel();
@@ -67,12 +63,12 @@ namespace HeroFishing.Battle {
 
         void LoadFireModel() {
             //載入Fire模型
-            var bulletPos = FirePosition;
+            var bulletPos = _info.FirePosition;
             var bulletRot = transform.rotation;
             //string firePath = string.Format($"Bullet/{HeroName}/BulletFire{SpellPrefabID}");
             var pool = PoolManager.Instance;
             //var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", firePath);
-            pool.Pop(SpellPrefabID, 0, PoolManager.PopType.Fire, bulletPos, bulletRot, null, go => {
+            pool.Pop(_info.PrefabID, 0, PoolManager.PopType.Fire, bulletPos, bulletRot, null, go => {
                 // 讓AutoBackPool.cs自己控制返回物件池的時間
             });
         }
@@ -92,7 +88,7 @@ namespace HeroFishing.Battle {
 
             var pool = PoolManager.Instance;
             //var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", projectilePath);
-            pool.Pop(SpellPrefabID, SubSpellPrefabID, PoolManager.PopType.Projectile, Vector3.zero, Quaternion.identity, transform, go => {
+            pool.Pop(_info.PrefabID, _info.SubPrefabID, PoolManager.PopType.Projectile, Vector3.zero, Quaternion.identity, transform, go => {
                 go.transform.localScale = Vector3.one;
                 Projectile = go;
                 LoadDone();
@@ -117,7 +113,7 @@ namespace HeroFishing.Battle {
             UnityEditor.Handles.color = Color.yellow;
             if (gizmoData.Angle > 0 && gizmoData.Direction != Vector3.zero) {
                 Vector3 fromDir = Quaternion.AngleAxis(-gizmoData.Angle / 2, Vector3.up) * gizmoData.Direction;
-                gizmoData.Position.y += 0.1f;
+                gizmoData.Position.y = 0.1f;
                 UnityEditor.Handles.DrawWireArc(gizmoData.Position, Vector3.up, fromDir, gizmoData.Angle, gizmoData.Radius);
                 Gizmos.DrawRay(gizmoData.Position, fromDir * gizmoData.Radius);
                 Gizmos.DrawRay(gizmoData.Position, Quaternion.AngleAxis(gizmoData.Angle, Vector3.up) * fromDir * gizmoData.Radius);

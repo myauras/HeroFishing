@@ -65,6 +65,7 @@ namespace Service.Realms {
         public static async UniTask OnSignin() {
             WriteLog.LogColorFormat("Realm帳號登入: {0}", WriteLog.LogType.Realm, MyApp.CurrentUser);
             try {
+                InitDB();//初始化RealmDB
                 await GetServerTime();
                 await GameConnector.SendRestfulAPI("player/syncredischeck", null); //檢查是否需要同步Redis資料回玩家資料
 
