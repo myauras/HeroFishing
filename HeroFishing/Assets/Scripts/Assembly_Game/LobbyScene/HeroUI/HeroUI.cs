@@ -9,6 +9,7 @@ using TMPro;
 using System;
 using HeroFishing.Socket;
 using Cysharp.Threading.Tasks;
+using LitJson;
 
 namespace HeroFishing.Main {
     public class HeroUI : ItemSpawner_Remote<HeroIconItem> {
@@ -111,11 +112,19 @@ namespace HeroFishing.Main {
             if (CurHero == null) return;
             var mapUI = MapUI.GetInstance<MapUI>();
             if (mapUI == null) return;
-            AllocatedRoom.Init();
-            AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
-            //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
-            PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
-            GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnResult).Forget();
+
+            UniTask.Void(async () => {
+                var result = await GameConnector.SendRestfulAPI("player/syncredischeck", null); //檢查是否需要同步Redis資料回玩家資料
+                JsonData jsonData = JsonMapper.ToObject(result.ToString());
+                string resultStr = jsonData["result"].ToString();
+                WriteLog.LogColorFormat("syncredischeck: {0}", WriteLog.LogType.Realm, resultStr);
+
+                AllocatedRoom.Init();
+                AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
+                //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
+                PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
+                GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnResult).Forget();
+            });
         }
         void OnConnResult(bool _success) {
             PopupUI.HideLoading();
