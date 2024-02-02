@@ -25,6 +25,7 @@ namespace HeroFishing.Battle {
         private float _scheduledRecoverTime;
         private float _scheduledLockTime;
         private bool _isAttack;
+        private bool _repeatAttack;
         private Monster _targetMonster;
         public bool CanAttack {
             get {
@@ -57,7 +58,8 @@ namespace HeroFishing.Battle {
         //簡單說就是將攻擊指令存0.2秒，如果0.2秒內可以再次發射，會立刻發射。
         //比較不會導致狂點，但是射出時間有落差造成的卡頓感。
         private void AttackInput() {
-            if (!Input.GetMouseButtonDown(0)) return;
+            if (Input.GetMouseButtonUp(0)) _repeatAttack = false;
+            if (!Input.GetMouseButtonDown(0) && !(Input.GetMouseButton(0) && _repeatAttack)) return;
             if (ControlLock) return;
             if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
@@ -99,6 +101,9 @@ namespace HeroFishing.Battle {
                         _targetMonster = monster;
                     }
                     _scheduledLockTime = Time.time + ATTACK_LOCK_TIME;
+                }
+                else {
+                    _repeatAttack = true;
                 }
             }
 
