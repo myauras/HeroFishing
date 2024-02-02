@@ -7,8 +7,11 @@ using UnityEngine.SceneManagement;
 namespace HeroFishing.Main {
     public class StartSceneManager : MonoBehaviour {
         private void Start() {
+#if UNITY_EDITOR
+            BaseManager.CreateNewInstance();
+#else
             UniTask.Void(async () => {
-                var result = await SendRestfulAPI("game/getstate", "test"); //檢查是否需要同步Redis資料回玩家資料
+                var result = await SendRestfulAPI("game/getstate", "test");
                 JsonData jsonData = JsonMapper.ToObject(result.ToString());
                 string dataValue = jsonData["data"].ToString();
                 var review = bool.Parse(dataValue);
@@ -19,6 +22,7 @@ namespace HeroFishing.Main {
                     BaseManager.CreateNewInstance();
                 }
             });
+#endif
         }
         /// <summary>
         /// 送RestfulAPI請求
