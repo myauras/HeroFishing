@@ -81,6 +81,7 @@ namespace Service.Realms {
         /// 初始化DB後才能直接對DB下Query
         /// </summary>
         public static void InitDB() {
+            WriteLog.LogColor("開始初始化DB", WriteLog.LogType.Realm);
             MyClient = MyApp.CurrentUser.GetMongoClient("mongodb-atlas");
             MyDB = MyClient.GetDatabase("herofishing");
         }
