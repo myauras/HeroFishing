@@ -36,7 +36,7 @@ namespace Scoz.Func {
             Instance = this;
             DontDestroyOnLoad(gameObject);
             GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(Screen.width, Screen.height);
-            VersionText.text = "Ver: " + Application.version;
+            VersionText.text = "Ver: " + AOTMetadata.Version;
 #if Dev
             EnvText.text = EnvVersion.Dev.ToString();
 #elif Test
