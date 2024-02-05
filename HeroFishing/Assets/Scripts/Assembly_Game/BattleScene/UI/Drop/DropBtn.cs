@@ -37,7 +37,6 @@ public class DropBtn : MonoBehaviour {
     }
 
     public void Play(float duration = 0) {
-        _dropID = -1;
         if (duration > 0) {
             _goDuration.SetActive(true);
             _txtDuration.text = duration.ToString();
@@ -54,12 +53,14 @@ public class DropBtn : MonoBehaviour {
             }, () => {
                 _goDuration.SetActive(false);
                 _goDrop.SetActive(false);
+                _dropID = -1;
                 _imgDrop.sprite = null;
             });
         }
         else {
             _goDrop.SetActive(false);
             _imgDrop.sprite = null;
+            _dropID = -1;
         }
     }
 
