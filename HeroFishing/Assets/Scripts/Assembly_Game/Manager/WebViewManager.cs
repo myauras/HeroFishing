@@ -129,14 +129,15 @@ public class WebViewManager : MonoSingletonA<WebViewManager> {
         }
 
         UniWebView = UniWebViewObj.AddComponent<UniWebView>();
+
 #if !UNITY_EDITOR
         // 把上面Done的按鍵的文字改為關閉
         if (useToolbar) {
-            UniWebView.SetDoneButtonText(StringJsonData.GetUIString("Close"));
+            UniWebView.EmbeddedToolbar.SetDoneButtonText(StringJsonData.GetUIString("Close"));
         }
 #if !UNITY_IOS
         UniWebView.SetShowToolbar(useToolbar);
-        UniWebView.SetToolbarDoneButtonText(StringJsonData.GetUIString("Close"));
+        UniWebView.EmbeddedToolbar.SetDoneButtonText(StringJsonData.GetUIString("Close"));
 #endif
         
 #endif

@@ -106,11 +106,29 @@ namespace Service.Realms {
                 }
 
                 var utcs = new UniTaskCompletionSource();
-                using var token = MyRealm.All<DBPlayer>().Where(i => i.ID == MyApp.CurrentUser.Id).SubscribeForNotifications((sender, e) => {
-                    if (sender.Count > 0) {
+
+                // 等待Process等於2才完成
+                int process = 0;
+                Action checkProcess = () => {
+                    WriteLog.LogError("process=" + process);
+                    if (process == 2) {
                         utcs.TrySetResult();
                     }
+                };
+
+                using var token = MyRealm.All<DBPlayer>().Where(i => i.ID == MyApp.CurrentUser.Id).SubscribeForNotifications((sender, e) => {
+                    if (sender.Count > 0) {
+                        process++;
+                        checkProcess();
+                    }
                 });
+                using var token2 = MyRealm.All<DBPlayerState>().Where(i => i.ID == MyApp.CurrentUser.Id).SubscribeForNotifications((sender, e) => {
+                    if (sender.Count > 0) {
+                        process++;
+                        checkProcess();
+                    }
+                });
+
 
                 await utcs.Task;
                 return replyData;
