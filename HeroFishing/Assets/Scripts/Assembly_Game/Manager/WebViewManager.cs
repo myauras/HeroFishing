@@ -219,7 +219,7 @@ public class WebViewManager : MonoSingletonA<WebViewManager> {
     public void SetTitleText(string titleText) {
 #if !UNITY_EDITOR      
         if (UniWebView != null) {
-            UniWebView.SetDoneButtonText(titleText);
+            UniWebView.EmbeddedToolbar.SetDoneButtonText(titleText);
         }
 #endif
     }
