@@ -55,10 +55,19 @@ public abstract class UniWebViewAuthenticationCommonFlow: MonoBehaviour {
             StartAuthenticationFlow();
         }
     }
-
-    // Subclass should override this method to start the authentication flow. Usually it starts
-    // a `UniWebViewAuthenticationFlow`. But you can also choose whatever you need to do.
+    
+    /// <summary>
+    /// Subclass should override this method to start the authentication flow. Usually it starts
+    /// a `UniWebViewAuthenticationFlow`. But you can also choose whatever you need to do. 
+    /// </summary>
     public abstract void StartAuthenticationFlow();
+
+    /// <summary>
+    /// Subclass should override this method to start the authentication flow. Usually it starts
+    /// a Unity Web Request against the authentication flow's token entry point to refresh the token.
+    /// </summary>
+    /// <param name="refreshToken">The refresh token.</param>
+    public abstract void StartRefreshTokenFlow(string refreshToken);
 
     // Child classes are expected to call this method to request a `state` (and store it for later check) if the 
     // `state` verification is enabled.

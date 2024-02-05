@@ -145,7 +145,8 @@ public class WebViewManager : MonoSingletonA<WebViewManager> {
         }
         IsLoadingWebView = true;
         UniWebView.Load(url);
-        UniWebView.Show(fullscreen, useToolbar, UniWebViewToolbarPosition.Top, parentRectTransform);
+        //UniWebView.Show(fullscreen, useToolbar, UniWebViewToolbarPosition.Top, parentRectTransform); 舊版
+        UniWebView.Show(false, UniWebViewTransitionEdge.None);
 
         UniWebView.OnPageFinished += OnPageFinished;
         OnWebViewPageFinished = onWebViewPageFinished;

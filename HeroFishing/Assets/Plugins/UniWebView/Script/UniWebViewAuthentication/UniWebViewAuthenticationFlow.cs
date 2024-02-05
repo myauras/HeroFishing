@@ -19,6 +19,7 @@ using System;
 using System.Collections;
 using UnityEngine.Networking;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -77,7 +78,17 @@ public interface IUniWebViewAuthenticationFlow<TTokenType>
     /// The dictionary indicates parameters that are used to perform the access token exchange request.
     /// </returns>
     Dictionary<string, string> GetAccessTokenRequestParameters(string authResponse);
-    
+
+    /// <summary>
+    /// Returns a dictionary contains the parameters that are used to perform the access token refresh request.
+    /// The key value pairs in the dictionary are used to construct the HTTP form body of the access token refresh request.
+    /// </summary>
+    /// <param name="refreshToken">The refresh token should be used to perform the refresh request.</param>
+    /// <returns>
+    /// The dictionary indicates parameters that are used to perform the access token refresh request.
+    /// </returns>
+    Dictionary<string, string> GetRefreshTokenRequestParameters(string refreshToken);
+
     /// <summary>
     /// Returns the strong-typed token for the authentication process.
     ///
@@ -97,11 +108,21 @@ public interface IUniWebViewAuthenticationFlow<TTokenType>
     /// Called when the authentication flow succeeds and a valid token is generated.
     /// </summary>
     UnityEvent<TTokenType> OnAuthenticationFinished { get; }
-    
+
     /// <summary>
     /// Called when any error (including user cancellation) happens during the authentication flow.
     /// </summary>
     UnityEvent<long, string> OnAuthenticationErrored { get; }
+    
+    /// <summary>
+    /// Called when the access token refresh request finishes and a valid refreshed token is generated.
+    /// </summary>
+    UnityEvent<TTokenType> OnRefreshTokenFinished { get; }
+
+    /// <summary>
+    /// Called when any error happens during the access token refresh flow.
+    /// </summary>
+    UnityEvent<long, string> OnRefreshTokenErrored { get; }
 }
 
 /// <summary>
@@ -138,7 +159,7 @@ public class UniWebViewAuthenticationFlow<TTokenType> {
         };
 
         session.OnAuthenticationErrorReceived += (_, errorCode, message) => {
-            FlowErrored(errorCode, message);
+            ExchangeTokenErrored(errorCode, message);
         };
         
         UniWebViewLogger.Instance.Verbose("Starting auth flow with url: " + authUrl + "; Callback scheme: " + callbackUri.Scheme);
@@ -150,25 +171,46 @@ public class UniWebViewAuthenticationFlow<TTokenType> {
             var args = service.GetAccessTokenRequestParameters(response);
             var request = GetTokenRequest(args);
             MonoBehaviour context = (MonoBehaviour)service;
-            context.StartCoroutine(SendTokenRequest(request));
+            context.StartCoroutine(SendExchangeTokenRequest(request));
         } catch (Exception e) {
             var message = e.Message;
             var code = -1;
             if (e is AuthenticationResponseException ex) {
                 code = ex.Code;
             }
-            UniWebViewLogger.Instance.Critical("Exception on parsing response: " + e + ". Code: " + code + ". Message: " + message);
-            FlowErrored(code, message);
+            UniWebViewLogger.Instance.Critical("Exception on exchange token response: " + e + ". Code: " + code + ". Message: " + message);
+            ExchangeTokenErrored(code, message);
+        }
+    }
+
+    /// <summary>
+    /// Refresh the access token with the given refresh token.
+    /// </summary>
+    /// <param name="refreshToken"></param>
+    public void RefreshToken(string refreshToken) {
+        try {
+            var args = service.GetRefreshTokenRequestParameters(refreshToken);
+            var request = GetTokenRequest(args);
+            MonoBehaviour context = (MonoBehaviour)service;
+            context.StartCoroutine(SendRefreshTokenRequest(request));
+        } catch (Exception e) {
+            var message = e.Message;
+            var code = -1;
+            if (e is AuthenticationResponseException ex) {
+                code = ex.Code;
+            }
+            UniWebViewLogger.Instance.Critical("Exception on refresh token response: " + e + ". Code: " + code + ". Message: " + message);
+            RefreshTokenErrored(code, message);
         }
     }
 
     private string GetAuthUrl() {
         var builder = new UriBuilder(service.GetAuthenticationConfiguration().authorizationEndpoint);
-        var query = System.Web.HttpUtility.ParseQueryString("");
+        var query = new Dictionary<string, string>();
         foreach (var kv in service.GetAuthenticationUriArguments()) {
             query.Add(kv.Key, kv.Value);
         }
-        builder.Query = query.ToString();
+        builder.Query = UniWebViewAuthenticationUtils.CreateQueryString(query);
         return builder.ToString();
     }
 
@@ -181,7 +223,15 @@ public class UniWebViewAuthenticationFlow<TTokenType> {
         return UnityWebRequest.Post(builder.ToString(), form);
     }
     
-    private IEnumerator SendTokenRequest(UnityWebRequest request) {
+    private IEnumerator SendExchangeTokenRequest(UnityWebRequest request) {
+        return SendTokenRequest(request, ExchangeTokenFinished, ExchangeTokenErrored);
+    }
+
+    private IEnumerator SendRefreshTokenRequest(UnityWebRequest request) {
+        return SendTokenRequest(request, RefreshTokenFinished, RefreshTokenErrored);
+    }
+
+    private IEnumerator SendTokenRequest(UnityWebRequest request, Action<TTokenType> finishAction, Action<long, string>errorAction) {
         using (var www = request) {
             yield return www.SendWebRequest();
             if (www.result != UnityWebRequest.Result.Success) {
@@ -194,13 +244,13 @@ public class UniWebViewAuthenticationFlow<TTokenType> {
                     errorBody = www.downloadHandler.text;
                 }
                 UniWebViewLogger.Instance.Critical("Failed to get access token. Error: " + errorMessage + ". " + errorBody);
-                FlowErrored(www.responseCode, errorBody ?? errorMessage);
+                errorAction(www.responseCode, errorBody ?? errorMessage);
             } else {
                 var responseText = www.downloadHandler.text;
                 UniWebViewLogger.Instance.Info("Token exchange request succeeded. Response: " + responseText);
                 try {
                     var token = service.GenerateTokenFromExchangeResponse(www.downloadHandler.text);
-                    FlowFinished(token);
+                    finishAction(token);
                 } catch (Exception e) {
                     var message = e.Message;
                     var code = -1;
@@ -210,23 +260,38 @@ public class UniWebViewAuthenticationFlow<TTokenType> {
                     UniWebViewLogger.Instance.Critical(
                         "Exception on parsing token response: " + e + ". Code: " + code + ". Message: " + 
                         message + ". Response: " + responseText);
-                    FlowErrored(code, message);
+                    errorAction(code, message);
                 }
             }
         }
     }
-    
-    private void FlowFinished(TTokenType token) {
+
+    private void ExchangeTokenFinished(TTokenType token) {
         if (service.OnAuthenticationFinished != null) {
             service.OnAuthenticationFinished.Invoke(token);            
         }
-        service = null;;
+        service = null;
     }
     
-    private void FlowErrored(long code, string message) {
+    private void ExchangeTokenErrored(long code, string message) {
         UniWebViewLogger.Instance.Info("Auth flow errored: " + code + ". Detail: " + message);
         if (service.OnAuthenticationErrored != null) {
             service.OnAuthenticationErrored.Invoke(code, message);
+        }
+        service = null;
+    }
+    
+    private void RefreshTokenFinished(TTokenType token) {
+        if (service.OnRefreshTokenFinished != null) {
+            service.OnRefreshTokenFinished.Invoke(token);
+        }
+        service = null;
+    }
+    
+    private void RefreshTokenErrored(long code, string message) {
+        UniWebViewLogger.Instance.Info("Refresh flow errored: " + code + ". Detail: " + message);
+        if (service.OnRefreshTokenErrored != null) {
+            service.OnRefreshTokenErrored.Invoke(code, message);
         }
         service = null;
     }
