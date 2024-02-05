@@ -39,6 +39,9 @@ namespace HeroFishing.Battle {
         private int _bet = 1;
         public int Bet => _bet;
 
+        private int _playerCount;
+        public int PlayerCount => _playerCount;
+
         public int Index {
             get {
                 if (_rotateTest || AllocatedRoom.Instance == null) return _rotateTestIndex;
@@ -53,6 +56,9 @@ namespace HeroFishing.Battle {
         public Camera BattleCam => MyCam;
 
         private const int MAX_HERO_COUNT = 4;
+
+        public Action<int, int> OnHeroAdd;
+        public Action<int> OnHeroRemove;
 
         public void Init() {
             Instance = this;
@@ -94,6 +100,7 @@ namespace HeroFishing.Battle {
                 hero.SetData(_testHeroID, $"{_testHeroID}_1");
                 hero.UpdatePoints(10);
                 _bet = _testBet;
+                OnHeroAdd?.Invoke(_testHeroID, Index);
             }
             else {
                 hero.SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
@@ -102,6 +109,7 @@ namespace HeroFishing.Battle {
                 var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
                 if (player != null && player.Point.HasValue)
                     hero.UpdatePoints((int)player.Point.Value);
+                OnHeroAdd?.Invoke(AllocatedRoom.Instance.MyHeroID, Index);
             }
         }
 
@@ -133,6 +141,7 @@ namespace HeroFishing.Battle {
         }
 
         public void UpdateHeros() {
+            int count = 1;
             if (AllocatedRoom.Instance == null || AllocatedRoom.Instance.HeroIDs == null) return;
             for (int i = 0; i < MAX_HERO_COUNT; i++) {
                 int playerIndex = i;
@@ -141,17 +150,21 @@ namespace HeroFishing.Battle {
                 int heroIndex = GetHeroIndex(playerIndex);
                 Hero hero = GetHero(heroIndex);
                 // id為0，代表沒有這個hero
-                int id = AllocatedRoom.Instance.HeroIDs[i];
-                if (id == 0) {
+                int heroId = AllocatedRoom.Instance.HeroIDs[i];
+                if (heroId == 0) {
                     if (hero.IsLoaded) {
                         hero.ResetData();
                     }
+                    OnHeroRemove?.Invoke(playerIndex);
                     continue;
                 }
 
+                count++;
                 if (hero.IsLoaded) continue;
-                hero.SetData(id, AllocatedRoom.Instance.HeroSkinIDs[i]);
+                hero.SetData(heroId, AllocatedRoom.Instance.HeroSkinIDs[i]);
+                OnHeroAdd?.Invoke(heroId, playerIndex);
             }
+            _playerCount = count;
         }
 
         // 取得Hero的Index值，若自己的player index為1，那hero index是0
