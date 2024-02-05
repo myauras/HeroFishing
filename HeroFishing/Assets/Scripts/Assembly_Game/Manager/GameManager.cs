@@ -135,8 +135,6 @@ namespace Scoz.Func {
             gameObject.AddComponent<UniTaskManager>().Init();
             //建立GameConnector
             gameObject.AddComponent<GameConnector>().Init();
-            // 初始化FlutterManager
-            FlutterManager.Init();
             //Permission請求
 #if UNITY_ANDROID
             gameObject.AddComponent<AndroidPermission>().RequestLaunchPermissions();
