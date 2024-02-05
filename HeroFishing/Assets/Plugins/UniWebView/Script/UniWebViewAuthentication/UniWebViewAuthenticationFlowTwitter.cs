@@ -63,7 +63,17 @@ public class UniWebViewAuthenticationFlowTwitter : UniWebViewAuthenticationCommo
         var flow = new UniWebViewAuthenticationFlow<UniWebViewAuthenticationTwitterToken>(this);
         flow.StartAuth();
     }
-    
+
+    /// <summary>
+    /// Starts the refresh flow with the standard OAuth 2.0.
+    /// This implements the abstract method in `UniWebViewAuthenticationCommonFlow`.
+    /// </summary>
+    /// <param name="refreshToken">The refresh token received with a previous access token response.</param>
+    public override void StartRefreshTokenFlow(string refreshToken) {
+        var flow = new UniWebViewAuthenticationFlow<UniWebViewAuthenticationTwitterToken>(this);
+        flow.RefreshToken(refreshToken);
+    }
+
     /// <summary>
     /// Implements required method in `IUniWebViewAuthenticationFlow`.
     /// </summary>
@@ -110,7 +120,7 @@ public class UniWebViewAuthenticationFlowTwitter : UniWebViewAuthenticationCommo
     /// Implements required method in `IUniWebViewAuthenticationFlow`.
     /// </summary>
     public Dictionary<string, string> GetAccessTokenRequestParameters(string authResponse) {
-        if (!authResponse.StartsWith(redirectUri)) {
+        if (!authResponse.StartsWith(redirectUri, StringComparison.InvariantCultureIgnoreCase)) {
             throw AuthenticationResponseException.UnexpectedAuthCallbackUrl;
         }
         
@@ -134,6 +144,17 @@ public class UniWebViewAuthenticationFlowTwitter : UniWebViewAuthenticationCommo
 
         return parameters;
     }
+    
+    /// <summary>
+    /// Implements required method in `IUniWebViewAuthenticationFlow`.
+    /// </summary>
+    public Dictionary<string, string> GetRefreshTokenRequestParameters(string refreshToken) {
+        return new Dictionary<string, string> {
+            { "client_id", clientId }, 
+            { "refresh_token", refreshToken },
+            { "grant_type", "refresh_token" }
+        };
+    }
 
     /// <summary>
     /// Implements required method in `IUniWebViewAuthenticationFlow`.
@@ -142,10 +163,29 @@ public class UniWebViewAuthenticationFlowTwitter : UniWebViewAuthenticationCommo
         return UniWebViewAuthenticationTokenFactory<UniWebViewAuthenticationTwitterToken>.Parse(exchangeResponse);
     }
 
+    /// <summary>
+    /// Implements required method in `IUniWebViewAuthenticationFlow`.
+    /// </summary>
     [field: SerializeField]
     public UnityEvent<UniWebViewAuthenticationTwitterToken> OnAuthenticationFinished { get; set; }
+    
+    /// <summary>
+    /// Implements required method in `IUniWebViewAuthenticationFlow`.
+    /// </summary>
     [field: SerializeField]
     public UnityEvent<long, string> OnAuthenticationErrored { get; set; }
+    
+    /// <summary>
+    /// Implements required method in `IUniWebViewAuthenticationFlow`.
+    /// </summary>
+    [field: SerializeField]
+    public UnityEvent<UniWebViewAuthenticationTwitterToken> OnRefreshTokenFinished { get; set; }
+    
+    /// <summary>
+    /// Implements required method in `IUniWebViewAuthenticationFlow`.
+    /// </summary>
+    [field: SerializeField]
+    public UnityEvent<long, string> OnRefreshTokenErrored { get; set; }
 }
 
 /// <summary>

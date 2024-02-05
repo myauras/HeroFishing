@@ -1,5 +1,188 @@
 # Release Note
 
+### 5.8.0 (28 Jan, 2024)
+
+#### Add
+
+* Supporting of specifying the cache mode used when loading a request. You can now use `SetCacheMode` and pick a `UniWebViewCacheMode` policy to determine whether and how to use the cache data when loading a request.
+* Adopt to use `AndroidProjectFilesModifier` to modify the exported Android project from Unity 2023.2. This prevents some potential edge issues when exporting the project if another custom Gradle template is used.
+* Supporting of the data URI on the page. Now the links starting with `data:` is treated as a valid URL and it trigger a standard downloading process.
+* Add a method `SetAllowUserEditFileNameBeforeDownloading` to provide a more customizable way of downloading. By setting it with `false`, UniWebView will skip the file name editing step and use the default file name instead, and start the downloading immediately.
+
+### 5.7.3 (25 Dec, 2023)
+
+#### Fix
+
+* The context menu image downloading now should work correctly on Android 14.
+* An issue that the downloading URL was converted to lower case when triggering a context menu download on Android.
+* Refine the gradle properties file patcher to not add a trailing new line when patching the file.
+* A potential vulnerability scanner warning that the file provider can read files from a wider scope than needed.
+
+#### Deprecate
+
+* Completely mark the legacy toolbar related methods as deprecated. Use the new embedded toolbar instead whenever possible.
+
+### 5.7.2 (4 Dec, 2023)
+
+#### Fix
+
+* A potential issue on some Android browser implementations, the OAuth support crashes due to a "null activity handler found!" error. Now UniWebView will use a workaround to prevent the crash.
+
+### 5.7.1 (24 Nov, 2023)
+
+#### Fix
+
+* The `SetDragInteractionEnabled` method also works on Android now. It allows you to disable the drag interaction on Android devices that support drag-and-drop gesture.
+* Mark several methods in `UniWebViewAuthenticationFlowCustomize` as `virtual` to allow overriding them in subclasses.
+* Now the OAuth 2.0 flow will ignore the letter case when receiving the response code URL from the server. It allows you to register the redirect URL with different letter cases in the OAuth provider and UniWebView.
+
+### 5.7.0 (25 Oct, 2023)
+
+#### Add
+
+* A new `SetForwardWebConsoleToNativeOutput` method which enables forwarding the web console log (such as `console.log` or `console.error`) to the native log output. On iOS, it prints the log to Xcode console, on Android to the Android logcat, and on macOS Editor to the Unity console. This is useful for debugging issues from the web page.
+* Now the `OnWebContentProcessTerminated` event will also be invoked when the render process is gone on Android (when the `OnRenderProcessGone` event is raise). This is a new behavior on Android 11 and above and the default handling will only prevent the whole app crash. You need to implement this event and 
+try to release resources and/or perform a reload to recover.
+
+#### Fix
+
+* An issue that the keyboard avoidance behavior on Android is not working properly and contains an undesired offset when the web view is not placed at the top of the screen.
+
+### 5.6.3 (4 Oct, 2023)
+
+#### Fix
+
+* An issue that the web view disappears when switching back to foreground in some newer Unity versions (2021.3.31f1, 2022.3.10f1, 2023.3.0a1). This is a regression of the particular Unity versions when it tries to fix [UUM-30881](https://issuetracker.unity3d.com/issues/android-a-black-screen-appears-for-a-few-seconds-when-returning-to-the-game-from-the-lock-screen-after-idle-time).
+
+### 5.6.2 (29 Sep, 2023)
+
+#### Fix
+
+* Support for Android 14. Solve a crash when setting Android 14 (API Level 34) as the target SDK for the game, and opening a web view on Android 14 devices.
+
+### 5.6.1 (9 Sep, 2023)
+
+#### Fix
+
+* A compile error when using UniWebView on Windows Editor was introduced in 5.6.0. Now you should be able to compile the project on Windows Editor. Mac Editor is not affected.
+
+### 5.6.0 (8 Sep, 2023)
+
+#### Add
+
+* New feature of rendering the web view to a texture. Now you can use `CreateRenderedTexture` to render the web view to a texture and use it in the game world. Check [this guide](https://docs.uniwebview.com/guide/render-to-texture.html) for more information and the implementation steps.
+
+#### Fix
+
+* Replace using of `NameValueCollection` in OAuth flows to prevent potential issues with different .Net versions.
+* An issue that a crash may happen when adding downloading URL or MIME type with `UniWebViewDownloadMatchingType.RegularExpression` option.
+
+
+### 5.5.1 (29 Aug, 2023)
+
+#### Fix
+
+* An issue that causes OAuth 2.0 flow crash on some browser implementations (such as Firefox and Amazon Silk) which does not provide the correct support. Chrome and some other browsers are not affected. You need a clean build after upgrading to get this fix.
+
+### 5.5.0 (6 Aug, 2023)
+
+#### Add
+
+* A new `OnLoadingErrorReceived` event, which is triggered when the web view loading encounters an error. This replaces the original `OnPageErrorReceived` event. The new event contains an additional `payload` parameter, in which some error detail (such as the failing URL) is contained.
+* Add a build option for adding `androidx.core` package in UniWebView's preference panel. This should fix the problem of crashing due to missing class `FileProvider` on Android 11 or above on Android when disabling the `androidx.browser` package. For more about building issues on Android, we also prepared a new [trouble shooting guide page](https://docs.uniwebview.com/guide/trouble-shooting.html).
+
+#### Fix
+
+* A potential issue that cookie values sometimes are not treated correctly when requesting following resource request inside an iframe target.
+
+#### Deprecate
+
+* `OnPageErrorReceived` is now deprecated. Use `OnLoadingErrorReceived` instead.
+
+### 5.4.3 (26 Jul, 2023)
+
+#### Fix
+
+* A potential issue that code obfuscation on Android might cause class conflicting with other plugins which also perform a full obfuscation. Now UniWebView uses a more stable way to obfuscate its native code.
+* A bug that `OnOrientationChanged` event might be called too early in some cases, which causes the received value is not yet correct.
+
+### 5.4.2 (9 Jun, 2023)
+
+#### Fix
+
+* The method `AddDownloadMIMEType` did not work as expected even when the target MIME type is detected. Now it should trigger the download as expected.
+
+### 5.4.1 (17 May, 2023)
+
+#### Fix
+
+* An issue that the web view crashes on some Android devices when there is no loading callback is registered under Release mode. This was a regression introduced in 5.4.0. If you are using 5.4.0 and has this crash, please upgrade to 5.4.1 to get a fix.
+
+### 5.4.0 (13 May, 2023)
+
+#### Add
+
+* A method to control whether a loading should be started or not. Use `RegisterShouldHandleRequest` to register a callback and returns whether the loading should be started or not. Check [its reference](https://docs.uniwebview.com/api/#registershouldhandlerequest) for more.
+
+#### Fix
+
+* Now web view on iOS 16.4 can also be inspected. However, different from previous versions, you need to call `SetWebContentsDebuggingEnabled` to enable the debugging mode before inspecting the web view on all platforms.
+
+### 5.3.2 (5 Apr, 2023)
+
+#### Fix
+
+* Strip using of methods from `System.Web.HttpUtility` internally to resolve a runtime issue in older Unity versions.
+
+### 5.3.1 (18 Feb, 2023)
+
+#### Fix
+
+* An issue that `SetOpenLinksInExternalBrowser` setting is ignored for links with "target=_blank" attribute. Now the external browser will be used for such links instead of opening the page in place. If `SetOpenLinksInExternalBrowser` and `SetSupportMultipleWindows` is set to `true` at the same time, the external browser will be used.
+* Now the activity for OAuth 2.0 flow on Android allows orientation changes. It won't throw an exception anymore when the device is rotated during the flow.
+
+### 5.3.0 (28 Jan, 2023)
+
+#### Add
+
+* Support for customization of Kotlin and Android Browser package versions. This can help to resolve the conflict with other plugins which use another version of these packages.
+
+#### Fix
+
+* Improve the visual effect of the Embedded Toolbar on iOS. Now it has a larger and bold font for the title.
+* A better way to find the root view controller for adding UniWebView to on iOS. Now you can implement a `rootViewControllerForUniWebView` method in your app delegate and return the view controller you want UniWebView to be added to. By default, if the app delegate does not implement either `rootViewControllerForUniWebView` or `rootViewController`, UniWebView now also tries to find the top-most view controller instead of the window's direct root view controller.
+
+### 5.2.1 (4 Jan, 2023)
+
+#### Fix
+
+* A crash when an SSL error is encountered during loading a scheme other than "http" or "https" (for example, "wss://" links) on Android.
+
+### 5.2.0 (23 Dec, 2022)
+
+#### Add
+
+* Most of the OAuth flows now support refresh token. Use `StartRefreshTokenFlow` on the flow to start token refresh. For more about OAuth 2.0 support in UniWebView, check [this guide](https://docs.uniwebview.com/guide/oauth2.html#refresh-token).
+
+#### Fix
+
+* A workaround for Facebook login on Android. Facebook is preventing a web view to perform OAuth login on Android, now the `UniWebViewAuthenticationFlowFacebook` will use a desktop browser user-agent to open the login page.
+* A crash that caused by orientation change when the camera is presented on Android while the game is landscape but the camera is portrait.
+* A crash when taking screenshot when the web view has a zero or negative size. Now under this case, the `CaptureSnapshot` method will give an error `-1002` in its `OnCaptureSnapshotFinished` event.
+
+### 5.1.0 (21 Nov, 2022)
+
+#### Add
+
+* New methods to control the behavior of the loading spinner. Use `SetAllowUserDismissSpinner` to allow or forbid users dismissing the loading indicator; Use `ShowSpinner` and `HideSpinner` to control its visibility programmatically.
+* A new API `SetLimitsNavigationsToAppBoundDomains`, it is a wrapper of `limitsNavigationsToAppBoundDomains` for iOS. It limits user's navigation to only pre-defined domains on iOS.
+
+#### Fix
+
+* Improve the delay that on Android the received cookies are not flushed fast enough in some cases. Now a forcibly cookie flush is always performed when closing the web view.
+* The Unity InputSystem assembly reference is added explicitly to prevent compiling error on Unity's versions without InputSystem support.
+* An issue prevents the package built on macOS 13 SDK.
+
 ### 5.0.2 (24 Oct, 2022)
 
 #### Fix

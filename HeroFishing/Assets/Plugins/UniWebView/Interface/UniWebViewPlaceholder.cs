@@ -32,11 +32,14 @@ public class UniWebViewInterface {
     public static void SetAllowAutoPlay(bool flag) { CheckPlatform(); }
     public static void SetAllowInlinePlay(bool flag) { CheckPlatform(); }
     public static void SetAllowJavaScriptOpenWindow(bool flag) { CheckPlatform(); }
+    public static void SetForwardWebConsoleToNativeOutput(bool flag) { CheckPlatform(); }
     public static void SetAllowFileAccess(string name, bool flag) { CheckPlatform(); }
     public static void SetAllowFileAccessFromFileURLs(string name, bool flag) { CheckPlatform(); }
     public static void SetAllowUniversalAccessFromFileURLs(bool flag) { CheckPlatform(); }
     public static void SetJavaScriptEnabled(bool flag) { CheckPlatform(); }
+    public static void SetLimitsNavigationsToAppBoundDomains(bool enabled) { CheckPlatform(); }
     public static void CleanCache(string name) { CheckPlatform(); }
+    public static void SetCacheMode(string name, int mode) { CheckPlatform(); }
     public static void ClearCookies() { CheckPlatform(); }
     public static void SetCookie(string url, string cookie, bool skipEncoding) { CheckPlatform(); }
     public static void RemoveCookies(string url, bool skipEncoding) { CheckPlatform(); }
@@ -48,6 +51,9 @@ public class UniWebViewInterface {
     public static float GetWebViewAlpha(string name) { CheckPlatform(); return 0.0f; }
     public static void SetShowSpinnerWhileLoading(string name, bool show) { CheckPlatform(); }
     public static void SetSpinnerText(string name, string text) { CheckPlatform(); }
+    public static void SetAllowUserDismissSpinnerByGesture(string name, bool flag) { CheckPlatform(); }
+    public static void ShowSpinner(string name) { CheckPlatform(); }
+    public static void HideSpinner(string name) { CheckPlatform(); }
     public static bool CanGoBack(string name) { CheckPlatform(); return false; }
     public static bool CanGoForward(string name) { CheckPlatform(); return false; }
     public static void GoBack(string name) { CheckPlatform(); }
@@ -67,6 +73,7 @@ public class UniWebViewInterface {
     public static void SetTransparencyClickingThroughEnabled(string name, bool enabled) { CheckPlatform(); }
     public static void SetWebContentsDebuggingEnabled(bool enabled) { CheckPlatform(); }
     public static void SetAllowHTTPAuthPopUpWindow(string name, bool flag) { CheckPlatform(); }
+    public static void SetAllowUserEditFileNameBeforeDownloading(string name, bool allowed) { CheckPlatform(); }
     public static void Print(string name) { CheckPlatform(); }
     public static void CaptureSnapshot(string name, string filename) { CheckPlatform(); }
     public static void SetCalloutEnabled(string name, bool flag) { CheckPlatform(); }
@@ -92,6 +99,9 @@ public class UniWebViewInterface {
     public static void SetEmbeddedToolbarButtonTextColor(string name, Color color) { CheckPlatform(); }
     public static void SetEmbeddedToolbarTitleTextColor(string name, Color color) { CheckPlatform(); }
     public static void SetEmeddedToolbarNavigationButtonsShow(string name, bool show) { CheckPlatform(); }
+    public static void StartSnapshotForRendering(string name, string identifier) { CheckPlatform(); }
+    public static void StopSnapshotForRendering(string name) { CheckPlatform(); }
+    public static byte[] GetRenderedData(string name, int x, int y, int width, int height) { CheckPlatform(); return null; }
 
     public static void CheckPlatform() {
         if (!alreadyLoggedWarning) {

@@ -49,13 +49,15 @@ public class UniWebView: MonoBehaviour {
     /// Raised when the web view finished to load a url successfully.
     /// 
     /// This method will be invoked when a valid response received from the url, regardless of the response status.
-    /// If a url loading fails before reaching to the server and getting a response, `OnPageErrorReceived` will be 
+    /// If a url loading fails before reaching to the server and getting a response, `OnLoadingErrorReceived` will be 
     /// raised instead.
     /// </summary>
     public event PageFinishedDelegate OnPageFinished;
 
     /// <summary>
     /// Delegate for page error received event.
+    ///
+    /// Deprecated. Use `LoadingErrorReceivedDelegate` instead.
     /// </summary>
     /// <param name="webView">The web view component which raises this event.</param>
     /// <param name="errorCode">
@@ -63,12 +65,41 @@ public class UniWebView: MonoBehaviour {
     /// It can be different from systems and platforms.
     /// </param>
     /// <param name="errorMessage">The error message which indicates the error.</param>
+    [Obsolete("PageErrorReceivedDelegate is deprecated. Use `LoadingErrorReceivedDelegate` instead.", false)]
     public delegate void PageErrorReceivedDelegate(UniWebView webView, int errorCode, string errorMessage);
+    
     /// <summary>
     /// Raised when an error encountered during the loading process. 
     /// Such as the "host not found" error or "no Internet connection" error will raise this event.
+    ///
+    /// Deprecated. Use `OnLoadingErrorReceived` instead. If both `OnPageErrorReceived` and `OnLoadingErrorReceived` are
+    /// listened, only the new `OnLoadingErrorReceived` will be raised, `OnPageErrorReceived` will not be called.
     /// </summary>
+    [Obsolete("OnPageErrorReceived is deprecated. Use `OnLoadingErrorReceived` instead.", false)]
     public event PageErrorReceivedDelegate OnPageErrorReceived;
+    
+    /// <summary>
+    /// Delegate for page loading error received event.
+    /// </summary>
+    /// <param name="webView">The web view component which raises this event.</param>
+    /// <param name="errorCode">
+    /// The error code which indicates the error type. 
+    /// It can be different from systems and platforms.
+    /// </param>
+    /// <param name="errorMessage">The error message which indicates the error.</param>
+    /// <param name="payload">The payload received from native side, which contains the error information, such as the failing URL, in its `Extra`.</param>
+    public delegate void LoadingErrorReceivedDelegate(
+        UniWebView webView, 
+        int errorCode, 
+        string errorMessage, 
+        UniWebViewNativeResultPayload payload);
+
+    /// <summary>
+    /// Raised when an error encountered during the loading process. 
+    /// Such as the "host not found" error or "no Internet connection" error will raise this event.
+    /// 
+    /// </summary>
+    public event LoadingErrorReceivedDelegate OnLoadingErrorReceived;
 
     /// <summary>
     /// Delegate for page progress changed event.
@@ -133,9 +164,14 @@ public class UniWebView: MonoBehaviour {
     /// <param name="webView">The web view component which raises this event.</param>
     public delegate void OnWebContentProcessTerminatedDelegate(UniWebView webView);
     /// <summary>
-    /// Raised when on iOS, when system calls `webViewWebContentProcessDidTerminate` method. 
-    /// It is usually due to a low memory when loading the web content and leave you a blank white screen. 
-    /// You need to free as much as memory you could and then do a page reload.
+    /// On iOS, raise when the system calls `webViewWebContentProcessDidTerminate` method. On Android, raise when the
+    /// system calls `onRenderProcessGone` method.
+    /// 
+    /// It is usually due to a low memory or the render process crashes when loading the web content. When this happens,
+    /// the web view will leave you a blank white screen.
+    /// 
+    /// Usually you should close the web view and clean all the resource since there is no good way to restore. In some
+    /// cases, you can also try to free as much as memory and do a page `Reload`.
     /// </summary>
     public event OnWebContentProcessTerminatedDelegate OnWebContentProcessTerminated;
 
@@ -214,6 +250,8 @@ public class UniWebView: MonoBehaviour {
     /// </summary>
     public event MultipleWindowClosedDelegate OnMultipleWindowClosed;
 
+    private static readonly Rect snapshotFullViewRect = new Rect(-1, -1, -1, -1);
+    
     private string id = Guid.NewGuid().ToString();
     private UniWebViewNativeListener listener;
     
@@ -221,8 +259,10 @@ public class UniWebView: MonoBehaviour {
     /// Represents the embedded toolbar in the current web view.
     /// </summary>
     public UniWebViewEmbeddedToolbar EmbeddedToolbar { get; private set; }
-
-    private bool isPortrait;
+    
+    private ScreenOrientation currentOrientation;
+    
+    
     [SerializeField]
 
     #pragma warning disable 0649 
@@ -306,6 +346,8 @@ public class UniWebView: MonoBehaviour {
     /// </summary>
     public void UpdateFrame() {
         Rect rect = NextFrameRect();
+        // Sync web view frame property.
+        frame = rect;
         UniWebViewInterface.SetFrame(listener.Name, (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height);
     }
 
@@ -377,7 +419,7 @@ public class UniWebView: MonoBehaviour {
         }
 
         UniWebViewInterface.Init(listener.Name, (int)rect.x, (int)rect. y, (int)rect.width, (int)rect.height);
-        isPortrait = Screen.height >= Screen.width;
+        currentOrientation = Screen.orientation;
     }
 
     void Start() {
@@ -400,11 +442,11 @@ public class UniWebView: MonoBehaviour {
     }
 
     void Update() {
-        var newIsPortrait = Screen.height >= Screen.width;
-        if (isPortrait != newIsPortrait) {
-            isPortrait = newIsPortrait;
+        var newOrientation = Screen.orientation;
+        if (currentOrientation != newOrientation) {
+            currentOrientation = newOrientation;
             if (OnOrientationChanged != null) {
-                OnOrientationChanged(this, Screen.orientation);
+                OnOrientationChanged(this, newOrientation);
             }
             if (referenceRectTransform != null) {
                 UpdateFrame();
@@ -578,33 +620,6 @@ public class UniWebView: MonoBehaviour {
                 float duration = 0.4f, Action completionHandler = null) 
     {
         return _Show(fade, edge, duration, false, completionHandler);
-    }
-
-    /// <summary>
-    /// 額外新增的Show加入控制項
-    /// </summary>
-    /// <param name="fullScreen">全螢幕</param>
-    /// <param name="useToolBar">使用Toolbar</param>
-    /// <param name="uniWebViewToolbarPosition">Toolbar位置</param>
-    /// <param name="rectTransform">是否有綁定的Parent</param>
-    /// <returns></returns>
-    public bool Show(bool _fullScreen, bool _useToolBar, UniWebViewToolbarPosition _uniWebViewToolbarPosition = UniWebViewToolbarPosition.Top, RectTransform _rectTransform = null) {
-        fullScreen = _fullScreen;
-        useEmbeddedToolbar = _useToolBar;
-        embeddedToolbarPosition = _uniWebViewToolbarPosition;
-        referenceRectTransform = _rectTransform;
-
-        return _Show(false, UniWebViewTransitionEdge.None, 0.4f, false, null);
-    }
-
-    /// <summary>
-    /// 清除設定項
-    /// </summary>
-    public void ClearSetting() {
-        fullScreen = false;
-        useEmbeddedToolbar = false;
-        embeddedToolbarPosition = UniWebViewToolbarPosition.Top;
-        referenceRectTransform = null;
     }
 
     public bool _Show(bool fade = false, UniWebViewTransitionEdge edge = UniWebViewTransitionEdge.None, 
@@ -877,7 +892,7 @@ public class UniWebView: MonoBehaviour {
     /// Sets whether loading a local file is allowed.
     /// 
     /// If set to `false`, any load from a file URL `file://` for `Load` method will be rejected and trigger an 
-    /// `OnPageErrorReceived` event. That means you cannot load a web page from any local file. If you are not going to 
+    /// `OnLoadingErrorReceived` event. That means you cannot load a web page from any local file. If you do not going to 
     /// load any local files, setting it to `false` helps to reduce the interface of web view and improve the security.
     /// 
     /// By default, it is `true` and the local file URL loading is allowed.
@@ -936,12 +951,14 @@ public class UniWebView: MonoBehaviour {
     }
 
     /// <summary>
-    /// Sets whether the web view area should avoid soft keyboard. It `true`, when the keyboard shows up, the web views
+    /// Sets whether the web view area should avoid soft keyboard. If `true`, when the keyboard shows up, the web views
     /// content view will resize itself to avoid keyboard overlap the web content. Otherwise, the web view will not resize
     /// and just leave the content below under the soft keyboard.
     /// 
     /// This method is only for Android. On iOS, the keyboard avoidance is built into the system directly and there is 
     /// no way to change its behavior.
+    /// 
+    /// Default is `true`.
     /// </summary>
     /// <param name="flag">Whether the keyboard should avoid web view content.</param>
     public static void SetEnableKeyboardAvoidance(bool flag) {
@@ -959,6 +976,24 @@ public class UniWebView: MonoBehaviour {
     }
 
     /// <summary>
+    /// Sets whether the web view limits navigation to pages within the app’s domain.
+    ///
+    /// This only works on iOS 14.0+. For more information, refer to the Apple's documentation:
+    /// https://developer.apple.com/documentation/webkit/wkwebviewconfiguration/3585117-limitsnavigationstoappbounddomai
+    /// and the App-Bound Domains page: https://webkit.org/blog/10882/app-bound-domains/
+    ///
+    /// This requires additional setup in `WKAppBoundDomains` key in the Info.plist file.
+    ///
+    /// On Android, this method does nothing.
+    /// </summary>
+    /// <param name="enabled"></param>
+    public static void SetLimitsNavigationsToAppBoundDomains(bool enabled) {
+        #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN && !UNITY_EDITOR_LINUX
+        UniWebViewInterface.SetLimitsNavigationsToAppBoundDomains(enabled);
+        #endif
+    }
+
+    /// <summary>
     /// Sets whether JavaScript can open windows without user interaction.
     /// 
     /// By setting this to `true`, an automatically JavaScript navigation will be allowed in the web view.
@@ -969,12 +1004,46 @@ public class UniWebView: MonoBehaviour {
     }
 
     /// <summary>
+    /// Sets whether the web page console output should be forwarded to native console.
+    ///
+    /// By setting this to `true`, UniWebView will try to intercept the web page console output methods and forward
+    /// them to the native console, for example, Xcode console on iOS, Android logcat on Android and Unity Console when
+    /// using Unity Editor on macOS. It provides a way to debug the web page by using the native console without opening
+    /// the web inspector. The forwarded logs in native side contains a "&lt;UniWebView-Web&gt;" tag. 
+    ///
+    /// Default is `false`. You need to set it before you create a web view instance to apply this setting. Any existing
+    /// web views are not affected.
+    ///
+    /// Logs from the methods below will be forwarded:
+    /// 
+    /// - console.log
+    /// - console.warn
+    /// - console.error
+    /// - console.debug
+    /// 
+    /// </summary>
+    /// <param name="flag">Whether the web page console output should be forwarded to native output.</param>
+    public static void SetForwardWebConsoleToNativeOutput(bool flag) {
+        UniWebViewInterface.SetForwardWebConsoleToNativeOutput(flag);
+    }
+
+    /// <summary>
     /// Cleans web view cache. This removes cached local data of web view. 
     /// 
     /// If you need to clear all cookies, use `ClearCookies` instead.
     /// </summary>
     public void CleanCache() {
         UniWebViewInterface.CleanCache(listener.Name);
+    }
+
+    /// <summary>
+    /// Sets the way of how the cache is used when loading a request.
+    ///
+    /// The default value is `UniWebViewCacheMode.Default`.
+    /// </summary>
+    /// <param name="cacheMode">The desired cache mode which the following request loading should be used.</param>
+    public void SetCacheMode(UniWebViewCacheMode cacheMode) {
+        UniWebViewInterface.SetCacheMode(listener.Name, (int)cacheMode);
     }
 
     /// <summary>
@@ -1107,6 +1176,39 @@ public class UniWebView: MonoBehaviour {
     }
 
     /// <summary>
+    /// Sets whether the user can dismiss the loading indicator by tapping on it or the greyed-out background around.
+    ///
+    /// By default, when the loading spinner is shown, the user can dismiss it by a single tapping. Call this method
+    /// with `false` to disable this behavior.
+    /// </summary>
+    /// <param name="flag">Whether the user can dismiss the loading indicator.</param>
+    public void SetAllowUserDismissSpinner(bool flag) {
+        UniWebViewInterface.SetAllowUserDismissSpinnerByGesture(listener.Name, flag);
+    }
+
+    /// <summary>
+    /// Shows the loading spinner.
+    ///
+    /// Calling this method will show the loading spinner, regardless if the `SetShowSpinnerWhileLoading` is set to
+    /// `true` or `false`. However, if `SetShowSpinnerWhileLoading` was called with `true`, UniWebView will still hide
+    /// the spinner when the loading finishes.
+    /// </summary>
+    public void ShowSpinner() {
+        UniWebViewInterface.ShowSpinner(listener.Name);
+    }
+
+    /// <summary>
+    /// Hides the loading spinner.
+    ///
+    /// Calling this method will hide the loading spinner, regardless if the `SetShowSpinnerWhileLoading` is set to
+    /// `true` or `false`. However, if `SetShowSpinnerWhileLoading` was called with `false`, UniWebView will still show
+    /// the spinner when the loading starts.
+    /// </summary>
+    public void HideSpinner() {
+        UniWebViewInterface.HideSpinner(listener.Name);
+    }
+
+    /// <summary>
     /// Sets whether the horizontal scroll bar should show when the web content beyonds web view bounds.
     /// 
     /// This only works on mobile platforms. It will do nothing on macOS Editor.
@@ -1225,6 +1327,8 @@ public class UniWebView: MonoBehaviour {
     /// Default is `true`</param>
     /// <param name="adjustInset">Whether the toolbar transition should also adjust web view position and size
     ///  if overlapped. Default is `false`</param>
+    [Obsolete("`SetShowToolbar` is deprecated. Use `EmbeddedToolbar.Show()` or `EmbeddedToolbar.Hide()`" + 
+              "instead.", false)]
     public void SetShowToolbar(bool show, bool animated = false, bool onTop = true, bool adjustInset = false) {
         #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN && !UNITY_EDITOR_LINUX
         UniWebViewInterface.SetShowToolbar(listener.Name, show, animated, onTop, adjustInset);
@@ -1240,6 +1344,8 @@ public class UniWebView: MonoBehaviour {
     /// This method is only for iOS, since there is no toolbar on Android.
     /// </summary>
     /// <param name="text">The text needed to be set as done button title.</param>
+    [Obsolete("`SetToolbarDoneButtonText` is deprecated. Use `EmbeddedToolbar.SetDoneButtonText` " + 
+              "instead.", false)]
     public void SetToolbarDoneButtonText(string text) {
         #if UNITY_IOS && !UNITY_EDITOR
         UniWebViewInterface.SetToolbarDoneButtonText(listener.Name, text);
@@ -1255,6 +1361,8 @@ public class UniWebView: MonoBehaviour {
     /// This method is only for iOS and macOS Editor, since there is no toolbar on Android.
     /// </summary>
     /// <param name="text">The text needed to be set as go back button.</param>
+    [Obsolete("`SetToolbarGoBackButtonText` is deprecated. Use `EmbeddedToolbar.SetGoBackButtonText` " + 
+              "instead.", false)]
     public void SetToolbarGoBackButtonText(string text) {
         #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN && !UNITY_EDITOR_LINUX
         UniWebViewInterface.SetToolbarGoBackButtonText(listener.Name, text);
@@ -1270,6 +1378,8 @@ public class UniWebView: MonoBehaviour {
     /// This method is only for iOS and macOS Editor, since there is no toolbar on Android.
     /// </summary>
     /// <param name="text">The text needed to be set as go forward button.</param>
+    [Obsolete("`SetToolbarGoForwardButtonText` is deprecated. Use `EmbeddedToolbar.SetGoForwardButtonText` " + 
+              "instead.", false)]
     public void SetToolbarGoForwardButtonText(string text) {
         #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN && !UNITY_EDITOR_LINUX
         UniWebViewInterface.SetToolbarGoForwardButtonText(listener.Name, text);
@@ -1285,6 +1395,8 @@ public class UniWebView: MonoBehaviour {
     /// This method is only for iOS, since there is no toolbar on Android.
     /// </summary>
     /// <param name="color">The color should be used for the background tint of the toolbar.</param>
+    [Obsolete("`SetToolbarTintColor` is deprecated. Use `EmbeddedToolbar.SetBackgroundColor` " + 
+              "instead.", false)]
     public void SetToolbarTintColor(Color color) {
         #if UNITY_IOS && !UNITY_EDITOR
         UniWebViewInterface.SetToolbarTintColor(listener.Name, color.r, color.g, color.b);
@@ -1300,6 +1412,8 @@ public class UniWebView: MonoBehaviour {
     /// This method is only for iOS, since there is no toolbar on Android.
     /// </summary>
     /// <param name="color">The color should be used for the button text of the toolbar.</param>
+    [Obsolete("`SetToolbarTextColor` is deprecated. Use `EmbeddedToolbar.SetButtonTextColor` or " + 
+              "`EmbeddedToolbar.SetTitleTextColor` instead.", false)]
     public void SetToolbarTextColor(Color color) {
         #if UNITY_IOS && !UNITY_EDITOR
         UniWebViewInterface.SetToolbarTextColor(listener.Name, color.r, color.g, color.b);
@@ -1316,6 +1430,8 @@ public class UniWebView: MonoBehaviour {
     /// This method is only for iOS, since there is no toolbar on Android.
     /// </summary>
     /// <param name="show">Whether the navigation buttons on the toolbar should show or hide.</param>
+    [Obsolete("`SetShowToolbarNavigationButtons` is deprecated. Use `EmbeddedToolbar.ShowNavigationButtons` or " + 
+              "`EmbeddedToolbar.HideNavigationButtons` instead.", false)]
     public void SetShowToolbarNavigationButtons(bool show) {
         #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN && !UNITY_EDITOR_LINUX
         UniWebViewInterface.SetShowToolbarNavigationButtons(listener.Name, show);
@@ -1519,19 +1635,21 @@ public class UniWebView: MonoBehaviour {
     /// <summary>
     /// Sets whether the drag interaction should be enabled on iOS.
     /// 
-    /// From iOS 11, the iPad web view supports the drag interaction when user long presses an image, link or text.
+    /// From iOS 11, the web view on iOS supports the drag interaction when user long presses an image, link or text.
     /// Setting this to `false` would disable the drag feather on the web view.
+    ///
+    /// On Android, there is no direct native way to disable drag only. This method instead disables the long touch
+    /// event, which is used as a trigger for drag interaction. So, setting this to `false` would disable the long
+    /// touch gesture as a side effect. 
     /// 
-    /// This method only works on iOS. It does nothing on Android or macOS editor. Default is `true`, which means
-    /// drag interaction on iPad is enabled.
+    /// It does nothing on macOS editor. Default is `true`, which means drag interaction is enabled if the device and
+    /// system version supports it.
     /// </summary>
     /// <param name="enabled">
     /// Whether the drag interaction should be enabled.
     /// </param>
     public void SetDragInteractionEnabled(bool enabled) {
-        #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN && !UNITY_EDITOR_LINUX
         UniWebViewInterface.SetDragInteractionEnabled(listener.Name, enabled);
-        #endif
     }
 
     /// <summary>
@@ -1647,6 +1765,23 @@ public class UniWebView: MonoBehaviour {
     }
 
     /// <summary>
+    /// Sets whether allowing users to edit the file name before downloading. Default is `true`.
+    ///
+    /// If `true`, when a download task is triggered, a dialog will be shown to ask user to edit the file name and the
+    /// user has a chance to choose if the they actually want to download the file. If `false`, the file download will
+    /// start immediately without asking user to edit the file name. The file name is generated by guessing from the
+    /// content disposition header and the MIME type. If the guessing of the file name fails, a random string will be
+    /// used.
+    ///
+    /// </summary>
+    /// <param name="allowed">
+    /// Whether the user can edit the file name and determine whether actually starting the downloading.
+    /// </param>
+    public void SetAllowUserEditFileNameBeforeDownloading(bool allowed) {
+        UniWebViewInterface.SetAllowUserEditFileNameBeforeDownloading(listener.Name, allowed);
+    }
+
+    /// <summary>
     /// Sets whether allowing users to choose the way to handle the downloaded file. Default is `true`.
     /// 
     /// On iOS, the downloaded file will be stored in a temporary folder. Setting this to `true` will show a system 
@@ -1658,7 +1793,7 @@ public class UniWebView: MonoBehaviour {
     /// This method does not have any effect on Android. On Android, the file is downloaded to the Download folder.
     /// 
     /// </summary>
-    /// <param name="allowed"></param>
+    /// <param name="allowed">Whether the user can choose the way to handle the downloaded file.</param>
     public void SetAllowUserChooseActionAfterDownloading(bool allowed) {
         #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN && !UNITY_EDITOR_LINUX
         UniWebViewInterface.SetAllowUserChooseActionAfterDownloading(listener.Name, allowed);
@@ -1686,26 +1821,178 @@ public class UniWebView: MonoBehaviour {
     }
 
     /// <summary>
-    /// 設定關閉按鍵的文字內容
+    /// Starts the process of continually rendering the snapshot.
     /// </summary>
-    /// <param name="text">關閉按鍵的顯示Text</param>
-    public void SetDoneButtonText(string text) {        
-        EmbeddedToolbar.SetDoneButtonText(text);        
+    /// <remarks>
+    /// <para>
+    /// You take the responsibility of calling this method before you use either <see cref="GetRenderedData(Rect?)"/> or
+    /// <see cref="CreateRenderedTexture(Rect?)"/> to get the rendered data or texture. It prepares a render buffer for the image
+    /// data and performs the initial rendering for later use.
+    /// </para>
+    /// <para>
+    /// If this method is not called, the related data or texture methods will not work and will only return <c>null</c>. Once you
+    /// no longer need the web view to be rendered as a texture, you should call <see cref="StopSnapshotForRendering"/> to clean up
+    /// the associated resources.
+    /// </para>
+    /// </remarks>
+    /// <param name="rect">The optional rectangle to specify the area for rendering. If <c>null</c>, the entire view is rendered.</param>
+    /// <param name="onStarted">
+    /// An optional callback to execute when rendering has started. The callback receives a <see cref="Texture2D"/> parameter
+    /// representing the rendered texture.
+    /// </param>
+    public void StartSnapshotForRendering(Rect? rect = null, Action<Texture2D> onStarted = null) {
+        string identifier = null;
+        if (onStarted != null) {
+            identifier = Guid.NewGuid().ToString();
+            actions.Add(identifier, () => {
+                var texture = CreateRenderedTexture(rect);
+                onStarted(texture);
+            });
+        }
+        UniWebViewInterface.StartSnapshotForRendering(listener.Name, identifier);
     }
 
     /// <summary>
-    /// 設定標題的文字
+    /// Stops the process of continually rendering the snapshot.
     /// </summary>
-    /// <param name="text">title文字</param>
-    public void SetTitleText(string text) {
-        EmbeddedToolbar.SetTitleText(text);
+    /// <remarks>
+    /// <para>
+    /// You should call this method when you no longer need any further data or texture from the
+    /// <see cref="GetRenderedData(Rect?)"/> or <see cref="CreateRenderedTexture(Rect?)"/> methods. This helps in releasing
+    /// resources and terminating the rendering process.
+    /// </para>
+    /// </remarks>
+    public void StopSnapshotForRendering() {
+        UniWebViewInterface.StopSnapshotForRendering(listener.Name);
     }
 
+    /// <summary>
+    /// Gets the data of the rendered image for the current web view.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This method provides you with the raw bytes of the rendered image data in PNG format. To successfully retrieve the
+    /// current rendered data, you should first call <see cref="StartSnapshotForRendering"/> to initiate the rendering process.
+    /// If <see cref="StartSnapshotForRendering"/> has not been called, this method will return <c>null</c>.
+    /// </para>
+    /// <para>
+    /// The rendering area specified by the <paramref name="rect"/> parameter is based on the local coordinates of the web view.
+    /// For example, <c>new Rect(webView.frame.width / 2, webView.frame.height / 2, 100, 100)</c> means setting the origin to the
+    /// center of the web view and taking a 100x100 square as the snapshot area.
+    /// </para>
+    /// <para>
+    /// Please note that this method supports only software-rendered content. Content rendered by hardware, such as videos
+    /// and WebGL content, will appear as a black rectangle in the rendered image.
+    /// </para>
+    /// </remarks>
+    /// <param name="rect">
+    /// The desired rectangle within which the snapshot rendering should occur in the web view. If default value `null` is used,
+    /// the whole web view frame will be used as the snapshot area.
+    /// </param>
+    /// <returns>
+    /// An array of raw bytes representing the rendered image data in PNG format, or <c>null</c> if the rendering process fails
+    /// or if the data is not prepared.
+    /// </returns>
+    /// <seealso cref="StartSnapshotForRendering"/>
+    public byte[] GetRenderedData(Rect? rect = null) {
+        var r = rect ?? snapshotFullViewRect;
+        return UniWebViewInterface.GetRenderedData(
+            listener.Name, (int)r.x, (int)r.y, (int)r.width, (int)r.height
+        );
+    }
+
+    /// <summary>
+    /// Creates a rendered texture for the current web view.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// You should destroy the returned texture using the `Destroy` method when you no longer need it to free up resources.
+    /// </para>
+    /// <para>
+    /// This method provides you with a texture of the rendered image for the web view, which you can use in your 3D game world.
+    /// To obtain the current rendered data, you should call <see cref="StartSnapshotForRendering"/> before using this method.
+    /// If <see cref="StartSnapshotForRendering"/> has not been called, this method will return <c>null</c>.
+    /// </para>
+    /// <para>
+    /// Please note that this method supports only software-rendered content. Content rendered by hardware, such as videos
+    /// and WebGL content, will appear as a black rectangle in the rendered image.
+    /// </para>
+    /// <para>
+    /// This method returns a plain <see cref="Texture2D"/> object. The texture is not user interactive and can only be used for
+    /// display purposes. It is your responsibility to call the `Destroy` method on this texture when you no longer need it.
+    /// </para>
+    /// </remarks>
+    /// <param name="rect">
+    /// The desired rectangle within which the snapshot rendering should occur in the web view. If default value `null` is used,
+    /// the whole web view frame will be used as the snapshot area.
+    /// </param>
+    /// <returns>
+    /// A rendered texture of the current web view, or <c>null</c> if the rendering process fails or if the data is not prepared.
+    /// </returns>
+    /// <seealso cref="StartSnapshotForRendering"/>
+    public Texture2D CreateRenderedTexture(Rect? rect = null) {
+        var bytes = GetRenderedData(rect);
+        if (bytes == null) {
+            return null;
+        }
+        Texture2D texture = new Texture2D(2, 2, TextureFormat.RGB24, false);
+        texture.LoadImage(bytes);
+        return texture;
+    }
+
+    /// <summary>
+    /// Registers a method handler for deciding whether UniWebView should handle the request received by the web view.
+    ///
+    /// The handler is called before the web view actually starts to load the new request. You can check the request
+    /// properties, such as the URL, to decide whether UniWebView should continue to handle the request or not. If you
+    /// return `true` from the handler function, UniWebView will continue to load the request. Otherwise, UniWebView
+    /// will stop the loading.
+    /// </summary>
+    /// <param name="handler">
+    /// A handler you can implement your own logic against the input request value. You need to return a boolean value
+    /// to indicate whether UniWebView should continue to load the request or not as soon as possible.
+    /// </param>
+    public void RegisterShouldHandleRequest(Func<UniWebViewChannelMethodHandleRequest, bool> handler) {
+        object Func(object obj) => handler((UniWebViewChannelMethodHandleRequest)obj);
+        UniWebViewChannelMethodManager.Instance.RegisterChannelMethod(
+            listener.Name, 
+            UniWebViewChannelMethod.ShouldUniWebViewHandleRequest,
+            Func
+        );
+    }
+    
+    /// <summary>
+    /// Unregisters the method handler for handling request received by the web view.
+    ///
+    /// This clears the handler registered by `RegisterHandlingRequest` method.
+    /// </summary>
+    public void UnregisterShouldHandleRequest() {
+        UniWebViewChannelMethodManager.Instance.UnregisterChannelMethod(
+            listener.Name, 
+            UniWebViewChannelMethod.ShouldUniWebViewHandleRequest
+        );
+    }
+    
     void OnDestroy() {
         UniWebViewNativeListener.RemoveListener(listener.Name);
+        UniWebViewChannelMethodManager.Instance.UnregisterChannel(listener.Name);
         UniWebViewInterface.Destroy(listener.Name);
         Destroy(listener.gameObject);
     }
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+    // From Unity 2022.3.10, the player view is brought to front when switching back from a pause
+    // state. Requiring to bring the web view to front to make the web view visible.
+    // Issue caused by:
+    // https://issuetracker.unity3d.com/issues/android-a-black-screen-appears-for-a-few-seconds-when-returning-to-the-game-from-the-lock-screen-after-idle-time
+    // 
+    // Ref: UWV-1061
+    void OnApplicationPause(bool pauseStatus) {
+        if (!pauseStatus) {
+            UniWebViewInterface.BringContentToFront(listener.Name);
+        }
+    }
+#endif
 
     /* //////////////////////////////////////////////////////
     // Internal Listener Interface
@@ -1770,9 +2057,14 @@ public class UniWebView: MonoBehaviour {
     }
 
     internal void InternalOnPageErrorReceived(UniWebViewNativeResultPayload payload) {
-        if (OnPageErrorReceived != null) {
-            int code = -1;
-            if (int.TryParse(payload.resultCode, out code)) {
+        if (OnLoadingErrorReceived != null) {
+            if (int.TryParse(payload.resultCode, out var code)) {
+                OnLoadingErrorReceived(this, code, payload.data, payload);
+            } else {
+                UniWebViewLogger.Instance.Critical("Invalid error code received: " + payload.resultCode);
+            }
+        } else if (OnPageErrorReceived != null) {
+            if (int.TryParse(payload.resultCode, out var code)) {
                 OnPageErrorReceived(this, code, payload.data);
             } else {
                 UniWebViewLogger.Instance.Critical("Invalid error code received: " + payload.resultCode);
@@ -1839,6 +2131,14 @@ public class UniWebView: MonoBehaviour {
         if (OnCaptureSnapshotFinished != null) {
             int errorCode = int.TryParse(payload.resultCode, out errorCode) ? errorCode : -1;
             OnCaptureSnapshotFinished(this, errorCode,  payload.data);
+        }
+    }
+    
+    internal void InternalOnSnapshotRenderingStarted(string identifier) {
+        Action action;
+        if (actions.TryGetValue(identifier, out action)) {
+            action();
+            actions.Remove(identifier);
         }
     }
 

@@ -56,10 +56,29 @@ public class UniWebViewAuthenticationFlowGitHub: UniWebViewAuthenticationCommonF
             "https://github.com/login/oauth/access_token"
         );
 
+    /// <summary>
+    /// Implements required method in `IUniWebViewAuthenticationFlow`.
+    /// </summary>
     [field: SerializeField]
     public UnityEvent<UniWebViewAuthenticationGitHubToken> OnAuthenticationFinished { get; set; }
+    
+    /// <summary>
+    /// Implements required method in `IUniWebViewAuthenticationFlow`.
+    /// </summary>
     [field: SerializeField]
     public UnityEvent<long, string> OnAuthenticationErrored { get; set; }
+    
+    /// <summary>
+    /// Implements required method in `IUniWebViewAuthenticationFlow`.
+    /// </summary>
+    [field: SerializeField]
+    public UnityEvent<UniWebViewAuthenticationGitHubToken> OnRefreshTokenFinished { get; set;  }
+
+    /// <summary>
+    /// Implements required method in `IUniWebViewAuthenticationFlow`.
+    /// </summary>
+    [field: SerializeField]
+    public UnityEvent<long, string> OnRefreshTokenErrored { get; set; }
 
     /// <summary>
     /// Starts the authentication flow with the standard OAuth 2.0.
@@ -68,6 +87,16 @@ public class UniWebViewAuthenticationFlowGitHub: UniWebViewAuthenticationCommonF
     public override void StartAuthenticationFlow() {
         var flow = new UniWebViewAuthenticationFlow<UniWebViewAuthenticationGitHubToken>(this);
         flow.StartAuth();
+    }
+
+    /// <summary>
+    /// Starts the refresh flow with the standard OAuth 2.0.
+    /// This implements the abstract method in `UniWebViewAuthenticationCommonFlow`.
+    /// </summary>
+    /// <param name="refreshToken">The refresh token received with a previous access token response.</param>
+    public override void StartRefreshTokenFlow(string refreshToken) {
+        var flow = new UniWebViewAuthenticationFlow<UniWebViewAuthenticationGitHubToken>(this);
+        flow.RefreshToken(refreshToken);
     }
 
     /// <summary>
@@ -115,7 +144,7 @@ public class UniWebViewAuthenticationFlowGitHub: UniWebViewAuthenticationCommonF
     /// Implements required method in `IUniWebViewAuthenticationFlow`.
     /// </summary>
     public Dictionary<string, string> GetAccessTokenRequestParameters(string authResponse) {
-        if (!authResponse.StartsWith(callbackUrl)) {
+        if (!authResponse.StartsWith(callbackUrl, StringComparison.InvariantCultureIgnoreCase)) {
             throw AuthenticationResponseException.UnexpectedAuthCallbackUrl;
         }
         var uri = new Uri(authResponse);
@@ -136,6 +165,18 @@ public class UniWebViewAuthenticationFlowGitHub: UniWebViewAuthenticationCommonF
             result.Add("redirect_uri", optional.redirectUri);
         }
         return result;
+    }
+
+    /// <summary>
+    /// Implements required method in `IUniWebViewAuthenticationFlow`.
+    /// </summary>
+    public Dictionary<string, string> GetRefreshTokenRequestParameters(string refreshToken) {
+        return new Dictionary<string, string> {
+            { "client_id", clientId }, 
+            { "client_secret", clientSecret }, 
+            { "refresh_token", refreshToken },
+            { "grant_type", "refresh_token" }
+        };
     }
 
     /// <summary>

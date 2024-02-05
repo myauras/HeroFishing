@@ -152,7 +152,8 @@ internal class UniWebViewAndroidManifest : UniWebViewAndroidXmlDocument {
                 var created = CreateElement("activity");
                 created.SetAttribute("name", AndroidXmlNamespace, "com.onevcat.uniwebview.UniWebViewAuthenticationActivity");
                 created.SetAttribute("exported", AndroidXmlNamespace, "true");
-                created.SetAttribute("launchMode", AndroidXmlNamespace, "singleTop");
+                created.SetAttribute("launchMode", AndroidXmlNamespace, "singleTask");
+                created.SetAttribute("configChanges", AndroidXmlNamespace, "orientation|screenSize|keyboardHidden");
                 authActivityNode = created;
             } else {
                 authActivityNode = list[0] as XmlElement;
