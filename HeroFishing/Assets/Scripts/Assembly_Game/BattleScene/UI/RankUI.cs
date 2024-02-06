@@ -27,13 +27,11 @@ public class RankUI : BaseUI {
             _rankItems[i].SetActive(false);
         }
 
-        if (AllocatedRoom.Instance == null) {
-            var id = BattleManager.Instance.GetHero(0).MyData.ID;
-            AddHero(id, BattleManager.Instance.Index);
-        }
-        //for (int i = 0; i < 4; i++) {
-        //    AddHeroTest();
-        //}
+        BattleManager.Instance.OnHeroAdd += AddHero;
+        BattleManager.Instance.OnHeroRemove += RemoveHero;
+
+        var id = BattleManager.Instance.GetHero(0).MyData.ID;
+        AddHero(id, BattleManager.Instance.Index);
     }
 
     public void AddHero(int heroID, int playerIdx) {

@@ -6,6 +6,7 @@ using LitJson;
 using Scoz.Func;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -286,9 +287,16 @@ namespace HeroFishing.Socket {
         }
         void HandleUpdatePlayer(SocketCMD<UPDATEPLAYER_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
-            //foreach (var player in _packet.Content.Players) {
-            //    WriteLog.Log(DebugUtils.ObjToStr(player));
-            //}
+            List<Player> players = new List<Player>();
+            for (int i = 0; i < _packet.Content.Players.Length; i++) {
+                var player = _packet.Content.Players[i];
+                if (player == null) continue;
+                players.Add(player);
+            }
+            players.Sort((a, b) => (int)(b.GainPoints - a.GainPoints));
+            var rankUI = BaseUI.GetInstance<RankUI>();
+            if (rankUI != null)
+                rankUI.SetRank(players.Select(p => p.Idx).ToArray());
         }
         void HandleUpdateScene(SocketCMD<UPDATESCENE_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;

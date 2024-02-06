@@ -100,7 +100,6 @@ namespace HeroFishing.Battle {
                 hero.SetData(_testHeroID, $"{_testHeroID}_1");
                 hero.UpdatePoints(10);
                 _bet = _testBet;
-                OnHeroAdd?.Invoke(_testHeroID, Index);
             }
             else {
                 hero.SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
@@ -109,7 +108,6 @@ namespace HeroFishing.Battle {
                 var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
                 if (player != null && player.Point.HasValue)
                     hero.UpdatePoints((int)player.Point.Value);
-                OnHeroAdd?.Invoke(AllocatedRoom.Instance.MyHeroID, Index);
             }
         }
 
@@ -154,8 +152,8 @@ namespace HeroFishing.Battle {
                 if (heroId == 0) {
                     if (hero.IsLoaded) {
                         hero.ResetData();
+                        OnHeroRemove?.Invoke(playerIndex);
                     }
-                    OnHeroRemove?.Invoke(playerIndex);
                     continue;
                 }
 
