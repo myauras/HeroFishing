@@ -6,17 +6,12 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-public class DropManager : MonoBehaviour {
+public class DropManager {
     private static DropManager _instance;
     public static DropManager Instance {
         get {
             if (_instance == null) {
-                _instance = FindObjectOfType<DropManager>();
-                if (_instance == null) {
-                    var go = new GameObject("DropManager");
-                    _instance = go.AddComponent<DropManager>();
-                    _instance.Init();
-                }
+                _instance = new DropManager();
             }
             return _instance;
         }
