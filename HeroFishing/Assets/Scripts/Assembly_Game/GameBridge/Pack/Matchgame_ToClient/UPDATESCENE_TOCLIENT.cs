@@ -24,6 +24,7 @@ namespace HeroFishing.Socket.Matchgame {
         public int JsonID { get; private set; } // 怪物JsonID
         public int Idx { get; private set; }// 怪物索引
         public bool Death { get; private set; }// 是否已死亡
+        public float LeaveTime { get; private set; }// 離開時間
         public MonsterEffect[] Effects { get; private set; }
     }
 

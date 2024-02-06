@@ -129,7 +129,6 @@ namespace Service.Realms {
                     }
                 });
 
-
                 await utcs.Task;
                 return replyData;
 

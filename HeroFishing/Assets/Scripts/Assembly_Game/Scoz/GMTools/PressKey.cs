@@ -21,7 +21,7 @@ namespace Scoz.Func {
             } else if (Input.GetKeyDown(KeyCode.W)) {
                 //GameConnector.Instance.Attack(1, "1_attack", 2);
             } else if (Input.GetKeyDown(KeyCode.E)) {
-                GameConnector.Instance.Hit(1, new int[1] { 0 }, "1_attack");
+                GameConnector.Instance.LvUpSpell(0);
 
             } else if (Input.GetKeyDown(KeyCode.R)) {
                 GameConnector.Instance.DropSpell(4);
