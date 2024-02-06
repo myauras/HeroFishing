@@ -311,7 +311,7 @@ namespace HeroFishing.Socket {
         }
         void HandleLvUpSpell(SocketCMD<LVUPSPELL_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
-            Debug.Log(_packet.Content.Success);
+            WriteLog.Log("技能升級結果:"+_packet.Content.Success);
         }
 
     }

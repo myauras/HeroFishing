@@ -192,16 +192,16 @@ namespace HeroFishing.Battle {
                 _updateSceneIdxs.Clear();
                 for (int i = 0; i < spawns.Length; i++) {
                     var spawn = spawns[i];
-                    var routeData = RouteJsonData.GetData(spawn.RouteJsonID);
+                    var routeData = RouteJsonData.GetData(spawn.RID);
                     var rotation = Quaternion.AngleAxis(Index * 90f, Vector3.up);
                     var initRotation = Quaternion.LookRotation(routeData.TargetPos - routeData.SpawnPos);
                     bool found = false;
-                    for (int j = 0; j < spawn.Monsters.Length; j++) {
-                        var spawnMonster = spawn.Monsters[j];
+                    for (int j = 0; j < spawn.Ms.Length; j++) {
+                        var spawnMonster = spawn.Ms[j];
                         // update
                         if (Monster.TryGetMonsterByIdx(spawnMonster.Idx, out Monster monster)) {
                             var monsterData = monster.MyData;
-                            float deltaTime = GameTime.Current - (float)spawn.SpawnTime;
+                            float deltaTime = GameTime.Current - (float)spawn.STime;
                             Vector3 deltaPosition = deltaTime * monsterData.Speed * (initRotation * Vector3.forward);
                             if (Vector3.SqrMagnitude(deltaPosition) > Vector3.SqrMagnitude(routeData.TargetPos - routeData.SpawnPos))
                                 break;

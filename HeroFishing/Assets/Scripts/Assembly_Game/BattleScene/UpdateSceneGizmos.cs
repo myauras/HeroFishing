@@ -30,17 +30,17 @@ public class UpdateSceneGizmos : MonoBehaviour
         if(_spawns == null || _spawns.Length == 0) return;
         for (int i = 0; i < _spawns.Length; i++) {
             var spawn = _spawns[i];
-            var routeData = RouteJsonData.GetData(spawn.RouteJsonID);
-            for (int j = 0; j < spawn.Monsters.Length; j++) {
-                var monster = spawn.Monsters[j];
+            var routeData = RouteJsonData.GetData(spawn.RID);
+            for (int j = 0; j < spawn.Ms.Length; j++) {
+                var monster = spawn.Ms[j];
                 if (monster.Death) {
                     Gizmos.color = Color.red;
                 }
                 else {
                     Gizmos.color = Color.green;
                 }
-                var monsterData = MonsterJsonData.GetData(monster.JsonID);
-                var deltaTime = GameTime.LastestOverride - spawn.SpawnTime;
+                var monsterData = MonsterJsonData.GetData(monster.ID);
+                var deltaTime = GameTime.LastestOverride - spawn.STime;
                 var rotation = Quaternion.AngleAxis(BattleManager.Instance.Index * 90f, Vector3.up);
                 var direction = (routeData.TargetPos - routeData.SpawnPos).normalized;
                 var position = rotation * (routeData.SpawnPos + (float)deltaTime * monsterData.Speed * direction);
