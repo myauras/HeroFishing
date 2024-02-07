@@ -68,8 +68,7 @@ namespace HeroFishing.Socket {
                     });
                     UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
                 });
-            }
-            else {
+            } else {
                 WriteLog.LogError("OnUDPDisconnect");
                 this.MatchgameDisconnect();
             }
@@ -112,16 +111,14 @@ namespace HeroFishing.Socket {
                     ConnectUDPMatchgame(packet.Content.ConnToken, packet.Content.Index);
 
                     JoinRoomSubject?.OnNext(Unit.Default);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     WriteLog.LogError($"UDP error: " + e);
                     JoinRoomSubject?.OnError(e);
                 }
                 if (TimeSyncer == null)
                     TimeSyncer = new GameObject("TimeSyncer").AddComponent<ServerTimeSyncer>();
                 TimeSyncer.StartCountTime();
-            }
-            else {
+            } else {
                 JoinRoomSubject?.OnError(new Exception("auth is invalid"));
             }
         }
@@ -172,8 +169,7 @@ namespace HeroFishing.Socket {
                         WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
                         break;
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 WriteLog.LogError("Parse UDP Message with Error : " + e.ToString());
             }
         }
@@ -187,8 +183,7 @@ namespace HeroFishing.Socket {
                 if (CMDCallback.TryGetValue(cmdID, out Action<string> _cb)) {
                     CMDCallback.Remove(cmdID);
                     _cb?.Invoke(_msg);
-                }
-                else {
+                } else {
                     SocketContent.MatchgameCMD_TCP cmdType;
                     if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
                         WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
@@ -236,13 +231,16 @@ namespace HeroFishing.Socket {
                             var leavePacket = JsonMapper.ToObject<SocketCMD<LEAVE_TOCLIENT>>(_msg);
                             HandleLeave(leavePacket);
                             break;
+                        case SocketContent.MatchgameCMD_TCP.LVUPSPELL_TOCLIENT:
+                            var lvupSpellPacket = JsonMapper.ToObject<SocketCMD<LVUPSPELL_TOCLIENT>>(_msg);
+                            HandleLvUpSpell(lvupSpellPacket);
+                            break;
                         default:
                             WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
                             break;
                     }
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 WriteLog.LogError("Parse收到的封包時出錯 : " + e.ToString());
                 if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) {
                     WriteLog.LogErrorFormat("不在{0}就釋放資源: ", MyScene.BattleScene, e.ToString());
@@ -319,5 +317,10 @@ namespace HeroFishing.Socket {
             AllocatedRoom.Instance.SetHero(_packet.Content.PlayerIdx, 0, string.Empty);
             BattleManager.Instance?.UpdateHeros();
         }
+        void HandleLvUpSpell(SocketCMD<LVUPSPELL_TOCLIENT> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            WriteLog.Log("技能升級結果:"+_packet.Content.Success);
+        }
+
     }
 }

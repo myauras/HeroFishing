@@ -51,6 +51,8 @@ namespace HeroFishing.Socket {
             MONSTERDIE_TOCLIENT,//怪物死亡時送Client
             AUTO_TOCLIENT,//Auto模式
             LEAVE_TOCLIENT,//離開遊戲
+            LVUPSPELL,//升級技能
+            LVUPSPELL_TOCLIENT, //升級技能結果回傳
         }
         public enum MatchgameCMD_UDP {
             //ATTACK_TOCLIENT,//攻擊

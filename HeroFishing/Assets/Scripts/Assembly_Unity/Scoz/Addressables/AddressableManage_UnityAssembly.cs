@@ -4,15 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Events;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Video;
-using UnityEngine.AddressableAssets.ResourceLocators;
-using System.Linq;
-using UnityEngine.ResourceManagement.ResourceLocations;
-using Unity.VisualScripting;
 using Cysharp.Threading.Tasks;
 
 namespace Scoz.Func {
@@ -92,12 +86,10 @@ namespace Scoz.Func {
             BG.SetActive(false);
             WriteLog_UnityAssembly.LogColor("LoadAsset-Start", WriteLog_UnityAssembly.LogType.Addressable);
             Keys.RemoveAll(a => a == "");
-#if UNITY_EDITOR
-            Keys.RemoveAll(a => a == "Dlls");//編輯器不需要載入Dlls
-#endif
+
             PopupUI_Local.ShowLoading(StringJsonData_UnityAssembly.GetUIString("AddressableLoading"));
             FinishedAction = _action;
-            Downloader = StartCoroutine(LoadAssets());//不輕快取用這個(正式版)
+            Downloader = StartCoroutine(LoadAssets());
         }
         void OnClearCatchCB() {
             Downloader = StartCoroutine(LoadAssets());
@@ -117,6 +109,7 @@ namespace Scoz.Func {
         }
 
         IEnumerator LoadAssets() {
+            
             //var handle = Addressables.LoadAssetAsync<TextAsset>("Assets/AddressableAssets/Jsons/String.json");
             //yield return handle;  // 如果在協程中
             //WriteLog.Log(handle.Status);

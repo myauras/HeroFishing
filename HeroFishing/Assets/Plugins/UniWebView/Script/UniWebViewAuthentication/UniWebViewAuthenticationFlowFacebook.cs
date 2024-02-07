@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -72,6 +73,12 @@ public class UniWebViewAuthenticationFlowFacebook: UniWebViewAuthenticationCommo
     /// </summary>
     public override void StartAuthenticationFlow() {
         var webView = gameObject.AddComponent<UniWebView>();
+        
+        // Facebook login deprecates the Web View login on Android. As a workaround, prevents to be a desktop browser to continue the manual flow.
+        #if UNITY_ANDROID && !UNITY_EDITOR
+        webView.SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 13_0_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15");
+        #endif
+        
         webView.OnPageFinished += (view, status, url) => {
             if (status != 200) {
                 if (OnAuthenticationErrored != null) {
@@ -114,24 +121,35 @@ public class UniWebViewAuthenticationFlowFacebook: UniWebViewAuthenticationCommo
                 }
             }
         };
-        webView.OnPageErrorReceived += (view, code, message) => {
+        webView.OnLoadingErrorReceived += (view, code, message, payload) => {
             if (OnAuthenticationErrored != null) {
                 OnAuthenticationErrored.Invoke(code, message);
             }
         };
         webView.Frame = new Rect(0, 0, Screen.width, Screen.height);
         webView.Load(GetAuthUrl());
-        webView.SetShowToolbar(true, adjustInset: true);
+        webView.EmbeddedToolbar.Show();
         webView.Show(false, UniWebViewTransitionEdge.Bottom, 0.25f);
     }
-    
+
+    /// <summary>
+    /// Starts the refresh flow with the standard OAuth 2.0.
+    /// This implements the abstract method in `UniWebViewAuthenticationCommonFlow`.
+    /// </summary>
+    /// <param name="refreshToken">The refresh token received with a previous access token response.</param>
+    public override void StartRefreshTokenFlow(string refreshToken) {
+        Debug.LogError("Facebook does not provide a refresh token flow when building with the manual flow.");
+        throw new NotImplementedException();
+    }
+
     private string GetAuthUrl() {
         var builder = new UriBuilder(config.authorizationEndpoint);
-        var query = System.Web.HttpUtility.ParseQueryString("");
+        var query = new Dictionary<string, string>();
         foreach (var kv in GetAuthenticationUriArguments()) {
             query.Add(kv.Key, kv.Value);
         }
-        builder.Query = query.ToString();
+
+        builder.Query = UniWebViewAuthenticationUtils.CreateQueryString(query);
         return builder.ToString();
     }
 

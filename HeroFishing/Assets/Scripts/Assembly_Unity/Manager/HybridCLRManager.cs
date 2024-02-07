@@ -1,5 +1,4 @@
-﻿using Castle.Components.DictionaryAdapter.Xml;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using HybridCLR;
 using Scoz.Func;
 using System;
@@ -16,9 +15,9 @@ public class HybridCLRManager : MonoBehaviour {
     /// 載入GameDll
     /// </summary>
     public static async UniTask LoadAssembly() {
-#if UNITY_EDITOR
-        return;
-#endif
+//#if UNITY_EDITOR
+//        return;
+//#endif
         await LoadGameAssembly();
         await LoadMetadataForAOTAssemblies();
     }
@@ -49,7 +48,7 @@ public class HybridCLRManager : MonoBehaviour {
     /// 呼叫GameAssembly取需要下載的元數據清單
     /// </summary>
     static List<string> GetGameAssemblyAotMetaData() {
-        WriteLog_UnityAssembly.LogColor("呼叫GameAssembly取需要下載的元數據清單", WriteLog_UnityAssembly.LogType.HybridCLR);   
+        WriteLog_UnityAssembly.LogColor("呼叫GameAssembly取需要下載的元數據清單", WriteLog_UnityAssembly.LogType.HybridCLR);
         Assembly targetAssembly = null;
         try {
             targetAssembly = Assembly.Load("Game");
@@ -62,6 +61,9 @@ public class HybridCLRManager : MonoBehaviour {
         Type aotMetadataType = targetAssembly.GetType("AOTMetadata");
 
         if (aotMetadataType != null) {
+            // 取版本資訊
+            var version = aotMetadataType.GetProperty("Version");
+            WriteLog_UnityAssembly.LogColorFormat("AOTMetadata的版本為Version: {0}", WriteLog_UnityAssembly.LogType.HybridCLR, version.GetValue(null));
             // 取 AotDllList 欄位資訊
             FieldInfo aotDllListField = aotMetadataType.GetField("AotDllList");
             if (aotDllListField != null) {

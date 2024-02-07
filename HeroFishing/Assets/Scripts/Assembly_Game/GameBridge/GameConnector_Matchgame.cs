@@ -62,5 +62,9 @@ namespace HeroFishing.Socket {
             SocketCMD<AUTO> cmd = new SocketCMD<AUTO>(new AUTO(isAuto));
             Socket.TCPSend(cmd);
         }
+        public void LvUpSpell(int _idx) {
+            SocketCMD<LVUPSPELL> cmd = new SocketCMD<LVUPSPELL>(new LVUPSPELL(_idx));
+            Socket.TCPSend(cmd);
+        }
     }
 }

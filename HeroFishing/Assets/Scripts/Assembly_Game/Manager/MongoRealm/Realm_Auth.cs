@@ -11,6 +11,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.Networking;
 using System.Text;
 using HeroFishing.Socket;
+using LitJson;
 
 namespace Service.Realms {
     public static partial class RealmManager {
@@ -67,7 +68,10 @@ namespace Service.Realms {
             try {
                 InitDB();//初始化RealmDB
                 await GetServerTime();
-                await GameConnector.SendRestfulAPI("player/syncredischeck", null); //檢查是否需要同步Redis資料回玩家資料
+                var result = await GameConnector.SendRestfulAPI("player/syncredischeck", null); //檢查是否需要同步Redis資料回玩家資料
+                JsonData jsonData = JsonMapper.ToObject(result.ToString());
+                string resultStr = jsonData["result"].ToString();
+                WriteLog.LogColorFormat("syncredischeck: {0}", WriteLog.LogType.Realm, resultStr);
 
             } catch (Exception _e) {
                 WriteLog.LogError(_e);
