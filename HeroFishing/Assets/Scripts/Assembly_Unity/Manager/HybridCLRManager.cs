@@ -15,9 +15,9 @@ public class HybridCLRManager : MonoBehaviour {
     /// 載入GameDll
     /// </summary>
     public static async UniTask LoadAssembly() {
-//#if UNITY_EDITOR
-//        return;
-//#endif
+        //#if UNITY_EDITOR
+        //        return;// 編輯器無法測試HybridCLR更新
+        //#endif
         await LoadGameAssembly();
         await LoadMetadataForAOTAssemblies();
     }
