@@ -13,9 +13,10 @@ public class DropFrozen : DropSpellBase {
         _duration = spellData.EffectValue1;
     }
 
-    public override bool PlayDrop() {
+    public override bool PlayDrop(int heroIndex) {
         WorldStateManager.Instance.Freeze(true);
-        _dropUI.OnDropPlay(_data.ID, _duration);
+        if (heroIndex == 0)
+            _dropUI.OnDropPlay(_data.ID, _duration);
         Observable.Timer(TimeSpan.FromSeconds(_duration)).Subscribe(_ => {
             WorldStateManager.Instance.Freeze(false);
         });

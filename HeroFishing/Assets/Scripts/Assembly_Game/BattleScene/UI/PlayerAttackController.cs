@@ -20,7 +20,12 @@ namespace HeroFishing.Battle {
         private Vector3 _spellPos;
         private Vector3 _originPos;
         private HeroMoveBehaviour _currentMove;
-        private int _attackID = 0;
+        private static int s_attackID = 0;
+        public static int AttackID {
+            get {
+                return s_attackID++;
+            }
+        }
         private float _scheduledNextAttackTime;
         private float _scheduledRecoverTime;
         private float _scheduledLockTime;
@@ -40,7 +45,7 @@ namespace HeroFishing.Battle {
         private const float ATTACK_LOCK_TIME = 1.5f;
         public bool ControlLock {
             get {
-                return _currentMove != null && _currentMove.IsMoving;
+                return (_currentMove != null && _currentMove.IsMoving) || TimelinePlayer.IsPlaying;
             }
         }
 
@@ -218,7 +223,7 @@ namespace HeroFishing.Battle {
                 lockAttack = _lockAttack,
                 heroIndex = 0,
                 monsterIdx = monsterIdx,
-                attackID = _attackID,
+                attackID = s_attackID,
                 attackPos = _attackPos,
                 heroPos = _hero.transform.position,
                 direction = _attackDir
@@ -236,8 +241,8 @@ namespace HeroFishing.Battle {
             if (spell.ShakeCamera != null)
                 spell.ShakeCamera.Play();
             if (GameConnector.Connected)
-                GameConnector.Instance.Attack(_attackID, _spellData.ID, monsterIdx, _lockAttack, _attackPos, _attackDir);
-            _attackID++;
+                GameConnector.Instance.Attack(s_attackID, _spellData.ID, monsterIdx, _lockAttack, _attackPos, _attackDir);
+            s_attackID++;
             //switch (TmpSpellData.MySpellType) {
             //    case HeroSpellJsonData.SpellType.SpreadLineShot:
             //        radius = float.Parse(TmpSpellData.SpellTypeValues[1]);

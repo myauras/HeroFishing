@@ -50,6 +50,11 @@ namespace HeroFishing.Socket {
             SocketCMD<DROPSPELL> cmd = new SocketCMD<DROPSPELL>(new DROPSPELL(_dropSpellJsonID));
             Socket.TCPSend(cmd);
         }
+
+        public void DropSpell(int _attackID, int _dropSpellJsonID) {
+            SocketCMD<DROPSPELL> cmd = new SocketCMD<DROPSPELL>(new DROPSPELL(_attackID, _dropSpellJsonID));
+            Socket.TCPSend(cmd);
+        }
         /// <summary>
         /// 場景狀態更新
         /// </summary>

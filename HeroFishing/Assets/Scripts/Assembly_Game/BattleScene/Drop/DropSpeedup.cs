@@ -20,12 +20,16 @@ public class DropSpeedup : DropSpellBase {
     public DropSpeedup(DropJsonData data, DropSpellJsonData spellData) : base(data, spellData) {
         _duration = spellData.EffectValue1;
         _speedupMultiplier = spellData.EffectValue2;
-        _hero = BattleManager.Instance.GetHero(0);
+
     }
 
-    public override bool PlayDrop() {
+    public override bool PlayDrop(int heroIndex) {
+        if (heroIndex == 0) {
+            _dropUI.OnDropPlay(_data.ID, _duration);
+        }
+
+        _hero = BattleManager.Instance.GetHero(heroIndex);
         _hero.AttackSpeedMultiplier = _speedupMultiplier;
-        _dropUI.OnDropPlay(_data.ID, _duration);
         string path = string.Format(DROP_BUFF_EFFECT, _data.Ref);
         PoolManager.Instance.Pop(path, _hero.transform.position, Quaternion.identity, null, go => _buffGO = go);
 

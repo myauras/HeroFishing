@@ -39,7 +39,7 @@ public class FlyingDrop : MonoBehaviour {
                 _progress = _timer = 0;
                 endPos.y = 0;
                 PoolManager.Instance.Pop(string.Format(GET_DROP_KEY, dropRef), endPos);
-                DropManager.Instance.AddDrop(dropID);
+                DropManager.Instance.AddDrop(heroIndex, dropID);
             });
         });
     }

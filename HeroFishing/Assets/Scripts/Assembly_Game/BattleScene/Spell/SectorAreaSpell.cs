@@ -38,6 +38,7 @@ public class SectorAreaSpell : SpellBase {
             InitDirection = playData.direction,
             IgnoreFireModel = false,
             LifeTime = _lifeTime,
+            IsDrop = playData.IsDrop,
         };
         if (!BulletSpawner.Spawn(spawnBulletInfo, out Bullet bullet)) return;
         var collisionInfo = new AreaCollisionInfo {

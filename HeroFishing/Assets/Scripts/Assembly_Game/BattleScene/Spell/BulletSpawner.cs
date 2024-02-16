@@ -14,6 +14,7 @@ public struct SpawnBulletInfo {
     public float ProjectileDelay;
     public float LifeTime;
     public bool IgnoreFireModel;
+    public bool IsDrop;
 }
 
 public static class BulletSpawner {
@@ -52,6 +53,7 @@ public static class BulletSpawner {
             IgnoreFireModel = spawnBulletInfo.IgnoreFireModel,
             FirePosition = firePosition,
             Delay = spawnBulletInfo.ProjectileDelay,
+            IsDrop = spawnBulletInfo.IsDrop,
         });
         return true;
     }

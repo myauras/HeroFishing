@@ -11,8 +11,8 @@ public abstract class DropBase {
         _data = data;
     }
 
-    public abstract void AddDrop();
-    public abstract bool PlayDrop();
+    public abstract void AddDrop(int heroIndex);
+    public abstract bool PlayDrop(int heroIndex);
 }
 
 public abstract class DropSpellBase : DropBase {
@@ -23,7 +23,8 @@ public abstract class DropSpellBase : DropBase {
         _dropUI = BaseUI.GetInstance<DropUI>();
     }
 
-    public override void AddDrop() {
-        _dropUI.OnDropAdd(_data.ID);
+    public override void AddDrop(int heroIndex) {
+        if (heroIndex == 0)
+            _dropUI.OnDropAdd(_data.ID);
     }
 }

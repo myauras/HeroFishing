@@ -6,12 +6,13 @@ using UnityEngine;
 
 namespace HeroFishing.Main {
     public class DropSpellJsonData : MyJsonData {
-        public enum EffectType { Frozen, Speedup, Circle }
+        public enum EffectType { Frozen, Speedup, Circle, HeroSpell }
         public static string DataName { get; set; }
         public string Name => StringJsonData.GetString_static(DataName + "_" + ID, "Name");
         public float RTP { get; private set; }
         public string[] Motion { get; private set; }
         public string Voice { get; private set; }
+        public bool HasTimeline { get; private set; }
         public EffectType MyEffectType { get; private set; }
         public float EffectValue1 { get; private set; }
         public float EffectValue2 { get; private set; }
@@ -32,6 +33,9 @@ namespace HeroFishing.Main {
                         break;
                     case "Voice":
                         Voice = item[key].ToString();
+                        break;
+                    case "HasTimeline":
+                        HasTimeline = bool.Parse(item[key].ToString());
                         break;
                     case "EffectType":
                         MyEffectType = MyEnum.ParseEnum<EffectType>(item[key].ToString());

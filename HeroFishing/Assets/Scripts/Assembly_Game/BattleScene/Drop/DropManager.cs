@@ -27,33 +27,43 @@ public class DropManager {
 
     }
 
-    public void AddDrop(int dropID) {
+    public void AddDrop(int heroIndex, int dropID) {
         if (_currentDrops.Contains(dropID)) return;
         DropJsonData data = DropJsonData.GetData(dropID);
         if (data.MyDropType == DropJsonData.DropType.Spell) {
             DropSpellJsonData spellData = DropSpellJsonData.GetData(dropID);
             if (!_dropSpells.TryGetValue(dropID, out var drop)) {
-                drop = GetDropSpell(data, spellData);
+                if (spellData.HasTimeline) {
+                    var timelineDrop = new DropTimeline(data, spellData);
+                    timelineDrop.SetDropSpell(GetDropSpell(data, spellData));
+                    drop = timelineDrop;
+                }
+                else {
+                    drop = GetDropSpell(data, spellData);
+                }
                 _dropSpells[dropID] = drop;
             }
 
-            drop.AddDrop();
-            _currentDrops.Add(dropID);
+            drop.AddDrop(heroIndex);
+            if (heroIndex == 0)
+                _currentDrops.Add(dropID);
         }
     }
 
-    public void PlayDrop(int dropID) {
+    public void PlayDrop(int heroIndex, int dropID) {
         if (_dropSpells.TryGetValue(dropID, out var drop) && _currentDrops.Contains(dropID)) {
-            if (drop.PlayDrop()) {
+            if (drop.PlayDrop(heroIndex)) {
 
-                if (drop.Duration == 0)
-                    _currentDrops.Remove(dropID);
-                else {
-                    Observable.Timer(TimeSpan.FromSeconds(drop.Duration)).Subscribe(_ => _currentDrops.Remove(dropID));
-                }
+                if (heroIndex == 0) {
+                    if (drop.Duration == 0)
+                        _currentDrops.Remove(dropID);
+                    else {
+                        Observable.Timer(TimeSpan.FromSeconds(drop.Duration)).Subscribe(_ => _currentDrops.Remove(dropID));
+                    }
 
-                if (GameConnector.Connected) {
-                    GameConnector.Instance.DropSpell(dropID);
+                    if (GameConnector.Connected) {
+                        GameConnector.Instance.DropSpell(dropID);
+                    }
                 }
             }
         }
@@ -65,8 +75,8 @@ public class DropManager {
                 return new DropFrozen(data, spellData);
             case DropSpellJsonData.EffectType.Speedup:
                 return new DropSpeedup(data, spellData);
-            case DropSpellJsonData.EffectType.Circle:
-                return new DropCircle(data, spellData);
+            case DropSpellJsonData.EffectType.HeroSpell:
+                return new DropHeroSpell(data, spellData);
         }
         throw new System.Exception("the drop type is not found: " + spellData.MyEffectType);
     }

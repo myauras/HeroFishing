@@ -43,7 +43,7 @@ public class DropUI : BaseUI
     public void Press(int index) {
         if (_dropBtns[index].IsEmpty) return;
         _dropBtns[index].Press();
-        DropManager.Instance.PlayDrop(_dropBtns[index].DropID);
+        DropManager.Instance.PlayDrop(0, _dropBtns[index].DropID);
         //Debug.Log("press");
     }
 

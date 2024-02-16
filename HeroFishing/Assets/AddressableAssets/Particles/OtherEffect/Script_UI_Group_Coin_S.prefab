@@ -8,6 +8,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2012500921941888193, guid: 27b8fceb8ed942948862c837f7964d7e,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: d2263dcebb0f8ed4784a4021fd82a233, type: 2}
     - target: {fileID: 4957411278359759291, guid: 27b8fceb8ed942948862c837f7964d7e,
         type: 3}
       propertyPath: m_Pivot.x
@@ -133,10 +138,20 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6527303493296386710, guid: 27b8fceb8ed942948862c837f7964d7e,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: d2263dcebb0f8ed4784a4021fd82a233, type: 2}
     - target: {fileID: 7003045434807835823, guid: 27b8fceb8ed942948862c837f7964d7e,
         type: 3}
       propertyPath: m_Name
       value: Script_UI_Group_Coin_S
+      objectReference: {fileID: 0}
+    - target: {fileID: 7912734417129279332, guid: 27b8fceb8ed942948862c837f7964d7e,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9070759606217753346, guid: 27b8fceb8ed942948862c837f7964d7e,
         type: 3}
