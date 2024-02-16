@@ -6,7 +6,6 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
-using static PlasticPipe.Server.MonitorStats;
 
 public class TimelinePlayer : MonoBehaviour {
     [SerializeField]
@@ -73,7 +72,6 @@ public class TimelinePlayer : MonoBehaviour {
     public void Play(bool mute = false) {
         if (s_isPlaying) return;
         //gameObject.SetActive(true);
-        mute = true;
         //mute = UnityEngine.Random.value > 0.5f;
         if (_isMuted != mute) {
             for (int j = 0; j < _mutedTrack.Length; j++) {
