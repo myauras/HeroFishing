@@ -5,6 +5,8 @@ using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
+using static PlasticPipe.Server.MonitorStats;
 
 public class TimelinePlayer : MonoBehaviour {
     [SerializeField]
@@ -13,10 +15,16 @@ public class TimelinePlayer : MonoBehaviour {
     private bool _playOnEnable = true;
     [SerializeField]
     private bool _autoBackPoolOnFinish = true;
+    [SerializeField]
+    private string _cinemachineTrack;
+    [SerializeField]
+    private string[] _mutedTrack;
 
     private const string CAMERA_TRACK_NAME = "Cinemachine Track";
 
     private bool _isInit;
+    private bool _isMuted;
+    private TimelineAsset _timelineAsset;
     public float Duration => (float)_director.playableAsset.duration;
 
     private static bool s_isPlaying;
@@ -48,9 +56,10 @@ public class TimelinePlayer : MonoBehaviour {
 
     public void Init() {
         if (_isInit) return;
+        _timelineAsset = (TimelineAsset)_director.playableAsset;
         foreach (var output in _director.playableAsset.outputs) {
             if (output.sourceObject != null) {
-                if (output.streamName == CAMERA_TRACK_NAME) {
+                if (output.streamName == _cinemachineTrack) {
                     var brain = BattleManager.Instance.BattleCam.GetComponent<CinemachineBrain>();
                     _director.SetGenericBinding(output.sourceObject, brain);
                     break;
@@ -61,9 +70,24 @@ public class TimelinePlayer : MonoBehaviour {
     }
 
     [ContextMenu("Play")]
-    public void Play() {
+    public void Play(bool mute = false) {
         if (s_isPlaying) return;
         //gameObject.SetActive(true);
+        mute = true;
+        //mute = UnityEngine.Random.value > 0.5f;
+        if (_isMuted != mute) {
+            for (int j = 0; j < _mutedTrack.Length; j++) {
+                for (int i = 0; i < _timelineAsset.rootTrackCount; i++) {
+                    var track = _timelineAsset.GetRootTrack(i);
+                    if (track.name == _mutedTrack[j]) {
+                        track.muted = mute;
+                        break;
+                    }
+                }
+            }
+
+            _isMuted = mute;
+        }
 
         if (!_isInit) {
             Observable.TimerFrame(1).Subscribe(_ => {
@@ -83,21 +107,24 @@ public class TimelinePlayer : MonoBehaviour {
     private void OnPlayed(PlayableDirector director) {
         Debug.Log("played");
         s_isPlaying = true;
-        //UICam.Instance.MyCam.gameObject.SetActive(false);
+        if (!_isMuted)
+            UICam.Instance.MyCam.gameObject.SetActive(false);
         OnTimelinePlayed?.Invoke();
     }
 
     private void OnPaused(PlayableDirector director) {
         Debug.Log("paused");
         s_isPlaying = false;
-        //UICam.Instance.MyCam.gameObject.SetActive(true);
+        if (!_isMuted)
+            UICam.Instance.MyCam.gameObject.SetActive(true);
         OnTimelinePaused?.Invoke();
     }
 
     private void OnStopped(PlayableDirector director) {
         Debug.Log("stopped");
         s_isPlaying = false;
-        //UICam.Instance.MyCam.gameObject.SetActive(true);
+        if (!_isMuted)
+            UICam.Instance.MyCam.gameObject.SetActive(true);
         OnTimelineStopped?.Invoke();
         if (_autoBackPoolOnFinish) {
             PoolManager.Instance.Push(gameObject);
