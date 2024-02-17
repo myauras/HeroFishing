@@ -124,7 +124,7 @@ namespace HeroFishing.Socket {
             //設定玩家目前所在遊戲房間的資料
             AllocatedRoom.Instance.SetRoom("System", new string[4], gameState.MatchgameTestverMapID, gameState.MatchgameTestverRoomName, gameState.MatchgameTestverIP, gameState.MatchgameTestverPort ?? 0, "");
             UniTask.Void(async () => {
-                var bsonDoc = await RealmManager.Query_GetDoc(DBGameCol.matchgame.ToString(), _reply.DBMatchgameID);
+                var bsonDoc = await RealmManager.Query_GetDoc(DBGameCol.matchgame.ToString(), gameState.MatchgameTestverRoomName);
                 if (bsonDoc != null) {
                     // var dbMatchgame = new DBMatchgame(bsonDoc);
                     GameConnector.Instance.ConnToMatchgame();
