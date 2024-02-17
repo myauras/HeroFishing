@@ -89,8 +89,10 @@ namespace HeroFishing.Socket {
             UniTask.Void(async () => {
                 var bsonDoc = await RealmManager.Query_GetDoc(DBGameCol.matchgame.ToString(), _reply.DBMatchgameID);
                 if (bsonDoc != null) {
-                    var dbMatchgame = new DBMatchgame(bsonDoc);
+                    // var dbMatchgame = new DBMatchgame(bsonDoc);
                     GameConnector.Instance.ConnToMatchgame();
+                } else {
+                    WriteLog.LogError("DBMatchgame 文件找不到, 請確認server有確實建立該文件");
                 }
             });
         }
@@ -110,6 +112,26 @@ namespace HeroFishing.Socket {
                 }
                 return;
             }
+        }
+
+        /// <summary>
+        /// 個人測試模式(不使用Agones服務, 不會透過Matchmaker分配房間再把ip回傳給client, 而是直接讓client去連資料庫matchgame的ip)
+        /// </summary>
+        public void ConnectToMatchgameTestVer() {
+            // 建立房間成功
+            WriteLog.LogColor("個人測試模式連線Matchgame: ", WriteLog.LogType.Connection);
+            var gameState = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.GameState.ToString());
+            //設定玩家目前所在遊戲房間的資料
+            AllocatedRoom.Instance.SetRoom("System", new string[4], gameState.MatchgameTestverMapID, gameState.MatchgameTestverRoomName, gameState.MatchgameTestverIP, gameState.MatchgameTestverPort ?? 0, "");
+            UniTask.Void(async () => {
+                var bsonDoc = await RealmManager.Query_GetDoc(DBGameCol.matchgame.ToString(), _reply.DBMatchgameID);
+                if (bsonDoc != null) {
+                    // var dbMatchgame = new DBMatchgame(bsonDoc);
+                    GameConnector.Instance.ConnToMatchgame();
+                } else {
+                    WriteLog.LogError("DBMatchgame 文件找不到, 請確認server有確實建立該文件");
+                }
+            });
         }
 
         /// <summary>
