@@ -119,7 +119,6 @@ namespace HeroFishing.Main {
                 string resultStr = jsonData["result"].ToString();
                 WriteLog.LogColorFormat("syncredischeck: {0}", WriteLog.LogType.Realm, resultStr);
 
-                AllocatedRoom.Init();
                 AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
                 //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
                 GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnResult).Forget();

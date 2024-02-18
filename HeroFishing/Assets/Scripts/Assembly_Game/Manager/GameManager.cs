@@ -144,6 +144,8 @@ namespace Scoz.Func {
 #endif
             //初始化文字取代工具
             StringReplacer.Init();
+            //初始化遊戲房間
+            AllocatedRoom.Init();
 
             // 建立AddressableManage並開始載包
             StartDownloadAddressable();
