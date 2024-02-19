@@ -15,7 +15,7 @@ using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Socket {
     public partial class GameConnector : MonoBehaviour {
-        public static bool Connected => Instance != null && AllocatedRoom.Instance != null;
+        public static bool Connected => Instance != null && AllocatedRoom.Instance != null && AllocatedRoom.Instance.InGame;
         public static GameConnector Instance = null;
 
         #region 共用參數設定

@@ -43,7 +43,7 @@ namespace HeroFishing.Battle {
 
         public int Index {
             get {
-                if (_rotateTest || AllocatedRoom.Instance == null) return _rotateTestIndex;
+                if (_rotateTest || !GameConnector.Connected) return _rotateTestIndex;
                 return AllocatedRoom.Instance.Index;
             }
         }
@@ -94,7 +94,7 @@ namespace HeroFishing.Battle {
 
         private void InitPlayerHero() {
             var hero = GetHero(0);
-            if (AllocatedRoom.Instance == null) {//測試流程
+            if (!GameConnector.Connected) {//測試流程
 
                 hero.SetData(_testHeroID, $"{_testHeroID}_1");
                 hero.UpdatePoints(10);
@@ -112,7 +112,7 @@ namespace HeroFishing.Battle {
 
         private void InitMonsterScheduler() {
             MyMonsterScheduler = new MonsterScheduler();
-            MyMonsterScheduler.Init(MapJsonData.GetData(7), AllocatedRoom.Instance == null);
+            MyMonsterScheduler.Init(MapJsonData.GetData(7), !GameConnector.Connected);
         }
 
         private void Update() {
@@ -139,7 +139,7 @@ namespace HeroFishing.Battle {
 
         public void UpdateHeros() {
             int count = 1;
-            if (AllocatedRoom.Instance == null || AllocatedRoom.Instance.HeroIDs == null) return;
+            if (GameConnector.Connected || AllocatedRoom.Instance.HeroIDs == null) return;
             for (int i = 0; i < MAX_HERO_COUNT; i++) {
                 int playerIndex = i;
                 if (Index == playerIndex) continue;
