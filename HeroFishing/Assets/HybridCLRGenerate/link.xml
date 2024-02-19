@@ -157,6 +157,7 @@
     <type fullname="System.Xml.Serialization.XmlIgnoreAttribute" preserve="all" />
   </assembly>
   <assembly fullname="UniRx">
+    <type fullname="UniRx.FrameCountType" preserve="all" />
     <type fullname="UniRx.Observable" preserve="all" />
     <type fullname="UniRx.ObservableExtensions" preserve="all" />
     <type fullname="UniRx.Subject`1" preserve="all" />
@@ -193,15 +194,9 @@
     <type fullname="UnityEngine.AddressableAssets.Addressables/MergeMode" preserve="all" />
     <type fullname="UnityEngine.AddressableAssets.AssetReference" preserve="all" />
   </assembly>
-  <assembly fullname="Unity.Burst">
-    <type fullname="Unity.Burst.BurstCompileAttribute" preserve="all" />
-  </assembly>
   <assembly fullname="Unity.Entities">
-    <type fullname="Unity.Entities.Entity" preserve="all" />
-    <type fullname="Unity.Entities.EntityManager" preserve="all" />
     <type fullname="Unity.Entities.IComponentData" preserve="all" />
     <type fullname="Unity.Entities.IQueryTypeParameter" preserve="all" />
-    <type fullname="Unity.Entities.World" preserve="all" />
   </assembly>
   <assembly fullname="Unity.Mathematics">
     <type fullname="Unity.Mathematics.Random" preserve="all" />
@@ -233,6 +228,10 @@
     <type fullname="TMPro.TMP_Text" preserve="all" />
     <type fullname="TMPro.TextMeshProUGUI" preserve="all" />
   </assembly>
+  <assembly fullname="Unity.Timeline">
+    <type fullname="UnityEngine.Timeline.TimelineAsset" preserve="all" />
+    <type fullname="UnityEngine.Timeline.TrackAsset" preserve="all" />
+  </assembly>
   <assembly fullname="Unity.VisualScripting.Core">
     <type fullname="Unity.VisualScripting.ComponentHolderProtocol" preserve="all" />
   </assembly>
@@ -243,6 +242,7 @@
     <type fullname="UnityEngine.AndroidJavaObject" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.AnimationModule">
+    <type fullname="UnityEngine.Animation" preserve="all" />
     <type fullname="UnityEngine.Animator" preserve="all" />
     <type fullname="UnityEngine.AnimatorStateInfo" preserve="all" />
     <type fullname="UnityEngine.RuntimeAnimatorController" preserve="all" />
@@ -299,6 +299,8 @@
     <type fullname="UnityEngine.Object" preserve="all" />
     <type fullname="UnityEngine.Ping" preserve="all" />
     <type fullname="UnityEngine.Plane" preserve="all" />
+    <type fullname="UnityEngine.Playables.PlayableAsset" preserve="all" />
+    <type fullname="UnityEngine.Playables.PlayableBinding" preserve="all" />
     <type fullname="UnityEngine.PlayerPrefs" preserve="all" />
     <type fullname="UnityEngine.PropertyAttribute" preserve="all" />
     <type fullname="UnityEngine.QualitySettings" preserve="all" />
@@ -344,6 +346,9 @@
     <type fullname="UnityEngine.WaitForFixedUpdate" preserve="all" />
     <type fullname="UnityEngine.WaitForSeconds" preserve="all" />
     <type fullname="UnityEngine.WaitForSecondsRealtime" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.DirectorModule">
+    <type fullname="UnityEngine.Playables.PlayableDirector" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.IMGUIModule">
     <type fullname="UnityEngine.GUI" preserve="all" />

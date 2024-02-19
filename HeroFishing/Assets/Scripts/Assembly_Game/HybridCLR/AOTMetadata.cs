@@ -16,8 +16,6 @@ public static class AOTMetadata {
 		"UniRx.dll",
 		"UniTask.dll",
 		"Unity.Addressables.dll",
-		"Unity.Burst.dll",
-		"Unity.Entities.dll",
 		"Unity.RenderPipelines.Core.Runtime.dll",
 		"Unity.ResourceManager.dll",
 		"Unity.VisualScripting.Core.dll",

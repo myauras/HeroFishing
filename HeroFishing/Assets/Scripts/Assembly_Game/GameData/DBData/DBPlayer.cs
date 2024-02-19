@@ -44,10 +44,8 @@ public partial class DBPlayer : IRealmObject {
     /// 離開遊戲房時將InMatchgameID設回null並取消訂閱
     /// </summary>
     public async UniTask SetInMatchgameID(string _matchgameID) {
-        WriteLog.Log("a");
         await RealmManager.MyRealm.WriteAsync(() => {
             InMatchgameID = _matchgameID;
-            WriteLog.Log("b");
         });
         //if (!string.IsNullOrEmpty(InMatchgameID)) {
         //    await RealmManager.Subscribe_Matchgame();
