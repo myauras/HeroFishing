@@ -75,8 +75,10 @@ namespace HeroFishing.Main {
                 return;
             }
             foreach (var setting in settings) {
-                if (MyEnum.TryParseEnum<DBGameSettingDoc>(setting.ID, out var _type)) {
+                if (Enum.TryParse<DBGameSettingDoc>(setting.ID, out var _type)) {
                     DBGameSettingDatas[_type] = setting;
+                } else {
+                    WriteLog.LogErrorFormat("傳入DBGameSetting的_id:{0} 無法轉為DBGameSettingDoc列舉", setting.ID);
                 }
             }
         }
@@ -96,6 +98,7 @@ namespace HeroFishing.Main {
         /// </summary>
         public async UniTask<DBMatchgame> GetMatchGame() {
             var dbPlayer = GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
+            WriteLog.Log(" dbPlayer.InMatchgameID=" + dbPlayer.InMatchgameID);
             if (string.IsNullOrEmpty(dbPlayer.InMatchgameID)) return null;
             var bsonDoc = await RealmManager.Query_GetDoc(DBGameCol.matchgame.ToString(), dbPlayer.InMatchgameID);
             if (bsonDoc == null) return null;
