@@ -3,9 +3,7 @@ using HeroFishing.Main;
 using Scoz.Func;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class CoinEffectUI : BaseUI, IUpdate {
     public class CoinEffectItemData {

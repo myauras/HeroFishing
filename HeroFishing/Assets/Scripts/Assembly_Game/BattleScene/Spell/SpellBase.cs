@@ -1,8 +1,6 @@
 using HeroFishing.Battle;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Assertions;
-using Unity.Entities;
 using UnityEngine;
 using static HeroFishing.Battle.SpellIndicator;
 

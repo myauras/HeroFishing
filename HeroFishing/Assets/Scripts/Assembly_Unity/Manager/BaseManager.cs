@@ -3,7 +3,6 @@ using LitJson;
 using Scoz.Func;
 using System;
 using System.Reflection;
-using Unity.Entities;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;

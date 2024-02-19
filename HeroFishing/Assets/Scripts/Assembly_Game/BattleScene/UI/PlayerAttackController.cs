@@ -1,5 +1,4 @@
 using UnityEngine;
-using Unity.Entities;
 using Scoz.Func;
 using UnityEngine.EventSystems;
 using HeroFishing.Main;

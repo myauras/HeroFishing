@@ -4,8 +4,6 @@ using HeroFishing.Socket;
 using Scoz.Func;
 using System;
 using UniRx;
-using Unity.Entities;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace HeroFishing.Battle {
