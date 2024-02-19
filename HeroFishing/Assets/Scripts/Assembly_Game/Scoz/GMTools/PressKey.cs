@@ -15,9 +15,11 @@ namespace Scoz.Func {
 
 
             if (Input.GetKeyDown(KeyCode.Q)) {
-                int[] monsterIdxs = new int[1] { 1 };
-                key++;
-                GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
+                DropManager.Instance.AddDrop(0, 15);
+
+                //int[] monsterIdxs = new int[1] { 1 };
+                //key++;
+                //GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
             } else if (Input.GetKeyDown(KeyCode.W)) {
                 //GameConnector.Instance.Attack(1, "1_attack", 2);
             } else if (Input.GetKeyDown(KeyCode.E)) {
