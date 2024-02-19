@@ -85,8 +85,10 @@ namespace HeroFishing.Socket {
             // 建立房間成功
             WriteLog.LogColorFormat("建立房間成功: ", WriteLog.LogType.Connection, DebugUtils.ObjToStr(_reply));
             //設定玩家目前所在遊戲房間的資料
-            AllocatedRoom.Instance.SetRoom(_reply.CreaterID, _reply.PlayerIDs, _reply.DBMapID, _reply.DBMatchgameID, _reply.IP, _reply.Port, _reply.PodName);
-            GameConnector.Instance.ConnToMatchgame(OnConnToMatchgameCB);
+            UniTask.Void(async () => {
+                await AllocatedRoom.Instance.SetRoom(_reply.CreaterID, _reply.PlayerIDs, _reply.DBMapID, _reply.DBMatchgameID, _reply.IP, _reply.Port, _reply.PodName);
+                GameConnector.Instance.ConnToMatchgame(OnConnToMatchgameCB);
+            });
         }
 
         private void OnCreateRoomError(Exception _exception) {
@@ -115,8 +117,10 @@ namespace HeroFishing.Socket {
             WriteLog.LogColor("個人測試模式連線Matchgame: ", WriteLog.LogType.Connection);
             var gameState = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.GameState.ToString());
             //設定玩家目前所在遊戲房間的資料
-            AllocatedRoom.Instance.SetRoom("System", new string[4], gameState.MatchgameTestverMapID, gameState.MatchgameTestverRoomName, gameState.MatchgameTestverIP, gameState.MatchgameTestverPort ?? 0, "");
-            GameConnector.Instance.ConnToMatchgame(_onConnnectedAC);
+            UniTask.Void(async () => {
+                await AllocatedRoom.Instance.SetRoom("System", new string[4], gameState.MatchgameTestverMapID, gameState.MatchgameTestverRoomName, gameState.MatchgameTestverIP, gameState.MatchgameTestverPort ?? 0, "");
+                GameConnector.Instance.ConnToMatchgame(_onConnnectedAC);
+            });
         }
 
         /// <summary>

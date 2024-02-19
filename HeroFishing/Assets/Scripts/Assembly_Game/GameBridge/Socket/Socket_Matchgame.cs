@@ -177,7 +177,7 @@ namespace HeroFishing.Socket {
         private void OnRecieveMatchgameTCPMsg(string _msg) {
             try {
 
-                //WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
+                WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
                 SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
                 Tuple<string, int> cmdID = new Tuple<string, int>(data.CMD, data.PackID);
                 if (CMDCallback.TryGetValue(cmdID, out Action<string> _cb)) {
@@ -234,6 +234,10 @@ namespace HeroFishing.Socket {
                         case SocketContent.MatchgameCMD_TCP.LVUPSPELL_TOCLIENT:
                             var lvupSpellPacket = JsonMapper.ToObject<SocketCMD<LVUPSPELL_TOCLIENT>>(_msg);
                             HandleLvUpSpell(lvupSpellPacket);
+                            break;
+                        case SocketContent.MatchgameCMD_TCP.DROPSPELL_TOCLIENT:
+                            var dropSpellPacket = JsonMapper.ToObject<SocketCMD<DROPSPELL_TOCLIENT>>(_msg);
+                            HandleDropSepll(dropSpellPacket);
                             break;
                         default:
                             WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
@@ -319,7 +323,11 @@ namespace HeroFishing.Socket {
         }
         void HandleLvUpSpell(SocketCMD<LVUPSPELL_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
-            WriteLog.Log("技能升級結果:"+_packet.Content.Success);
+            WriteLog.Log("技能升級結果:" + _packet.Content.Success);
+        }
+        void HandleDropSepll(SocketCMD<DROPSPELL_TOCLIENT> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            WriteLog.Log("施放掉落技能:" + _packet.Content.Success);
         }
 
     }
