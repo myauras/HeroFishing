@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 public class AOTGenericReferences : UnityEngine.MonoBehaviour
 {
 
@@ -10,7 +10,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		"FlutterUnityIntegration.dll",
 		"LitJson.dll",
 		"Loxodon.Framework.dll",
-		"Realm",
+		"Realm.dll",
 		"SerializableDictionary.dll",
 		"System.Core.dll",
 		"System.dll",
@@ -187,7 +187,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<System.ValueTuple<object,object>>
 	// System.Action<UniRx.TimeInterval<long>>
 	// System.Action<UniRx.Unit>
-	// System.Action<UniWebViewMessage>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,object>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<long>>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>>
