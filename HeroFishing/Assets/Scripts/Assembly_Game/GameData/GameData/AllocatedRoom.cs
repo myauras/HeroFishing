@@ -70,7 +70,7 @@ namespace HeroFishing.Main {
         /// <summary>
         /// 設定被Matchmaker分配到的房間資料，CreateRoom後會從Matchmaker回傳取得此資料
         /// </summary>
-        public void SetRoom(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _ip, int _port, string _podName) {
+        public async UniTask SetRoom(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _ip, int _port, string _podName) {
             CreaterID = _createID;
             PlayerIDs = _playerIDs;
             DBMapID = _dbMapID;
@@ -82,7 +82,7 @@ namespace HeroFishing.Main {
 
             var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
             if (dbPlayer == null) return;
-            dbPlayer.SetInMatchgameID(DBMatchgameID).Forget();
+            await dbPlayer.SetInMatchgameID(DBMatchgameID);
         }
         /// <summary>
         /// 設定房間內玩家的索引, 也就是玩家的座位, 一進房間後就不會更動
