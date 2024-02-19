@@ -76,7 +76,7 @@ namespace HeroFishing.Socket {
         /// <summary>
         /// 收到建立房間結果回傳如果有錯誤就重連
         /// </summary>
-        void OnCreateRoom(CREATEROOM_TOCLIENT _reply) {
+        void OnCreateRoom(CREATEROOM_TOCLIENT _reply, Action<bool> _onConnectedAC) {
             if (_reply == null) {
                 WriteLog.LogError("OnCreateRoom回傳的CREATEROOM_REPLY內容為null");
                 OnConnToMatchgameCB?.Invoke(false);
@@ -86,13 +86,7 @@ namespace HeroFishing.Socket {
             WriteLog.LogColorFormat("建立房間成功: ", WriteLog.LogType.Connection, DebugUtils.ObjToStr(_reply));
             //設定玩家目前所在遊戲房間的資料
             AllocatedRoom.Instance.SetRoom(_reply.CreaterID, _reply.PlayerIDs, _reply.DBMapID, _reply.DBMatchgameID, _reply.IP, _reply.Port, _reply.PodName);
-            UniTask.Void(async () => {
-                var bsonDoc = await RealmManager.Query_GetDoc(DBGameCol.matchgame.ToString(), _reply.DBMatchgameID);
-                if (bsonDoc != null) {
-                    var dbMatchgame = new DBMatchgame(bsonDoc);
-                    GameConnector.Instance.ConnToMatchgame();
-                }
-            });
+            GameConnector.Instance.ConnToMatchgame(_onConnectedAC);
         }
 
         private void OnCreateRoomError(Exception _exception) {
@@ -113,10 +107,24 @@ namespace HeroFishing.Socket {
         }
 
         /// <summary>
-        /// 偵聽到DBMatchgame表被建立後會跳BattleScene並開始跑ConnToMatchgame開始連線到Matchgame
+        /// 個人測試模式(不使用Agones服務, 不會透過Matchmaker分配房間再把ip回傳給client, 而是直接讓client去連資料庫matchgame的ip)
         /// </summary>
-        public void ConnToMatchgame() {
+        public void ConnectToMatchgameTestVer(int _id, string _heroSkinID, Action<bool> _onConnnectedAC) {
+            AllocatedRoom.Instance.SetMyHero(_id, _heroSkinID); //設定本地玩家自己使用的英雄ID
+            // 建立房間成功
+            WriteLog.LogColor("個人測試模式連線Matchgame: ", WriteLog.LogType.Connection);
+            var gameState = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.GameState.ToString());
+            //設定玩家目前所在遊戲房間的資料
+            AllocatedRoom.Instance.SetRoom("System", new string[4], gameState.MatchgameTestverMapID, gameState.MatchgameTestverRoomName, gameState.MatchgameTestverIP, gameState.MatchgameTestverPort ?? 0, "");
+            GameConnector.Instance.ConnToMatchgame(_onConnnectedAC);
+        }
+
+        /// <summary>
+        /// 確認DBMatchgame表被建立後會跳BattleScene並開始跑ConnToMatchgame開始連線到Matchgame
+        /// </summary>
+        public void ConnToMatchgame(Action<bool> _onConnectedAC) {
             if (AllocatedRoom.Instance.InGame) return;
+            //OnConnToMatchgameCB = _onConnectedAC;
             AllocatedRoom.Instance.SetInGame(true);
             WriteLog.LogColor("DBMatchgame已建立好, 開始連線到Matchgame", WriteLog.LogType.Connection);
             UniTask.Void(async () => {

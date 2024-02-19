@@ -33,6 +33,7 @@ namespace Service.Realms {
         Timer,
         Address,
         GameState,
+        GameConfig,
         ScheduledInGameNotification,
     }
     public static partial class RealmManager {

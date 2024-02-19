@@ -107,7 +107,7 @@ namespace Scoz.Editor {
             } catch (Exception _e) {
                 LogFile.AppendWrite(logPath, $"失敗! 從 {sourcePath} 到 {targetPath}  錯誤: {_e}");
             }
-            // 補充元數據(使用metaDatas來複製dll, 不可以直接使用AOTMetadata.AotDllList 因為自動化腳本修改.cs檔案後 在此自動化腳本中只能訪問未修改前的版本)
+            // 補充元數據(使用 metaDatas來複製dll, 不可以直接使用AOTMetadata.AotDllList 因為自動化腳本修改.cs檔案後 在此自動化腳本中只能訪問未修改前的版本)
             LogFile.AppendWrite(logPath, "MetaData Count: " + metaDatas.Length.ToString());
             foreach (var item in metaDatas) {
                 LogFile.AppendWrite(logPath, item);

@@ -75,8 +75,10 @@ namespace HeroFishing.Main {
                 return;
             }
             foreach (var setting in settings) {
-                if (MyEnum.TryParseEnum<DBGameSettingDoc>(setting.ID, out var _type)) {
+                if (Enum.TryParse<DBGameSettingDoc>(setting.ID, out var _type)) {
                     DBGameSettingDatas[_type] = setting;
+                } else {
+                    WriteLog.LogErrorFormat("傳入DBGameSetting的_id:{0} 無法轉為DBGameSettingDoc列舉", setting.ID);
                 }
             }
         }
