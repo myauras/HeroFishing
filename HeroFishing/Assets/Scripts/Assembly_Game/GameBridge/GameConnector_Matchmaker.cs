@@ -76,7 +76,7 @@ namespace HeroFishing.Socket {
         /// <summary>
         /// 收到建立房間結果回傳如果有錯誤就重連
         /// </summary>
-        void OnCreateRoom(CREATEROOM_TOCLIENT _reply, Action<bool> _onConnectedAC) {
+        void OnCreateRoom(CREATEROOM_TOCLIENT _reply) {
             if (_reply == null) {
                 WriteLog.LogError("OnCreateRoom回傳的CREATEROOM_REPLY內容為null");
                 OnConnToMatchgameCB?.Invoke(false);
@@ -86,7 +86,7 @@ namespace HeroFishing.Socket {
             WriteLog.LogColorFormat("建立房間成功: ", WriteLog.LogType.Connection, DebugUtils.ObjToStr(_reply));
             //設定玩家目前所在遊戲房間的資料
             AllocatedRoom.Instance.SetRoom(_reply.CreaterID, _reply.PlayerIDs, _reply.DBMapID, _reply.DBMatchgameID, _reply.IP, _reply.Port, _reply.PodName);
-            GameConnector.Instance.ConnToMatchgame(_onConnectedAC);
+            GameConnector.Instance.ConnToMatchgame(OnConnToMatchgameCB);
         }
 
         private void OnCreateRoomError(Exception _exception) {
@@ -124,7 +124,7 @@ namespace HeroFishing.Socket {
         /// </summary>
         public void ConnToMatchgame(Action<bool> _onConnectedAC) {
             if (AllocatedRoom.Instance.InGame) return;
-            //OnConnToMatchgameCB = _onConnectedAC;
+            OnConnToMatchgameCB = _onConnectedAC;
             AllocatedRoom.Instance.SetInGame(true);
             WriteLog.LogColor("DBMatchgame已建立好, 開始連線到Matchgame", WriteLog.LogType.Connection);
             UniTask.Void(async () => {
