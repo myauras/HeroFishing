@@ -41,7 +41,8 @@ public class CircleAreaSpell : SpellBase {
             InitPosition = playData.attackPos,
             InitDirection = playData.direction,
             IgnoreFireModel = false,
-            LifeTime = _lifeTime
+            LifeTime = _lifeTime,
+            IsDrop = playData.IsDrop,
         };
         if (!BulletSpawner.Spawn(spawnBulletInfo, out Bullet bullet)) return;
         var collisionInfo = new AreaCollisionInfo {

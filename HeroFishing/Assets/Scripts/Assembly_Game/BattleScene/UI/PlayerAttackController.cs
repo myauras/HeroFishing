@@ -20,11 +20,17 @@ namespace HeroFishing.Battle {
         private Vector3 _spellPos;
         private Vector3 _originPos;
         private HeroMoveBehaviour _currentMove;
-        private int _attackID = 0;
+        private static int s_attackID = 0;
+        public static int AttackID {
+            get {
+                return s_attackID++;
+            }
+        }
         private float _scheduledNextAttackTime;
         private float _scheduledRecoverTime;
         private float _scheduledLockTime;
         private bool _isAttack;
+        private bool _repeatAttack;
         private Monster _targetMonster;
         public bool CanAttack {
             get {
@@ -39,7 +45,7 @@ namespace HeroFishing.Battle {
         private const float ATTACK_LOCK_TIME = 1.5f;
         public bool ControlLock {
             get {
-                return _currentMove != null && _currentMove.IsMoving;
+                return (_currentMove != null && _currentMove.IsMoving) || TimelinePlayer.IsPlaying;
             }
         }
 
@@ -57,7 +63,8 @@ namespace HeroFishing.Battle {
         //簡單說就是將攻擊指令存0.2秒，如果0.2秒內可以再次發射，會立刻發射。
         //比較不會導致狂點，但是射出時間有落差造成的卡頓感。
         private void AttackInput() {
-            if (!Input.GetMouseButtonDown(0)) return;
+            if (Input.GetMouseButtonUp(0)) _repeatAttack = false;
+            if (!Input.GetMouseButtonDown(0) && !(Input.GetMouseButton(0) && _repeatAttack)) return;
             if (ControlLock) return;
             if (_isSkillMode) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
@@ -100,6 +107,9 @@ namespace HeroFishing.Battle {
                     }
                     _scheduledLockTime = Time.time + ATTACK_LOCK_TIME;
                 }
+                else {
+                    _repeatAttack = true;
+                }
             }
 
             // 確認有按到怪物，判斷是否真的進入鎖定狀態
@@ -121,7 +131,7 @@ namespace HeroFishing.Battle {
             _hero.UsePoints();
 
             _isAttack = false;
-            _scheduledNextAttackTime = Time.time + _spellData.CD;
+            _scheduledNextAttackTime = Time.time + _spellData.CD / _hero.AttackSpeedMultiplier;
             //攻擊方向
             var pos = _lockAttack && _targetMonster != null ? _targetMonster.transform.position : UIPosition.GetMouseWorldPointOnYZero(0);
             var dir = (pos - _hero.transform.position).normalized;
@@ -213,7 +223,7 @@ namespace HeroFishing.Battle {
                 lockAttack = _lockAttack,
                 heroIndex = 0,
                 monsterIdx = monsterIdx,
-                attackID = _attackID,
+                attackID = s_attackID,
                 attackPos = _attackPos,
                 heroPos = _hero.transform.position,
                 direction = _attackDir
@@ -231,8 +241,8 @@ namespace HeroFishing.Battle {
             if (spell.ShakeCamera != null)
                 spell.ShakeCamera.Play();
             if (GameConnector.Connected)
-                GameConnector.Instance.Attack(_attackID, _spellData.ID, monsterIdx, _lockAttack, _attackPos, _attackDir);
-            _attackID++;
+                GameConnector.Instance.Attack(s_attackID, _spellData.ID, monsterIdx, _lockAttack, _attackPos, _attackDir);
+            s_attackID++;
             //switch (TmpSpellData.MySpellType) {
             //    case HeroSpellJsonData.SpellType.SpreadLineShot:
             //        radius = float.Parse(TmpSpellData.SpellTypeValues[1]);

@@ -17,7 +17,7 @@ public class FlyingDrop : MonoBehaviour {
     private const string FLYING_DROP_KEY = "OtherEffect/Script_Flying{0}";
     private const string GET_DROP_KEY = "OtherEffect/Script_Get{0}";
 
-    public void Init(string dropRef, int heroIndex) {
+    public void Init(int dropID, string dropRef, int heroIndex) {
         var hero = BattleManager.Instance.GetHero(heroIndex);
         var startPos = transform.position;
         var endPos = hero.transform.position;
@@ -39,6 +39,7 @@ public class FlyingDrop : MonoBehaviour {
                 _progress = _timer = 0;
                 endPos.y = 0;
                 PoolManager.Instance.Pop(string.Format(GET_DROP_KEY, dropRef), endPos);
+                DropManager.Instance.AddDrop(heroIndex, dropID);
             });
         });
     }

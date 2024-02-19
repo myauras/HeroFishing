@@ -17,7 +17,7 @@ public class PoolManager : MonoBehaviour {
     private Dictionary<int, string> _heroNameDic;
 
     private const string POOL_BULLET = "bullet";
-    public enum PopType { Fire, Projectile, Hit }
+    public enum PopType { Fire, Projectile, Hit, Empty }
 
 
     public void Init() {
@@ -121,6 +121,9 @@ public class PoolManager : MonoBehaviour {
     }
 
     private string GetKey(int prefabID, int subPrefabID, PopType popType) {
+        if (popType == PopType.Empty)
+            return $"Bullet/BulletEmpty";
+
         if (!_heroNameDic.TryGetValue(prefabID, out var heroName) || string.IsNullOrEmpty(heroName))
             throw new Exception("hero name is not found");
         switch (popType) {

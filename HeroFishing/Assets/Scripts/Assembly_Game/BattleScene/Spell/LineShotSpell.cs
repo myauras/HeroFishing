@@ -43,6 +43,7 @@ public class LineShotSpell : SpellBase {
             IgnoreFireModel = false,
             ProjectileDelay = _delay,
             LifeTime = _lifeTime,
+            IsDrop = playData.IsDrop,
         };
         if (!BulletSpawner.Spawn(spawnData, out Bullet bullet)) return;
         var bulletCollisionInfo = new BulletCollisionInfo() {

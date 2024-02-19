@@ -14,6 +14,7 @@ public struct SpellPlayData {
     public Vector3 attackPos;
     public Vector3 heroPos;
     public Vector3 direction;
+    public bool IsDrop;
 }
 
 public abstract class SpellBase {

@@ -25,6 +25,10 @@ public class BattleSceneUI : BaseUI {
     private CoinUI _coinUI;
     [SerializeField]
     private CoinEffectUI _coinEffectUI;
+    [SerializeField]
+    private DropUI _dropUI;
+    [SerializeField]
+    private RankUI _rankUI;
 
     private void Start() {
         Init();
@@ -44,6 +48,8 @@ public class BattleSceneUI : BaseUI {
             _deviceInfoUI.Init();
             _coinUI.Init();
             _coinEffectUI.Init();
+            _dropUI.Init();
+            _rankUI.Init();
         });
     }
 
