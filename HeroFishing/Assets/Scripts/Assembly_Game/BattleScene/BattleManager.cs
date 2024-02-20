@@ -262,8 +262,12 @@ namespace HeroFishing.Battle {
 
         public void SetMonsterDead(int playerIndex, int[] monsterIdxs, long[] gainPoints, int[] gainHeroExps, int[] gainSpellCharge, int[] gainDrops) {
             int heroIndex = GetHeroIndex(playerIndex);
+            var hero = GetHero(heroIndex);
             int totalExp = 0;
             for (int i = 0; i < monsterIdxs.Length; i++) {
+                if (heroIndex == 0) {
+                    hero.HoldStoredPoints(monsterIdxs[i], (int)gainPoints[i]);
+                }
                 if (Monster.TryGetMonsterByIdx(monsterIdxs[i], out Monster monster)) {
                     monster.Die(heroIndex);
                 }
@@ -295,12 +299,8 @@ namespace HeroFishing.Battle {
             //_entityManager.AddComponentData(entity, monsterDieNetworkData);
 
             if (heroIndex == 0) {
-                var hero = GetHero(heroIndex);
                 hero.AddExp(totalExp);
                 hero.ChargeSpell(gainSpellCharge);
-                for (int i = 0; i < monsterIdxs.Length; i++) {
-                    hero.HoldStoredPoints(monsterIdxs[i], (int)gainPoints[i]);
-                }
             }
         }
     }
