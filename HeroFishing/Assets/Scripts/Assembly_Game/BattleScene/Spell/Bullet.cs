@@ -87,7 +87,7 @@ namespace HeroFishing.Battle {
 
             var pool = PoolManager.Instance;
             //var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", projectilePath);
-            Debug.Log("is drop " + _info.IsDrop);
+            //Debug.Log("is drop " + _info.IsDrop);
             PoolManager.PopType popType = _info.IsDrop ? PoolManager.PopType.Empty : PoolManager.PopType.Projectile;
             pool.Pop(_info.PrefabID, _info.SubPrefabID, popType, Vector3.zero, Quaternion.identity, transform, go => {
                 go.transform.localScale = Vector3.one;

@@ -91,7 +91,7 @@ public class AreaCollision : CollisionBase {
                 }
                 var monsterData = MonsterJsonData.GetData(monster.MonsterID);
                 float killProbability = rtp / monsterData.Odds;
-                Debug.Log("kp " + killProbability);
+                //Debug.Log("kp " + killProbability);
 
                 float value = UnityEngine.Random.value;
                 if (value <= killProbability) {
