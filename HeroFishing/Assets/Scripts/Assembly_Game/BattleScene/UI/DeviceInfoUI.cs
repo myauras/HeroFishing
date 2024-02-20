@@ -1,4 +1,5 @@
 using HeroFishing.Main;
+using HeroFishing.Socket;
 using Scoz.Func;
 using System;
 using System.Collections;
@@ -47,7 +48,7 @@ public class DeviceInfoUI : BaseUI {
                 int signalStrength = _networkInfoSource.GetSignalStrength();
                 //Debug.Log(signalStrength);
                 UpdateWifiImage(signalStrength);
-                if (AllocatedRoom.Instance != null) {
+                if (GameConnector.Connected) {
                     Ping ping = new Ping(AllocatedRoom.Instance.IP);
                     Observable.ReturnUnit().SkipWhile(_ => !ping.isDone).Timeout(TimeSpan.FromMilliseconds(UPDATE_WIFI_MS)).Subscribe(_ => {
                         Debug.Log($"ping {ping.time}");

@@ -1,5 +1,7 @@
 using HeroFishing.Battle;
+using HeroFishing.Main;
 using HeroFishing.Socket;
+using Scoz.Func;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -79,8 +81,20 @@ public class AreaCollision : CollisionBase {
             idxs[i] = monster.MonsterIdx;
 
             if (!GameConnector.Connected) {
-                float value = Random.value;
-                if (value < BattleManager.Instance.LocalDieThreshold) {
+                var spellData = HeroSpellJsonData.GetData(_info.SpellID);
+                float rtp = 1;
+                if (spellData.SpellName != SpellName.attack) {
+                    var spellUI = BaseUI.GetInstance<SpellUI>();
+                    int level = spellUI.GetSpellLevel(spellData.SpellName);
+                    if (BattleManager.Instance.IsSpellTest && level == 0) level = 1;
+                    rtp = spellData.RTP[level - 1] / spellData.MaxHits;
+                }
+                var monsterData = MonsterJsonData.GetData(monster.MonsterID);
+                float killProbability = rtp / monsterData.Odds;
+                //Debug.Log("kp " + killProbability);
+
+                float value = UnityEngine.Random.value;
+                if (value <= killProbability) {
                     monster.Die(_info.HeroIndex);
                 }
             }

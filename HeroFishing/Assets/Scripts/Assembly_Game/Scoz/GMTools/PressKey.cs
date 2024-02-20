@@ -15,10 +15,11 @@ namespace Scoz.Func {
 
 
             if (Input.GetKeyDown(KeyCode.Q)) {
+                DropManager.Instance.AddDrop(0, 15);
 
-                int[] monsterIdxs = new int[1] { 1 };
-                key++;
-                GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
+                //int[] monsterIdxs = new int[1] { 1 };
+                //key++;
+                //GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
             } else if (Input.GetKeyDown(KeyCode.T)) {
                 GameConnector.Instance.ConnectToMatchgameTestVer(1, "1_1", result => {
                     if (result) {

@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using System.Linq;
 using Service.Realms;
 using TMPro;
-using Unity.Entities.UniversalDelegates;
 
 namespace HeroFishing.Main {
     public class SpellPanel : BaseUI {

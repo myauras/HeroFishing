@@ -2,10 +2,7 @@ using HeroFishing.Battle;
 using Scoz.Func;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Entities;
 using UnityEngine;
-
-public struct FreezeTag : IComponentData { }
 
 public class WorldStateManager : MonoBehaviour {
     private static WorldStateManager _instance;

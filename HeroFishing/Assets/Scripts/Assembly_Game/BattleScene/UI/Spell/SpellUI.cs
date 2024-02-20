@@ -70,6 +70,10 @@ public class SpellUI : BaseUI {
         return GetSpellBtn(spellName).CanUse;
     }
 
+    public int GetSpellLevel(SpellName spellName) {
+        return GetSpellBtn(spellName).SpellLevel;
+    }
+
     private void OnUpgrade(SpellName spellName) {
         if (_hero.Level <= TotalSpellLevel) {
             CloseUpgradeBtn(_spellBtn1, spellName);
