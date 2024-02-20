@@ -31,7 +31,7 @@ public class CoinEffectUI : BaseUI, IUpdate {
 
     public override void Init() {
         base.Init();
-        _canvas = GetComponent<Canvas>();
+        _canvas = GetComponentInParent<Canvas>();
         var hero = BattleManager.Instance.GetHero(0);
         hero.OnPointGet += OnPointGet;
         _queue = new Queue<CoinEffectItemData>();
