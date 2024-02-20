@@ -204,10 +204,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<object,object>
 	// System.Action<object>
 	// System.Action<ushort>
-	// System.ArraySegment.Enumerator<UnityEngine.jvalue>
-	// System.ArraySegment.Enumerator<ushort>
-	// System.ArraySegment<UnityEngine.jvalue>
-	// System.ArraySegment<ushort>
 	// System.ByReference<UnityEngine.jvalue>
 	// System.ByReference<ushort>
 	// System.Collections.Concurrent.ConcurrentQueue.<Enumerate>d__28<object>
@@ -692,8 +688,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Predicate<int>
 	// System.Predicate<object>
 	// System.Predicate<ushort>
-	// System.ReadOnlySpan.Enumerator<UnityEngine.jvalue>
-	// System.ReadOnlySpan.Enumerator<ushort>
 	// System.ReadOnlySpan<UnityEngine.jvalue>
 	// System.ReadOnlySpan<ushort>
 	// System.Runtime.CompilerServices.AsyncTaskMethodBuilder<System.Threading.Tasks.VoidTaskResult>
@@ -714,8 +708,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Runtime.CompilerServices.TaskAwaiter<long>
 	// System.Runtime.CompilerServices.TaskAwaiter<object>
 	// System.Runtime.CompilerServices.TrueReadOnlyCollection<object>
-	// System.Span.Enumerator<UnityEngine.jvalue>
-	// System.Span.Enumerator<ushort>
 	// System.Span<UnityEngine.jvalue>
 	// System.Span<ushort>
 	// System.Threading.Tasks.ContinuationTaskFromResultTask<System.Threading.Tasks.VoidTaskResult>
