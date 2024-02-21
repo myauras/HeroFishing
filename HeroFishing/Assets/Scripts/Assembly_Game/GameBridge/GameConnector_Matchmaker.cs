@@ -118,7 +118,7 @@ namespace HeroFishing.Socket {
             var gameState = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.GameState.ToString());
             //設定玩家目前所在遊戲房間的資料
             UniTask.Void(async () => {
-                await AllocatedRoom.Instance.SetRoom("System", new string[4], gameState.MatchgameTestverMapID, gameState.MatchgameTestverRoomName, gameState.MatchgameTestverIP, gameState.MatchgameTestverPort ?? 0, "");
+                await AllocatedRoom.Instance.SetRoom_TestvVer("System", new string[4], gameState.MatchgameTestverMapID, gameState.MatchgameTestverRoomName, gameState.MatchgameTestverTcpIP, gameState.MatchgameTestverUdpIP, gameState.MatchgameTestverPort ?? 0, "");
                 GameConnector.Instance.ConnToMatchgame(_onConnnectedAC);
             });
         }
@@ -147,12 +147,12 @@ namespace HeroFishing.Socket {
         /// </summary>
         async UniTask JoinMatchgame() {
             var realmToken = await RealmManager.GetValidAccessToken();
-            if (string.IsNullOrEmpty(AllocatedRoom.Instance.IP) || AllocatedRoom.Instance.Port == 0) {
+            if (string.IsNullOrEmpty(AllocatedRoom.Instance.TcpIP) || string.IsNullOrEmpty(AllocatedRoom.Instance.UdpIP) || AllocatedRoom.Instance.Port == 0) {
                 WriteLog.LogError("JoinMatchgame失敗，AllocatedRoom的IP或Port為null");
                 OnConnToMatchgameCB?.Invoke(false);
                 return;
             }
-            Socket.JoinMatchgame(realmToken, AllocatedRoom.Instance.IP, AllocatedRoom.Instance.Port);
+            Socket.JoinMatchgame(realmToken, AllocatedRoom.Instance.TcpIP, AllocatedRoom.Instance.UdpIP, AllocatedRoom.Instance.Port);
         }
 
         void JoinGameSuccess() {

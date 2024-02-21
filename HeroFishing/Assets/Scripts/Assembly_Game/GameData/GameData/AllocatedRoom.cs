@@ -30,7 +30,11 @@ namespace HeroFishing.Main {
         /// <summary>
         ///  Matchmaker派發Matchgame的IP
         /// </summary>
-        public string IP { get; private set; }
+        public string TcpIP { get; private set; }
+        /// <summary>
+        ///  Matchmaker派發Matchgame的IP
+        /// </summary>
+        public string UdpIP { get; private set; }
 
         /// <summary>
         ///  Matchmaker派發Matchgame的Port
@@ -75,7 +79,26 @@ namespace HeroFishing.Main {
             PlayerIDs = _playerIDs;
             DBMapID = _dbMapID;
             DBMatchgameID = _dbMatchgameID;
-            IP = _ip;
+            TcpIP = _ip;
+            UdpIP = _ip;
+            Port = _port;
+            PodName = _podName;
+            WriteLog.LogColorFormat("設定被Matchmaker分配到的房間資料: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));
+
+            var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
+            if (dbPlayer == null) return;
+            await dbPlayer.SetInMatchgameID(DBMatchgameID);
+        }
+        /// <summary>
+        /// 設定被Matchmaker分配到的房間資料，CreateRoom後會從Matchmaker回傳取得此資料
+        /// </summary>
+        public async UniTask SetRoom_TestvVer(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _tcpIP, string _udpIP, int _port, string _podName) {
+            CreaterID = _createID;
+            PlayerIDs = _playerIDs;
+            DBMapID = _dbMapID;
+            DBMatchgameID = _dbMatchgameID;
+            TcpIP = _tcpIP;
+            UdpIP = _udpIP;
             Port = _port;
             PodName = _podName;
             WriteLog.LogColorFormat("設定被Matchmaker分配到的房間資料: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));
@@ -135,7 +158,8 @@ namespace HeroFishing.Main {
             DBMapID = null;
             DBMatchgameID = null;
             HeroIDs = null;
-            IP = null;
+            TcpIP = null;
+            UdpIP = null;
             Port = 0;
             PodName = null;
             WriteLog.LogColorFormat("清空配對房間(AllocatedRoom)資訊: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));

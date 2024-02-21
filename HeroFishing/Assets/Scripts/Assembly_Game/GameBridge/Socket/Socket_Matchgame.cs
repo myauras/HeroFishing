@@ -39,9 +39,9 @@ namespace HeroFishing.Socket {
             }
             CMDCallback.Add(cmdID, _ac);
         }
-        public void JoinMatchgame(string _realmToken, string _ip, int _port) {
-            CreateClientObject(ref TCP_MatchgameClient, _ip, _port, "JoinMatchgame", "TCP_MatchgameClient");
-            CreateClientObject(ref UDP_MatchgameClient, _ip, _port, "JoinMatchgame", "UDP_MatchgameClient");
+        public void JoinMatchgame(string _realmToken, string _tcpIP, string _udpIP, int _port) {
+            CreateClientObject(ref TCP_MatchgameClient, _tcpIP, _port, "JoinMatchgame", "TCP_MatchgameClient");
+            CreateClientObject(ref UDP_MatchgameClient, _udpIP, _port, "JoinMatchgame", "UDP_MatchgameClient");
             TCP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameTCPMsg;
 
             TCP_MatchgameClient.StartConnect((bool connected) => OnMatchgameTCPConnect(connected, _realmToken));
@@ -49,6 +49,7 @@ namespace HeroFishing.Socket {
         }
 
         public void OnMatchgameUDPDisconnect() {
+            WriteLog.LogError("UDP連線失敗");
             UDP_MatchgameClient.OnReceiveMsg -= OnRecieveMatchgameUDPMsg;
             //沒有timeout重連UDP
             if (UDP_MatchgameClient != null && UDP_MatchgameClient.CheckTimerInTime()) {
@@ -124,6 +125,7 @@ namespace HeroFishing.Socket {
         }
 
         private void ConnectUDPMatchgame(string connToken, int index) {
+            WriteLog.LogError("connToken=" + connToken + "    index = " + index);
             //取得Matchgame Auth的回傳結果 UDP socket的ConnToken與遊戲房間的座位索引
             WriteLog.LogColor($"Matchgame auth success! UDP_MatchgameConnToken: {UDP_MatchgameConnToken}", WriteLog.LogType.Connection);
             UDP_MatchgameConnToken = connToken;
@@ -131,6 +133,7 @@ namespace HeroFishing.Socket {
 
             //取得ConnToken後就能進行UDP socket連線
             UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
+                WriteLog.LogError("UDP Connected");
                 WriteLog.LogColor($"UDP Is connected: {connected}", WriteLog.LogType.Connection);
                 if (connected)
                     UDP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameUDPMsg;

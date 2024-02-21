@@ -49,7 +49,7 @@ public class DeviceInfoUI : BaseUI {
                 //Debug.Log(signalStrength);
                 UpdateWifiImage(signalStrength);
                 if (GameConnector.Connected) {
-                    Ping ping = new Ping(AllocatedRoom.Instance.IP);
+                    Ping ping = new Ping(AllocatedRoom.Instance.TcpIP);
                     Observable.ReturnUnit().SkipWhile(_ => !ping.isDone).Timeout(TimeSpan.FromMilliseconds(UPDATE_WIFI_MS)).Subscribe(_ => {
                         Debug.Log($"ping {ping.time}");
                         _txtPing.text = string.Format(TXT_PING_CONTENT, ping);
