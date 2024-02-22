@@ -17,7 +17,6 @@ namespace HeroFishing.Socket {
         UdpSocket UDP_MatchgameClient;
         ServerTimeSyncer TimeSyncer;
         string UDP_MatchgameConnToken;// 連Matchgame需要的Token，由AUTH_REPLY時取得
-        int CurReConnectUDPTimes = 0;//目前嘗試重連UDP次數
 
         Dictionary<Tuple<string, int>, Action<string>> CMDCallback = new Dictionary<Tuple<string, int>, Action<string>>();
 
@@ -37,60 +36,47 @@ namespace HeroFishing.Socket {
             }
             CMDCallback.Add(cmdID, _ac);
         }
-        public void JoinMatchgame(string _realmToken, string _tcpIP, string _udpIP, int _port) {
+        public void JoinMatchgame(Action _onDisconnected, string _realmToken, string _tcpIP, string _udpIP, int _port) {
             CreateClientObject(ref TCP_MatchgameClient, _tcpIP, _port, "JoinMatchgame", "TCP_MatchgameClient");
             CreateClientObject(ref UDP_MatchgameClient, _udpIP, _port, "JoinMatchgame", "UDP_MatchgameClient");
             TCP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameTCPMsg;
 
             TCP_MatchgameClient.StartConnect((bool connected) => OnMatchgameTCPConnect(connected, _realmToken));
-            TCP_MatchgameClient.RegistOnDisconnect(OnMatchgameTCPDisconnect);
-        }
-        private void OnMatchgameTCPDisconnect() {
-            WriteLog.LogColor("OnMatchgameTCPDisconnect", WriteLog.LogType.Connection);
+            TCP_MatchgameClient.RegistOnDisconnect(_onDisconnected);
         }
 
         public void OnMatchgameUDPDisconnect() {
-            WriteLog.LogError("UDP斷線");
             UDP_MatchgameClient.OnReceiveMsg -= OnRecieveMatchgameUDPMsg;
             if (UDP_MatchgameClient != null) {
                 this.MatchgameUDPEndWithDisconnection();
                 return;
             }
-            CurReConnectUDPTimes++;
-            if (CurReConnectUDPTimes > UDP_MatchgameClient.ReConnectTimes) {
-                this.MatchgameUDPEndWithDisconnection();
-                return;
-            }
 
-            WriteLog.LogError("aa");
             UDP_MatchgameClient.Close();
             UDP_MatchgameClient = new GameObject("GameUdpSocket").AddComponent<UdpSocket>();
             UniTask.Void(async () => {
                 try {
-                    WriteLog.LogError("bb");
                     var dbMatchgame = await GamePlayer.Instance.GetMatchGame();
                     if (dbMatchgame == null) {
                         WriteLog.LogError("OnMatchgameUDPDisconnect時重連失敗，dbMatchgame is null");
-                        OnMatchgameUDPDisconnect();
+                        this.MatchgameUDPEndWithDisconnection();
+                        return;
                     } else UDP_MatchgameClient.Init(dbMatchgame.IP, dbMatchgame.Port ?? 0);
                 } catch (Exception _e) {
                     WriteLog.LogError("OnMatchgameUDPDisconnect時嘗試重連失敗: " + _e);
                     OnMatchgameUDPDisconnect();
                     return;
                 }
-                WriteLog.LogErrorFormat("{0}秒後嘗試第{1}次重連UDP", UDP_MatchgameClient.ReConnectInterval, CurReConnectUDPTimes);
-                await UniTask.Delay((int)(UDP_MatchgameClient.ReConnectInterval * 1000));
                 UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
                     WriteLog.LogColor("OnMatchgameUDPDisconnect後重連結果 :" + connected, WriteLog.LogType.Connection);
                     if (connected) {
                         UDP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameUDPMsg;
-                        UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
                     } else {
                         this.MatchgameUDPEndWithDisconnection();
                         return;
                     }
                 });
-
+                UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
             });
         }
         public void MatchgameUDPEndWithDisconnection() {
@@ -157,18 +143,17 @@ namespace HeroFishing.Socket {
             AllocatedRoom.Instance.SetPlayerIndex(index);
 
             //取得ConnToken後就能進行UDP socket連線
-            CurReConnectUDPTimes = 0;//重設斷線重連次數
             UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
                 WriteLog.LogColor($"UDP Is connected: {connected}", WriteLog.LogType.Connection);
                 if (connected) {
                     UDP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameUDPMsg;
-                    UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
                 } else {
                     WriteLog.LogError("UDP連線失敗");
                     OnMatchgameUDPDisconnect();
                 }
+                UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
             });
-
+            
         }
 
         public void OnRecieveMatchgameUDPMsg(string _msg) {

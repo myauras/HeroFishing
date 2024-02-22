@@ -121,17 +121,30 @@ namespace HeroFishing.Main {
 
                 AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
                 //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
-                GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnResult).Forget();
+                GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnFail, OnConnFail, OnCreateRoom).Forget();
             });
         }
-        void OnConnResult(bool _success) {
-            PopupUI.HideLoading();
-            if (!_success) {
-                WriteLog.LogError("連線失敗");
-                return;
-            }
-            GameConnector.Instance.SetHero(CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID
 
+        void OnConnFail() {
+            WriteLog.LogError("配房失敗");
+        }
+        void OnCreateRoom(Socket.Matchmaker.CREATEROOM_TOCLIENT _content) {
+            //設定玩家目前所在遊戲房間的資料
+            UniTask.Void(async () => {
+                await AllocatedRoom.Instance.SetRoom(_content.CreaterID, _content.PlayerIDs, _content.DBMapID, _content.DBMatchgameID, _content.IP, _content.Port, _content.PodName);
+                GameConnector.Instance.ConnToMatchgame(OnConnToMatchgame, OnJoinGagmeFail, OnMatchgameDisconnected);
+            });
+        }
+
+        void OnConnToMatchgame() {
+            PopupUI.HideLoading();
+            GameConnector.Instance.SetHero(CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID
+        }
+        void OnJoinGagmeFail() {
+            WriteLog.LogError("連線遊戲房失敗");
+        }
+        void OnMatchgameDisconnected() {
+            WriteLog.LogError("需要斷線重連");
         }
     }
 

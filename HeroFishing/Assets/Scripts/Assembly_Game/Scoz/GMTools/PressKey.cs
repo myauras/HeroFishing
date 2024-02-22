@@ -21,10 +21,12 @@ namespace Scoz.Func {
                 //key++;
                 //GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
             } else if (Input.GetKeyDown(KeyCode.T)) {
-                GameConnector.Instance.ConnectToMatchgameTestVer(1, "1_1", result => {
-                    if (result) {
-                        GameConnector.Instance.SetHero(1, "1_1"); //送Server玩家使用的英雄ID
-                    }
+                GameConnector.Instance.ConnectToMatchgameTestVer(1, "1_1", ()=> {
+                    GameConnector.Instance.SetHero(1, "1_1"); //送Server玩家使用的英雄ID
+                }, () => {
+                    WriteLog.LogError("連線遊戲房失敗");
+                },() => {
+                    WriteLog.LogError("需要斷線重連");
                 });
             } else if (Input.GetKeyDown(KeyCode.W)) {
                 GameConnector.Instance.DropSpell(4);
