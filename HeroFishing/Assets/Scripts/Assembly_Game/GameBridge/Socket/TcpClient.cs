@@ -9,6 +9,7 @@ using System.Threading;
 using UnityEngine;
 using Scoz.Func;
 using Cysharp.Threading.Tasks;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 namespace HeroFishing.Socket {
     public class TcpClient : MonoBehaviour, INetworkClient {
@@ -41,8 +42,7 @@ namespace HeroFishing.Socket {
                     thread_receive.Abort();
                 if (cancellationSource != null)
                     cancellationSource.Dispose();
-            }
-            catch {
+            } catch {
 
             }
 
@@ -98,8 +98,7 @@ namespace HeroFishing.Socket {
                 if (!IsConnected || socket == null) return;
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Close();
-            }
-            catch {
+            } catch {
 
             }
             StopAllCoroutines();
@@ -122,8 +121,7 @@ namespace HeroFishing.Socket {
                     socket.Send(Encoding.UTF8.GetBytes(msg));
                     WriteLog.LogColorFormat("(TCP)送: {0}", WriteLog.LogType.Connection, msg);
                     return command.PackID;
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     WriteLog.LogErrorFormat("Socket send error: {0}", e.ToString());
                     OnDisConnect();
                     return -1;
@@ -202,25 +200,22 @@ namespace HeroFishing.Socket {
                             string packet = packets[i];
                             syncContext.Post(state => OnReceiveMsg?.Invoke(packet), null);
                         }
-                            //messageQueue.Enqueue(packets[i]);
+                        //messageQueue.Enqueue(packets[i]);
                     }
-                }
-                catch (ThreadAbortException e) {
+                } catch (ThreadAbortException e) {
                     //this.Close();
                     WriteLog.Log($"TcpClient Exception={e}");
                     WriteLog.LogWarning($"TcpClient Exception={e}");
                     break;
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     WriteLog.LogErrorFormat("Scoket receive error: {0}", e.ToString());
-                    //OnDisConnect();
+                    OnDisConnect();
                     break;
                 }
             }
             try {
                 socket.Close();
-            }
-            catch {
+            } catch {
             }
 
         }
