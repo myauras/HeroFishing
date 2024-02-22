@@ -125,7 +125,6 @@ namespace HeroFishing.Socket {
         }
 
         private void ConnectUDPMatchgame(string connToken, int index) {
-            WriteLog.LogError("connToken=" + connToken + "    index = " + index);
             //取得Matchgame Auth的回傳結果 UDP socket的ConnToken與遊戲房間的座位索引
             WriteLog.LogColor($"Matchgame auth success! UDP_MatchgameConnToken: {UDP_MatchgameConnToken}", WriteLog.LogType.Connection);
             UDP_MatchgameConnToken = connToken;
@@ -133,7 +132,6 @@ namespace HeroFishing.Socket {
 
             //取得ConnToken後就能進行UDP socket連線
             UDP_MatchgameClient.StartConnect(UDP_MatchgameConnToken, (bool connected) => {
-                WriteLog.LogError("UDP Connected");
                 WriteLog.LogColor($"UDP Is connected: {connected}", WriteLog.LogType.Connection);
                 if (connected)
                     UDP_MatchgameClient.OnReceiveMsg += OnRecieveMatchgameUDPMsg;
