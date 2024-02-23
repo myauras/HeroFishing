@@ -153,7 +153,7 @@ namespace HeroFishing.Socket {
                 }
                 UDP_MatchgameClient.RegistOnDisconnect(OnMatchgameUDPDisconnect);
             });
-            
+
         }
 
         public void OnRecieveMatchgameUDPMsg(string _msg) {
@@ -320,7 +320,9 @@ namespace HeroFishing.Socket {
         }
         void HandleUpdateScene(SocketCMD<UPDATESCENE_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
-            BattleManager.Instance?.UpdateScene(_packet.Content.Spawns, _packet.Content.SceneEffects);
+            if (CDChecker.DoneCD("UpdateScene", 1f))
+                BattleManager.Instance?.UpdateScene(_packet.Content.Spawns, _packet.Content.SceneEffects);
+
             if (UpdateSceneGizmos.Instance != null)
                 UpdateSceneGizmos.Instance.SetUpdateScene(_packet.Content);
         }
