@@ -191,7 +191,7 @@ namespace Service.Realms {
                 }
 
                 var mapUI = MapUI.GetInstance<MapUI>();
-                if (mapUI != null && mapUI.gameObject.activeInHierarchy) mapUI.SpawnItems();
+                if (mapUI != null && mapUI.gameObject.activeInHierarchy) mapUI.RefreshScrollView();
 
             });
             Registers.Add("DBMap", token_dbMaps);

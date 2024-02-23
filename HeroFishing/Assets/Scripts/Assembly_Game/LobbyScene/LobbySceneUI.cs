@@ -50,7 +50,6 @@ namespace HeroFishing.Main {
                 //初始化UIs
                 PopupUI.FinishSceneTransitionProgress("LobbyUILoaded");
                 MyMapUI.Init();
-                MyMapUI.LoadItemAsset();
                 UIs.Add(LobbyUIs.Map, MyMapUI);
                 MyHeroUI.Init();
                 MyHeroUI.LoadItemAsset();
@@ -100,7 +99,7 @@ namespace HeroFishing.Main {
                     LastPopupUI = null;
                     break;
                 case LobbyUIs.Map:
-                    MyMapUI.SpawnItems();
+                    MyMapUI.RefreshScrollView();
                     _cb?.Invoke();
                     LastPopupUI = MyMapUI;
                     break;

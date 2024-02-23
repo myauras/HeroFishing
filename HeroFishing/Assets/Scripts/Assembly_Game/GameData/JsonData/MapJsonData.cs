@@ -15,8 +15,11 @@ namespace HeroFishing.Main {
             }
         }
         public string Ref { get; private set; }
+        public string MapName { get; private set; }
         public float Multiplier { get; private set; }
         public int[] MonsterSpawnerIDs { get; private set; }
+        public string GlowColor { get; private set; }
+        public string TextColor { get; private set; }
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
             DataName = _dataName;
             JsonData item = _item;
@@ -24,6 +27,9 @@ namespace HeroFishing.Main {
                 switch (key) {
                     case "ID":
                         ID = int.Parse(item[key].ToString());
+                        break;
+                    case "Name":
+                        MapName = item[key].ToString();
                         break;
                     case "Ref":
                         Ref = item[key].ToString();
@@ -33,6 +39,12 @@ namespace HeroFishing.Main {
                         break;
                     case "MonsterSpawnerIDs":
                         MonsterSpawnerIDs = TextManager.StringSplitToIntArray(item[key].ToString(), ',');
+                        break;
+                    case "GlowColor":
+                        GlowColor = item[key].ToString();
+                        break;
+                    case "TextColor":
+                        TextColor = item[key].ToString();
                         break;
                     default:
                         WriteLog.LogWarning(string.Format("{0}表有不明屬性:{1}", DataName, key));

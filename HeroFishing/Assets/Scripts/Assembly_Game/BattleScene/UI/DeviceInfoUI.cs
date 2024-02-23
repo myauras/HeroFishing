@@ -48,7 +48,7 @@ public class DeviceInfoUI : BaseUI {
                 int signalStrength = _networkInfoSource.GetSignalStrength();
                 //Debug.Log(signalStrength);
                 UpdateWifiImage(signalStrength);
-                if (GameConnector.Connected) {
+                if (GameConnector.Connected && _txtPing != null) {
                     Ping ping = new Ping(AllocatedRoom.Instance.IP);
                     Observable.ReturnUnit().SkipWhile(_ => !ping.isDone).Timeout(TimeSpan.FromMilliseconds(UPDATE_WIFI_MS)).Subscribe(_ => {
                         Debug.Log($"ping {ping.time}");

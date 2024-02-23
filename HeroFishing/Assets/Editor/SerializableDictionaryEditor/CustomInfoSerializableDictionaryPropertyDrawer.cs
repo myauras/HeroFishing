@@ -8,6 +8,7 @@ namespace HeroFishing.Main {
     [CustomPropertyDrawer(typeof(ResourcePreSetter.MaterialDicClass))]
     [CustomPropertyDrawer(typeof(SpellIndicator.IndicatorDicClass))]
     [CustomPropertyDrawer(typeof(GameManager.SceneUIAssetDicClass))]
+    [CustomPropertyDrawer(typeof(MapUI.MapColorDicClass))]
 
     public class CustomInfoSerializableDictionaryPropertyDrawer : SerializableDictionaryPropertyDrawer { }
 }
