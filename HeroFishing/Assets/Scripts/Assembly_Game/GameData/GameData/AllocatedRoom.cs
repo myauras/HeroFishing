@@ -153,6 +153,7 @@ namespace HeroFishing.Main {
         /// 清空配對房間(AllocatedRoom)資訊
         /// </summary>
         public void ClearRoom() {
+            InGame = false;
             CreaterID = null;
             PlayerIDs = null;
             DBMapID = null;

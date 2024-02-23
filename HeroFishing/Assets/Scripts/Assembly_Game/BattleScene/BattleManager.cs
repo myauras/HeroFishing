@@ -99,8 +99,7 @@ namespace HeroFishing.Battle {
                 hero.SetData(_testHeroID, $"{_testHeroID}_1");
                 hero.UpdatePoints(10);
                 _bet = _testBet;
-            }
-            else {
+            } else {
                 hero.SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
                 var map = RealmManager.MyRealm.Find<DBMap>(AllocatedRoom.Instance.DBMapID);
                 _bet = map.Bet ?? 1;
@@ -210,6 +209,7 @@ namespace HeroFishing.Battle {
                         var spawnMonster = spawn.Ms[j];
                         // update
                         if (Monster.TryGetMonsterByIdx(spawnMonster.Idx, out Monster monster)) {
+
                             var monsterData = monster.MyData;
                             float deltaTime = GameTime.Current - (float)spawn.STime;
                             Vector3 deltaPosition = deltaTime * monsterData.Speed * (initRotation * Vector3.forward);
@@ -254,8 +254,7 @@ namespace HeroFishing.Battle {
                         monster.DestroyGOAfterDelay(0.1f * i);
                     }
                 }
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Debug.LogError("update scene error " + ex);
             }
         }

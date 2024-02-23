@@ -65,6 +65,7 @@ namespace HeroFishing.Battle {
                 AddressableManage.SetToChangeSceneRelease(handle);//切場景再釋放資源
                 SetModel();
                 LoadDone();
+                WriteLog.LogError("MonsterIdx=" + MonsterIdx);
                 if (!s_aliveMonsters.Contains(this)) {
                     s_aliveMonsters.Add(this);
                     s_idxToMonsterMapping.Add(MonsterIdx, this);
@@ -128,8 +129,7 @@ namespace HeroFishing.Battle {
             if (WorldStateManager.Instance.IsFrozen) {
                 if (Explosion != null)
                     Explosion.Explode();
-            }
-            else {
+            } else {
                 Observable.Timer(TimeSpan.FromMilliseconds(150)).Subscribe(_ => {
                     for (int i = 0; i < MySkinnedMeshRenderers.Length; i++) {
                         MySkinnedMeshRenderers[i].enabled = false;
@@ -198,8 +198,7 @@ namespace HeroFishing.Battle {
                 allMatList = new List<Material>();
                 s_frozenMatDic.Add(id, allMatList);
                 SetupFrozenDic();
-            }
-            else {
+            } else {
                 for (int i = 0; i < MySkinnedMeshRenderers.Length; i++) {
                     var renderer = MySkinnedMeshRenderers[i];
                     var matList = allMatList.GetRange(startIndex, renderer.materials.Length);
@@ -292,8 +291,7 @@ namespace HeroFishing.Battle {
                 var monster = s_aliveMonsters[i];
                 if (active) {
                     monster.Freeze();
-                }
-                else {
+                } else {
                     monster.UnFreeze();
                 }
             }

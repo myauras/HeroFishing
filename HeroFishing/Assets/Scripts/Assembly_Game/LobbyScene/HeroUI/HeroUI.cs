@@ -139,6 +139,7 @@ namespace HeroFishing.Main {
         void OnConnToMatchgame() {
             PopupUI.HideLoading();
             GameConnector.Instance.SetHero(CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID
+            PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
         }
         void OnJoinGagmeFail() {
             WriteLog.LogError("連線遊戲房失敗");

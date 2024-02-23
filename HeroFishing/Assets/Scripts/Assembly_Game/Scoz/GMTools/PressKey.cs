@@ -2,6 +2,9 @@ using UnityEngine;
 using Service.Realms;
 using System.Linq;
 using HeroFishing.Socket;
+using System;
+using Cysharp.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 namespace Scoz.Func {
     public partial class TestTool : MonoBehaviour {
@@ -21,13 +24,22 @@ namespace Scoz.Func {
                 //key++;
                 //GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
             } else if (Input.GetKeyDown(KeyCode.T)) {
-                GameConnector.Instance.ConnectToMatchgameTestVer(1, "1_1", ()=> {
+                Action connFunc = null;
+                connFunc = () => GameConnector.Instance.ConnectToMatchgameTestVer(1, "1_1", () => {
                     GameConnector.Instance.SetHero(1, "1_1"); //送Server玩家使用的英雄ID
+                    if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString())
+                        PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
                 }, () => {
                     WriteLog.LogError("連線遊戲房失敗");
-                },() => {
+                }, () => {
                     WriteLog.LogError("需要斷線重連");
+                    UniTask.Void(async () => {
+                        WriteLog.LogError("等待5秒後重連");
+                        await UniTask.Delay(5000, true);
+                        connFunc();
+                    });
                 });
+                connFunc();
             } else if (Input.GetKeyDown(KeyCode.W)) {
                 GameConnector.Instance.DropSpell(4);
             } else if (Input.GetKeyDown(KeyCode.E)) {
