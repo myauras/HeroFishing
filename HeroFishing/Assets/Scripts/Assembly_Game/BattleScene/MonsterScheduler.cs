@@ -56,6 +56,7 @@ namespace HeroFishing.Battle {
         /// <param name="_mapData">表格-地圖資料</param>
         /// <param name="_locoTest">是否使用本地測試</param>
         public void Init(MapJsonData _mapData, bool _locoTest) {
+            BossExist = false;
             CurMapJson = _mapData;
             IsInit = true;
             if (_locoTest) {

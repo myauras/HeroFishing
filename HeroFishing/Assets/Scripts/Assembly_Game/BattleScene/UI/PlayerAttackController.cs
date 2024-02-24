@@ -275,8 +275,7 @@ namespace HeroFishing.Battle {
         }
 
         public void OnLeaveBtnClick() {
-            GameConnector.Instance.LeaveRoom();
-            PopupUI.CallSceneTransition(MyScene.LobbyScene);
+            BattleManager.Instance.LeaveGame();
         }
 
     }

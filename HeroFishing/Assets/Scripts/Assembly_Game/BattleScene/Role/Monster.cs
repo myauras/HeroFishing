@@ -30,6 +30,13 @@ namespace HeroFishing.Battle {
         private static readonly Dictionary<int, List<Material>> s_originMatDic = new();
         private static readonly Dictionary<int, List<Material>> s_frozenMatDic = new();
 
+        public static void ResetMonsterStaticDatas() {
+            s_aliveMonsters.Clear();
+            IdxToMonsterMapping.Clear();
+            s_originMatDic.Clear();
+            s_frozenMatDic.Clear();
+        }
+
         private const string MAT_FREEZE_OPAQUE = "FreezeMonOp";
         private const string MAT_FREEZE_TRANSPARENT = "FreezeMonTr";
 
@@ -45,6 +52,8 @@ namespace HeroFishing.Battle {
             }
         }
         public bool IsAlive => s_aliveMonsters.Contains(this);
+
+
 
         public void SetData(int _monsterID, int _monsterIdx, Action _ac) {
             MyData = MonsterJsonData.GetData(_monsterID);
@@ -166,7 +175,7 @@ namespace HeroFishing.Battle {
                 IdxToMonsterMapping.Remove(MonsterIdx);
             }
             Observable.Timer(TimeSpan.FromSeconds(delay)).Subscribe(_ => {
-                Destroy(gameObject);
+                if (gameObject!=null) Destroy(gameObject);
             });
             //Observable.Timer(TimeSpan.FromSeconds(delay)).Subscribe(_ => {
             //    try {

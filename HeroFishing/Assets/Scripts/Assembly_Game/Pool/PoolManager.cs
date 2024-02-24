@@ -26,6 +26,12 @@ public class PoolManager : MonoBehaviour {
         _heroNameDic = new Dictionary<int, string>();
     }
 
+    public void ResetBattlePool() {
+        _pools.Clear();
+        _heroNameDic.Clear();
+    }
+
+
     public void InitHeroSpell(HeroSpellJsonData data) {
         var heroData = HeroJsonData.GetData(data.HeroID);
         if (heroData == null)

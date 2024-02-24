@@ -11,7 +11,9 @@ using System.Threading;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 namespace HeroFishing.Battle {
     public class BattleManager : MonoBehaviour {
         public static BattleManager Instance;
@@ -59,9 +61,12 @@ namespace HeroFishing.Battle {
 
         public Action<int, int> OnHeroAdd;
         public Action<int> OnHeroRemove;
+        Action OnLeaveGameAC;
 
         public void Init() {
             Instance = this;
+            PoolManager.Instance.ResetBattlePool();//清除物件池
+            Monster.ResetMonsterStaticDatas();//清除場上怪物清單
             SetCam();//設定攝影機模式
             InitMonsterScheduler();
             InitPlayerHero();
@@ -78,10 +83,25 @@ namespace HeroFishing.Battle {
                 GameConnector.Instance.UpdateScene();
             }
         }
+        public void RegisterOnLeaveGameEvent(Action _ac) {
+            if (_ac == null) return;
+            OnLeaveGameAC += _ac;
+        }
         void SetCam() {
             //因為戰鬥場景的攝影機有分為場景與UI, 要把場景攝影機設定為Base, UI設定為Overlay, 並在BaseCamera中加入Camera stack
             UICam.Instance.SetRendererMode(CameraRenderType.Overlay);
             AddCamStack(UICam.Instance.MyCam);
+        }
+        public void LeaveGame() {
+            PoolManager.Instance.ResetBattlePool();//清除物件池
+            Monster.ResetMonsterStaticDatas();//清除場上怪物清單
+            OnLeaveGameAC?.Invoke();
+            OnLeaveGameAC = null;
+            AllocatedRoom.Instance.ClearRoom();
+            GameConnector.Instance.LeaveRoom();
+            PopupUI.InitSceneTransitionProgress(0);
+            PopupUI.CallSceneTransition(MyScene.LobbyScene);
+            UICam.Instance.SetRendererMode(CameraRenderType.Base);//把攝影機mode設定回base
         }
         /// <summary>
         /// 將指定camera加入到MyCam的CameraStack中
