@@ -48,8 +48,7 @@ namespace HeroFishing.Socket {
         /// <summary>
         /// 個人測試模式(不使用Agones服務, 不會透過Matchmaker分配房間再把ip回傳給client, 而是直接讓client去連資料庫matchgame的ip)
         /// </summary>
-        public void ConnectToMatchgameTestVer(int _id, string _heroSkinID, Action _onConnnectedAC, Action _onJoinGameFail, Action _onDisconnected) {
-            AllocatedRoom.Instance.SetMyHero(_id, _heroSkinID); //設定本地玩家自己使用的英雄ID
+        public void ConnectToMatchgameTestVer(Action _onConnnectedAC, Action _onJoinGameFail, Action _onDisconnected) {
             // 建立房間成功
             WriteLog.LogColor("個人測試模式連線Matchgame: ", WriteLog.LogType.Connection);
             var gameState = RealmManager.MyRealm.Find<DBGameSetting>(DBGameSettingDoc.GameState.ToString());
@@ -84,8 +83,7 @@ namespace HeroFishing.Socket {
             OnJoinGameFail?.Invoke();
         }
 
-        void GameDisconnected() {
-            AllocatedRoom.Instance.ClearRoom();
+        void GameDisconnected() {            
             IsConnectomg = false;
             OnMatchgameDisconnected?.Invoke();
         }

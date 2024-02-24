@@ -254,13 +254,6 @@ namespace HeroFishing.Battle {
                 }
 
                 var clientExclusiveMonsters = clientMonsterIdxs.Except(serverMonsterIdxs).ToList(); //client有但server沒有的怪物
-
-                for(int i=0;i< clientExclusiveMonsters.Count; i++) {
-                    WriteLog.LogError("怪物IDX=" + clientExclusiveMonsters[i]);
-                    if (Monster.TryGetMonsterByIdx(clientExclusiveMonsters[i], out var monster)) {
-                        WriteLog.LogError("ID="+monster.MonsterID);
-                    }                    
-                }
                 // Server端沒有的怪物, 但client端有就要將client端的怪物移除
                 for (int i = 0; i < clientExclusiveMonsters.Count; i++) {
                     if (Monster.TryGetMonsterByIdx(clientExclusiveMonsters[i], out var monster)) {

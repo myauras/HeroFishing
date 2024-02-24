@@ -5,6 +5,8 @@ using HeroFishing.Socket;
 using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using HeroFishing.Main;
+using System.Security.Cryptography;
 
 namespace Scoz.Func {
     public partial class TestTool : MonoBehaviour {
@@ -25,7 +27,8 @@ namespace Scoz.Func {
                 //GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
             } else if (Input.GetKeyDown(KeyCode.T)) {
                 Action connFunc = null;
-                connFunc = () => GameConnector.Instance.ConnectToMatchgameTestVer(1, "1_1", () => {
+                AllocatedRoom.Instance.SetMyHero(1, "1_1"); //設定本地玩家自己使用的英雄ID
+                connFunc = () => GameConnector.Instance.ConnectToMatchgameTestVer(() => {
                     GameConnector.Instance.SetHero(1, "1_1"); //送Server玩家使用的英雄ID
                     if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString())
                         PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
@@ -34,8 +37,7 @@ namespace Scoz.Func {
                 }, () => {
                     WriteLog.LogError("需要斷線重連");
                     UniTask.Void(async () => {
-                        WriteLog.LogError("等待5秒後重連");
-                        await UniTask.Delay(5000, true);
+                        await UniTask.Delay(100, true);
                         connFunc();
                     });
                 });

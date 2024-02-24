@@ -10,6 +10,7 @@ using System;
 using HeroFishing.Socket;
 using Cysharp.Threading.Tasks;
 using LitJson;
+using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Main {
     public class HeroUI : ItemSpawner_Remote<HeroIconItem> {
@@ -126,11 +127,13 @@ namespace HeroFishing.Main {
         }
 
         void OnConnFail() {
+            PopupUI.HideLoading();
             WriteLog.LogError("配房失敗");
         }
+
         void OnCreateRoom(Socket.Matchmaker.CREATEROOM_TOCLIENT _content) {
-            //設定玩家目前所在遊戲房間的資料
             UniTask.Void(async () => {
+                //設定玩家目前所在遊戲房間的資料
                 await AllocatedRoom.Instance.SetRoom(_content.CreaterID, _content.PlayerIDs, _content.DBMapID, _content.DBMatchgameID, _content.IP, _content.Port, _content.PodName);
                 GameConnector.Instance.ConnToMatchgame(OnConnToMatchgame, OnJoinGagmeFail, OnMatchgameDisconnected);
             });
@@ -139,13 +142,18 @@ namespace HeroFishing.Main {
         void OnConnToMatchgame() {
             PopupUI.HideLoading();
             GameConnector.Instance.SetHero(CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID
-            PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString())
+                PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
         }
         void OnJoinGagmeFail() {
             WriteLog.LogError("連線遊戲房失敗");
         }
         void OnMatchgameDisconnected() {
-            WriteLog.LogError("需要斷線重連");
+            //在戰鬥場景, 且仍在遊戲房間內就進行斷線重連
+            if (AllocatedRoom.Instance.InGame && //在房間內
+                SceneManager.GetActiveScene().name == MyScene.BattleScene.ToString()) {//在戰鬥場景
+                GameConnector.Instance.ConnToMatchgame(OnConnToMatchgame, OnJoinGagmeFail, OnMatchgameDisconnected);
+            }
         }
     }
 
