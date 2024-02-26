@@ -6,6 +6,7 @@ public static class AOTMetadata {
     public static string Version { get; private set; } = "0.11.1";
     public static List<string> AotDllList = new List<string> {"Cinemachine.dll",
 		"DOTween.dll",
+		"FancyScrollView.dll",
 		"FlutterUnityIntegration.dll",
 		"LitJson.dll",
 		"Loxodon.Framework.dll",
