@@ -41,11 +41,11 @@ public class WorldStateManager : MonoBehaviour {
             Monster.Freeze(active);
             if (active) {
                 //_entityManager.AddComponentData(_worldStateEntity, new FreezeTag());
-                SceneMaterialConverter.Instance.Freeze();
+                SceneMaterialConverter.Instance?.Freeze();
             }
             else {
                 //_entityManager.RemoveComponent<FreezeTag>(_worldStateEntity);
-                SceneMaterialConverter.Instance.Unfreeze();
+                SceneMaterialConverter.Instance?.Unfreeze();
             }
         }
     }
