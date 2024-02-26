@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_StoneGlow_m_02
+  m_Name: VFX_StoneGlow_m_03-1
   m_Shader: {fileID: 4800000, guid: 67852691b75aa744ba5ad3a6fb14b466, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -32,7 +32,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: e024d603526b763438be346a526ade87, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal:
@@ -58,22 +58,19 @@ Material:
     - Vector1_5A41DF23: 0
     - Vector1_DA37CFC9: 0.19
     - _Cut: 0
-    - _H: 0
-    - _NormalIntensity: 0.323
+    - _NormalIntensity: 0.271
     - _QueueControl: 1
     - _QueueOffset: 0
-    - _Rim: 0.956
+    - _Rim: 0.535
     - _RimValue: 1
-    - _S: 0
-    - _Smoothness: 0.116
-    - _V: 0
+    - _Smoothness: 0.24
     m_Colors:
     - Color_16A8E7A: {r: 0.75608593, g: 0.9177007, b: 1.4980394, a: 1}
     - Color_8ADDE21D: {r: 0.16164494, g: 0.16037738, b: 2, a: 1}
     - Color_DA2C7E2B: {r: 1.6037736, g: 1.42997, b: 0.34042367, a: 1}
-    - _Color: {r: 1, g: 0.033018887, b: 0.033018887, a: 1}
-    - _RimColor: {r: 4.8671446, g: 0.051351465, b: 0, a: 1}
-    - _SpecularColor: {r: 5.216475, g: 0.12303006, b: 0.20303044, a: 1}
+    - _Color: {r: 0.14509805, g: 0.38967752, b: 0.99215686, a: 1}
+    - _RimColor: {r: 0, g: 0.5405388, b: 3.8944612, a: 1}
+    - _SpecularColor: {r: 0.17770189, g: 1.9976165, b: 11.313707, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &8676466064618065713
 MonoBehaviour:
