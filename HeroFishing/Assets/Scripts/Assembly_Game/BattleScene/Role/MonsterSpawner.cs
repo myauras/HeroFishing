@@ -35,7 +35,7 @@ public static class MonsterSpawner {
             Vector3 initPosition = Vector3.zero;
             if (routeData != null) {
                 var rotation = Quaternion.AngleAxis(spawn.PlayerIndex * 90f, Vector3.up);
-                initRotation = Quaternion.LookRotation(routeData.TargetPos - routeData.SpawnPos);
+                initRotation = rotation * Quaternion.LookRotation(routeData.TargetPos - routeData.SpawnPos);
                 if (spawn.SpawnTime == 0)
                     initPosition = rotation * routeData.SpawnPos;
                 else {
