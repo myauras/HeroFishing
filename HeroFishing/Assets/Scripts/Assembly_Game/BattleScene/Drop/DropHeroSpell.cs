@@ -8,9 +8,15 @@ using UnityEngine;
 public class DropHeroSpell : DropSpellBase {
     private float _radius;
     private Monster[] _monsters = new Monster[100];
+    private int _attackID = -1;
     private const string HERO_SPELL_ID = "{0}_drop_spell";
     public DropHeroSpell(DropJsonData data, DropSpellJsonData spellData) : base(data, spellData) {
         _radius = spellData.EffectValue1;
+    }
+
+    public override void SetAttackID(int attackID) {
+        base.SetAttackID(attackID);
+        _attackID = attackID;
     }
 
     public override bool PlayDrop(int heroIndex) {
@@ -23,9 +29,7 @@ public class DropHeroSpell : DropSpellBase {
             Debug.LogError("no hero spell data");
             return false;
         }
-        //Hero hero = BattleManager.Instance.GetHero(heroIndex);
-        int attackID = heroIndex == 0 ? PlayerAttackController.AttackID : 0;
-        Debug.Log(attackID);
+
         int count = Monster.GetMonstersInRange(Vector3.zero, _radius, _monsters);
         int[] idxs = new int[count];
         for (int i = 0; i < count; i++) {
@@ -42,18 +46,9 @@ public class DropHeroSpell : DropSpellBase {
         }
 
         if (GameConnector.Connected && heroIndex == 0) {
-            GameConnector.Instance.Hit(attackID, idxs, heroSpellID);
+            GameConnector.Instance.Hit(_attackID, idxs, heroSpellID);
         }
-        //SpellPlayData playData = new SpellPlayData {
-        //    attackPos = Vector3.zero,
-        //    direction = Vector3.forward,
-        //    heroIndex = heroIndex,
-        //    IsDrop = true,
-        //    heroPos = hero.transform.position,
-        //    attackID = attackID,
-        //};
-
-        //heroSpellData.Spell.Play(playData);
+        
         return true;
     }
 }

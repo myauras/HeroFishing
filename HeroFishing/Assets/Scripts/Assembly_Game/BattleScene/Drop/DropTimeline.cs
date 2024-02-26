@@ -15,6 +15,12 @@ public class DropTimeline : DropSpellBase {
         _childDropSpell = dropSpell;
     }
 
+    public override void SetAttackID(int attackID) {
+        base.SetAttackID(attackID);
+
+        _childDropSpell.SetAttackID(attackID);
+    }
+
     public override bool PlayDrop(int heroIndex) {
         if (_childDropSpell == null) {
             Debug.LogError("timeline child drop is null");
