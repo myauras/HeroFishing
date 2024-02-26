@@ -25,6 +25,7 @@ public static class MonsterSpawner {
         bool hasSpawn = false;
         for (int i = 0; i < spawn.Monsters.Count; i++) {
             var spawnMonster = spawn.Monsters[i];
+            if (Monster.IdxToMonsterMapping.ContainsKey(spawnMonster.Idx)) continue;
             int monsterID = spawnMonster.ID;
             if (monsterID <= 0) continue;
 

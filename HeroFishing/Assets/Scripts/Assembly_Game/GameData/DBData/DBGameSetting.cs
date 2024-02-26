@@ -51,8 +51,10 @@ public partial class DBGameSetting : IRealmObject {
     public string MatchgameTestverRoomName { get; set; }
     [MapTo("matchgame-testver-mapID")]
     public string MatchgameTestverMapID { get; set; }
-    [MapTo("matchgame-testver-ip")]
-    public string MatchgameTestverIP { get; set; }
+    [MapTo("matchgame-testver-tcp-ip")]
+    public string MatchgameTestverTcpIP { get; set; }
+    [MapTo("matchgame-testver-udp-ip")]
+    public string MatchgameTestverUdpIP { get; set; }
     [MapTo("matchgame-testver-port")]
     public int? MatchgameTestverPort { get; set; }
 

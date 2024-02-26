@@ -6,10 +6,14 @@ using Service.Realms;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 namespace HeroFishing.Battle {
     public class BattleManager : MonoBehaviour {
         public static BattleManager Instance;
@@ -48,7 +52,6 @@ namespace HeroFishing.Battle {
             }
         }
         //private EntityManager _entityManager;
-        private List<int> _updateSceneIdxs = new List<int>();
 
         public MonsterScheduler MyMonsterScheduler { get; private set; }
         public static float3 MonsterCollisionPosOffset { get; private set; }//因為怪物的位置是在地板 所以檢測碰撞半徑時以地板為圓心的話子彈會打不到 所以碰撞檢測時要將判定的圓心高度提高到子彈高度
@@ -58,9 +61,12 @@ namespace HeroFishing.Battle {
 
         public Action<int, int> OnHeroAdd;
         public Action<int> OnHeroRemove;
+        Action OnLeaveGameAC;
 
         public void Init() {
             Instance = this;
+            PoolManager.Instance.ResetBattlePool();//清除物件池
+            Monster.ResetMonsterStaticDatas();//清除場上怪物清單
             SetCam();//設定攝影機模式
             InitMonsterScheduler();
             InitPlayerHero();
@@ -77,10 +83,25 @@ namespace HeroFishing.Battle {
                 GameConnector.Instance.UpdateScene();
             }
         }
+        public void RegisterOnLeaveGameEvent(Action _ac) {
+            if (_ac == null) return;
+            OnLeaveGameAC += _ac;
+        }
         void SetCam() {
             //因為戰鬥場景的攝影機有分為場景與UI, 要把場景攝影機設定為Base, UI設定為Overlay, 並在BaseCamera中加入Camera stack
             UICam.Instance.SetRendererMode(CameraRenderType.Overlay);
             AddCamStack(UICam.Instance.MyCam);
+        }
+        public void LeaveGame() {
+            PoolManager.Instance.ResetBattlePool();//清除物件池
+            Monster.ResetMonsterStaticDatas();//清除場上怪物清單
+            OnLeaveGameAC?.Invoke();
+            OnLeaveGameAC = null;
+            AllocatedRoom.Instance.ClearRoom();
+            GameConnector.Instance.LeaveRoom();
+            PopupUI.InitSceneTransitionProgress(0);
+            PopupUI.CallSceneTransition(MyScene.LobbyScene);
+            UICam.Instance.SetRendererMode(CameraRenderType.Base);//把攝影機mode設定回base
         }
         /// <summary>
         /// 將指定camera加入到MyCam的CameraStack中
@@ -99,8 +120,7 @@ namespace HeroFishing.Battle {
                 hero.SetData(_testHeroID, $"{_testHeroID}_1");
                 hero.UpdatePoints(10);
                 _bet = _testBet;
-            }
-            else {
+            } else {
                 hero.SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
                 var map = RealmManager.MyRealm.Find<DBMap>(AllocatedRoom.Instance.DBMapID);
                 _bet = map.Bet ?? 1;
@@ -199,7 +219,11 @@ namespace HeroFishing.Battle {
         public void UpdateScene(Spawn[] spawns, SceneEffect[] effects) {
             try {
                 if (spawns == null || spawns.Length == 0) return;
-                _updateSceneIdxs.Clear();
+
+                // 取出server有的monster索引
+                List<int> serverMonsterIdxs = new List<int>(128);
+                var clientMonsterIdxs = Monster.IdxToMonsterMapping.Keys;
+ 
                 for (int i = 0; i < spawns.Length; i++) {
                     var spawn = spawns[i];
                     var routeData = RouteJsonData.GetData(spawn.RID);
@@ -208,20 +232,22 @@ namespace HeroFishing.Battle {
                     bool found = false;
                     for (int j = 0; j < spawn.Ms.Length; j++) {
                         var spawnMonster = spawn.Ms[j];
-                        // update
+                        if (!spawnMonster.Death) serverMonsterIdxs.Add(spawnMonster.Idx);
+                        // Server端有的怪物, 且client端也有就更新怪物狀態
                         if (Monster.TryGetMonsterByIdx(spawnMonster.Idx, out Monster monster)) {
                             var monsterData = monster.MyData;
                             float deltaTime = GameTime.Current - (float)spawn.STime;
                             Vector3 deltaPosition = deltaTime * monsterData.Speed * (initRotation * Vector3.forward);
-                            if (Vector3.SqrMagnitude(deltaPosition) > Vector3.SqrMagnitude(routeData.TargetPos - routeData.SpawnPos))
-                                break;
+                            // 先註解掉, 因為要超出邊界的怪物也需要移動位置, 否則可能發生client端的怪物還在邊界內但server端已經在邊界外的情形
+                            // 可能會導致玩家A看玩家B打死邊界外的怪物
+                            //if (Vector3.SqrMagnitude(deltaPosition) > Vector3.SqrMagnitude(routeData.TargetPos - routeData.SpawnPos))
+                            //    continue;
                             monster.GetComponent<MonsterGrid>().Teleport(rotation * (routeData.SpawnPos + deltaPosition));
                             found = true;
-                            _updateSceneIdxs.Add(spawnMonster.Idx);
-                            break;
                         }
                     }
-                    // add
+
+                    // Server端有的怪物, 但client端沒有就要補
                     if (!found) {
                         MyMonsterScheduler.EnqueueMonster(spawn, Index);
                     }
@@ -247,15 +273,14 @@ namespace HeroFishing.Battle {
                     //_entityManager.AddComponent<RefreshSceneTag>(entity);
                 }
 
-                // remove
-                var idxs = Monster.GetExceptMonsterIdxs(_updateSceneIdxs);
-                for (int i = 0; i < idxs.Count; i++) {
-                    if (Monster.TryGetMonsterByIdx(idxs[i], out var monster)) {
+                var clientExclusiveMonsters = clientMonsterIdxs.Except(serverMonsterIdxs).ToList(); //client有但server沒有的怪物
+                // Server端沒有的怪物, 但client端有就要將client端的怪物移除
+                for (int i = 0; i < clientExclusiveMonsters.Count; i++) {
+                    if (Monster.TryGetMonsterByIdx(clientExclusiveMonsters[i], out var monster)) {
                         monster.DestroyGOAfterDelay(0.1f * i);
                     }
                 }
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Debug.LogError("update scene error " + ex);
             }
         }

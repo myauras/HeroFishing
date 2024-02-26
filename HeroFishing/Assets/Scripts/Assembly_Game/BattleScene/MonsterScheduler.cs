@@ -56,6 +56,7 @@ namespace HeroFishing.Battle {
         /// <param name="_mapData">表格-地圖資料</param>
         /// <param name="_locoTest">是否使用本地測試</param>
         public void Init(MapJsonData _mapData, bool _locoTest) {
+            BossExist = false;
             CurMapJson = _mapData;
             IsInit = true;
             if (_locoTest) {
@@ -149,7 +150,7 @@ namespace HeroFishing.Battle {
         public void EnqueueMonster(Spawn spawn, int playerIndex) {
             if (!IsInit) { WriteLog.LogError("SpawnCheck尚未初始化"); return; }
             List<SpawnMonsterInfo.MonsterInfo> monsters = new List<SpawnMonsterInfo.MonsterInfo>(spawn.Ms.Length);
-            for (int i = 0; i < monsters.Count; i++) {
+            for (int i = 0; i < spawn.Ms.Length; i++) {
                 var spawnMonster = spawn.Ms[i];
                 if (spawnMonster == null || spawnMonster.Death) continue;
                 monsters.Add(new SpawnMonsterInfo.MonsterInfo {

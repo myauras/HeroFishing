@@ -2,6 +2,11 @@ using UnityEngine;
 using Service.Realms;
 using System.Linq;
 using HeroFishing.Socket;
+using System;
+using Cysharp.Threading.Tasks;
+using UnityEngine.SceneManagement;
+using HeroFishing.Main;
+using System.Security.Cryptography;
 
 namespace Scoz.Func {
     public partial class TestTool : MonoBehaviour {
@@ -21,11 +26,23 @@ namespace Scoz.Func {
                 //key++;
                 //GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
             } else if (Input.GetKeyDown(KeyCode.T)) {
-                GameConnector.Instance.ConnectToMatchgameTestVer(1, "1_1", result => {
-                    if (result) {
-                        GameConnector.Instance.SetHero(1, "1_1"); //送Server玩家使用的英雄ID
+                Action connFunc = null;
+                AllocatedRoom.Instance.SetMyHero(1, "1_1"); //設定本地玩家自己使用的英雄ID
+                if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString())
+                    PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
+                PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
+                connFunc = () => GameConnector.Instance.ConnectToMatchgameTestVer(() => {
+                    PopupUI.HideLoading();
+                    GameConnector.Instance.SetHero(1, "1_1"); //送Server玩家使用的英雄ID
+                }, () => {
+                    WriteLog.LogError("連線遊戲房失敗");
+                }, () => {
+                    if (AllocatedRoom.Instance.InGame) {
+                        WriteLog.LogError("需要斷線重連");
+                        connFunc();
                     }
                 });
+                connFunc();
             } else if (Input.GetKeyDown(KeyCode.W)) {
                 GameConnector.Instance.DropSpell(4);
             } else if (Input.GetKeyDown(KeyCode.E)) {

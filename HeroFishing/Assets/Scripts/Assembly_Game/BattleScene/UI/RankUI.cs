@@ -1,7 +1,5 @@
 using HeroFishing.Battle;
 using Scoz.Func;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 using UnityEngine;
@@ -49,11 +47,11 @@ public class RankUI : BaseUI {
         bool found = false;
         for (int i = 0; i < _rankItems.Length; i++) {
             var item = _rankItems[i];
-            // ¥ý§äÂ÷¶}ªºplayer idx
+            // å…ˆæ‰¾é›¢é–‹çš„player idx
             if (item.PlayerIdx == playerIdx) {
                 found = true;
             }
-            // §ä¨ì«á¡A¦pªG¥¦«á­±ªº¶¶¦ì¦³¸ê®Æ¡A©¹«e¤@¦W²¾°Ê
+            // æ‰¾åˆ°å¾Œï¼Œå¦‚æžœå®ƒå¾Œé¢çš„é †ä½æœ‰è³‡æ–™ï¼Œå¾€å‰ä¸€åç§»å‹•
             if (found) {
                 if (i < _rankItems.Length - 1 && _rankItems[i + 1].PlayerIdx != -1) {
                     var nextItem = _rankItems[i + 1];
@@ -62,7 +60,7 @@ public class RankUI : BaseUI {
             }
         }
 
-        // ³Ì«áªº¨º­Ó±Æ¦WÃö³¬
+        // æœ€å¾Œçš„é‚£å€‹æŽ’åé—œé–‰
         _rankItems[_playerCount].ResetContent();
         _rankItems[_playerCount].SetActive(false);
     }
