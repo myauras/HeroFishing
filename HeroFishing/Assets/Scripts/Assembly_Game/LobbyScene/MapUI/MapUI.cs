@@ -23,6 +23,8 @@ namespace HeroFishing.Main {
         private MapColorDicClass _glowColorDic;
         [SerializeField]
         private MapColorDicClass _txtColorDic;
+        [SerializeField]
+        private Button _confirmButton;
 
         private List<MapItemData> _mapItemDatas;
         private int[] _bets = new int[] { 1, 5, 10, 30, 50, 200, 200, 300 };
@@ -54,10 +56,26 @@ namespace HeroFishing.Main {
             var dbmaps = query.OrderByDescending(item => item.Priority);
             foreach(var dbMap in dbmaps) {
                 if (!dbMap.Enable.HasValue || !dbMap.Enable.Value) continue;
-                var itemData = CreateMapItemData(dbMap.JsonMapID ?? 1, dbMap.Bet ?? 1);
+                var itemData = CreateMapItemData(dbMap.JsonMapID ?? 1, dbMap.Bet ?? 1, dbMap);
                 _mapItemDatas.Add(itemData);
             }
             _mapScrollView.UpdateData(_mapItemDatas);
+        }
+
+        public void Confirm() {
+            if (_localTest) {
+                Debug.LogWarning("it is local test mode, so it is no db map at all");
+                return;
+            }
+
+
+            if (_mapScrollView.SelectedMap == null) {
+                Debug.LogError("db map is null");
+                return;
+            }
+
+            SelectedDBMap = _mapScrollView.SelectedMap;
+            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
         }
 
         private MapItemData CreateMapItemDataLocal(int index) {
@@ -65,7 +83,7 @@ namespace HeroFishing.Main {
             return CreateMapItemData(index + 1, bet);
         }
 
-        private MapItemData CreateMapItemData(int id, int bet) {
+        private MapItemData CreateMapItemData(int id, int bet, DBMap dbMap = null) {
             var mapData = MapJsonData.GetData(id);
             var itemData = new MapItemData() {
                 Id = id,
@@ -73,6 +91,7 @@ namespace HeroFishing.Main {
                 Bet = bet,
                 IsGradient = bet == _bets[_bets.Length - 1],
                 txtColor = _txtColorDic[bet],
+                dbMap = dbMap,
             };
             itemData.glowColor = itemData.IsGradient ? Color.black : _glowColorDic[bet];
             return itemData;

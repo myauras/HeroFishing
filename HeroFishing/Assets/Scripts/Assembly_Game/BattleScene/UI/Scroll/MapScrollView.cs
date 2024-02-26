@@ -12,11 +12,13 @@ public class MapItemData {
     public bool IsGradient;
     public Color glowColor;
     public Color txtColor;
+    public DBMap dbMap;
 }
 
 public class Context {
     public Action<int> OnClick;
     public int SelectedIndex;
+    public DBMap SelectedMap;
 }
 
 public class MapScrollView : FancyScrollView<MapItemData, Context> {
@@ -29,19 +31,22 @@ public class MapScrollView : FancyScrollView<MapItemData, Context> {
 
     protected override GameObject CellPrefab => _prefab;
 
+    public DBMap SelectedMap => Context.SelectedMap;
+
     protected override void Initialize() {
         base.Initialize();
 
         _scroller.OnValueChanged(UpdatePosition);
         _scroller.OnSelectionChanged(UpdateSelection);
+
+        Context.OnClick += SelectCell;
     }
 
     private void UpdateSelection(int index) {
         if (Context.SelectedIndex == index) return;
 
-        Context.OnClick += SelectCell;
-
         Context.SelectedIndex = index;
+        Context.SelectedMap = ItemsSource[index].dbMap;
         Refresh();
     }
 
@@ -51,11 +56,13 @@ public class MapScrollView : FancyScrollView<MapItemData, Context> {
                 _prefab = handle.Result;
                 UpdateContents(itemData);
                 _scroller.SetTotalCount(itemData.Count);
+                Context.SelectedMap = itemData[Context.SelectedIndex].dbMap;
             };
         }
         else {
             UpdateContents(itemData);
             _scroller.SetTotalCount(itemData.Count);
+            Context.SelectedMap = itemData[Context.SelectedIndex].dbMap;
         }
     }
 

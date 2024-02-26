@@ -16,7 +16,7 @@ PrefabInstance:
     - target: {fileID: 4722294797421433420, guid: c3980f958eb46e6498629bfc0558facc,
         type: 3}
       propertyPath: m_Name
-      value: Script_Map
+      value: Script_MapUI
       objectReference: {fileID: 0}
     - target: {fileID: 5042996298028206001, guid: c3980f958eb46e6498629bfc0558facc,
         type: 3}
@@ -128,6 +128,41 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8895635646645747850, guid: c3980f958eb46e6498629bfc0558facc,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8895635646645747850, guid: c3980f958eb46e6498629bfc0558facc,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8895635646645747850, guid: c3980f958eb46e6498629bfc0558facc,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1581827506362702344}
+    - target: {fileID: 8895635646645747850, guid: c3980f958eb46e6498629bfc0558facc,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8895635646645747850, guid: c3980f958eb46e6498629bfc0558facc,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Confirm
+      objectReference: {fileID: 0}
+    - target: {fileID: 8895635646645747850, guid: c3980f958eb46e6498629bfc0558facc,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HeroFishing.Main.MapUI, Game
+      objectReference: {fileID: 0}
+    - target: {fileID: 8895635646645747850, guid: c3980f958eb46e6498629bfc0558facc,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3478607776400541413, guid: c3980f958eb46e6498629bfc0558facc, type: 3}
@@ -189,6 +224,7 @@ MonoBehaviour:
     - {r: 1, g: 0.25882354, b: 0.6784314, a: 1}
     - {r: 0.7882353, g: 0.7921569, b: 0.9882353, a: 1}
     - {r: 0.73333335, g: 0.75686276, b: 0.8117647, a: 1}
+  _confirmButton: {fileID: 0}
 --- !u!224 &6011427193199425748 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3627128516013119318, guid: c3980f958eb46e6498629bfc0558facc,
