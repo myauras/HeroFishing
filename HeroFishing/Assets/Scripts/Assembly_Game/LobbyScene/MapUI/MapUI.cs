@@ -92,6 +92,7 @@ namespace HeroFishing.Main {
                 IsGradient = bet == _bets[_bets.Length - 1],
                 txtColor = _txtColorDic[bet],
                 dbMap = dbMap,
+                Position = mapData.ForegroundPos,
             };
             itemData.glowColor = itemData.IsGradient ? Color.black : _glowColorDic[bet];
             return itemData;

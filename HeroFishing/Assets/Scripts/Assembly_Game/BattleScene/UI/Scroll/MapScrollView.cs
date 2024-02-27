@@ -12,6 +12,7 @@ public class MapItemData {
     public bool IsGradient;
     public Color glowColor;
     public Color txtColor;
+    public Vector2 Position;
     public DBMap dbMap;
 }
 

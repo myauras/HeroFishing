@@ -78,6 +78,9 @@ namespace HeroFishing.Main {
             MyJsonMap = MapJsonData.GetData(id);
             AddressablesLoader.GetSpriteAtlas("MapItem", atlas => {
                 _imgBackground.sprite = atlas.GetSprite($"Img_Map_Bg0{id}");
+                _imgForeground.sprite = atlas.GetSprite($"Img_Map_Fg0{id}");
+                _imgForeground.SetNativeSize();
+                _imgForeground.rectTransform.anchoredPosition = itemData.Position;
                 _imgFrame.sprite = atlas.GetSprite($"Img_Container_{bet}");
                 _imgBet.sprite = atlas.GetSprite($"Img_Map_Bet{bet}");
             });

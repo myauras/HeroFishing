@@ -70,6 +70,20 @@ namespace Scoz.Func {
             Int2D int2D = new Int2D(values[0], values[1]);
             return int2D;
         }
+        public static Vector2 ParseTextToVector2(string _text, char _char) {
+            float[] values = new float[2] { 0, 0 };
+            try {
+                values = Array.ConvertAll(_text.Split(_char), a => float.Parse(a));
+                if (values.Length != 2)
+                    WriteLog.LogErrorFormat("Parse {0} to Vector2 失敗", _text);
+            }
+            catch {
+                WriteLog.LogErrorFormat("Parse {0} to Vector2 失敗", _text);
+                return Vector2.zero;
+            }
+            Vector2 vector2 = new Vector2(values[0], values[1]);
+            return vector2;
+        }
         public static Vector3 ParseTextToVector3(string _text, char _char) {
             float[] values = new float[3] { 0, 0, 0 };
             try {
