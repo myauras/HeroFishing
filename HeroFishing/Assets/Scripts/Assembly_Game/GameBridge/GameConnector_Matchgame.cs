@@ -26,8 +26,8 @@ namespace HeroFishing.Socket {
         /// 確認DBMatchgame表被建立後會跳BattleScene並開始跑ConnToMatchgame開始連線到Matchgame
         /// </summary>
         public void ConnToMatchgame(Action _onConnected, Action _onJoinGameFail, Action _onDisconnected) {
-            if (AllocatedRoom.Instance.InGame) return;
-            AllocatedRoom.Instance.SetInGame(true);
+            if (AllocatedRoom.Instance.CurGameState != AllocatedRoom.GameState.NotInGame) return;
+            AllocatedRoom.Instance.SetGameState(AllocatedRoom.GameState.InGame);
             if (IsConnectomg) return;
             OnConnToMatchgame = _onConnected;
             OnJoinGameFail = _onJoinGameFail;
@@ -83,7 +83,7 @@ namespace HeroFishing.Socket {
             OnJoinGameFail?.Invoke();
         }
 
-        void GameDisconnected() {            
+        void GameDisconnected() {
             IsConnectomg = false;
             OnMatchgameDisconnected?.Invoke();
         }

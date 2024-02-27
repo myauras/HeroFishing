@@ -114,16 +114,10 @@ namespace HeroFishing.Main {
             var mapUI = MapUI.GetInstance<MapUI>();
             if (mapUI == null) return;
             PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
-            UniTask.Void(async () => {
-                var result = await GameConnector.SendRestfulAPI("player/syncredischeck", null); //檢查是否需要同步Redis資料回玩家資料
-                JsonData jsonData = JsonMapper.ToObject(result.ToString());
-                string resultStr = jsonData["result"].ToString();
-                WriteLog.LogColorFormat("syncredischeck: {0}", WriteLog.LogType.Realm, resultStr);
-
-                AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
-                //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
-                GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnFail, OnConnFail, OnCreateRoom).Forget();
-            });
+            GamePlayer.Instance.RedisSync().Forget();
+            AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
+            //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
+            GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnFail, OnConnFail, OnCreateRoom).Forget();
         }
 
         void OnConnFail() {
@@ -133,6 +127,7 @@ namespace HeroFishing.Main {
 
         void OnCreateRoom(Socket.Matchmaker.CREATEROOM_TOCLIENT _content) {
             UniTask.Void(async () => {
+                PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
                 //設定玩家目前所在遊戲房間的資料
                 await AllocatedRoom.Instance.SetRoom(_content.CreaterID, _content.PlayerIDs, _content.DBMapID, _content.DBMatchgameID, _content.IP, _content.Port, _content.PodName);
                 GameConnector.Instance.ConnToMatchgame(OnConnToMatchgame, OnJoinGagmeFail, OnMatchgameDisconnected);
@@ -141,16 +136,14 @@ namespace HeroFishing.Main {
 
         void OnConnToMatchgame() {
             PopupUI.HideLoading();
-            GameConnector.Instance.SetHero(CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID
-            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString())
-                PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
+            GameConnector.Instance.SetHero(CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID                
         }
         void OnJoinGagmeFail() {
             WriteLog.LogError("連線遊戲房失敗");
         }
         void OnMatchgameDisconnected() {
-            //在戰鬥場景, 且仍在遊戲房間內就進行斷線重連
-            if (AllocatedRoom.Instance.InGame && //在房間內
+            //在戰鬥場景, 且仍在遊玩中就進行斷線重連
+            if (AllocatedRoom.Instance.CurGameState == AllocatedRoom.GameState.Playing && //在遊玩中
                 SceneManager.GetActiveScene().name == MyScene.BattleScene.ToString()) {//在戰鬥場景
                 GameConnector.Instance.ConnToMatchgame(OnConnToMatchgame, OnJoinGagmeFail, OnMatchgameDisconnected);
             }

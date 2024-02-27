@@ -20,7 +20,7 @@ namespace HeroFishing.Socket {
         string TmpDBMapID;//暫時紀錄要建立或加入的DBMapID
         Action OnConnToMatchmakerFail;//連線Matchmaker失敗 callback
         Action OnCreateRoomFail;//建立Matchgame房間失敗 callback
-        Action<CREATEROOM_TOCLIENT> OnMatchmakerCreated;//連線Matchmaker callback
+        Action<CREATEROOM_TOCLIENT> OnMatchgameCreated;//Matchgame房間建立好後回傳
 
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace HeroFishing.Socket {
             CurRetryTimes = 0;
             OnConnToMatchmakerFail = _onConnToMatchmakerFail;
             OnCreateRoomFail = _onCreateRoomFail;
-            OnMatchmakerCreated = _onMatchmakerCreated;
+            OnMatchgameCreated = _onMatchmakerCreated;
             // 接Socket
             var gameSetting = GamePlayer.Instance.GetDBGameSettingDoc<DBGameSetting>(DBGameSettingDoc.GameState);
             Socket.CreateMatchmaker(gameSetting.MatchmakerIP, gameSetting.MatchmakerPort ?? 0);
@@ -87,7 +87,7 @@ namespace HeroFishing.Socket {
             }
             // 建立房間成功
             WriteLog.LogColorFormat("建立房間成功: ", WriteLog.LogType.Connection, DebugUtils.ObjToStr(_reply));
-            OnMatchmakerCreated?.Invoke(_reply);
+            OnMatchgameCreated?.Invoke(_reply);
         }
 
         private void OnCreateRoomError(Exception _exception) {

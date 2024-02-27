@@ -66,7 +66,12 @@ namespace HeroFishing.Main {
         /// </summary>
         public int Index { get; private set; }
 
-        public bool InGame { get; private set; } = false; //是否已經在遊戲房間中
+        public enum GameState {
+            NotInGame,// 不在遊戲中
+            InGame,//在遊戲中, 但是還沒開始遊戲(以從Matchmaker收到配對房間但還沒從Matchgame收到Auth回傳true)
+            Playing,//遊玩中(加入Matchgame並收到Auth回傳true)
+        }
+        public GameState CurGameState { get; private set; } = GameState.NotInGame;
         public static void Init() {
             Instance = new AllocatedRoom();
         }
@@ -143,17 +148,16 @@ namespace HeroFishing.Main {
             MyHeroID = _id;
             MyHeroSkinID = _heroSkinID;
         }
-        /// <summary>
-        /// 設定玩家是否在遊戲中, 連線到遊戲後要設定為true, 離開遊戲設定回false
-        /// </summary>
-        public void SetInGame(bool _value) {
-            InGame = _value;
+
+        public void SetGameState(GameState _value) {
+            CurGameState = _value;
+            WriteLog.Log("遊戲狀態切換為:" + _value);
         }
         /// <summary>
         /// 清空配對房間(AllocatedRoom)資訊
         /// </summary>
         public void ClearRoom() {
-            InGame = false;
+            SetGameState(GameState.NotInGame);
             CreaterID = null;
             PlayerIDs = null;
             DBMapID = null;

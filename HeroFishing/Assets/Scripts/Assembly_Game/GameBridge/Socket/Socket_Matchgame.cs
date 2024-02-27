@@ -210,6 +210,10 @@ namespace HeroFishing.Socket {
                     //if (cmdType != SocketContent.MatchgameCMD_TCP.ATTACK_TOCLIENT)
                     WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
                     switch (cmdType) {
+                        case SocketContent.MatchgameCMD_TCP.AUTH_TOCLIENT:
+                            var authPacket = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_TOCLIENT>>(_msg);
+                            HandleAuth(authPacket);
+                            break;
                         case SocketContent.MatchgameCMD_TCP.ATTACK_TOCLIENT:
                             var attackPacket = LitJson.JsonMapper.ToObject<SocketCMD<ATTACK_TOCLIENT>>(_msg);
                             HandleAttack(attackPacket);
@@ -291,6 +295,15 @@ namespace HeroFishing.Socket {
             BattleManager.Instance?.SetMonsterDead(_packet.Content.PlayerIdx, _packet.Content.KillMonsterIdxs, _packet.Content.GainPoints, _packet.Content.GainHeroExps, _packet.Content.GainSpellCharges, _packet.Content.GainDrops);
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.KillMonsterIdxs));
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.GainGolds));
+        }
+        void HandleAuth(SocketCMD<AUTH_TOCLIENT> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            if (_packet.Content == null || !_packet.Content.IsAuth) {
+                WriteLog.LogError("Auth錯誤 遊戲無法開始");
+                return;
+            }
+            AllocatedRoom.Instance.SetGameState(AllocatedRoom.GameState.Playing);
+            BattleManager.Instance?.StartGame();
         }
         void HandleAttack(SocketCMD<ATTACK_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;

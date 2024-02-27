@@ -35,7 +35,6 @@ public class SpellUI : BaseUI {
     public override void Init() {
         base.Init();
         _hero = BattleManager.Instance.GetHero(0);
-        WriteLog.Log("_hero=" + _hero);
         _spellBtn1.Init(HeroSpellJsonData.GetSpell(_hero.MyData.ID, SpellName.spell1), 4);
         _spellBtn2.Init(HeroSpellJsonData.GetSpell(_hero.MyData.ID, SpellName.spell2), 4);
         _spellBtn3.Init(HeroSpellJsonData.GetSpell(_hero.MyData.ID, SpellName.spell3), 2);

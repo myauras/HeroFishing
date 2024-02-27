@@ -9,6 +9,7 @@ using Realms;
 using System.Data.SqlTypes;
 using Cysharp.Threading.Tasks;
 using HeroFishing.Socket;
+using LitJson;
 
 namespace HeroFishing.Main {
 
@@ -53,6 +54,17 @@ namespace HeroFishing.Main {
 
             return true;
         }
+
+        /// <summary>
+        /// 通知Server要同步玩家資料
+        /// </summary>
+        public async UniTask RedisSync() {
+            var result = await GameConnector.SendRestfulAPI("player/syncredischeck", null); //檢查是否需要同步Redis資料回玩家資料
+            JsonData jsonData = JsonMapper.ToObject(result.ToString());
+            string resultStr = jsonData["result"].ToString();
+            WriteLog.LogColorFormat("syncredischeck: {0}", WriteLog.LogType.Realm, resultStr);
+        }
+
         /// <summary>
         /// 取得玩家自己的資料
         /// </summary>
