@@ -251,7 +251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cellInterval: 0.18
   scrollOffset: 0.5
-  loop: 1
+  loop: 0
   cellContainer: {fileID: 7934291754245889968}
   _scroller: {fileID: 6335380918287560277}
   _prefabRef:
@@ -273,7 +273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewport: {fileID: 6011427193199425748}
   scrollDirection: 1
-  movementType: 0
+  movementType: 1
   elasticity: 0.1
   scrollSensitivity: 5
   inertia: 1
