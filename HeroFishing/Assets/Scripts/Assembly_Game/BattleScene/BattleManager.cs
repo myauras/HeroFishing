@@ -73,15 +73,27 @@ namespace HeroFishing.Battle {
             MonsterCollisionPosOffset = new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
             //_entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             _spellIndicator.Init();
-            DeviceManager.AddOnFocusAction(() => {
-                if (GameConnector.Connected)
-                    GameConnector.Instance.UpdateScene();
-            });
-
-            if (GameConnector.Connected) {
-                UpdateHeros();
-                GameConnector.Instance.UpdateScene();
+            CheckGameState();
+        }
+        void CheckGameState() {
+            switch (AllocatedRoom.Instance.CurGameState) {
+                case AllocatedRoom.GameState.NotInGame://本地測試
+                    break;
+                case AllocatedRoom.GameState.InGame://需要等待Matchgame Server回傳Auth成功
+                    PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
+                    break;
+                case AllocatedRoom.GameState.Playing://遊戲開始(極罕見情況會發生場景載入前Matchgame Server已經回傳Auth為true)
+                    StartGame();
+                    break;
             }
+        }
+        public void StartGame() {
+            UpdateHeros();
+            GameConnector.Instance.UpdateScene();
+            DeviceManager.AddOnFocusAction(() => {
+                GameConnector.Instance.UpdateScene();
+            });
+            PopupUI.HideLoading();
         }
         public void RegisterOnLeaveGameEvent(Action _ac) {
             if (_ac == null) return;
@@ -223,7 +235,7 @@ namespace HeroFishing.Battle {
                 // 取出server有的monster索引
                 List<int> serverMonsterIdxs = new List<int>(128);
                 var clientMonsterIdxs = Monster.IdxToMonsterMapping.Keys;
- 
+
                 for (int i = 0; i < spawns.Length; i++) {
                     var spawn = spawns[i];
                     var routeData = RouteJsonData.GetData(spawn.RID);
