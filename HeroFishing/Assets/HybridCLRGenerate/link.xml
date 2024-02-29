@@ -22,6 +22,12 @@
   <assembly fullname="Demigiant">
     <type fullname="DG.Tweening.DOTweenAnimation" preserve="all" />
   </assembly>
+  <assembly fullname="FancyScrollView">
+    <type fullname="EasingCore.Ease" preserve="all" />
+    <type fullname="FancyScrollView.FancyCell`2" preserve="all" />
+    <type fullname="FancyScrollView.FancyScrollView`2" preserve="all" />
+    <type fullname="FancyScrollView.Scroller" preserve="all" />
+  </assembly>
   <assembly fullname="FlutterUnityIntegration">
     <type fullname="FlutterUnityIntegration.SingletonMonoBehaviour`1" preserve="all" />
     <type fullname="FlutterUnityIntegration.UnityMessageManager" preserve="all" />
@@ -136,14 +142,13 @@
     <type fullname="System.Collections.Generic.HashSet`1/Enumerator" preserve="all" />
     <type fullname="System.Linq.Enumerable" preserve="all" />
     <type fullname="System.Linq.Expressions.BinaryExpression" preserve="all" />
-    <type fullname="System.Linq.Expressions.ConstantExpression" preserve="all" />
     <type fullname="System.Linq.Expressions.Expression" preserve="all" />
     <type fullname="System.Linq.Expressions.Expression`1" preserve="all" />
     <type fullname="System.Linq.Expressions.MemberExpression" preserve="all" />
     <type fullname="System.Linq.Expressions.ParameterExpression" preserve="all" />
-    <type fullname="System.Linq.Expressions.UnaryExpression" preserve="all" />
     <type fullname="System.Linq.IGrouping`2" preserve="all" />
     <type fullname="System.Linq.IOrderedEnumerable`1" preserve="all" />
+    <type fullname="System.Linq.IOrderedQueryable`1" preserve="all" />
     <type fullname="System.Linq.IQueryable`1" preserve="all" />
     <type fullname="System.Linq.Queryable" preserve="all" />
   </assembly>
@@ -156,7 +161,12 @@
   <assembly fullname="System.Xml">
     <type fullname="System.Xml.Serialization.XmlIgnoreAttribute" preserve="all" />
   </assembly>
+  <assembly fullname="UIGradient">
+    <type fullname="JoshH.UI.UIGradient" preserve="all" />
+  </assembly>
   <assembly fullname="UniRx">
+    <type fullname="UniRx.CompositeDisposable" preserve="all" />
+    <type fullname="UniRx.DisposableExtensions" preserve="all" />
     <type fullname="UniRx.FrameCountType" preserve="all" />
     <type fullname="UniRx.Observable" preserve="all" />
     <type fullname="UniRx.ObservableExtensions" preserve="all" />
@@ -180,19 +190,15 @@
     <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions/UnityWebRequestAsyncOperationAwaiter" preserve="all" />
   </assembly>
-  <assembly fullname="UniWebView-CSharp">
-    <type fullname="UniWebView" preserve="all" />
-    <type fullname="UniWebView/MessageReceivedDelegate" preserve="all" />
-    <type fullname="UniWebView/PageFinishedDelegate" preserve="all" />
-    <type fullname="UniWebView/ShouldCloseDelegate" preserve="all" />
-    <type fullname="UniWebViewEmbeddedToolbar" preserve="all" />
-    <type fullname="UniWebViewMessage" preserve="all" />
-    <type fullname="UniWebViewTransitionEdge" preserve="all" />
-  </assembly>
   <assembly fullname="Unity.Addressables">
     <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
     <type fullname="UnityEngine.AddressableAssets.Addressables/MergeMode" preserve="all" />
     <type fullname="UnityEngine.AddressableAssets.AssetReference" preserve="all" />
+    <type fullname="UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.Burst">
+    <type fullname="Unity.Burst.Intrinsics.X86" preserve="all" />
+    <type fullname="Unity.Burst.Intrinsics.X86/Avx" preserve="all" />
   </assembly>
   <assembly fullname="Unity.Mathematics">
     <type fullname="Unity.Mathematics.Random" preserve="all" />
@@ -270,6 +276,7 @@
     <type fullname="UnityEngine.ContextMenu" preserve="all" />
     <type fullname="UnityEngine.Coroutine" preserve="all" />
     <type fullname="UnityEngine.Debug" preserve="all" />
+    <type fullname="UnityEngine.DisallowMultipleComponent" preserve="all" />
     <type fullname="UnityEngine.Events.UnityAction" preserve="all" />
     <type fullname="UnityEngine.Events.UnityAction`1" preserve="all" />
     <type fullname="UnityEngine.Events.UnityAction`2" preserve="all" />
@@ -312,7 +319,6 @@
     <type fullname="UnityEngine.RenderTextureReadWrite" preserve="all" />
     <type fullname="UnityEngine.Renderer" preserve="all" />
     <type fullname="UnityEngine.RequireComponent" preserve="all" />
-    <type fullname="UnityEngine.Resolution" preserve="all" />
     <type fullname="UnityEngine.Resources" preserve="all" />
     <type fullname="UnityEngine.RuntimePlatform" preserve="all" />
     <type fullname="UnityEngine.SceneManagement.LoadSceneMode" preserve="all" />
@@ -321,6 +327,7 @@
     <type fullname="UnityEngine.Screen" preserve="all" />
     <type fullname="UnityEngine.ScriptableObject" preserve="all" />
     <type fullname="UnityEngine.SerializeField" preserve="all" />
+    <type fullname="UnityEngine.Shader" preserve="all" />
     <type fullname="UnityEngine.SkinnedMeshRenderer" preserve="all" />
     <type fullname="UnityEngine.Sprite" preserve="all" />
     <type fullname="UnityEngine.SpriteRenderer" preserve="all" />
@@ -415,6 +422,7 @@
     <type fullname="UnityEngine.UI.VertexHelper" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.UIModule">
+    <type fullname="UnityEngine.AdditionalCanvasShaderChannels" preserve="all" />
     <type fullname="UnityEngine.Canvas" preserve="all" />
     <type fullname="UnityEngine.RectTransformUtility" preserve="all" />
   </assembly>
