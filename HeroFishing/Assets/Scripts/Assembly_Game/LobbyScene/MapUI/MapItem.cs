@@ -42,7 +42,7 @@ namespace HeroFishing.Main {
 
         private Material _hightlightMat;
         private Material _glowMat;
-        
+
 
         //[SerializeField] Image MapImg;
         [SerializeField] Button _btnSelect;
@@ -54,9 +54,7 @@ namespace HeroFishing.Main {
         private float _currentPosition = 0;
         private const string PARAM_HIGHTLIGHT = "_HightLight";
 
-        //private void OnEnable() {
-        //    UpdatePosition(_currentPosition);
-        //}
+        private bool _hasAnimation;
 
         private void Start() {
             _btnSelect.onClick.AddListener(() => Context.OnClick?.Invoke(Index));
@@ -74,51 +72,50 @@ namespace HeroFishing.Main {
             _imgGlow.material = _glowMat;
         }
 
-        public override void UpdateContent(MapItemData itemData) {
+        public override async void UpdateContent(MapItemData itemData) {
             _txtName.text = itemData.Name;
             int id = itemData.Id;
             int bet = itemData.Bet;
 
             MyJsonMap = MapJsonData.GetData(id);
-            //Addressables.LoadAssetAsync<GameObject>($"Assets/AddressableAssets/Animations/MapMonsters/Map_0{id}.controller").Completed += handle => {
-            //    var animator = _imgForeground.GetComponent<Animator>();
-            //    var ac = handle.Result.GetComponent<RuntimeAnimatorController>();
-            //    animator.runtimeAnimatorController = ac;
-            //    animator.enabled = true;
-            //};
-            //AddressablesLoader.GetController($"MapMonsters/Map_0{id}", AddressablesLoader.ControllerFileExtention.controller, ac => {
-            //    var animator = _imgForeground.GetComponent<Animator>();
-            //    animator.runtimeAnimatorController = ac;
-            //    animator.enabled = true;
-            //});
-            //var handle = Addressables.LoadAssetAsync<RuntimeAnimatorController>($"Assets/AddressableAssets/Animations/MapMonsters/Map_0{id}.controller");
-            //var ac = await handle.Task;
-            //bool hasAnimation = ac != null;
-            //if (hasAnimation) {
-            //    var animator = _imgForeground.GetComponent<Animator>();
-            //    animator.runtimeAnimatorController = ac;
-            //    animator.enabled = true;
-            //}
+            string str_id = id.ToString("d2");
+
+            // 檢查是否有動畫
+            string animationPath = $"Assets/AddressableAssets/Animations/MapMonsters/Map_{str_id}.controller";
+            _hasAnimation = HasKey(animationPath, typeof(RuntimeAnimatorController));
+
+            // 加入圖片
             AddressablesLoader.GetSpriteAtlas("MapItem", atlas => {
-                _imgBackground.sprite = atlas.GetSprite($"Img_Map_Bg0{id}");
-                _imgForeground.sprite = atlas.GetSprite($"Img_Map_Fg0{id}");
+                _imgBackground.sprite = atlas.GetSprite($"Img_Map_Bg{str_id}");
+                _imgForeground.sprite = atlas.GetSprite($"Img_Map_Fg{str_id}");
                 _imgForeground.SetNativeSize();
                 _imgForeground.rectTransform.anchoredPosition = itemData.Position;
                 _imgFrame.sprite = atlas.GetSprite($"Img_Container_{bet}");
                 _imgBet.sprite = atlas.GetSprite($"Img_Map_Bet{bet}");
             });
 
+            // 如果需要漸層色，則開啟漸層色
             _imgGlow.GetComponent<UIGradient>().enabled = itemData.IsGradient;
             _imgGlow.color = itemData.glowColor;
 
+            // 替換文字顏色
             _txtName.color = itemData.txtColor;
             var outlineColor = itemData.txtColor * 0.05f;
             outlineColor.a = 1;
             _outlineName.OutlineColor = outlineColor;
 
-            if (Context.SelectedIndex == Index) {
-                Debug.Log("selected " + Index);
+            // 開啟動畫
+            var animator = _imgForeground.GetComponent<Animator>();
+            animator.enabled = false;
+            if (_hasAnimation) {
+                var handle = Addressables.LoadAssetAsync<RuntimeAnimatorController>(animationPath);
+                var ac = await handle.Task;
+                animator.runtimeAnimatorController = ac;
+                animator.enabled = Context.SelectedIndex == Index;
             }
+            //if (Context.SelectedIndex == Index) {
+            //    Debug.Log("selected " + Index);
+            //}
         }
 
         public override void UpdatePosition(float position) {
@@ -137,6 +134,15 @@ namespace HeroFishing.Main {
             float value = Mathf.Clamp01(1 - Mathf.Abs(0.5f - position) / _hightlightDistance);
             _hightlightMat.SetFloat(PARAM_HIGHTLIGHT, value);
             _glowMat.SetFloat(PARAM_HIGHTLIGHT, value);
+        }
+
+        private static bool HasKey(object key, Type type) {
+            foreach (var l in Addressables.ResourceLocators) {
+                if (l.Locate(key, type, out var loc)) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
