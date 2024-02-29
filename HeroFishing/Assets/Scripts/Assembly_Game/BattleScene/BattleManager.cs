@@ -77,6 +77,10 @@ namespace HeroFishing.Battle {
             _spellIndicator.Init();
             _serverMonsterIdxs = new List<int>(128);
             CheckGameState();
+            LoadSubScene();
+        }
+        void LoadSubScene() {
+            AddressablesLoader.LoadAdditiveScene("Stage1", null);
         }
         void CheckGameState() {
             switch (AllocatedRoom.Instance.CurGameState) {

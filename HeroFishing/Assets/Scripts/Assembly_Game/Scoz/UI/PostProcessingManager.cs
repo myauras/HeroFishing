@@ -58,7 +58,7 @@ namespace Scoz.Func {
             MyVolume.profile.TryGet(out bloom);
             if (bloom == null) return;
             MyScene myScene;
-            if (MyEnum.TryParseEnum(_scene.name, out myScene)) {
+            if (Enum.TryParse(_scene.name, out myScene)) {
                 if (!MyBloomSettingDic.ContainsKey(myScene)) return;
                 bloom.intensity.value = MyBloomSettingDic[myScene].Intensity;
                 bloom.threshold.value = MyBloomSettingDic[myScene].Threshold;

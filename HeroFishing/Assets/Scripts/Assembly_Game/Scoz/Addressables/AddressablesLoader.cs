@@ -2,10 +2,10 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.SceneManagement;
 using UnityEngine.U2D;
 
 namespace Scoz.Func {
@@ -235,6 +235,7 @@ namespace Scoz.Func {
                 }
             };
         }
+
         public static void GetTexture(string _path, Action<Texture, AsyncOperationHandle> _cb, Action _notExistCB = null) {
             if (_path == "") {
                 return;
@@ -357,6 +358,26 @@ namespace Scoz.Func {
                         break;
                     default:
                         // WriteLog.LogError("讀取資源失敗:" + _path);
+                        break;
+                }
+                //Addressables.Release(handle);
+            };
+
+        }
+        public static void LoadAdditiveScene(string _path, Action _cb) {
+            if (_path == "") {
+                _cb?.Invoke();
+                return;
+            }
+            _path = string.Format("Assets/AddressableAssets/Scenes/{0}.unity", _path);
+            Addressables.LoadSceneAsync(_path, LoadSceneMode.Additive).Completed += handle => {
+                switch (handle.Status) {
+                    case AsyncOperationStatus.Succeeded:
+                        _cb?.Invoke();
+                        break;
+                    default:
+                        WriteLog.LogError("讀取場景失敗:" + _path);
+                        _cb?.Invoke();
                         break;
                 }
                 //Addressables.Release(handle);
