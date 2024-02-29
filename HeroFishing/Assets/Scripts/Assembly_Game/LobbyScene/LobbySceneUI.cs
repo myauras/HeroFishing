@@ -55,7 +55,7 @@ namespace HeroFishing.Main {
                 MyHeroUI.LoadItemAsset();
                 UIs.Add(LobbyUIs.Hero, MyHeroUI);
                 SwitchUI(LobbyUIs.Lobby);
-
+                GlassController.Instance.Init();
             });
         }
 

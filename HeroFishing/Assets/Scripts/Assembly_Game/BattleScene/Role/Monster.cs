@@ -160,7 +160,7 @@ namespace HeroFishing.Battle {
                 MyMonsterSpecialize.CloseAddOnObjs();
                 MyMonsterSpecialize.PlayCoinEffect(MyData.MyMonsterSize, MySkinnedMeshRenderers[0], KillHeroIndex, MonsterIdx);
                 if (MyData.DropID > 0) {
-                    if (MyData.DropID == 5)
+                    //if (MyData.DropID == 5)
                         MyMonsterSpecialize.PlayDropEffect(MyData.DropID, heroIndex);
                 }
             }

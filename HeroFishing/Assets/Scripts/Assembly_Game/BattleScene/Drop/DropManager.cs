@@ -1,3 +1,4 @@
+using HeroFishing.Battle;
 using HeroFishing.Main;
 using HeroFishing.Socket;
 using System;
@@ -41,6 +42,7 @@ public class DropManager {
                 else {
                     drop = GetDropSpell(data, spellData);
                 }
+                drop.IsAttack = spellData.IsAttack;
                 _dropSpells[dropID] = drop;
             }
 
@@ -52,6 +54,11 @@ public class DropManager {
 
     public void PlayDrop(int heroIndex, int dropID) {
         if (_dropSpells.TryGetValue(dropID, out var drop) && _currentDrops.Contains(dropID)) {
+            int attackID = -1;
+            if (drop.IsAttack && heroIndex == 0) {
+                attackID = PlayerAttackController.AttackID;
+                drop.SetAttackID(attackID);
+            }
             if (drop.PlayDrop(heroIndex)) {
 
                 if (heroIndex == 0) {
@@ -62,7 +69,12 @@ public class DropManager {
                     }
 
                     if (GameConnector.Connected) {
-                        GameConnector.Instance.DropSpell(dropID);
+                        if (drop.IsAttack) {
+                            GameConnector.Instance.DropSpell(attackID, dropID);
+                        }
+                        else {
+                            GameConnector.Instance.DropSpell(dropID);
+                        }
                     }
                 }
             }

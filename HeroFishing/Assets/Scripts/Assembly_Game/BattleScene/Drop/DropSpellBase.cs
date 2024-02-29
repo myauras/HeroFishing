@@ -6,11 +6,13 @@ using UnityEngine;
 
 public abstract class DropBase {
     public virtual float Duration { get; }
+    public virtual bool IsAttack { get; set; }
     protected DropJsonData _data;
     public DropBase(DropJsonData data) {
         _data = data;
     }
 
+    public virtual void SetAttackID(int attackID) { }
     public abstract void AddDrop(int heroIndex);
     public abstract bool PlayDrop(int heroIndex);
 }

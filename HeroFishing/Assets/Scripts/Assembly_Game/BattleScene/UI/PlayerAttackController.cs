@@ -22,7 +22,9 @@ namespace HeroFishing.Battle {
         private static int s_attackID = 0;
         public static int AttackID {
             get {
-                return s_attackID++;
+                int attackID = s_attackID;
+                s_attackID++;
+                return attackID;
             }
         }
         private float _scheduledNextAttackTime;

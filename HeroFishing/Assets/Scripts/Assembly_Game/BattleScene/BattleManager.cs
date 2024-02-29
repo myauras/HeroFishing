@@ -171,7 +171,7 @@ namespace HeroFishing.Battle {
 
         public void UpdateHeros() {
             int count = 1;
-            if (GameConnector.Connected || AllocatedRoom.Instance.HeroIDs == null) return;
+            if (!GameConnector.Connected || AllocatedRoom.Instance.HeroIDs == null) return;
             for (int i = 0; i < MAX_HERO_COUNT; i++) {
                 int playerIndex = i;
                 if (Index == playerIndex) continue;
