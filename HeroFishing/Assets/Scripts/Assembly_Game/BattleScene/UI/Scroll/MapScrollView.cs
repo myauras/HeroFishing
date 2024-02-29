@@ -2,6 +2,7 @@ using FancyScrollView;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -49,6 +50,9 @@ public class MapScrollView : FancyScrollView<MapItemData, Context> {
         Context.SelectedIndex = index;
         Context.SelectedMap = ItemsSource[index].dbMap;
         Refresh();
+        Observable.Timer(TimeSpan.FromSeconds(0.3f)).Subscribe(_ => {
+            GlassController.Instance.Play();
+        });
     }
 
     public void UpdateData(IList<MapItemData> itemData) {

@@ -7,6 +7,10 @@ using System;
 using TMPro;
 using FancyScrollView;
 using JoshH.UI;
+using UnityEngine.AddressableAssets;
+using Cysharp.Threading.Tasks;
+using UnityEngine.AddressableAssets.ResourceLocators;
+using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace HeroFishing.Main {
 
@@ -76,6 +80,25 @@ namespace HeroFishing.Main {
             int bet = itemData.Bet;
 
             MyJsonMap = MapJsonData.GetData(id);
+            //Addressables.LoadAssetAsync<GameObject>($"Assets/AddressableAssets/Animations/MapMonsters/Map_0{id}.controller").Completed += handle => {
+            //    var animator = _imgForeground.GetComponent<Animator>();
+            //    var ac = handle.Result.GetComponent<RuntimeAnimatorController>();
+            //    animator.runtimeAnimatorController = ac;
+            //    animator.enabled = true;
+            //};
+            //AddressablesLoader.GetController($"MapMonsters/Map_0{id}", AddressablesLoader.ControllerFileExtention.controller, ac => {
+            //    var animator = _imgForeground.GetComponent<Animator>();
+            //    animator.runtimeAnimatorController = ac;
+            //    animator.enabled = true;
+            //});
+            //var handle = Addressables.LoadAssetAsync<RuntimeAnimatorController>($"Assets/AddressableAssets/Animations/MapMonsters/Map_0{id}.controller");
+            //var ac = await handle.Task;
+            //bool hasAnimation = ac != null;
+            //if (hasAnimation) {
+            //    var animator = _imgForeground.GetComponent<Animator>();
+            //    animator.runtimeAnimatorController = ac;
+            //    animator.enabled = true;
+            //}
             AddressablesLoader.GetSpriteAtlas("MapItem", atlas => {
                 _imgBackground.sprite = atlas.GetSprite($"Img_Map_Bg0{id}");
                 _imgForeground.sprite = atlas.GetSprite($"Img_Map_Fg0{id}");
