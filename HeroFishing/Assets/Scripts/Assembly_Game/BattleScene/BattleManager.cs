@@ -257,13 +257,17 @@ namespace HeroFishing.Battle {
                     if (Monster.TryGetMonsterByIdx(spawnMonster.Idx, out Monster monster)) {
                         var monsterData = monster.MyData;
                         var frozenTime = GetFrozenTime(effects, (float)spawn.STime, GameTime.Current);
-                        float deltaTime = GameTime.Current - (float)spawn.STime - frozenTime;
-                        Vector3 deltaPosition = deltaTime * monsterData.Speed * (initRotation * Vector3.forward);
+                        double deltaTime = GameTime.Current - spawn.STime - frozenTime;
+
+                        //Vector3 deltaPosition = (float)deltaTime * monsterData.Speed * (initRotation * Vector3.forward);
+                        var direction = (routeData.TargetPos - routeData.SpawnPos).normalized;
+                        var position = rotation * (routeData.SpawnPos + (float)deltaTime * monsterData.Speed * direction);
+                        //Debug.Log($"battle manager {monster.MonsterIdx}: deltaTime: {deltaTime} position: {position}");
                         // 先註解掉, 因為要超出邊界的怪物也需要移動位置, 否則可能發生client端的怪物還在邊界內但server端已經在邊界外的情形
                         // 可能會導致玩家A看玩家B打死邊界外的怪物
                         //if (Vector3.SqrMagnitude(deltaPosition) > Vector3.SqrMagnitude(routeData.TargetPos - routeData.SpawnPos))
                         //    continue;
-                        monster.GetComponent<MonsterGrid>().Teleport(rotation * (routeData.SpawnPos + deltaPosition));
+                        monster.GetComponent<MonsterGrid>().Teleport(position);
                         found = true;
                     }
                 }
