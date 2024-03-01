@@ -55,6 +55,10 @@ public class MapScrollView : FancyScrollView<MapItemData, Context> {
         });
     }
 
+    public void ResetPos() {
+        UpdatePosition(0);
+    }
+
     public void UpdateData(IList<MapItemData> itemData) {
         if (_prefab == null) {
             Addressables.LoadAssetAsync<GameObject>(_prefabRef).Completed += handle => {

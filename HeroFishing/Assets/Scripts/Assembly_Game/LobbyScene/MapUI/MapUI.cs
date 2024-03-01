@@ -38,7 +38,11 @@ namespace HeroFishing.Main {
         public override void Init() {
             base.Init();
             _mapItemDatas = new List<MapItemData>();
-            //RefreshScrollView();
+            RefreshScrollView();
+        }
+
+        public void ResetScrollViewPos() {
+            _mapScrollView.ResetPos();
         }
 
         public void RefreshScrollView() {
@@ -52,7 +56,11 @@ namespace HeroFishing.Main {
             }
 
             var query = RealmManager.MyRealm.All<DBMap>();
-            if (query == null || query.Count() == 0) return;
+            if (query == null || query.Count() == 0) {
+                Debug.LogError("query is empty");
+                return;
+            }
+
             var dbmaps = query.OrderByDescending(item => item.Priority);
             foreach(var dbMap in dbmaps) {
                 if (!dbMap.Enable.HasValue || !dbMap.Enable.Value) continue;
