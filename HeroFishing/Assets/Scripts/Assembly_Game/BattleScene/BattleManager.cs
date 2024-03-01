@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using HeroFishing.Main;
 using HeroFishing.Socket;
 using HeroFishing.Socket.Matchgame;
@@ -92,8 +93,10 @@ namespace HeroFishing.Battle {
         }
         public void StartGame() {
             UpdateHeros();
-            GameConnector.Instance.UpdateScene();
-            DeviceManager.AddOnFocusAction(() => {
+            if (GameConnector.Connected)
+                GameConnector.Instance.UpdateScene();
+            DeviceManager.AddOnFocusAction(async () => {
+                await UniTask.Delay(1000);
                 GameConnector.Instance.UpdateScene();
             });
             PopupUI.HideLoading();
