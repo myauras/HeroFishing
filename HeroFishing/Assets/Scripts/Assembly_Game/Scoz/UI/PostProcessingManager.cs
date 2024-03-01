@@ -40,29 +40,35 @@ namespace Scoz.Func {
             MyVolume.enabled = GamePlayer.Instance.PostProcessing;
             if (!GamePlayer.Instance.PostProcessing)//沒開後製效果就不用處理後續
                 return;
-            SetBloom(_scene);
+            SetVolume(_scene);
         }
         public void RefreshSetting() {
             if (!Instance) return;
             MyVolume.enabled = GamePlayer.Instance.PostProcessing;
             if (GamePlayer.Instance.PostProcessing)
-                SetBloom(SceneManager.GetActiveScene());
+                SetVolume(SceneManager.GetActiveScene());
         }
 
         /// <summary>
-        /// 根據場景設定Bloom
+        /// 根據場景設定Volume
         /// </summary>
-        void SetBloom(Scene _scene) {
+        void SetVolume(Scene _scene) {
             if (MyVolume == null) return;
             Bloom bloom;
             MyVolume.profile.TryGet(out bloom);
             if (bloom == null) return;
             MyScene myScene;
             if (Enum.TryParse(_scene.name, out myScene)) {
-                if (!MyBloomSettingDic.ContainsKey(myScene)) return;
+                if (!MyBloomSettingDic.ContainsKey(myScene)) {
+                    MyVolume.enabled = false;
+                    return;
+                }
                 bloom.intensity.value = MyBloomSettingDic[myScene].Intensity;
                 bloom.threshold.value = MyBloomSettingDic[myScene].Threshold;
                 bloom.tint.value = MyBloomSettingDic[myScene].TintColor;
+                MyVolume.enabled = true;
+            } else {
+                MyVolume.enabled = false;
             }
         }
     }

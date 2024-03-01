@@ -80,7 +80,7 @@ namespace HeroFishing.Battle {
             LoadSubScene();
         }
         void LoadSubScene() {
-            AddressablesLoader.LoadAdditiveScene("Stage1", null);
+            AddressablesLoader.LoadAdditiveScene("Stage1/Stage1", null);
         }
         void CheckGameState() {
             switch (AllocatedRoom.Instance.CurGameState) {
@@ -139,8 +139,7 @@ namespace HeroFishing.Battle {
                 hero.SetData(_testHeroID, $"{_testHeroID}_1");
                 hero.UpdatePoints(10);
                 _bet = _testBet;
-            }
-            else {
+            } else {
                 hero.SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
                 var map = RealmManager.MyRealm.Find<DBMap>(AllocatedRoom.Instance.DBMapID);
                 _bet = map.Bet ?? 1;
@@ -373,8 +372,7 @@ namespace HeroFishing.Battle {
                             var eTime = Mathf.Min((float)(effect.AtTime + effect.Duration), currentTime);
                             totalTime += eTime - sTime;
                         }
-                    }
-                    else {
+                    } else {
                         var sTime = Mathf.Max((float)effect.AtTime, startTime);
                         var eTime = Mathf.Min((float)(effect.AtTime + effect.Duration), currentTime);
                         totalTime += eTime - sTime;
