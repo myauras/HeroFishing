@@ -294,7 +294,7 @@ namespace HeroFishing.Socket {
             //WriteLog.Log(DebugUtils.EnumerableToStr(_packet.Content.GainGolds));
         }
         void HandleAuth(SocketCMD<AUTH_TOCLIENT> _packet) {
-            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
+            //if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             if (_packet.Content == null || !_packet.Content.IsAuth) {
                 WriteLog.LogError("Auth錯誤 遊戲無法開始");
                 return;
