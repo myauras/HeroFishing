@@ -21,6 +21,7 @@ namespace Scoz.Func {
             data.cameraStack.Add(overlayCam);
         }
         public void ClearCameraStack() {
+            if (MyCam == null) return;
             var data = MyCam.GetUniversalAdditionalCameraData();
             data.cameraStack.Clear();
         }

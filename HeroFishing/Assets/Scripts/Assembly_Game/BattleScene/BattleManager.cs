@@ -57,6 +57,8 @@ namespace HeroFishing.Battle {
         public static float3 MonsterCollisionPosOffset { get; private set; }//因為怪物的位置是在地板 所以檢測碰撞半徑時以地板為圓心的話子彈會打不到 所以碰撞檢測時要將判定的圓心高度提高到子彈高度
         public Camera BattleCam => MyCam;
 
+        private List<int> _serverMonsterIdxs;
+
         private const int MAX_HERO_COUNT = 4;
 
         public Action<int, int> OnHeroAdd;
@@ -73,6 +75,7 @@ namespace HeroFishing.Battle {
             MonsterCollisionPosOffset = new float3(0, GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY), 0);
             //_entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             _spellIndicator.Init();
+            _serverMonsterIdxs = new List<int>(128);
             CheckGameState();
         }
         void CheckGameState() {
@@ -132,7 +135,8 @@ namespace HeroFishing.Battle {
                 hero.SetData(_testHeroID, $"{_testHeroID}_1");
                 hero.UpdatePoints(10);
                 _bet = _testBet;
-            } else {
+            }
+            else {
                 hero.SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
                 var map = RealmManager.MyRealm.Find<DBMap>(AllocatedRoom.Instance.DBMapID);
                 _bet = map.Bet ?? 1;
@@ -229,72 +233,74 @@ namespace HeroFishing.Battle {
         }
 
         public void UpdateScene(Spawn[] spawns, SceneEffect[] effects) {
-            try {
-                if (spawns == null || spawns.Length == 0) return;
+            //try {
+            if (WorldStateManager.Instance.IsFrozen) return;
+            if (spawns == null || spawns.Length == 0) return;
 
-                // 取出server有的monster索引
-                List<int> serverMonsterIdxs = new List<int>(128);
-                var clientMonsterIdxs = Monster.IdxToMonsterMapping.Keys;
+            // 取出server有的monster索引
+            _serverMonsterIdxs.Clear();
+            var clientMonsterIdxs = Monster.IdxToMonsterMapping.Keys;
 
-                for (int i = 0; i < spawns.Length; i++) {
-                    var spawn = spawns[i];
-                    var routeData = RouteJsonData.GetData(spawn.RID);
-                    var rotation = Quaternion.AngleAxis(Index * 90f, Vector3.up);
-                    var initRotation = Quaternion.LookRotation(routeData.TargetPos - routeData.SpawnPos);
-                    bool found = false;
-                    for (int j = 0; j < spawn.Ms.Length; j++) {
-                        var spawnMonster = spawn.Ms[j];
-                        if (!spawnMonster.Death) serverMonsterIdxs.Add(spawnMonster.Idx);
-                        // Server端有的怪物, 且client端也有就更新怪物狀態
-                        if (Monster.TryGetMonsterByIdx(spawnMonster.Idx, out Monster monster)) {
-                            var monsterData = monster.MyData;
-                            float deltaTime = GameTime.Current - (float)spawn.STime;
-                            Vector3 deltaPosition = deltaTime * monsterData.Speed * (initRotation * Vector3.forward);
-                            // 先註解掉, 因為要超出邊界的怪物也需要移動位置, 否則可能發生client端的怪物還在邊界內但server端已經在邊界外的情形
-                            // 可能會導致玩家A看玩家B打死邊界外的怪物
-                            //if (Vector3.SqrMagnitude(deltaPosition) > Vector3.SqrMagnitude(routeData.TargetPos - routeData.SpawnPos))
-                            //    continue;
-                            monster.GetComponent<MonsterGrid>().Teleport(rotation * (routeData.SpawnPos + deltaPosition));
-                            found = true;
-                        }
-                    }
-
-                    // Server端有的怪物, 但client端沒有就要補
-                    if (!found) {
-                        MyMonsterScheduler.EnqueueMonster(spawn, Index);
-                    }
-
-                    //NativeArray<MonsterData> monsterDatas = new NativeArray<MonsterData>(spawns[i].Monsters.Length, Allocator.Persistent);
-                    //for (int j = 0; j < monsterDatas.Length; j++) {
-                    //    var monster = spawns[i].Monsters[j];
-                    //    if (monster == null || monster.Death) continue;
-                    //    MonsterData monsterData = new MonsterData() {
-                    //        ID = monster.JsonID,
-                    //        Idx = monster.Idx,
-                    //    };
-                    //    monsterDatas[j] = monsterData;
-                    //}
-                    //var entity = _entityManager.CreateEntity();
-                    //_entityManager.AddComponentData(entity, new SpawnData {
-                    //    Monsters = monsterDatas,
-                    //    RouteID = spawns[i].RouteJsonID,
-                    //    SpawnTime = (float)spawns[i].SpawnTime,
-                    //    IsBoss = spawns[i].IsBoss,
-                    //    PlayerIndex = Index,
-                    //});
-                    //_entityManager.AddComponent<RefreshSceneTag>(entity);
-                }
-
-                var clientExclusiveMonsters = clientMonsterIdxs.Except(serverMonsterIdxs).ToList(); //client有但server沒有的怪物
-                // Server端沒有的怪物, 但client端有就要將client端的怪物移除
-                for (int i = 0; i < clientExclusiveMonsters.Count; i++) {
-                    if (Monster.TryGetMonsterByIdx(clientExclusiveMonsters[i], out var monster)) {
-                        monster.DestroyGOAfterDelay(0.1f * i);
+            for (int i = 0; i < spawns.Length; i++) {
+                var spawn = spawns[i];
+                var routeData = RouteJsonData.GetData(spawn.RID);
+                var rotation = Quaternion.AngleAxis(Index * 90f, Vector3.up);
+                var initRotation = Quaternion.LookRotation(routeData.TargetPos - routeData.SpawnPos);
+                bool found = false;
+                for (int j = 0; j < spawn.Ms.Length; j++) {
+                    var spawnMonster = spawn.Ms[j];
+                    if (!spawnMonster.Death) _serverMonsterIdxs.Add(spawnMonster.Idx);
+                    // Server端有的怪物, 且client端也有就更新怪物狀態
+                    if (Monster.TryGetMonsterByIdx(spawnMonster.Idx, out Monster monster)) {
+                        var monsterData = monster.MyData;
+                        var frozenTime = GetFrozenTime(effects, (float)spawn.STime, GameTime.Current);
+                        float deltaTime = GameTime.Current - (float)spawn.STime - frozenTime;
+                        Vector3 deltaPosition = deltaTime * monsterData.Speed * (initRotation * Vector3.forward);
+                        // 先註解掉, 因為要超出邊界的怪物也需要移動位置, 否則可能發生client端的怪物還在邊界內但server端已經在邊界外的情形
+                        // 可能會導致玩家A看玩家B打死邊界外的怪物
+                        //if (Vector3.SqrMagnitude(deltaPosition) > Vector3.SqrMagnitude(routeData.TargetPos - routeData.SpawnPos))
+                        //    continue;
+                        monster.GetComponent<MonsterGrid>().Teleport(rotation * (routeData.SpawnPos + deltaPosition));
+                        found = true;
                     }
                 }
-            } catch (Exception ex) {
-                Debug.LogError("update scene error " + ex);
+
+                // Server端有的怪物, 但client端沒有就要補
+                if (!found) {
+                    MyMonsterScheduler.EnqueueMonster(spawn, Index);
+                }
+
+                //NativeArray<MonsterData> monsterDatas = new NativeArray<MonsterData>(spawns[i].Monsters.Length, Allocator.Persistent);
+                //for (int j = 0; j < monsterDatas.Length; j++) {
+                //    var monster = spawns[i].Monsters[j];
+                //    if (monster == null || monster.Death) continue;
+                //    MonsterData monsterData = new MonsterData() {
+                //        ID = monster.JsonID,
+                //        Idx = monster.Idx,
+                //    };
+                //    monsterDatas[j] = monsterData;
+                //}
+                //var entity = _entityManager.CreateEntity();
+                //_entityManager.AddComponentData(entity, new SpawnData {
+                //    Monsters = monsterDatas,
+                //    RouteID = spawns[i].RouteJsonID,
+                //    SpawnTime = (float)spawns[i].SpawnTime,
+                //    IsBoss = spawns[i].IsBoss,
+                //    PlayerIndex = Index,
+                //});
+                //_entityManager.AddComponent<RefreshSceneTag>(entity);
             }
+
+            var clientExclusiveMonsters = clientMonsterIdxs.Except(_serverMonsterIdxs).ToList(); //client有但server沒有的怪物
+                                                                                                 // Server端沒有的怪物, 但client端有就要將client端的怪物移除
+            for (int i = 0; i < clientExclusiveMonsters.Count; i++) {
+                if (Monster.TryGetMonsterByIdx(clientExclusiveMonsters[i], out var monster)) {
+                    monster.DestroyGOAfterDelay(0.1f * i);
+                }
+            }
+            //} catch (Exception ex) {
+            //    Debug.LogError("update scene error " + ex);
+            //}
         }
 
         public void SetMonsterDead(int playerIndex, int[] monsterIdxs, long[] gainPoints, int[] gainHeroExps, int[] gainSpellCharge, int[] gainDrops) {
@@ -339,6 +345,39 @@ namespace HeroFishing.Battle {
                 hero.AddExp(totalExp);
                 hero.ChargeSpell(gainSpellCharge);
             }
+        }
+
+        private float GetFrozenTime(SceneEffect[] effects, float startTime, float currentTime) {
+            float totalTime = 0;
+            if (effects == null) return 0;
+            for (int i = 0; i < effects.Length; i++) {
+                var effect = effects[i];
+                // 是否跟怪物的時間重疊 (怪物的開始時間比效果的結束時間早就有重疊。雖然這情況通常會比效果的開始時間晚，因為冰凍時不會產怪物。)
+                if (startTime < effect.AtTime + effect.Duration) {
+                    // 如果不是第一個effect，去找前一個effect
+                    if (i > 0) {
+                        var prevEffect = effects[i - 1];
+                        // 如果跟前一個effect重疊時間
+                        if (effect.AtTime < prevEffect.AtTime + prevEffect.Duration) {
+                            var sTime = Mathf.Max((float)(prevEffect.AtTime + prevEffect.Duration), startTime);
+                            var eTime = Mathf.Min((float)(effect.AtTime + effect.Duration), currentTime);
+                            totalTime += eTime - sTime;
+                        }
+                        // 沒有的話就一般的比較
+                        else {
+                            var sTime = Mathf.Max((float)effect.AtTime, startTime);
+                            var eTime = Mathf.Min((float)(effect.AtTime + effect.Duration), currentTime);
+                            totalTime += eTime - sTime;
+                        }
+                    }
+                    else {
+                        var sTime = Mathf.Max((float)effect.AtTime, startTime);
+                        var eTime = Mathf.Min((float)(effect.AtTime + effect.Duration), currentTime);
+                        totalTime += eTime - sTime;
+                    }
+                }
+            }
+            return totalTime;
         }
     }
 }

@@ -198,73 +198,70 @@ namespace HeroFishing.Socket {
                 WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
                 SocketCMD<SocketContent> data = JsonMapper.ToObject<SocketCMD<SocketContent>>(_msg);
                 Tuple<string, int> cmdID = new Tuple<string, int>(data.CMD, data.PackID);
+                SocketContent.MatchgameCMD_TCP cmdType;
+                if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
+                    WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
+                    return;
+                }
                 if (CMDCallback.TryGetValue(cmdID, out Action<string> _cb)) {
                     CMDCallback.Remove(cmdID);
                     _cb?.Invoke(_msg);
-                } else {
-                    SocketContent.MatchgameCMD_TCP cmdType;
-                    if (!MyEnum.TryParseEnum(data.CMD, out cmdType)) {
-                        WriteLog.LogErrorFormat("收到錯誤的命令類型: {0}", cmdType);
-                        return;
-                    }
-                    //if (cmdType != SocketContent.MatchgameCMD_TCP.ATTACK_TOCLIENT)
-                    WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
-                    switch (cmdType) {
-                        case SocketContent.MatchgameCMD_TCP.AUTH_TOCLIENT:
-                            var authPacket = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_TOCLIENT>>(_msg);
-                            HandleAuth(authPacket);
-                            break;
-                        case SocketContent.MatchgameCMD_TCP.ATTACK_TOCLIENT:
-                            var attackPacket = LitJson.JsonMapper.ToObject<SocketCMD<ATTACK_TOCLIENT>>(_msg);
-                            HandleAttack(attackPacket);
-                            break;
-                        case SocketContent.MatchgameCMD_TCP.SPAWN_TOCLIENT:
-                            var spawnPacket = LitJson.JsonMapper.ToObject<SocketCMD<SPAWN_TOCLIENT>>(_msg);
-                            HandleSPAWN(spawnPacket);
-                            break;
-                        case SocketContent.MatchgameCMD_TCP.SETHERO_TOCLIENT:
-                            var setHeroPacket = LitJson.JsonMapper.ToObject<SocketCMD<SETHERO_TOCLIENT>>(_msg);
-                            HandleSETHERO(setHeroPacket);
-                            break;
-                        case SocketContent.MatchgameCMD_TCP.UPDATEPLAYER_TOCLIENT:
-                            var updatePlaeyrPacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEPLAYER_TOCLIENT>>(_msg);
-                            HandleUpdatePlayer(updatePlaeyrPacket);
-                            break;
-                        case SocketContent.MatchgameCMD_TCP.HIT_TOCLIENT:
-                            //WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
-                            var hitPacket = LitJson.JsonMapper.ToObject<SocketCMD<HIT_TOCLIENT>>(_msg);
-                            HandleHit(hitPacket);
-                            break;
-                        case SocketContent.MatchgameCMD_TCP.UPDATESCENE_TOCLIENT:
-                            //WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
-                            var updateScenePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATESCENE_TOCLIENT>>(_msg);
-                            HandleUpdateScene(updateScenePacket);
-                            break;
-                        case SocketContent.MatchgameCMD_TCP.MONSTERDIE_TOCLIENT:
-                            //WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
-                            var monsterDiePacket = LitJson.JsonMapper.ToObject<SocketCMD<MONSTERDIE_TOCLIENT>>(_msg);
-                            HandleMonsterDie(monsterDiePacket);
-                            break;
-                        case SocketContent.MatchgameCMD_TCP.AUTO_TOCLIENT:
-                            var autoPacket = JsonMapper.ToObject<SocketCMD<AUTO_TOCLIENT>>(_msg);
-                            HandleAuto(autoPacket);
-                            break;
-                        case SocketContent.MatchgameCMD_TCP.LEAVE_TOCLIENT:
-                            var leavePacket = JsonMapper.ToObject<SocketCMD<LEAVE_TOCLIENT>>(_msg);
-                            HandleLeave(leavePacket);
-                            break;
-                        case SocketContent.MatchgameCMD_TCP.LVUPSPELL_TOCLIENT:
-                            var lvupSpellPacket = JsonMapper.ToObject<SocketCMD<LVUPSPELL_TOCLIENT>>(_msg);
-                            HandleLvUpSpell(lvupSpellPacket);
-                            break;
-                        case SocketContent.MatchgameCMD_TCP.DROPSPELL_TOCLIENT:
-                            var dropSpellPacket = JsonMapper.ToObject<SocketCMD<DROPSPELL_TOCLIENT>>(_msg);
-                            HandleDropSepll(dropSpellPacket);
-                            break;
-                        default:
-                            WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
-                            break;
-                    }
+                }
+                switch (cmdType) {
+                    case SocketContent.MatchgameCMD_TCP.AUTH_TOCLIENT:
+                        var authPacket = LitJson.JsonMapper.ToObject<SocketCMD<AUTH_TOCLIENT>>(_msg);
+                        HandleAuth(authPacket);
+                        break;
+                    case SocketContent.MatchgameCMD_TCP.ATTACK_TOCLIENT:
+                        var attackPacket = LitJson.JsonMapper.ToObject<SocketCMD<ATTACK_TOCLIENT>>(_msg);
+                        HandleAttack(attackPacket);
+                        break;
+                    case SocketContent.MatchgameCMD_TCP.SPAWN_TOCLIENT:
+                        var spawnPacket = LitJson.JsonMapper.ToObject<SocketCMD<SPAWN_TOCLIENT>>(_msg);
+                        HandleSPAWN(spawnPacket);
+                        break;
+                    case SocketContent.MatchgameCMD_TCP.SETHERO_TOCLIENT:
+                        var setHeroPacket = LitJson.JsonMapper.ToObject<SocketCMD<SETHERO_TOCLIENT>>(_msg);
+                        HandleSETHERO(setHeroPacket);
+                        break;
+                    case SocketContent.MatchgameCMD_TCP.UPDATEPLAYER_TOCLIENT:
+                        var updatePlaeyrPacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATEPLAYER_TOCLIENT>>(_msg);
+                        HandleUpdatePlayer(updatePlaeyrPacket);
+                        break;
+                    case SocketContent.MatchgameCMD_TCP.HIT_TOCLIENT:
+                        //WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
+                        var hitPacket = LitJson.JsonMapper.ToObject<SocketCMD<HIT_TOCLIENT>>(_msg);
+                        HandleHit(hitPacket);
+                        break;
+                    case SocketContent.MatchgameCMD_TCP.UPDATESCENE_TOCLIENT:
+                        //WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
+                        var updateScenePacket = LitJson.JsonMapper.ToObject<SocketCMD<UPDATESCENE_TOCLIENT>>(_msg);
+                        HandleUpdateScene(updateScenePacket);
+                        break;
+                    case SocketContent.MatchgameCMD_TCP.MONSTERDIE_TOCLIENT:
+                        //WriteLog.LogColorFormat("(TCP)接收: {0}", WriteLog.LogType.Connection, _msg);
+                        var monsterDiePacket = LitJson.JsonMapper.ToObject<SocketCMD<MONSTERDIE_TOCLIENT>>(_msg);
+                        HandleMonsterDie(monsterDiePacket);
+                        break;
+                    case SocketContent.MatchgameCMD_TCP.AUTO_TOCLIENT:
+                        var autoPacket = JsonMapper.ToObject<SocketCMD<AUTO_TOCLIENT>>(_msg);
+                        HandleAuto(autoPacket);
+                        break;
+                    case SocketContent.MatchgameCMD_TCP.LEAVE_TOCLIENT:
+                        var leavePacket = JsonMapper.ToObject<SocketCMD<LEAVE_TOCLIENT>>(_msg);
+                        HandleLeave(leavePacket);
+                        break;
+                    case SocketContent.MatchgameCMD_TCP.LVUPSPELL_TOCLIENT:
+                        var lvupSpellPacket = JsonMapper.ToObject<SocketCMD<LVUPSPELL_TOCLIENT>>(_msg);
+                        HandleLvUpSpell(lvupSpellPacket);
+                        break;
+                    case SocketContent.MatchgameCMD_TCP.DROPSPELL_TOCLIENT:
+                        var dropSpellPacket = JsonMapper.ToObject<SocketCMD<DROPSPELL_TOCLIENT>>(_msg);
+                        HandleDropSepll(dropSpellPacket);
+                        break;
+                    default:
+                        WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
+                        break;
                 }
             } catch (Exception e) {
                 WriteLog.LogError("Parse收到的封包時出錯 : " + e.ToString());

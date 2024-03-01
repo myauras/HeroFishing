@@ -25,7 +25,6 @@ public class GlassController : MonoBehaviour {
     }
 
     public void Init() {
-        //Debug.Log(UICam.Instance == null);
         UICam.Instance.AddCameraStack(_camera);
     }
 
