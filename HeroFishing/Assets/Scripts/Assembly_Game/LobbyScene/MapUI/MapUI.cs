@@ -7,6 +7,8 @@ using System.Linq;
 using Service.Realms;
 using TMPro;
 using UnityEngine.AddressableAssets;
+using UniRx;
+using System;
 
 namespace HeroFishing.Main {
 
@@ -62,7 +64,7 @@ namespace HeroFishing.Main {
             }
 
             var dbmaps = query.OrderByDescending(item => item.Priority);
-            foreach(var dbMap in dbmaps) {
+            foreach (var dbMap in dbmaps) {
                 if (!dbMap.Enable.HasValue || !dbMap.Enable.Value) continue;
                 var itemData = CreateMapItemData(dbMap.JsonMapID ?? 1, dbMap.Bet ?? 1, dbMap);
                 _mapItemDatas.Add(itemData);
@@ -71,6 +73,7 @@ namespace HeroFishing.Main {
         }
 
         public void Confirm() {
+            GlassController.Instance.Play();
             if (_localTest) {
                 Debug.LogWarning("it is local test mode, so it is no db map at all");
                 return;
@@ -83,7 +86,9 @@ namespace HeroFishing.Main {
             }
 
             SelectedDBMap = _mapScrollView.SelectedMap;
-            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
+            Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ => {
+                LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
+            });
         }
 
         private MapItemData CreateMapItemDataLocal(int index) {

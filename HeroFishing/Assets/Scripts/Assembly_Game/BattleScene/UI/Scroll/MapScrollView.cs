@@ -1,8 +1,8 @@
 using FancyScrollView;
+using HeroFishing.Main;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -50,13 +50,12 @@ public class MapScrollView : FancyScrollView<MapItemData, Context> {
         Context.SelectedIndex = index;
         Context.SelectedMap = ItemsSource[index].dbMap;
         Refresh();
-        Observable.Timer(TimeSpan.FromSeconds(0.3f)).Subscribe(_ => {
-            GlassController.Instance.Play();
-        });
     }
 
     public void ResetPos() {
-        UpdatePosition(0);
+        Refresh();
+        var position = _scroller.Position;
+        GlassController.Instance.Select(Mathf.Abs(Mathf.Round(position) - position) < 0.001f);
     }
 
     public void UpdateData(IList<MapItemData> itemData) {
@@ -64,15 +63,22 @@ public class MapScrollView : FancyScrollView<MapItemData, Context> {
             Addressables.LoadAssetAsync<GameObject>(_prefabRef).Completed += handle => {
                 _prefab = handle.Result;
                 UpdateContents(itemData);
-                _scroller.SetTotalCount(itemData.Count);
-                Context.SelectedMap = itemData[Context.SelectedIndex].dbMap;
             };
         }
         else {
             UpdateContents(itemData);
-            _scroller.SetTotalCount(itemData.Count);
-            Context.SelectedMap = itemData[Context.SelectedIndex].dbMap;
         }
+    }
+
+    protected override void UpdateContents(IList<MapItemData> itemsSource) {
+        base.UpdateContents(itemsSource);
+        _scroller.SetTotalCount(itemsSource.Count);
+        Context.SelectedMap = itemsSource[Context.SelectedIndex].dbMap;
+    }
+
+    protected override void UpdatePosition(float position) {
+        base.UpdatePosition(position);
+        GlassController.Instance.Select(Mathf.Abs(Mathf.Round(position) - position) < 0.001f);
     }
 
     private void SelectCell(int index) {
@@ -83,6 +89,4 @@ public class MapScrollView : FancyScrollView<MapItemData, Context> {
         UpdateSelection(index);
         _scroller.ScrollTo(index, 0.35f, EasingCore.Ease.OutCubic);
     }
-
-    private void LateUpdate() { }
 }
