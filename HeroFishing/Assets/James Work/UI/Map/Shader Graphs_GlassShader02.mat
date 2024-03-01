@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_GlassShader
-  m_Shader: {fileID: -6465566751694194690, guid: da5b0bd7382ff6d4a936cf1055a67d6d,
+  m_Name: Shader Graphs_GlassShader02
+  m_Shader: {fileID: -6465566751694194690, guid: 06e6597040fdada43980b8432c213eef,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,9 +24,21 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _TintTexture:
+    - _Noise:
+        m_Texture: {fileID: 2800000, guid: 0bdb4c362449aa14bbb7065c6aa22bcc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxOcclusionMapping_220338bd60de4ee89574c666f0500f32_Heightmap_2_Texture2D:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_aa974e78d9e740099e1115e132c86d36_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 24d73a0978aa8264d8d2eafb48f370bb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2D:
+        m_Texture: {fileID: 2800000, guid: 53303b488e3258e42b5a3feefa0a64e4, type: 3}
+        m_Scale: {x: 0.5, y: 0.5}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
@@ -42,20 +54,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DisortStrength: 0.1
-    - _DistortionOnTexture: 0
-    - _Metallic: 1
-    - _NormalStrength: 1.7
+    - _Metallic: 0.5
+    - _Opacity: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReflectionStrength: 0.9
-    - _Smoothness: 1
-    - _Tiling: 400
+    - _Smooth: 0
+    - _edge_glow: 0.5
     m_Colors:
-    - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _TintColor: {r: 1, g: 1, b: 1, a: 0.44705883}
+    - _Color: {r: 3.0405278, g: 2.2784379, b: 8.47419, a: 1}
+    - _Distort_move: {r: 0, g: 0.3, b: 0, a: 0}
+    - _Vector2: {r: 0, g: -0.1, b: 0, a: 0}
+    - _albedo: {r: 1, g: 1, b: 1, a: 1}
+    - _egde_color: {r: 15.2481165, g: 12.436553, b: 47.937256, a: 1}
+    - _offset: {r: 0, g: -0.2, b: 0, a: 0}
+    - _tiling: {r: -0.5, g: -0.5, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &1898401044591935137
+--- !u!114 &1910985842058401086
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
