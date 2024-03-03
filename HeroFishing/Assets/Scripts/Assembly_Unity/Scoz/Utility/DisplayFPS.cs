@@ -6,6 +6,7 @@ public class DisplayFPS : MonoBehaviour {
     private float deltaTime = 0.0f;
     private void Start() {
         Application.targetFrameRate = 60;
+        
     }
 
     void Update() {
@@ -18,4 +19,5 @@ public class DisplayFPS : MonoBehaviour {
         // 格式化文字並顯示
         fpsText.text = string.Format("{0:0.} fps", fps);
     }
+
 }

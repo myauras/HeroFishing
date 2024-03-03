@@ -4,16 +4,13 @@ using HeroFishing.Socket.Matchgame;
 using Scoz.Func;
 using Service.Realms;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+
 using UnityEngine.Rendering.Universal;
-using UnityEngine.SceneManagement;
+
 namespace HeroFishing.Battle {
     public class BattleManager : MonoBehaviour {
         public static BattleManager Instance;
@@ -67,6 +64,7 @@ namespace HeroFishing.Battle {
 
         public void Init() {
             Instance = this;
+
             PoolManager.Instance.ResetBattlePool();//清除物件池
             Monster.ResetMonsterStaticDatas();//清除場上怪物清單
             SetCam();//設定攝影機模式
