@@ -24,6 +24,7 @@ namespace HeroFishing.Main {
         //進遊戲就要初始化的UI放這裡(會增加場景切換時的讀取時間)
         [SerializeField] MapUI MyMapUI;
         [SerializeField] HeroUI MyHeroUI;
+        [SerializeField] GlassController MyGlass;
 
 
         public static LobbySceneUI Instance { get; private set; }
@@ -55,6 +56,7 @@ namespace HeroFishing.Main {
                 MyHeroUI.LoadItemAsset();
                 UIs.Add(LobbyUIs.Hero, MyHeroUI);
                 SwitchUI(LobbyUIs.Lobby);
+                Instantiate(MyGlass);
                 GlassController.Instance.Init();
             });
         }
