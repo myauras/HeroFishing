@@ -1,4 +1,6 @@
 using HeroFishing.Battle;
+using HeroFishing.Main;
+using HeroFishing.Socket;
 using Scoz.Func;
 using System.Linq;
 using UniRx;
@@ -25,11 +27,27 @@ public class RankUI : BaseUI {
         BattleManager.Instance.OnHeroAdd += AddHero;
         BattleManager.Instance.OnHeroRemove += RemoveHero;
 
-        var id = BattleManager.Instance.GetHero(0).MyData.ID;
-        AddHero(id, BattleManager.Instance.Index);
+        if (!GameConnector.Connected) {
+            var id = BattleManager.Instance.GetHero(0).MyData.ID;
+            AddHero(id, BattleManager.Instance.Index);
+        }
+        else {
+            if (AllocatedRoom.Instance.CurGameState == AllocatedRoom.GameState.Playing)
+                if (AllocatedRoom.Instance.HeroIDs != null && AllocatedRoom.Instance.HeroIDs.Length > 0) {
+                    for (int i = 0; i < AllocatedRoom.Instance.HeroIDs.Length; i++) {
+                        int id = AllocatedRoom.Instance.HeroIDs[i];
+                        int index = i;
+                        AddHero(id, index);
+                    }
+                }
+                else {
+                    AddHero(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.Index);
+                }
+        }
     }
 
     public void AddHero(int heroID, int playerIdx) {
+        //Debug.Log("add hero: " + playerIdx);
         _playerCount++;
         bool isPlayer = BattleManager.Instance.Index == playerIdx;
         for (int i = 0; i < _rankItems.Length; i++) {
@@ -43,6 +61,7 @@ public class RankUI : BaseUI {
     }
 
     public void RemoveHero(int playerIdx) {
+        //Debug.Log("remove hero: " + playerIdx);
         _playerCount--;
         bool found = false;
         for (int i = 0; i < _rankItems.Length; i++) {
@@ -66,14 +85,18 @@ public class RankUI : BaseUI {
     }
 
     public void SetRank(int[] playerIdxs) {
+        //Debug.Log("set rank: " + string.Join(", ", playerIdxs));
         bool firstSwap = false;
         for (int i = 0; i < _rankItems.Length - 1; i++) {
             int index = i;
             var item = _rankItems[i];
             var itemPlayerIndex = item.PlayerIdx;
+            //Debug.Log(i + " item player index: " + itemPlayerIndex);
             if (itemPlayerIndex == -1) continue;
+            //Debug.Log(i + " cur player index: " + playerIdxs[i]);
             if (itemPlayerIndex == playerIdxs[i]) continue;
             if (!firstSwap) {
+                //Debug.Log(i + " play animation");
                 item.PlayAnimation();
                 firstSwap = true;
             }
@@ -93,31 +116,4 @@ public class RankUI : BaseUI {
             });
         }
     }
-
-    //public void AddHeroTest() {
-    //    int[] allIdxs = new int[] { 0, 1, 2, 3 };
-    //    var idxs = _rankItems.Select(item => item.PlayerIdx).ToArray();
-    //    var exceptIdxs = allIdxs.Except(idxs).ToArray();
-    //    var idx = exceptIdxs[Random.Range(0, exceptIdxs.Length)];
-    //    int[] heroIDs = new int[] { 1, 2, 7, 19 };
-    //    int heroID = heroIDs[idx];
-    //    AddHero(heroID, idx);
-    //    Debug.Log("possible idxs " + string.Join(", ", exceptIdxs));
-    //    Debug.Log("add idx " + idx);
-    //}
-
-    //public void RemoveRandomHeroTest() {
-    //    var idxs = _rankItems.Where(item => item.PlayerIdx != -1).Select(item => item.PlayerIdx).ToArray();
-    //    var idx = idxs[Random.Range(0, idxs.Length)];
-    //    RemoveHero(idx);
-    //    Debug.Log("remove idx " + idx);
-    //}
-
-    //public void SetRankTest() {
-    //    var idxs = _rankItems.Where(item => item.PlayerIdx != -1).Select(item => item.PlayerIdx).ToList();
-    //    Debug.Log("before: " + string.Join(", ", idxs));
-    //    idxs.Shuffle();
-    //    Debug.Log("after: " + string.Join(", ", idxs));
-    //    SetRank(idxs.ToArray());
-    //}
 }

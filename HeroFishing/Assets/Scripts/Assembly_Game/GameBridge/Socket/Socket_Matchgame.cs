@@ -323,7 +323,13 @@ namespace HeroFishing.Socket {
                 if (player == null) continue;
                 players.Add(player);
             }
-            players.Sort((a, b) => (int)(b.GainPoints - a.GainPoints));
+            players.Sort((a, b) => {
+                if(b.GainPoints == a.GainPoints) {
+                    return a.Idx - b.Idx;
+                }
+                return (int)(b.GainPoints - a.GainPoints);
+            });
+
             var rankUI = BaseUI.GetInstance<RankUI>();
             if (rankUI != null)
                 rankUI.SetRank(players.Select(p => p.Idx).ToArray());
