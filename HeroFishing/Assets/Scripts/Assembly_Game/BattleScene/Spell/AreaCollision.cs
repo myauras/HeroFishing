@@ -100,7 +100,7 @@ public class AreaCollision : CollisionBase {
             }
         }
 
-        if (GameConnector.Connected)
+        if (GameConnector.Connected && _info.HeroIndex == 0)
             GameConnector.Instance.Hit(_info.AttackID, idxs, _info.SpellID);
     }
 }

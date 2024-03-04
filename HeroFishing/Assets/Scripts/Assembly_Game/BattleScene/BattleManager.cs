@@ -94,6 +94,8 @@ namespace HeroFishing.Battle {
             }
         }
         public void StartGame() {
+            Debug.Log("start game");
+            OnHeroAdd?.Invoke(AllocatedRoom.Instance.HeroIDs[Index], Index);
             UpdateHeros();
             if (GameConnector.Connected)
                 GameConnector.Instance.UpdateScene();
@@ -102,6 +104,7 @@ namespace HeroFishing.Battle {
                 GameConnector.Instance.UpdateScene();
             });
             PopupUI.HideLoading();
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
         public void RegisterOnLeaveGameEvent(Action _ac) {
             if (_ac == null) return;
