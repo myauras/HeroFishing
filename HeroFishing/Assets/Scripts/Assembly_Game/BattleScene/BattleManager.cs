@@ -5,16 +5,13 @@ using HeroFishing.Socket.Matchgame;
 using Scoz.Func;
 using Service.Realms;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+
 using UnityEngine.Rendering.Universal;
-using UnityEngine.SceneManagement;
+
 namespace HeroFishing.Battle {
     public class BattleManager : MonoBehaviour {
         public static BattleManager Instance;
@@ -68,6 +65,7 @@ namespace HeroFishing.Battle {
 
         public void Init() {
             Instance = this;
+
             PoolManager.Instance.ResetBattlePool();//清除物件池
             Monster.ResetMonsterStaticDatas();//清除場上怪物清單
             SetCam();//設定攝影機模式
@@ -78,6 +76,10 @@ namespace HeroFishing.Battle {
             _spellIndicator.Init();
             _serverMonsterIdxs = new List<int>(128);
             CheckGameState();
+            LoadSubScene();
+        }
+        void LoadSubScene() {
+            AddressablesLoader.LoadAdditiveScene("Stage1/Stage1", null);
         }
         void CheckGameState() {
             switch (AllocatedRoom.Instance.CurGameState) {
@@ -141,8 +143,7 @@ namespace HeroFishing.Battle {
                 hero.SetData(_testHeroID, $"{_testHeroID}_1");
                 hero.UpdatePoints(10);
                 _bet = _testBet;
-            }
-            else {
+            } else {
                 hero.SetData(AllocatedRoom.Instance.MyHeroID, AllocatedRoom.Instance.MyHeroSkinID);
                 var map = RealmManager.MyRealm.Find<DBMap>(AllocatedRoom.Instance.DBMapID);
                 _bet = map.Bet ?? 1;
@@ -379,8 +380,7 @@ namespace HeroFishing.Battle {
                             var eTime = Mathf.Min((float)(effect.AtTime + effect.Duration), currentTime);
                             totalTime += eTime - sTime;
                         }
-                    }
-                    else {
+                    } else {
                         var sTime = Mathf.Max((float)effect.AtTime, startTime);
                         var eTime = Mathf.Min((float)(effect.AtTime + effect.Duration), currentTime);
                         totalTime += eTime - sTime;

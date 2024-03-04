@@ -77,7 +77,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<Service.Realms.RealmManager.<Signout>d__33>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.HeroUI.<>c__DisplayClass20_0.<<OnCreateRoom>b__0>d>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass20_0.<<RealmLoginCheck>b__0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__16_0>d>
@@ -85,7 +85,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Socket.HeroFishingSocket.<<OnMatchgameUDPDisconnect>b__17_0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.HeroUI.<>c__DisplayClass20_0.<<OnCreateRoom>b__0>d>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass20_0.<<RealmLoginCheck>b__0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__16_0>d>
@@ -151,6 +151,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.UniTaskExtensions.<>c__0<object>
 	// DG.Tweening.Core.DOGetter<float>
 	// DG.Tweening.Core.DOSetter<float>
+	// DelegateList<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>>
 	// DelegateList<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<long>>
 	// DelegateList<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>>
 	// DelegateList<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle>
@@ -195,6 +196,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<UniRx.TimeInterval<long>>
 	// System.Action<UniRx.Unit>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,object>
+	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<long>>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle>
@@ -211,10 +213,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<object,object>
 	// System.Action<object>
 	// System.Action<ushort>
-	// System.ArraySegment.Enumerator<UnityEngine.jvalue>
-	// System.ArraySegment.Enumerator<ushort>
-	// System.ArraySegment<UnityEngine.jvalue>
-	// System.ArraySegment<ushort>
 	// System.ByReference<UnityEngine.jvalue>
 	// System.ByReference<ushort>
 	// System.Collections.Concurrent.ConcurrentQueue.<Enumerate>d__28<object>
@@ -617,6 +615,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<UniRx.Unit,byte>
 	// System.Func<UniRx.Unit,int,byte>
 	// System.Func<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>>
+	// System.Func<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Func<byte,byte>
 	// System.Func<byte,ushort>
 	// System.Func<byte>
@@ -628,6 +627,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<long,int,byte>
 	// System.Func<long>
 	// System.Func<object,System.Threading.Tasks.VoidTaskResult>
+	// System.Func<object,UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Func<object,byte>
 	// System.Func<object,float>
 	// System.Func<object,int>
@@ -705,47 +705,51 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Predicate<int>
 	// System.Predicate<object>
 	// System.Predicate<ushort>
-	// System.ReadOnlySpan.Enumerator<UnityEngine.jvalue>
-	// System.ReadOnlySpan.Enumerator<ushort>
 	// System.ReadOnlySpan<UnityEngine.jvalue>
 	// System.ReadOnlySpan<ushort>
 	// System.Runtime.CompilerServices.AsyncTaskMethodBuilder<System.Threading.Tasks.VoidTaskResult>
 	// System.Runtime.CompilerServices.AsyncTaskMethodBuilder<byte>
 	// System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>
 	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable.ConfiguredTaskAwaiter<System.Threading.Tasks.VoidTaskResult>
+	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable.ConfiguredTaskAwaiter<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable.ConfiguredTaskAwaiter<byte>
 	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable.ConfiguredTaskAwaiter<long>
 	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable.ConfiguredTaskAwaiter<object>
 	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable<System.Threading.Tasks.VoidTaskResult>
+	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable<byte>
 	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable<long>
 	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable<object>
 	// System.Runtime.CompilerServices.ReadOnlyCollectionBuilder.Enumerator<object>
 	// System.Runtime.CompilerServices.ReadOnlyCollectionBuilder<object>
 	// System.Runtime.CompilerServices.TaskAwaiter<System.Threading.Tasks.VoidTaskResult>
+	// System.Runtime.CompilerServices.TaskAwaiter<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Runtime.CompilerServices.TaskAwaiter<byte>
 	// System.Runtime.CompilerServices.TaskAwaiter<long>
 	// System.Runtime.CompilerServices.TaskAwaiter<object>
 	// System.Runtime.CompilerServices.TrueReadOnlyCollection<object>
-	// System.Span.Enumerator<UnityEngine.jvalue>
-	// System.Span.Enumerator<ushort>
 	// System.Span<UnityEngine.jvalue>
 	// System.Span<ushort>
 	// System.Threading.Tasks.ContinuationTaskFromResultTask<System.Threading.Tasks.VoidTaskResult>
+	// System.Threading.Tasks.ContinuationTaskFromResultTask<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Threading.Tasks.ContinuationTaskFromResultTask<byte>
 	// System.Threading.Tasks.ContinuationTaskFromResultTask<long>
 	// System.Threading.Tasks.ContinuationTaskFromResultTask<object>
 	// System.Threading.Tasks.Task<System.Threading.Tasks.VoidTaskResult>
+	// System.Threading.Tasks.Task<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Threading.Tasks.Task<byte>
 	// System.Threading.Tasks.Task<long>
 	// System.Threading.Tasks.Task<object>
+	// System.Threading.Tasks.TaskCompletionSource<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Threading.Tasks.TaskCompletionSource<long>
 	// System.Threading.Tasks.TaskCompletionSource<object>
 	// System.Threading.Tasks.TaskFactory.<>c__DisplayClass35_0<System.Threading.Tasks.VoidTaskResult>
+	// System.Threading.Tasks.TaskFactory.<>c__DisplayClass35_0<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Threading.Tasks.TaskFactory.<>c__DisplayClass35_0<byte>
 	// System.Threading.Tasks.TaskFactory.<>c__DisplayClass35_0<long>
 	// System.Threading.Tasks.TaskFactory.<>c__DisplayClass35_0<object>
 	// System.Threading.Tasks.TaskFactory<System.Threading.Tasks.VoidTaskResult>
+	// System.Threading.Tasks.TaskFactory<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Threading.Tasks.TaskFactory<byte>
 	// System.Threading.Tasks.TaskFactory<long>
 	// System.Threading.Tasks.TaskFactory<object>
@@ -830,12 +834,16 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// UnityEngine.Events.UnityEvent<object>
 	// UnityEngine.Rendering.VolumeParameter<UnityEngine.Color>
 	// UnityEngine.Rendering.VolumeParameter<float>
+	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase.<>c__DisplayClass60_0<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase.<>c__DisplayClass60_0<long>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase.<>c__DisplayClass60_0<object>
+	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase.<>c__DisplayClass61_0<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase.<>c__DisplayClass61_0<long>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase.<>c__DisplayClass61_0<object>
+	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase<long>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase<object>
+	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<long>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>
 	// UnityEngine.ResourceManagement.ChainOperationTypelessDepedency<object>
@@ -895,7 +903,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<GetValidAccessToken>d__28>(Service.Realms.RealmManager.<GetValidAccessToken>d__28&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<Query_GetDoc>d__34>(Service.Realms.RealmManager.<Query_GetDoc>d__34&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.HeroUI.<>c__DisplayClass20_0.<<OnCreateRoom>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.HeroUI.<>c__DisplayClass20_0.<<OnCreateRoom>b__0>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass20_0.<<RealmLoginCheck>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass20_0.<<RealmLoginCheck>b__0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Socket.GameConnector.<>c__DisplayClass17_0.<<ConnectToMatchgameTestVer>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Socket.GameConnector.<>c__DisplayClass17_0.<<ConnectToMatchgameTestVer>b__0>d&)
@@ -903,7 +911,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.HeroFishingSocket.<<OnMatchgameUDPDisconnect>b__17_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.HeroFishingSocket.<<OnMatchgameUDPDisconnect>b__17_0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.HeroUI.<>c__DisplayClass20_0.<<OnCreateRoom>b__0>d>(HeroFishing.Main.HeroUI.<>c__DisplayClass20_0.<<OnCreateRoom>b__0>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass20_0.<<RealmLoginCheck>b__0>d>(HeroFishing.Main.LobbySceneUI.<>c__DisplayClass20_0.<<RealmLoginCheck>b__0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>(HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>(HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>(HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__16_0>d>(HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__16_0>d&)
@@ -1003,7 +1011,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<byte>.Start<SpellLevelUI.<Upgrade>d__18>(SpellLevelUI.<Upgrade>d__18&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<Realms.Sync.User.FunctionsClient.<CallSerializedAsync>d__4<object>>(Realms.Sync.User.FunctionsClient.<CallSerializedAsync>d__4<object>&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<CallAtlasFunc>d__23>(Service.Realms.RealmManager.<CallAtlasFunc>d__23&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Battle.BattleManager.<>c.<<StartGame>b__40_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Battle.BattleManager.<>c.<<StartGame>b__40_0>d&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Socket.TcpClient.<Thread_Connect>d__37>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Socket.TcpClient.<Thread_Connect>d__37&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,Service.Realms.RealmManager.<EmailPWSignup>d__27>(Cysharp.Threading.Tasks.UniTask.Awaiter&,Service.Realms.RealmManager.<EmailPWSignup>d__27&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,SpellActivationBehaviour.<OnSpellPlay>d__2>(Cysharp.Threading.Tasks.UniTask.Awaiter&,SpellActivationBehaviour.<OnSpellPlay>d__2&)
@@ -1011,7 +1018,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<byte>,SpellBtn.<Upgrade>d__32>(System.Runtime.CompilerServices.TaskAwaiter<byte>&,SpellBtn.<Upgrade>d__32&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,HeroFishing.Main.MapItem.<UpdateContent>d__28>(System.Runtime.CompilerServices.TaskAwaiter<object>&,HeroFishing.Main.MapItem.<UpdateContent>d__28&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<EmailPWSignup>d__27>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<EmailPWSignup>d__27&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<HeroFishing.Battle.BattleManager.<>c.<<StartGame>b__40_0>d>(HeroFishing.Battle.BattleManager.<>c.<<StartGame>b__40_0>d&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<HeroFishing.Main.MapItem.<UpdateContent>d__28>(HeroFishing.Main.MapItem.<UpdateContent>d__28&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<HeroFishing.Socket.TcpClient.<Thread_Connect>d__37>(HeroFishing.Socket.TcpClient.<Thread_Connect>d__37&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Service.Realms.RealmManager.<EmailPWSignup>d__27>(Service.Realms.RealmManager.<EmailPWSignup>d__27&)
@@ -1038,7 +1044,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<UniRx.Unit>(System.IObservable<UniRx.Unit>,System.Action<UniRx.Unit>)
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<UniRx.Unit>(System.IObservable<UniRx.Unit>,System.Action<UniRx.Unit>,System.Action<System.Exception>)
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<long>(System.IObservable<long>,System.Action<long>)
-		// System.IDisposable UniRx.ObservableExtensions.Subscribe<long>(System.IObservable<long>,System.Action<long>,System.Action)
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<object>(System.IObservable<object>,System.Action<object>,System.Action<System.Exception>)
 		// System.IObserver<UniRx.TimeInterval<long>> UniRx.Observer.CreateSubscribeObserver<UniRx.TimeInterval<long>>(System.Action<UniRx.TimeInterval<long>>,System.Action<System.Exception>,System.Action)
 		// System.IObserver<UniRx.Unit> UniRx.Observer.CreateSubscribeObserver<UniRx.Unit>(System.Action<UniRx.Unit>,System.Action<System.Exception>,System.Action)

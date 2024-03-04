@@ -40,7 +40,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7427249648834665877}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
@@ -49,7 +49,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 0224e1c4b530a654e924d994abdfac6e, type: 2}
+  sharedProfile: {fileID: 11400000, guid: a6560a915ef98420e9faacc1c7438823, type: 2}
 --- !u!114 &7947000608219393331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MyBloomSettingDic:
-    m_keys: 000000000100000002000000
+    m_keys: 0000000001000000
     m_values:
     - Threshold: 0.95
       Intensity: 0.5
@@ -71,6 +71,3 @@ MonoBehaviour:
     - Threshold: 0.95
       Intensity: 0.5
       TintColor: {r: 1, g: 1, b: 1, a: 1}
-    - Threshold: 0.9
-      Intensity: 0.5
-      TintColor: {r: 1, g: 0, b: 0, a: 1}
