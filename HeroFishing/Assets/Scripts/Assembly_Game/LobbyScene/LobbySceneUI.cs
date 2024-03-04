@@ -99,7 +99,8 @@ namespace HeroFishing.Main {
                     LastPopupUI = null;
                     break;
                 case LobbyUIs.Map:
-                    MyMapUI.RefreshScrollView();
+                    //MyMapUI.RefreshScrollView();
+                    MyMapUI.ResetScrollViewPos();
                     _cb?.Invoke();
                     LastPopupUI = MyMapUI;
                     break;

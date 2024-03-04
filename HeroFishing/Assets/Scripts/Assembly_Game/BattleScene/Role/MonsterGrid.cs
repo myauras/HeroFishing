@@ -13,12 +13,15 @@ public class MonsterGrid : MonoBehaviour, IUpdate {
     private Vector2Int _gridPos;
     private Vector3 _position;
     private Transform _t;
+    private bool _forceMoving;
     private static int s_currentFrameCount;
     private static Dictionary<Vector2Int, List<Monster>> s_gridMap = new Dictionary<Vector2Int, List<Monster>>();
 
     public const float CELL_SIZE = 1f;
     public const int GRID_WIDTH = 20;
     public const int GRID_HEIGHT = 20;
+    public const float FORCE_MOVE_TIME = 0.5f;
+    public const float TELEPORT_DISTANCE = 5f;
     public static readonly Vector2Int GRID_BOUDNARY_X = new Vector2Int(-10, 10);
     public static readonly Vector2Int GRID_BOUDNARY_Y = new Vector2Int(-10, 10);
     public static readonly Vector2Int REMOVAL_BOUNDARY_X = new Vector2Int(-12, 12);
@@ -45,7 +48,7 @@ public class MonsterGrid : MonoBehaviour, IUpdate {
             s_currentFrameCount = Time.frameCount;
         }
 
-        if (_monster.MyData.Speed != 0 && !WorldStateManager.Instance.IsFrozen && _monster.IsAlive) {
+        if (_monster.MyData.Speed != 0 && !WorldStateManager.Instance.IsFrozen && _monster.IsAlive && !_forceMoving) {
             _position += _monster.MyData.Speed * deltaTime * transform.forward;
             _t.position = _position;
         }
@@ -72,8 +75,23 @@ public class MonsterGrid : MonoBehaviour, IUpdate {
     }
 
     public void Teleport(Vector3 position) {
-        _position = position;
-        _t.position = _position;
+        if (Vector3.SqrMagnitude(position - _position) > TELEPORT_DISTANCE * TELEPORT_DISTANCE) {
+            _position = position;
+            _t.position = _position;
+        }
+        else {
+            _forceMoving = true;
+            var startPosition = _position;
+            var startTime = Time.time;
+            position += FORCE_MOVE_TIME * _monster.MyData.Speed * _t.forward;
+            Observable.EveryUpdate().TakeWhile(_ => Time.time < startTime + FORCE_MOVE_TIME).Subscribe(_ => {
+                var value = Mathf.Clamp01((Time.time - startTime) / FORCE_MOVE_TIME);
+                _position = Vector3.Lerp(startPosition, position, value);
+                _t.position = _position;
+            }, () => {
+                _forceMoving = false;
+            });
+        }
     }
 
     public static bool TryGetMonsters(Vector2Int gridPos, out List<Monster> monsters) {

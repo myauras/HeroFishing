@@ -33,6 +33,7 @@ public class PoolManager : MonoBehaviour {
 
 
     public void InitHeroSpell(HeroSpellJsonData data) {
+        if (_heroNameDic.ContainsKey(data.HeroID)) return;
         var heroData = HeroJsonData.GetData(data.HeroID);
         if (heroData == null)
             WriteLog.LogError("pool manager cannot find the hero data");

@@ -7,6 +7,8 @@ using System.Linq;
 using Service.Realms;
 using TMPro;
 using UnityEngine.AddressableAssets;
+using UniRx;
+using System;
 
 namespace HeroFishing.Main {
 
@@ -38,7 +40,11 @@ namespace HeroFishing.Main {
         public override void Init() {
             base.Init();
             _mapItemDatas = new List<MapItemData>();
-            //RefreshScrollView();
+            RefreshScrollView();
+        }
+
+        public void ResetScrollViewPos() {
+            _mapScrollView.ResetPos();
         }
 
         public void RefreshScrollView() {
@@ -52,9 +58,13 @@ namespace HeroFishing.Main {
             }
 
             var query = RealmManager.MyRealm.All<DBMap>();
-            if (query == null || query.Count() == 0) return;
+            if (query == null || query.Count() == 0) {
+                Debug.LogError("query is empty");
+                return;
+            }
+
             var dbmaps = query.OrderByDescending(item => item.Priority);
-            foreach(var dbMap in dbmaps) {
+            foreach (var dbMap in dbmaps) {
                 if (!dbMap.Enable.HasValue || !dbMap.Enable.Value) continue;
                 var itemData = CreateMapItemData(dbMap.JsonMapID ?? 1, dbMap.Bet ?? 1, dbMap);
                 _mapItemDatas.Add(itemData);
@@ -63,6 +73,7 @@ namespace HeroFishing.Main {
         }
 
         public void Confirm() {
+            GlassController.Instance.Play();
             if (_localTest) {
                 Debug.LogWarning("it is local test mode, so it is no db map at all");
                 return;
@@ -75,7 +86,9 @@ namespace HeroFishing.Main {
             }
 
             SelectedDBMap = _mapScrollView.SelectedMap;
-            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
+            Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ => {
+                LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
+            });
         }
 
         private MapItemData CreateMapItemDataLocal(int index) {

@@ -28,13 +28,14 @@ public class GlassController : MonoBehaviour {
         UICam.Instance.AddCameraStack(_camera);
     }
 
+    public void Select(bool active) {
+        _wholeGlass.SetActive(active);
+    }
+
     [ContextMenu("Play")]
     public void Play() {
-        _wholeGlass.SetActive(true);
-        Observable.Timer(TimeSpan.FromMilliseconds(50)).Subscribe(_ => {
-            _wholeGlass.SetActive(false);
-            _breakGlassAnimator.gameObject.SetActive(true);
-            _breakGlassAnimator.SetTrigger("Play");
-        });
+        _wholeGlass.SetActive(false);
+        _breakGlassAnimator.gameObject.SetActive(true);
+        _breakGlassAnimator.SetTrigger("Play");
     }
 }

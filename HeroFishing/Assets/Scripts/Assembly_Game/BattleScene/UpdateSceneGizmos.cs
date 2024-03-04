@@ -46,6 +46,7 @@ public class UpdateSceneGizmos : MonoBehaviour {
                 var rotation = Quaternion.AngleAxis(BattleManager.Instance.Index * 90f, Vector3.up);
                 var direction = (routeData.TargetPos - routeData.SpawnPos).normalized;
                 var position = rotation * (routeData.SpawnPos + (float)deltaTime * monsterData.Speed * direction);
+                //Debug.Log($"gizmo {monster.Idx}: deltaTime: {deltaTime} deltaPosition: {position}");
                 Gizmos.DrawSphere(position, monsterData.Radius);
             }
         }
