@@ -46,7 +46,7 @@ namespace HeroFishing.Battle {
         private const float ATTACK_LOCK_TIME = 1.5f;
         public bool ControlLock {
             get {
-                return (_currentMove != null && _currentMove.IsMoving) || TimelinePlayer.IsPlaying;
+                return (_currentMove != null && _currentMove.IsMoving) || !TimelinePlayer.CanControl;
             }
         }
 
