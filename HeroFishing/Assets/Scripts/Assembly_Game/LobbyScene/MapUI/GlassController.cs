@@ -37,5 +37,9 @@ public class GlassController : MonoBehaviour {
         _wholeGlass.SetActive(false);
         _breakGlassAnimator.gameObject.SetActive(true);
         _breakGlassAnimator.SetTrigger("Play");
+        Observable.EveryUpdate().Select(_ => _breakGlassAnimator.GetCurrentAnimatorStateInfo(0))
+            .SkipWhile(stateInfo => stateInfo.normalizedTime < 0.95f).First().Subscribe(_ => {
+            _breakGlassAnimator.gameObject.SetActive(false);
+        });
     }
 }
