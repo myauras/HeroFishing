@@ -364,6 +364,9 @@ namespace HeroFishing.Socket {
         void HandleDropSepll(SocketCMD<DROPSPELL_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             WriteLog.Log("施放掉落技能:" + _packet.Content.Success);
+            var playerIdx = _packet.Content.PlayerIdx;
+            var heroIndex = BattleManager.Instance.GetHeroIndex(playerIdx);
+            DropManager.Instance.PlayDrop(heroIndex, _packet.Content.DropSpellJsonID);
         }
 
     }
