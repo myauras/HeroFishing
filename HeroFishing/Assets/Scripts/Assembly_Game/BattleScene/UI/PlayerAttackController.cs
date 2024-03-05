@@ -157,6 +157,13 @@ namespace HeroFishing.Battle {
             SpellIndicator.Instance.ShowIndicator(_spellData);
             SpellIndicator.Instance.MoveIndicator(_hero.transform.position);
             _isSkillMode = true;
+
+            // 如果有lock，解除lock攻擊
+            if (_lockAttack) {
+                _lockAttack = false;
+                _targetMonster.Lock(false);
+                _targetMonster = null;
+            }
         }
 
         //施放技能-拖曳
