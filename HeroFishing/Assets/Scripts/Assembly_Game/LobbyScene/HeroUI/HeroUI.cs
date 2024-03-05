@@ -16,7 +16,6 @@ namespace HeroFishing.Main {
     public class HeroUI : ItemSpawner_Remote<HeroIconItem> {
 
         [SerializeField] ScrollRect MyScrollRect;
-        [SerializeField] TextMeshProUGUI TitleText;
         [SerializeField] SpellPanel MySpellPanel;
         [SerializeField] SkinPanel MySkinPanel;
         HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.LOL;
@@ -43,7 +42,6 @@ namespace HeroFishing.Main {
 
         public override void RefreshText() {
             base.RefreshText();
-            TitleText.text = StringJsonData.GetUIString("HeroUITitle");
         }
         public void SwitchCategory(int _categoryIndex) {
             HeroJsonData.RoleCategory changeToCategory;
