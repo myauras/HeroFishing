@@ -30,6 +30,7 @@ namespace HeroFishing.Battle {
         private float _scheduledNextAttackTime;
         private float _scheduledRecoverTime;
         private float _scheduledLockTime;
+        private float _scheduledRepeatTime;
         private bool _isAttack;
         private bool _repeatAttack;
         private Monster _targetMonster;
@@ -44,6 +45,7 @@ namespace HeroFishing.Battle {
         private const float MOVE_SCALE_FACTOR = 2;
         private const float ATTACK_BUFFER_TIME = 0.2f;
         private const float ATTACK_LOCK_TIME = 1.5f;
+        private const float ATTACK_REPEAT_TIME = 1.0f;
         public bool ControlLock {
             get {
                 return (_currentMove != null && _currentMove.IsMoving) || !TimelinePlayer.CanControl;
@@ -109,7 +111,7 @@ namespace HeroFishing.Battle {
                     _scheduledLockTime = Time.time + ATTACK_LOCK_TIME;
                 }
                 else {
-                    _repeatAttack = true;
+                    _scheduledRepeatTime = Time.time + ATTACK_REPEAT_TIME;
                 }
             }
 
@@ -122,6 +124,11 @@ namespace HeroFishing.Battle {
                 else if (!_lockAttack && Time.time > _scheduledLockTime) {
                     _lockAttack = true;
                     _targetMonster.Lock(true);
+                }
+            }
+            else {
+                if (Input.GetMouseButton(0) && Time.time > _scheduledRepeatTime) {
+                    _repeatAttack = true;
                 }
             }
         }
