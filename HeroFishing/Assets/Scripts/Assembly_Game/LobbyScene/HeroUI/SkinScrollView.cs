@@ -1,5 +1,6 @@
 using FancyScrollView;
 using HeroFishing.Main;
+using Scoz.Func;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,8 +48,6 @@ public class SkinScrollView : FancyScrollView<SkinItemData, SkinScrollContext> {
 
     public void ResetPos() {
         Refresh();
-        var position = _scroller.Position;
-        GlassController.Instance.Select(Mathf.Abs(Mathf.Round(position) - position) < 0.001f);
     }
 
     public void UpdateData(IList<SkinItemData> itemData) {
@@ -69,6 +68,7 @@ public class SkinScrollView : FancyScrollView<SkinItemData, SkinScrollContext> {
     }
 
     protected override void UpdatePosition(float position) {
+        WriteLog.LogError("position=" + position);
         base.UpdatePosition(position);
         GlassController.Instance.Select(Mathf.Abs(Mathf.Round(position) - position) < 0.001f);
     }

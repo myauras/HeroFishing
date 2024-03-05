@@ -19,7 +19,7 @@ namespace HeroFishing.Main {
 
         [SerializeField] ScrollRect MyScrollRect;
         [SerializeField] SpellPanel MySpellPanel;
-        [SerializeField] SkinPanel MySkinPanel;
+        [SerializeField] SkinScrollView MySkinScrollView;
         [SerializeField] HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.All;
         [SerializeField] GameObject[] CategoryTags;
         [SerializeField] Image HeroBG;
@@ -31,10 +31,9 @@ namespace HeroFishing.Main {
         public override void LoadItemAsset(Action _cb = null) {
             base.LoadItemAsset(_cb);
             MySpellPanel.Init();
-            MySkinPanel.Init();
             MyLoadingProgress = new LoadingProgress(() => { SwitchCategory(0); }); //子UI都都載入完成再執行SwitchCategory
             MyLoadingProgress.AddLoadingProgress("Hero", "Skin");
-            MySkinPanel.LoadItemAsset(() => { MyLoadingProgress.FinishProgress("Skin"); });
+            //MySkinScrollView.LoadItemAsset(() => { MyLoadingProgress.FinishProgress("Skin"); });
 
         }
 
@@ -113,7 +112,7 @@ namespace HeroFishing.Main {
             //切換英雄後會自動選到第一個技能
             MySpellPanel.SetHero(CurHero.ID);
             //切換英雄後會自動選到第一個Skin
-            MySkinPanel.SetHero(CurHero.ID);
+            //MySkinScrollView.SetHero(CurHero.ID);
             var firstSkin = HeroSkinJsonData.GetSkinDic(CurHero.ID).First().Value;
             SwitchHeroSkin(firstSkin);
         }
