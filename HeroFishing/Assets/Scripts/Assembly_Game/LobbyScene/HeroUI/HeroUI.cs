@@ -11,6 +11,8 @@ using HeroFishing.Socket;
 using Cysharp.Threading.Tasks;
 using LitJson;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 
 namespace HeroFishing.Main {
     public class HeroUI : ItemSpawner_Remote<HeroIconItem> {
@@ -18,7 +20,9 @@ namespace HeroFishing.Main {
         [SerializeField] ScrollRect MyScrollRect;
         [SerializeField] SpellPanel MySpellPanel;
         [SerializeField] SkinPanel MySkinPanel;
-        HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.LOL;
+        [SerializeField] HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.All;
+        [SerializeField] GameObject[] CategoryTags;
+        [SerializeField] Image HeroBG;
         HeroJsonData CurHero;
         HeroSkinJsonData CurHeroSkin;
 
@@ -52,6 +56,13 @@ namespace HeroFishing.Main {
             CurCategory = changeToCategory;
             SpawnItems();
             SwitchHero(GetFirstHero());
+            RefreshTags();
+        }
+
+        void RefreshTags() {
+            for (int i = 0; i < CategoryTags.Length; i++) {
+                CategoryTags[i].SetActive(i == (int)CurCategory);
+            }
         }
 
         public void SpawnItems() {
@@ -75,18 +86,19 @@ namespace HeroFishing.Main {
             }
             Filter();
         }
-        HeroJsonData GetFirstHero() {
+        HeroIconItem GetFirstHero() {
             for (int i = 0; i < ItemList.Count; i++) {
                 if (ItemList[i].IsActive == false) continue;
-                return ItemList[i].MyJsonHero;
+                return ItemList[i];
             }
             return null;
         }
         void Filter() {
             for (int i = 0; i < ItemList.Count; i++) {
                 if (ItemList[i].IsActive == false) continue;
-                ItemList[i].gameObject.SetActive(CurCategory == ItemList[i].MyJsonHero.MyRoleCategory);
-                ItemList[i].IsActive = CurCategory == ItemList[i].MyJsonHero.MyRoleCategory;
+                bool meetCatetory = (CurCategory == HeroJsonData.RoleCategory.All) || (CurCategory == ItemList[i].MyJsonHero.MyRoleCategory);
+                ItemList[i].gameObject.SetActive(meetCatetory);
+                ItemList[i].IsActive = meetCatetory;
             }
             MyScrollRect.verticalNormalizedPosition = 1;//至頂
         }
@@ -94,9 +106,10 @@ namespace HeroFishing.Main {
         public void OnCloseUIClick() {
             LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Map);
         }
-        public void SwitchHero(HeroJsonData _heroJsonData) {
-            if (_heroJsonData == null) return;
-            CurHero = _heroJsonData;
+        public void SwitchHero(HeroIconItem _item) {
+            if (_item == null) return;
+            SetItems(_item);
+            CurHero = _item.MyJsonHero;
             //切換英雄後會自動選到第一個技能
             MySpellPanel.SetHero(CurHero.ID);
             //切換英雄後會自動選到第一個Skin
@@ -104,8 +117,21 @@ namespace HeroFishing.Main {
             var firstSkin = HeroSkinJsonData.GetSkinDic(CurHero.ID).First().Value;
             SwitchHeroSkin(firstSkin);
         }
+        void SetItems(HeroIconItem _item) {
+            for (int i = 0; i < ItemList.Count; i++) {
+                ItemList[i].IsSelected = ItemList[i] == _item;
+                ItemList[i].RefreshItem();
+            }
+        }
         public void SwitchHeroSkin(HeroSkinJsonData _heroSkinJsonData) {
             CurHeroSkin = _heroSkinJsonData;
+            RefreshHeroBG();
+        }
+        void RefreshHeroBG() {
+            AddressablesLoader.GetSprite("HeroBG/" + CurHeroSkin.ID, (sprite, handle) => {
+                HeroBG.sprite = sprite;
+                Addressables.Release(handle);
+            });
         }
         public void OnBattleStartClick() {
             if (CurHero == null) return;
