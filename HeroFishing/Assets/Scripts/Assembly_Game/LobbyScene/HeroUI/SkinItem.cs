@@ -11,39 +11,52 @@ using UnityEngine.AddressableAssets;
 
 namespace HeroFishing.Main {
 
-    public class SkinItem : FancyCell<SkinItemData, Context> {
+    public class SkinItem : FancyCell<SkinItemData, SkinScrollContext> {
+        [SerializeField] Image SkinBGImg;
         [SerializeField] Image SkinIconImg;
-        [SerializeField] Button _btnSelect;
+        [SerializeField] Animator ScrollAni;
+        [SerializeField] Transform Parent;
+
+        Material ImgMaterial;//Material副本
         public bool IsActive { get; set; }
 
         public SkinItemData MySkinItem { get; private set; }
         private void Start() {
-            _btnSelect.onClick.AddListener(() => Context.OnClick?.Invoke(Index));
+            //Btn.onClick.AddListener(() => Context.OnClick?.Invoke(Index));
+
         }
         public override void Initialize() {
             base.Initialize();
         }
 
-        public override  void UpdateContent(SkinItemData _item) {
+        public override void UpdateContent(SkinItemData _item) {
             MySkinItem = _item;
-            RefreshItem();
+            if (ImgMaterial == null) ImgMaterial = new Material(SkinIconImg.material);
+
+
+            if (Context.SelectedIndex == Index) {
+                transform.SetAsLastSibling();
+                ImgMaterial.SetFloat("_EffectAmount", 0f);
+                Parent.localScale = Vector2.one;
+                AddressablesLoader.GetSpriteAtlas("HeroSkinIcon", atlas => {
+                    SkinBGImg.sprite = atlas.GetSprite("SkinBG_On");
+                    SkinIconImg.sprite = atlas.GetSprite(MySkinItem.MyJsonSkin.ID);
+                });
+            } else {
+                ImgMaterial.SetFloat("_EffectAmount", 0.3f);
+                Parent.localScale = new Vector2(0.75f, 0.75f);
+                AddressablesLoader.GetSpriteAtlas("HeroSkinIcon", atlas => {
+                    SkinBGImg.sprite = atlas.GetSprite("SkinBG");
+                    SkinIconImg.sprite = atlas.GetSprite(MySkinItem.MyJsonSkin.ID);
+                });
+            }
         }
 
         public override void UpdatePosition(float position) {
-            SetHightlight(position);
-        }
-        private void SetHightlight(float position) {
-            WriteLog.LogError("position=" + position);
-        }
-
-        void RefreshItem() {
-            AddressablesLoader.GetSpriteAtlas("HeroSkinIcon", atlas => {
-                SkinIconImg.sprite = atlas.GetSprite(MySkinItem.MyJsonSkin.ID);
-            });
-        }
-
-        public void OnClick() {
-            HeroUI.GetInstance<HeroUI>()?.SwitchHeroSkin(MySkinItem.MyJsonSkin);
+            if (ScrollAni.isActiveAndEnabled) {
+                ScrollAni.Play("scroll", -1, position);
+            }
+            ScrollAni.speed = 0;
         }
     }
 }

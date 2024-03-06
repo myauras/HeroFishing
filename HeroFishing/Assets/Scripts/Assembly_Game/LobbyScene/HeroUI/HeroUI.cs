@@ -33,8 +33,7 @@ namespace HeroFishing.Main {
             MySpellPanel.Init();
             MyLoadingProgress = new LoadingProgress(() => { SwitchCategory(0); }); //子UI都都載入完成再執行SwitchCategory
             MyLoadingProgress.AddLoadingProgress("Hero", "Skin");
-            //MySkinScrollView.LoadItemAsset(() => { MyLoadingProgress.FinishProgress("Skin"); });
-
+            MySkinScrollView.LoadItemAsset(() => { MyLoadingProgress.FinishProgress("Skin"); });
         }
 
         public override void OnLoadItemFinished() {
@@ -112,7 +111,7 @@ namespace HeroFishing.Main {
             //切換英雄後會自動選到第一個技能
             MySpellPanel.SetHero(CurHero.ID);
             //切換英雄後會自動選到第一個Skin
-            //MySkinScrollView.SetHero(CurHero.ID);
+            MySkinScrollView.RefreshScrollView(CurHero.ID);
             var firstSkin = HeroSkinJsonData.GetSkinDic(CurHero.ID).First().Value;
             SwitchHeroSkin(firstSkin);
         }
@@ -124,12 +123,9 @@ namespace HeroFishing.Main {
         }
         public void SwitchHeroSkin(HeroSkinJsonData _heroSkinJsonData) {
             CurHeroSkin = _heroSkinJsonData;
-            RefreshHeroBG();
-        }
-        void RefreshHeroBG() {
             AddressablesLoader.GetSprite("HeroBG/" + CurHeroSkin.ID, (sprite, handle) => {
                 HeroBG.sprite = sprite;
-                Addressables.Release(handle);
+                //Addressables.Release(handle);
             });
         }
         public void OnBattleStartClick() {
