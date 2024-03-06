@@ -10,6 +10,8 @@ public class CoinUI : BaseUI {
     [SerializeField]
     private Animator _animator;
     [SerializeField]
+    private Animator _txtAnimator;
+    [SerializeField]
     private TextMeshProUGUI _txtCoin;
 
     private static readonly int PARAMS_GET_COIN = Animator.StringToHash("GetCoin");
@@ -28,8 +30,10 @@ public class CoinUI : BaseUI {
     }
 
     private void OnPointUpdate(int points, bool needAnimation = false) {
-        if (needAnimation)
+        if (needAnimation) {
             _animator.SetTrigger(PARAMS_GET_COIN);
+            _txtAnimator.SetTrigger(PARAMS_GET_COIN);
+        }
         if (points < 0)
             points = 0;
         _txtCoin.text = points.ToString();
