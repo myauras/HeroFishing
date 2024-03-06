@@ -38,6 +38,9 @@ namespace HeroFishing.Main {
         public void SwitchSpell(SpellName _spellName) {
             if (_spellName == SpellName.attack) return;
             CurSpell = HeroSpellJsonData.GetSpell(CurHero.ID, _spellName);
+            for(int i=0;i< SpellItems.Length; i++) {
+                SpellItems[i].Switch((int)_spellName == (i + 1));
+            }
             RefreshText();
         }
 

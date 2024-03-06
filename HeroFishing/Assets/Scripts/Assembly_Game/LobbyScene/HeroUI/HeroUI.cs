@@ -13,6 +13,7 @@ using LitJson;
 using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEditorInternal.Profiling.Memory.Experimental;
+using UniRx;
 
 namespace HeroFishing.Main {
     public class HeroUI : ItemSpawner_Remote<HeroIconItem> {
@@ -23,15 +24,19 @@ namespace HeroFishing.Main {
         [SerializeField] HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.All;
         [SerializeField] GameObject[] CategoryTags;
         [SerializeField] Image HeroBG;
-        HeroJsonData CurHero;
-        HeroSkinJsonData CurHeroSkin;
+        public static HeroJsonData CurHero { get; private set; }
+        public static HeroSkinJsonData CurHeroSkin { get; private set; }
 
         LoadingProgress MyLoadingProgress;
 
         public override void LoadItemAsset(Action _cb = null) {
             base.LoadItemAsset(_cb);
             MySpellPanel.Init();
-            MyLoadingProgress = new LoadingProgress(() => { SwitchCategory(0); }); //子UI都都載入完成再執行SwitchCategory
+            MyLoadingProgress = new LoadingProgress(() => {
+                CurHero = HeroJsonData.GetData(1);
+                CurHeroSkin = HeroSkinJsonData.GetData("1_1");
+                SwitchCategory(0); 
+            }); //子UI都都載入完成再執行SwitchCategory
             MyLoadingProgress.AddLoadingProgress("Hero", "Skin");
             MySkinScrollView.LoadItemAsset(() => { MyLoadingProgress.FinishProgress("Skin"); });
         }
@@ -129,44 +134,12 @@ namespace HeroFishing.Main {
             });
         }
         public void OnBattleStartClick() {
-            if (CurHero == null) return;
-            var mapUI = MapUI.GetInstance<MapUI>();
-            if (mapUI == null) return;
-            PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
-            GamePlayer.Instance.RedisSync().Forget();
-            AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
-            //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
-            GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnFail, OnConnFail, OnCreateRoom).Forget();
-        }
-
-        void OnConnFail() {
-            PopupUI.HideLoading();
-            WriteLog.LogError("配房失敗");
-        }
-
-        void OnCreateRoom(Socket.Matchmaker.CREATEROOM_TOCLIENT _content) {
-            UniTask.Void(async () => {
-                PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
-                //設定玩家目前所在遊戲房間的資料
-                await AllocatedRoom.Instance.SetRoom(_content.CreaterID, _content.PlayerIDs, _content.DBMapID, _content.DBMatchgameID, _content.IP, _content.Port, _content.PodName);
-                GameConnector.Instance.ConnToMatchgame(OnConnToMatchgame, OnJoinGagmeFail, OnMatchgameDisconnected);
+            Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ => {
+                LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
             });
         }
 
-        void OnConnToMatchgame() {
-            PopupUI.HideLoading();
-            GameConnector.Instance.SetHero(CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID                
-        }
-        void OnJoinGagmeFail() {
-            WriteLog.LogError("連線遊戲房失敗");
-        }
-        void OnMatchgameDisconnected() {
-            //在戰鬥場景, 且仍在遊玩中就進行斷線重連
-            if (AllocatedRoom.Instance.CurGameState == AllocatedRoom.GameState.Playing && //在遊玩中
-                SceneManager.GetActiveScene().name == MyScene.BattleScene.ToString()) {//在戰鬥場景
-                GameConnector.Instance.ConnToMatchgame(OnConnToMatchgame, OnJoinGagmeFail, OnMatchgameDisconnected);
-            }
-        }
+
     }
 
 

@@ -30,7 +30,8 @@ public class SkinScrollView : FancyScrollView<SkinItemData, SkinScrollContext> {
     public HeroSkinJsonData SelectedSkinJsonData => Context.SelectedJsonSkin;
 
     public void RefreshScrollView(int _heroID) {
-        ResetPos();
+        CurItemIdx = 0;
+        Context.SelectedIndex = CurItemIdx;
         var skinItemList = new List<SkinItemData>();
         var skinDic = HeroSkinJsonData.GetSkinDic(_heroID);
         foreach (var skinData in skinDic.Values) {
@@ -40,6 +41,7 @@ public class SkinScrollView : FancyScrollView<SkinItemData, SkinScrollContext> {
             skinItemList.Add(itemData);
         }
         UpdateData(skinItemList);
+        SelectCell(CurItemIdx);
     }
 
 
@@ -61,11 +63,6 @@ public class SkinScrollView : FancyScrollView<SkinItemData, SkinScrollContext> {
         Refresh();
     }
 
-    public void ResetPos() {
-        Refresh();
-        CurItemIdx = 0;
-        SelectCell(CurItemIdx);
-    }
     public void LoadItemAsset(Action _cb = null) {
         if (_prefab != null) {
             _cb?.Invoke();
@@ -108,7 +105,7 @@ public class SkinScrollView : FancyScrollView<SkinItemData, SkinScrollContext> {
         RightArrow.SetActive(CurItemIdx < (ItemsSource.Count - 1));
         LeftArrow.SetActive(CurItemIdx > 0);
         if (index < 0 || index >= ItemsSource.Count || index == Context.SelectedIndex) {
-            return;
+            index = 0;
         }
         UpdateSelection(index);
         _scroller.ScrollTo(index, 0.35f, EasingCore.Ease.OutCubic);
