@@ -1,18 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Scoz.Func;
 using UnityEngine.UI;
 using System.Linq;
-using Service.Realms;
-using TMPro;
 using System;
-using HeroFishing.Socket;
-using Cysharp.Threading.Tasks;
-using LitJson;
-using UnityEngine.SceneManagement;
-using UnityEngine.AddressableAssets;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UniRx;
 
 namespace HeroFishing.Main {
