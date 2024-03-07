@@ -195,6 +195,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<System.ValueTuple<object,object>>
 	// System.Action<UniRx.TimeInterval<long>>
 	// System.Action<UniRx.Unit>
+	// System.Action<UnityEngine.AnimatorStateInfo>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,object>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<long>>
@@ -618,6 +619,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<System.ValueTuple<object,byte,object>,object>
 	// System.Func<UniRx.Unit,byte>
 	// System.Func<UniRx.Unit,int,byte>
+	// System.Func<UnityEngine.AnimatorStateInfo,byte>
+	// System.Func<UnityEngine.AnimatorStateInfo,int,byte>
 	// System.Func<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>>
 	// System.Func<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Func<byte,byte>
@@ -627,7 +630,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<int,byte>
 	// System.Func<int,object>
 	// System.Func<int>
+	// System.Func<long,UnityEngine.AnimatorStateInfo>
 	// System.Func<long,byte>
+	// System.Func<long,int,UnityEngine.AnimatorStateInfo>
 	// System.Func<long,int,byte>
 	// System.Func<long>
 	// System.Func<object,System.Threading.Tasks.VoidTaskResult>
@@ -643,10 +648,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<ushort,byte>
 	// System.IObservable<UniRx.TimeInterval<long>>
 	// System.IObservable<UniRx.Unit>
+	// System.IObservable<UnityEngine.AnimatorStateInfo>
 	// System.IObservable<long>
 	// System.IObservable<object>
 	// System.IObserver<UniRx.TimeInterval<long>>
 	// System.IObserver<UniRx.Unit>
+	// System.IObserver<UnityEngine.AnimatorStateInfo>
 	// System.IObserver<long>
 	// System.IObserver<object>
 	// System.Lazy<object>
@@ -782,29 +789,46 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// UniRx.Observable.<RepeatInfinite>d__130<long>
 	// UniRx.Observer.Subscribe<UniRx.TimeInterval<long>>
 	// UniRx.Observer.Subscribe<UniRx.Unit>
+	// UniRx.Observer.Subscribe<UnityEngine.AnimatorStateInfo>
 	// UniRx.Observer.Subscribe<long>
 	// UniRx.Observer.Subscribe<object>
 	// UniRx.Observer.Subscribe_<UniRx.TimeInterval<long>>
 	// UniRx.Observer.Subscribe_<UniRx.Unit>
+	// UniRx.Observer.Subscribe_<UnityEngine.AnimatorStateInfo>
 	// UniRx.Observer.Subscribe_<long>
 	// UniRx.Observer.Subscribe_<object>
+	// UniRx.Operators.FirstObservable.First<UnityEngine.AnimatorStateInfo>
+	// UniRx.Operators.FirstObservable.First_<UnityEngine.AnimatorStateInfo>
+	// UniRx.Operators.FirstObservable<UnityEngine.AnimatorStateInfo>
 	// UniRx.Operators.OperatorObservableBase.<>c__DisplayClass3_0<UniRx.TimeInterval<long>>
 	// UniRx.Operators.OperatorObservableBase.<>c__DisplayClass3_0<UniRx.Unit>
+	// UniRx.Operators.OperatorObservableBase.<>c__DisplayClass3_0<UnityEngine.AnimatorStateInfo>
 	// UniRx.Operators.OperatorObservableBase.<>c__DisplayClass3_0<long>
 	// UniRx.Operators.OperatorObservableBase<UniRx.TimeInterval<long>>
 	// UniRx.Operators.OperatorObservableBase<UniRx.Unit>
+	// UniRx.Operators.OperatorObservableBase<UnityEngine.AnimatorStateInfo>
 	// UniRx.Operators.OperatorObservableBase<long>
 	// UniRx.Operators.OperatorObserverBase<UniRx.Unit,UniRx.Unit>
+	// UniRx.Operators.OperatorObserverBase<UnityEngine.AnimatorStateInfo,UnityEngine.AnimatorStateInfo>
 	// UniRx.Operators.OperatorObserverBase<long,UniRx.TimeInterval<long>>
+	// UniRx.Operators.OperatorObserverBase<long,UnityEngine.AnimatorStateInfo>
 	// UniRx.Operators.OperatorObserverBase<long,long>
 	// UniRx.Operators.RepeatUntilObservable.RepeatUntil.<SubscribeAfterEndOfFrame>d__13<long>
 	// UniRx.Operators.RepeatUntilObservable.RepeatUntil<long>
 	// UniRx.Operators.RepeatUntilObservable<long>
+	// UniRx.Operators.SelectObservable.Select<long,UnityEngine.AnimatorStateInfo>
+	// UniRx.Operators.SelectObservable.Select_<long,UnityEngine.AnimatorStateInfo>
+	// UniRx.Operators.SelectObservable<long,UnityEngine.AnimatorStateInfo>
+	// UniRx.Operators.SelectWhereObservable.SelectWhere<long,UnityEngine.AnimatorStateInfo>
+	// UniRx.Operators.SelectWhereObservable<long,UnityEngine.AnimatorStateInfo>
 	// UniRx.Operators.SkipWhileObservable.SkipWhile<UniRx.Unit>
+	// UniRx.Operators.SkipWhileObservable.SkipWhile<UnityEngine.AnimatorStateInfo>
 	// UniRx.Operators.SkipWhileObservable.SkipWhile<long>
 	// UniRx.Operators.SkipWhileObservable.SkipWhile_<UniRx.Unit>
+	// UniRx.Operators.SkipWhileObservable.SkipWhile_<UnityEngine.AnimatorStateInfo>
 	// UniRx.Operators.SkipWhileObservable.SkipWhile_<long>
 	// UniRx.Operators.SkipWhileObservable<UniRx.Unit>
+	// UniRx.Operators.SkipWhileObservable<UnityEngine.AnimatorStateInfo>
 	// UniRx.Operators.SkipWhileObservable<long>
 	// UniRx.Operators.TakeUntilObservable.TakeUntil.TakeUntilOther<long,UniRx.Unit>
 	// UniRx.Operators.TakeUntilObservable.TakeUntil.TakeUntilOther<long,long>
@@ -821,6 +845,16 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// UniRx.Operators.TimeoutObservable.Timeout<UniRx.Unit>
 	// UniRx.Operators.TimeoutObservable.Timeout_<UniRx.Unit>
 	// UniRx.Operators.TimeoutObservable<UniRx.Unit>
+	// UniRx.Operators.WhereObservable.<>c__DisplayClass5_0<UnityEngine.AnimatorStateInfo>
+	// UniRx.Operators.WhereObservable.<>c__DisplayClass5_0<long>
+	// UniRx.Operators.WhereObservable.Where<UnityEngine.AnimatorStateInfo>
+	// UniRx.Operators.WhereObservable.Where<long>
+	// UniRx.Operators.WhereObservable.Where_<UnityEngine.AnimatorStateInfo>
+	// UniRx.Operators.WhereObservable.Where_<long>
+	// UniRx.Operators.WhereObservable<UnityEngine.AnimatorStateInfo>
+	// UniRx.Operators.WhereObservable<long>
+	// UniRx.Operators.WhereSelectObservable.WhereSelect<long,UnityEngine.AnimatorStateInfo>
+	// UniRx.Operators.WhereSelectObservable<long,UnityEngine.AnimatorStateInfo>
 	// UniRx.Subject.Subscription<UniRx.Unit>
 	// UniRx.Subject.Subscription<object>
 	// UniRx.Subject<UniRx.Unit>
@@ -1037,10 +1071,13 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// object& System.Runtime.CompilerServices.Unsafe.As<object,object>(object&)
 		// System.Void* System.Runtime.CompilerServices.Unsafe.AsPointer<object>(object&)
 		// object UniRx.DisposableExtensions.AddTo<object>(object,System.Collections.Generic.ICollection<System.IDisposable>)
+		// System.IObservable<UnityEngine.AnimatorStateInfo> UniRx.Observable.First<UnityEngine.AnimatorStateInfo>(System.IObservable<UnityEngine.AnimatorStateInfo>)
 		// System.Collections.Generic.IEnumerable<System.IObservable<long>> UniRx.Observable.RepeatInfinite<long>(System.IObservable<long>)
 		// System.IObservable<long> UniRx.Observable.RepeatUntilCore<long>(System.Collections.Generic.IEnumerable<System.IObservable<long>>,System.IObservable<UniRx.Unit>,UnityEngine.GameObject)
 		// System.IObservable<long> UniRx.Observable.RepeatUntilDestroy<long>(System.IObservable<long>,UnityEngine.GameObject)
+		// System.IObservable<UnityEngine.AnimatorStateInfo> UniRx.Observable.Select<long,UnityEngine.AnimatorStateInfo>(System.IObservable<long>,System.Func<long,UnityEngine.AnimatorStateInfo>)
 		// System.IObservable<UniRx.Unit> UniRx.Observable.SkipWhile<UniRx.Unit>(System.IObservable<UniRx.Unit>,System.Func<UniRx.Unit,bool>)
+		// System.IObservable<UnityEngine.AnimatorStateInfo> UniRx.Observable.SkipWhile<UnityEngine.AnimatorStateInfo>(System.IObservable<UnityEngine.AnimatorStateInfo>,System.Func<UnityEngine.AnimatorStateInfo,bool>)
 		// System.IObservable<long> UniRx.Observable.SkipWhile<long>(System.IObservable<long>,System.Func<long,bool>)
 		// System.IObservable<long> UniRx.Observable.TakeUntil<long,UniRx.Unit>(System.IObservable<long>,System.IObservable<UniRx.Unit>)
 		// System.IObservable<long> UniRx.Observable.TakeUntil<long,long>(System.IObservable<long>,System.IObservable<long>)
@@ -1053,13 +1090,16 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<UniRx.TimeInterval<long>>(System.IObservable<UniRx.TimeInterval<long>>,System.Action<UniRx.TimeInterval<long>>,System.Action)
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<UniRx.Unit>(System.IObservable<UniRx.Unit>,System.Action<UniRx.Unit>)
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<UniRx.Unit>(System.IObservable<UniRx.Unit>,System.Action<UniRx.Unit>,System.Action<System.Exception>)
+		// System.IDisposable UniRx.ObservableExtensions.Subscribe<UnityEngine.AnimatorStateInfo>(System.IObservable<UnityEngine.AnimatorStateInfo>,System.Action<UnityEngine.AnimatorStateInfo>)
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<long>(System.IObservable<long>,System.Action<long>)
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<long>(System.IObservable<long>,System.Action<long>,System.Action)
 		// System.IDisposable UniRx.ObservableExtensions.Subscribe<object>(System.IObservable<object>,System.Action<object>,System.Action<System.Exception>)
 		// System.IObserver<UniRx.TimeInterval<long>> UniRx.Observer.CreateSubscribeObserver<UniRx.TimeInterval<long>>(System.Action<UniRx.TimeInterval<long>>,System.Action<System.Exception>,System.Action)
 		// System.IObserver<UniRx.Unit> UniRx.Observer.CreateSubscribeObserver<UniRx.Unit>(System.Action<UniRx.Unit>,System.Action<System.Exception>,System.Action)
+		// System.IObserver<UnityEngine.AnimatorStateInfo> UniRx.Observer.CreateSubscribeObserver<UnityEngine.AnimatorStateInfo>(System.Action<UnityEngine.AnimatorStateInfo>,System.Action<System.Exception>,System.Action)
 		// System.IObserver<long> UniRx.Observer.CreateSubscribeObserver<long>(System.Action<long>,System.Action<System.Exception>,System.Action)
 		// System.IObserver<object> UniRx.Observer.CreateSubscribeObserver<object>(System.Action<object>,System.Action<System.Exception>,System.Action)
+		// System.IObservable<UnityEngine.AnimatorStateInfo> UniRx.Operators.WhereObservable<long>.CombineSelector<UnityEngine.AnimatorStateInfo>(System.Func<long,UnityEngine.AnimatorStateInfo>)
 		// object Unity.VisualScripting.ComponentHolderProtocol.AddComponent<object>(UnityEngine.Object)
 		// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object> UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<object>(object)
 		// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Collections.Generic.IList<object>> UnityEngine.AddressableAssets.Addressables.LoadAssetsAsync<object>(object,System.Action<object>)
