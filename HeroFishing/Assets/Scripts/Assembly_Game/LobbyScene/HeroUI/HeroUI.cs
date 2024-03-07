@@ -11,28 +11,34 @@ using HeroFishing.Socket;
 using Cysharp.Threading.Tasks;
 using LitJson;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
+using UnityEditorInternal.Profiling.Memory.Experimental;
+using UniRx;
 
 namespace HeroFishing.Main {
     public class HeroUI : ItemSpawner_Remote<HeroIconItem> {
 
         [SerializeField] ScrollRect MyScrollRect;
-        [SerializeField] TextMeshProUGUI TitleText;
         [SerializeField] SpellPanel MySpellPanel;
-        [SerializeField] SkinPanel MySkinPanel;
-        HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.LOL;
-        HeroJsonData CurHero;
-        HeroSkinJsonData CurHeroSkin;
+        [SerializeField] SkinScrollView MySkinScrollView;
+        [SerializeField] HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.All;
+        [SerializeField] GameObject[] CategoryTags;
+        [SerializeField] Image HeroBG;
+        public static HeroJsonData CurHero { get; private set; }
+        public static HeroSkinJsonData CurHeroSkin { get; private set; }
 
         LoadingProgress MyLoadingProgress;
 
         public override void LoadItemAsset(Action _cb = null) {
             base.LoadItemAsset(_cb);
             MySpellPanel.Init();
-            MySkinPanel.Init();
-            MyLoadingProgress = new LoadingProgress(() => { SwitchCategory(0); }); //子UI都都載入完成再執行SwitchCategory
+            MyLoadingProgress = new LoadingProgress(() => {
+                CurHero = HeroJsonData.GetData(1);
+                CurHeroSkin = HeroSkinJsonData.GetData("1_1");
+                SwitchCategory(0);
+            }); //子UI都都載入完成再執行SwitchCategory
             MyLoadingProgress.AddLoadingProgress("Hero", "Skin");
-            MySkinPanel.LoadItemAsset(() => { MyLoadingProgress.FinishProgress("Skin"); });
-
+            MySkinScrollView.LoadItemAsset(() => { MyLoadingProgress.FinishProgress("Skin"); });
         }
 
         public override void OnLoadItemFinished() {
@@ -43,7 +49,6 @@ namespace HeroFishing.Main {
 
         public override void RefreshText() {
             base.RefreshText();
-            TitleText.text = StringJsonData.GetUIString("HeroUITitle");
         }
         public void SwitchCategory(int _categoryIndex) {
             HeroJsonData.RoleCategory changeToCategory;
@@ -54,6 +59,13 @@ namespace HeroFishing.Main {
             CurCategory = changeToCategory;
             SpawnItems();
             SwitchHero(GetFirstHero());
+            RefreshTags();
+        }
+
+        void RefreshTags() {
+            for (int i = 0; i < CategoryTags.Length; i++) {
+                CategoryTags[i].SetActive(i == (int)CurCategory);
+            }
         }
 
         public void SpawnItems() {
@@ -77,18 +89,19 @@ namespace HeroFishing.Main {
             }
             Filter();
         }
-        HeroJsonData GetFirstHero() {
+        HeroIconItem GetFirstHero() {
             for (int i = 0; i < ItemList.Count; i++) {
                 if (ItemList[i].IsActive == false) continue;
-                return ItemList[i].MyJsonHero;
+                return ItemList[i];
             }
             return null;
         }
         void Filter() {
             for (int i = 0; i < ItemList.Count; i++) {
                 if (ItemList[i].IsActive == false) continue;
-                ItemList[i].gameObject.SetActive(CurCategory == ItemList[i].MyJsonHero.MyRoleCategory);
-                ItemList[i].IsActive = CurCategory == ItemList[i].MyJsonHero.MyRoleCategory;
+                bool meetCatetory = (CurCategory == HeroJsonData.RoleCategory.All) || (CurCategory == ItemList[i].MyJsonHero.MyRoleCategory);
+                ItemList[i].gameObject.SetActive(meetCatetory);
+                ItemList[i].IsActive = meetCatetory;
             }
             MyScrollRect.verticalNormalizedPosition = 1;//至頂
         }
@@ -96,58 +109,35 @@ namespace HeroFishing.Main {
         public void OnCloseUIClick() {
             LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Map);
         }
-        public void SwitchHero(HeroJsonData _heroJsonData) {
-            if (_heroJsonData == null) return;
-            CurHero = _heroJsonData;
+        public void SwitchHero(HeroIconItem _item) {
+            if (_item == null) return;
+            SetItems(_item);
+            CurHero = _item.MyJsonHero;
             //切換英雄後會自動選到第一個技能
             MySpellPanel.SetHero(CurHero.ID);
             //切換英雄後會自動選到第一個Skin
-            MySkinPanel.SetHero(CurHero.ID);
+            MySkinScrollView.RefreshScrollView(CurHero.ID);
             var firstSkin = HeroSkinJsonData.GetSkinDic(CurHero.ID).First().Value;
             SwitchHeroSkin(firstSkin);
         }
-        public void SwitchHeroSkin(HeroSkinJsonData _heroSkinJsonData) {
-            CurHeroSkin = _heroSkinJsonData;
-        }
-        public void OnBattleStartClick() {
-            if (CurHero == null) return;
-            var mapUI = MapUI.GetInstance<MapUI>();
-            if (mapUI == null) return;
-            PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
-            GamePlayer.Instance.RedisSync().Forget();
-            AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
-            //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
-            GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnFail, OnConnFail, OnCreateRoom).Forget();
-        }
-
-        void OnConnFail() {
-            PopupUI.HideLoading();
-            WriteLog.LogError("配房失敗");
-        }
-
-        void OnCreateRoom(Socket.Matchmaker.CREATEROOM_TOCLIENT _content) {
-            UniTask.Void(async () => {
-                PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
-                //設定玩家目前所在遊戲房間的資料
-                await AllocatedRoom.Instance.SetRoom(_content.CreaterID, _content.PlayerIDs, _content.DBMapID, _content.DBMatchgameID, _content.IP, _content.Port, _content.PodName);
-                GameConnector.Instance.ConnToMatchgame(OnConnToMatchgame, OnJoinGagmeFail, OnMatchgameDisconnected);
-            });
-        }
-
-        void OnConnToMatchgame() {
-            PopupUI.HideLoading();
-            GameConnector.Instance.SetHero(CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID                
-        }
-        void OnJoinGagmeFail() {
-            WriteLog.LogError("連線遊戲房失敗");
-        }
-        void OnMatchgameDisconnected() {
-            //在戰鬥場景, 且仍在遊玩中就進行斷線重連
-            if (AllocatedRoom.Instance.CurGameState == AllocatedRoom.GameState.Playing && //在遊玩中
-                SceneManager.GetActiveScene().name == MyScene.BattleScene.ToString()) {//在戰鬥場景
-                GameConnector.Instance.ConnToMatchgame(OnConnToMatchgame, OnJoinGagmeFail, OnMatchgameDisconnected);
+        void SetItems(HeroIconItem _item) {
+            for (int i = 0; i < ItemList.Count; i++) {
+                ItemList[i].IsSelected = ItemList[i] == _item;
+                ItemList[i].RefreshItem();
             }
         }
+        public void SwitchHeroSkin(HeroSkinJsonData _heroSkinJsonData) {
+            CurHeroSkin = _heroSkinJsonData;
+            AddressablesLoader.GetSprite("HeroBG/" + CurHeroSkin.ID, (sprite, handle) => {
+                HeroBG.sprite = sprite;
+                //Addressables.Release(handle);
+            });
+        }
+        public void ConfirmBtn() {
+            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Map);
+        }
+
+
     }
 
 

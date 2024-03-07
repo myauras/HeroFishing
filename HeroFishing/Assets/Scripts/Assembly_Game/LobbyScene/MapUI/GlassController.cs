@@ -15,9 +15,6 @@ public class GlassController : MonoBehaviour {
     [SerializeField]
     private Camera _camera;
 
-    private void Awake() {
-        _instance = this;
-    }
 
     private void OnDestroy() {
         if (_camera != null)
@@ -25,6 +22,7 @@ public class GlassController : MonoBehaviour {
     }
 
     public void Init() {
+        _instance = this;
         UICam.Instance.AddCameraStack(_camera);
     }
 
@@ -39,7 +37,7 @@ public class GlassController : MonoBehaviour {
         _breakGlassAnimator.SetTrigger("Play");
         Observable.EveryUpdate().Select(_ => _breakGlassAnimator.GetCurrentAnimatorStateInfo(0))
             .SkipWhile(stateInfo => stateInfo.normalizedTime < 0.95f).First().Subscribe(_ => {
-            _breakGlassAnimator.gameObject.SetActive(false);
-        });
+                _breakGlassAnimator.gameObject.SetActive(false);
+            });
     }
 }

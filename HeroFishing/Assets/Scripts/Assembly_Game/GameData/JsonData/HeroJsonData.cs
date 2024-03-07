@@ -5,12 +5,21 @@ using Scoz.Func;
 using LitJson;
 using System;
 using System.Linq;
+using static HeroFishing.Main.HeroJsonData;
 
 namespace HeroFishing.Main {
     public class HeroJsonData : MyJsonData {
         public enum RoleCategory {
+            All,
+            DOTA2,
             LOL,
-            DOTA2
+        }
+        public enum RoleType {
+            Shooter,
+            Mage,
+            AGI,
+            INT,
+            STR,
         }
         public static string DataName { get; set; }
         public string Name {
@@ -18,8 +27,14 @@ namespace HeroFishing.Main {
                 return StringJsonData.GetString_static(DataName + "_" + ID, "Name");
             }
         }
+        public string Title {
+            get {
+                return StringJsonData.GetString_static(DataName + "_" + ID, "Title");
+            }
+        }
         public string Ref { get; private set; }
         public RoleCategory MyRoleCategory { get; private set; }
+        public RoleType MyRoleType { get; private set; }
         public string[] IdleMotions { get; private set; }
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
             DataName = _dataName;
@@ -28,6 +43,9 @@ namespace HeroFishing.Main {
                 switch (key) {
                     case "ID":
                         ID = int.Parse(item[key].ToString());
+                        break;
+                    case "RoleType":
+                        MyRoleType = MyEnum.ParseEnum<RoleType>(item[key].ToString());
                         break;
                     case "Ref":
                         Ref = item[key].ToString();

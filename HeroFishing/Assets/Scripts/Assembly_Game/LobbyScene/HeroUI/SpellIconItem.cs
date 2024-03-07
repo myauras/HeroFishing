@@ -10,6 +10,7 @@ namespace HeroFishing.Main {
 
     public class SpellIconItem : MonoBehaviour, IItem {
         [SerializeField] Image SpellIconImg;
+        [SerializeField] Image CircleImg;
         [SerializeField] Button EnterBtn;
 
         public bool IsActive { get; set; }
@@ -26,6 +27,13 @@ namespace HeroFishing.Main {
         void RefreshItem() {
             AddressablesLoader.GetSpriteAtlas("SpellIcon", atlas => {
                 SpellIconImg.sprite = atlas.GetSprite(MyJsonSpell.Ref);
+            });
+        }
+        
+        public void Switch(bool _on) {
+            AddressablesLoader.GetSpriteAtlas("HeroUI", atlas => {
+                if (_on) CircleImg.sprite = atlas.GetSprite("Circle_On");
+                else CircleImg.sprite = atlas.GetSprite("Circle");
             });
         }
 
