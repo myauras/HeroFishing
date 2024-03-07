@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2b3f02e856174846b58ea3f23213776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _originRenderer: {fileID: 0}
+  _originRenderer: {fileID: 2940048705396602779}
   _bomb: {fileID: 8709105804066431093}
   _rigids:
   - {fileID: 1126143819213975722}
@@ -272,6 +272,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c98df94682083304b867aa9c8995ab88,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c98df94682083304b867aa9c8995ab88,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c98df94682083304b867aa9c8995ab88,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c98df94682083304b867aa9c8995ab88,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -319,6 +334,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c98df94682083304b867aa9c8995ab88,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8620061291980784375, guid: c98df94682083304b867aa9c8995ab88,
         type: 3}
@@ -819,6 +839,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 277237741120885709}
   m_SourcePrefab: {fileID: 100100000, guid: c98df94682083304b867aa9c8995ab88, type: 3}
+--- !u!137 &2940048705396602779 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7375200057469417375, guid: c98df94682083304b867aa9c8995ab88,
+    type: 3}
+  m_PrefabInstance: {fileID: 3560975286413213690}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3954610561884870673 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c98df94682083304b867aa9c8995ab88,
