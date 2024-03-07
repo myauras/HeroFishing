@@ -12,9 +12,11 @@ public class RankItemUI : MonoBehaviour {
     [SerializeField]
     private Color _otherColor;
     [SerializeField]
+    private GameObject _activeGO;
+    [SerializeField]
     private Image _imgHeroIcon;
     [SerializeField]
-    private Animation _animation;
+    private Animation[] _animations;
     [SerializeField]
     private GameObject[] _playerGO;
     [SerializeField]
@@ -40,7 +42,10 @@ public class RankItemUI : MonoBehaviour {
 
     public void PlayAnimation() {
         s_isChanging = false;
-        _animation.Play();
+        for (int i = 0; i < _animations.Length; i++) {
+            var a = _animations[i];
+            a.Play();
+        }
     }
 
     public void SetContent(RankItemUI other) {
@@ -72,6 +77,7 @@ public class RankItemUI : MonoBehaviour {
 
     public void SetActive(bool active) {
         gameObject.SetActive(active);
+        _activeGO.SetActive(active);
     }
 
     public void OnIconChange() {

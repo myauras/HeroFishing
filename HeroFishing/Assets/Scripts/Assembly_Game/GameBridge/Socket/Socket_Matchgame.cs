@@ -323,7 +323,13 @@ namespace HeroFishing.Socket {
                 if (player == null) continue;
                 players.Add(player);
             }
-            players.Sort((a, b) => (int)(b.GainPoints - a.GainPoints));
+            players.Sort((a, b) => {
+                if(b.GainPoints == a.GainPoints) {
+                    return a.Idx - b.Idx;
+                }
+                return (int)(b.GainPoints - a.GainPoints);
+            });
+
             var rankUI = BaseUI.GetInstance<RankUI>();
             if (rankUI != null)
                 rankUI.SetRank(players.Select(p => p.Idx).ToArray());
@@ -358,6 +364,9 @@ namespace HeroFishing.Socket {
         void HandleDropSepll(SocketCMD<DROPSPELL_TOCLIENT> _packet) {
             if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
             WriteLog.Log("施放掉落技能:" + _packet.Content.Success);
+            var playerIdx = _packet.Content.PlayerIdx;
+            var heroIndex = BattleManager.Instance.GetHeroIndex(playerIdx);
+            DropManager.Instance.PlayDrop(heroIndex, _packet.Content.DropSpellJsonID);
         }
 
     }
