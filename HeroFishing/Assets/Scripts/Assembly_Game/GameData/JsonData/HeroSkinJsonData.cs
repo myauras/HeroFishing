@@ -16,8 +16,6 @@ namespace HeroFishing.Main {
                 return StringJsonData.GetString_static(DataName + "_" + ID, "Name");
             }
         }
-        public string Prefab { get; private set; }
-        public string Texture { get; private set; }
         static Dictionary<int, SortedDictionary<string, HeroSkinJsonData>> SkinDic = new Dictionary<int, SortedDictionary<string, HeroSkinJsonData>>();
 
         protected override void GetDataFromJson(JsonData _item, string _dataName) {
@@ -27,12 +25,6 @@ namespace HeroFishing.Main {
                 switch (key) {
                     case "ID":
                         ID = item[key].ToString();
-                        break;
-                    case "Prefab":
-                        Prefab = item[key].ToString();
-                        break;
-                    case "Texture":
-                        Texture = item[key].ToString();
                         break;
                     default:
                         WriteLog.LogWarning(string.Format("{0}表有不明屬性:{1}", DataName, key));

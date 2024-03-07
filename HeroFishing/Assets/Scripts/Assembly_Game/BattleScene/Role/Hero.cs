@@ -60,7 +60,7 @@ namespace HeroFishing.Battle {
         }
 
         void LoadModel() {
-            string path = string.Format("Role/{0}/{1}.prefab", MyData.Ref, MyHeroSkinData.Prefab);
+            string path = string.Format("Role/{0}/{1}.prefab", MyData.Ref, MyHeroSkinData.ID);
             AddressablesLoader.GetPrefabResourceByPath<GameObject>(path, (prefab, handle) => {
                 _model = Instantiate(prefab, transform);
                 _model.transform.localPosition = prefab.transform.localPosition;
@@ -78,13 +78,14 @@ namespace HeroFishing.Battle {
 
         protected override void SetModel() {
             base.SetModel();
-            string path = string.Format("Role/{0}/{1}.png", MyData.Ref, MyHeroSkinData.Texture);
-            AddressablesLoader.GetPrefabResourceByPath<Texture>(path, (texture, handle) => {
-                PropertyBlock.SetTexture("_MainTex", texture);
-                SetPropertyBlock(PropertyBlock);
-                Addressables.Release(handle);
-                LoadDone();
-            });
+            LoadDone();
+            //string path = string.Format("Role/{0}/{1}.png", MyData.Ref, MyHeroSkinData.Texture);
+            //AddressablesLoader.GetPrefabResourceByPath<Texture>(path, (texture, handle) => {
+            //    PropertyBlock.SetTexture("_MainTex", texture);
+            //    SetPropertyBlock(PropertyBlock);
+            //    Addressables.Release(handle);
+            //    LoadDone();
+            //});
         }
 
         public void PlayIdleMotion() {
