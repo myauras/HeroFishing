@@ -35,7 +35,7 @@ namespace HeroFishing.Main {
             MyLoadingProgress = new LoadingProgress(() => {
                 CurHero = HeroJsonData.GetData(1);
                 CurHeroSkin = HeroSkinJsonData.GetData("1_1");
-                SwitchCategory(0); 
+                SwitchCategory(0);
             }); //子UI都都載入完成再執行SwitchCategory
             MyLoadingProgress.AddLoadingProgress("Hero", "Skin");
             MySkinScrollView.LoadItemAsset(() => { MyLoadingProgress.FinishProgress("Skin"); });
@@ -133,10 +133,8 @@ namespace HeroFishing.Main {
                 //Addressables.Release(handle);
             });
         }
-        public void OnBattleStartClick() {
-            Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ => {
-                LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
-            });
+        public void ConfirmBtn() {
+            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Map);
         }
 
 

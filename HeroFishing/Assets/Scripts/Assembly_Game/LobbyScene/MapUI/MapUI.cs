@@ -30,6 +30,7 @@ namespace HeroFishing.Main {
         private MapColorDicClass _txtColorDic;
         [SerializeField]
         private Button _confirmButton;
+        [SerializeField] GlassController MyGlass;
 
         private List<MapItemData> _mapItemDatas;
         private int[] _bets = new int[] { 1, 5, 10, 30, 50, 200, 200, 300 };
@@ -44,6 +45,8 @@ namespace HeroFishing.Main {
             base.Init();
             _mapItemDatas = new List<MapItemData>();
             RefreshScrollView();
+            var glassController = Instantiate(MyGlass, transform);
+            glassController.Init();
         }
 
         public void ResetScrollViewPos() {
@@ -74,6 +77,11 @@ namespace HeroFishing.Main {
             }
             _mapScrollView.UpdateData(_mapItemDatas);
         }
+
+        public void SelectHeroBtn() {
+            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
+        }
+
 
         public void Confirm() {
             GlassController.Instance.Play();
