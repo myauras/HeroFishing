@@ -12,6 +12,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using HeroFishing.Socket;
 using UnityEngine.SceneManagement;
+using static PlasticPipe.PlasticProtocol.Messages.Serialization.ItemHandlerMessagesSerialization;
 
 namespace HeroFishing.Main {
 
@@ -31,11 +32,17 @@ namespace HeroFishing.Main {
         [SerializeField]
         private Button _confirmButton;
         [SerializeField] GlassController MyGlass;
+        [SerializeField] Image HeroIconImg;
 
         private List<MapItemData> _mapItemDatas;
         private int[] _bets = new int[] { 1, 5, 10, 30, 50, 200, 200, 300 };
 
         public DBMap SelectedDBMap { get; private set; }
+
+        protected override void OnEnable() {
+            base.OnEnable();
+            SetHeroIcon(HeroUI.CurHero);
+        }
 
         public override void RefreshText() {
             //TitleText.text = StringJsonData.GetUIString("MapUITitle");
@@ -82,6 +89,11 @@ namespace HeroFishing.Main {
             LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
         }
 
+        public void SetHeroIcon(HeroJsonData _jsonData) {
+            AddressablesLoader.GetSpriteAtlas("HeroIcon", atlas => {
+                HeroIconImg.sprite = atlas.GetSprite(_jsonData.Ref);
+            });
+        }
 
         public void Confirm() {
             GlassController.Instance.Play();

@@ -56,7 +56,7 @@ public class RankItemUI : MonoBehaviour {
         //Debug.Log($"old player index: {_playerIdx} new player index {playerIdx}");
         AddressablesLoader.GetSpriteAtlas("HeroIcon", atlas => {
             var heroData = HeroJsonData.GetData(heroID);
-            _imgHeroIcon.sprite = atlas.GetSprite($"Icon_" + heroData.Ref);
+            _imgHeroIcon.sprite = atlas.GetSprite(heroData.Ref);
         });
         SetGOActive(isPlayer);
         SetGraphicColor(isPlayer ? _playerColor : _otherColor);
