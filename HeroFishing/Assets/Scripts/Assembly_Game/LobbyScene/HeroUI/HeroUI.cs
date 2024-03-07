@@ -14,6 +14,9 @@ namespace HeroFishing.Main {
         [SerializeField] HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.All;
         [SerializeField] GameObject[] CategoryTags;
         [SerializeField] Image HeroBG;
+
+        HeroJsonData TmpCurHero;
+        HeroSkinJsonData TmpCurHeroSkin;
         public static HeroJsonData CurHero { get; private set; }
         public static HeroSkinJsonData CurHeroSkin { get; private set; }
 
@@ -25,6 +28,8 @@ namespace HeroFishing.Main {
             MyLoadingProgress = new LoadingProgress(() => {
                 CurHero = HeroJsonData.GetData(1);
                 CurHeroSkin = HeroSkinJsonData.GetData("1_1");
+                TmpCurHero = CurHero;
+                TmpCurHeroSkin = CurHeroSkin;
                 SwitchCategory(0);
             }); //子UI都都載入完成再執行SwitchCategory
             MyLoadingProgress.AddLoadingProgress("Hero", "Skin");
@@ -102,12 +107,12 @@ namespace HeroFishing.Main {
         public void SwitchHero(HeroIconItem _item) {
             if (_item == null) return;
             SetItems(_item);
-            CurHero = _item.MyJsonHero;
+            TmpCurHero = _item.MyJsonHero;
             //切換英雄後會自動選到第一個技能
-            MySpellPanel.SetHero(CurHero.ID);
+            MySpellPanel.SetHero(TmpCurHero.ID);
             //切換英雄後會自動選到第一個Skin
-            MySkinScrollView.RefreshScrollView(CurHero.ID);
-            var firstSkin = HeroSkinJsonData.GetSkinDic(CurHero.ID).First().Value;
+            MySkinScrollView.RefreshScrollView(TmpCurHero.ID);
+            var firstSkin = HeroSkinJsonData.GetSkinDic(TmpCurHero.ID).First().Value;
             SwitchHeroSkin(firstSkin);
         }
         void SetItems(HeroIconItem _item) {
@@ -117,13 +122,15 @@ namespace HeroFishing.Main {
             }
         }
         public void SwitchHeroSkin(HeroSkinJsonData _heroSkinJsonData) {
-            CurHeroSkin = _heroSkinJsonData;
-            AddressablesLoader.GetSprite("HeroBG/" + CurHeroSkin.ID, (sprite, handle) => {
+            TmpCurHeroSkin = _heroSkinJsonData;
+            AddressablesLoader.GetSprite("HeroBG/" + TmpCurHeroSkin.ID, (sprite, handle) => {
                 HeroBG.sprite = sprite;
                 //Addressables.Release(handle);
             });
         }
         public void ConfirmBtn() {
+            CurHero = TmpCurHero;
+            CurHeroSkin = TmpCurHeroSkin;
             LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Map);
         }
 

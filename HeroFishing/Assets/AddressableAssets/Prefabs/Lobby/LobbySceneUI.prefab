@@ -692,6 +692,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5371696828642159065, guid: c467d617b7d1a704e87bc69ba5a62269,
         type: 3}
+    - target: {fileID: 1581827506362702344, guid: 7643e62a7970d984f832b61b2e10e131,
+        type: 3}
+      propertyPath: HeroIconImg
+      value: 
+      objectReference: {fileID: 7389824689218394057}
     - target: {fileID: 2355999557312740814, guid: 7643e62a7970d984f832b61b2e10e131,
         type: 3}
       propertyPath: m_Name
@@ -817,6 +822,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b53456dddbde31c48a4333da739d9440, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7389824689218394057 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3994671399032663959, guid: 7643e62a7970d984f832b61b2e10e131,
+    type: 3}
+  m_PrefabInstance: {fileID: 5900280797810079838}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &8441038116196929645 stripped
