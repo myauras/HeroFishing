@@ -64,8 +64,7 @@ public class MapScrollView : FancyScrollView<MapItemData, Context> {
                 _prefab = handle.Result;
                 UpdateContents(itemData);
             };
-        }
-        else {
+        } else {
             UpdateContents(itemData);
         }
     }
@@ -74,6 +73,7 @@ public class MapScrollView : FancyScrollView<MapItemData, Context> {
         base.UpdateContents(itemsSource);
         _scroller.SetTotalCount(itemsSource.Count);
         Context.SelectedMap = itemsSource[Context.SelectedIndex].dbMap;
+
     }
 
     protected override void UpdatePosition(float position) {

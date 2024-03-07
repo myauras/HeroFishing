@@ -9,6 +9,9 @@ using TMPro;
 using UnityEngine.AddressableAssets;
 using UniRx;
 using System;
+using Cysharp.Threading.Tasks;
+using HeroFishing.Socket;
+using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Main {
 
@@ -27,6 +30,7 @@ namespace HeroFishing.Main {
         private MapColorDicClass _txtColorDic;
         [SerializeField]
         private Button _confirmButton;
+        [SerializeField] GlassController MyGlass;
 
         private List<MapItemData> _mapItemDatas;
         private int[] _bets = new int[] { 1, 5, 10, 30, 50, 200, 200, 300 };
@@ -41,6 +45,8 @@ namespace HeroFishing.Main {
             base.Init();
             _mapItemDatas = new List<MapItemData>();
             RefreshScrollView();
+            var glassController = Instantiate(MyGlass, transform);
+            glassController.Init();
         }
 
         public void ResetScrollViewPos() {
@@ -72,6 +78,11 @@ namespace HeroFishing.Main {
             _mapScrollView.UpdateData(_mapItemDatas);
         }
 
+        public void SelectHeroBtn() {
+            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
+        }
+
+
         public void Confirm() {
             GlassController.Instance.Play();
             if (_localTest) {
@@ -84,11 +95,18 @@ namespace HeroFishing.Main {
                 Debug.LogError("db map is null");
                 return;
             }
-
             SelectedDBMap = _mapScrollView.SelectedMap;
-            Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ => {
-                LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Hero);
-            });
+
+
+            if (HeroUI.CurHero == null) return;
+            var mapUI = MapUI.GetInstance<MapUI>();
+            if (mapUI == null) return;
+            PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
+            GamePlayer.Instance.RedisSync().Forget();
+            AllocatedRoom.Instance.SetMyHero(HeroUI.CurHero.ID, HeroUI.CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
+            //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
+            GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnFail, OnConnFail, OnCreateRoom).Forget();
+
         }
 
         private MapItemData CreateMapItemDataLocal(int index) {
@@ -109,6 +127,36 @@ namespace HeroFishing.Main {
             };
             itemData.glowColor = itemData.IsGradient ? Color.black : _glowColorDic[bet];
             return itemData;
+        }
+
+
+        void OnConnFail() {
+            PopupUI.HideLoading();
+            WriteLog.LogError("配房失敗");
+        }
+
+        void OnCreateRoom(Socket.Matchmaker.CREATEROOM_TOCLIENT _content) {
+            UniTask.Void(async () => {
+                PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
+                //設定玩家目前所在遊戲房間的資料
+                await AllocatedRoom.Instance.SetRoom(_content.CreaterID, _content.PlayerIDs, _content.DBMapID, _content.DBMatchgameID, _content.IP, _content.Port, _content.PodName);
+                GameConnector.Instance.ConnToMatchgame(OnConnToMatchgame, OnJoinGagmeFail, OnMatchgameDisconnected);
+            });
+        }
+
+        void OnConnToMatchgame() {
+            PopupUI.HideLoading();
+            GameConnector.Instance.SetHero(HeroUI.CurHero.ID, HeroUI.CurHeroSkin.ID); //送Server玩家使用的英雄ID                
+        }
+        void OnJoinGagmeFail() {
+            WriteLog.LogError("連線遊戲房失敗");
+        }
+        void OnMatchgameDisconnected() {
+            //在戰鬥場景, 且仍在遊玩中就進行斷線重連
+            if (AllocatedRoom.Instance.CurGameState == AllocatedRoom.GameState.Playing && //在遊玩中
+                SceneManager.GetActiveScene().name == MyScene.BattleScene.ToString()) {//在戰鬥場景
+                GameConnector.Instance.ConnToMatchgame(OnConnToMatchgame, OnJoinGagmeFail, OnMatchgameDisconnected);
+            }
         }
 
         public void SpawnItems() {
