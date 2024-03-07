@@ -53,14 +53,16 @@ public class DropManager {
     }
 
     public void PlayDrop(int heroIndex, int dropID) {
-        if (_dropSpells.TryGetValue(dropID, out var drop) && _currentDrops.Contains(dropID)) {
+        if (_dropSpells.TryGetValue(dropID, out var drop)) {
             int attackID = -1;
-            if (drop.IsAttack && heroIndex == 0) {
-                attackID = PlayerAttackController.AttackID;
-                drop.SetAttackID(attackID);
+            if (heroIndex == 0) {
+                if (!_currentDrops.Contains(dropID)) return;
+                if (drop.IsAttack) {
+                    attackID = PlayerAttackController.AttackID;
+                    drop.SetAttackID(attackID);
+                }
             }
             if (drop.PlayDrop(heroIndex)) {
-
                 if (heroIndex == 0) {
                     if (drop.Duration == 0)
                         _currentDrops.Remove(dropID);

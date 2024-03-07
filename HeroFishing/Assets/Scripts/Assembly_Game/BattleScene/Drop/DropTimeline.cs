@@ -22,7 +22,7 @@ public class DropTimeline : DropSpellBase {
     }
 
     public override bool PlayDrop(int heroIndex) {
-        if (_childDropSpell == null) {
+        if (heroIndex == 0 && _childDropSpell == null) {
             Debug.LogError("timeline child drop is null");
             return false;
         }
@@ -36,7 +36,10 @@ public class DropTimeline : DropSpellBase {
     private void OnTimelinePlay(GameObject go) {
         if (_player == null)
             _player = go.GetComponent<TimelinePlayer>();
-        _player.OnTimelineTriggred += OnTimelineTriggered;
+        _player.Init();
+        _player.Play(_heroIndex != 0);
+        if (_heroIndex == 0)
+            _player.OnTimelineTriggred += OnTimelineTriggered;
     }
 
     private void OnTimelineTriggered() {

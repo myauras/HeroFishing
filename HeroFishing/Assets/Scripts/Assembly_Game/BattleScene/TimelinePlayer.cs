@@ -26,6 +26,9 @@ public class TimelinePlayer : MonoBehaviour {
     private TimelineAsset _timelineAsset;
     public float Duration => (float)_director.playableAsset.duration;
 
+    public static bool s_canControl = true;
+    public static bool CanControl => s_canControl;
+
     private static bool s_isPlaying;
     public static bool IsPlaying => s_isPlaying;
 
@@ -44,6 +47,15 @@ public class TimelinePlayer : MonoBehaviour {
         _director.stopped -= OnStopped;
         _director.paused -= OnPaused;
         _director.played -= OnPlayed;
+        for (int j = 0; j < _mutedTrack.Length; j++) {
+            for (int i = 0; i < _timelineAsset.rootTrackCount; i++) {
+                var track = _timelineAsset.GetRootTrack(i);
+                if (track.name == _mutedTrack[j]) {
+                    track.muted = false;
+                    break;
+                }
+            }
+        }
     }
 
     private void OnEnable() {
@@ -105,24 +117,30 @@ public class TimelinePlayer : MonoBehaviour {
     private void OnPlayed(PlayableDirector director) {
         Debug.Log("played");
         s_isPlaying = true;
-        if (!_isMuted)
+        if (!_isMuted) {
             UICam.Instance.MyCam.gameObject.SetActive(false);
+            s_canControl = false;
+        }
         OnTimelinePlayed?.Invoke();
     }
 
     private void OnPaused(PlayableDirector director) {
         Debug.Log("paused");
         s_isPlaying = false;
-        if (!_isMuted)
+        if (!_isMuted) {
             UICam.Instance.MyCam.gameObject.SetActive(true);
+            s_canControl = true;
+        }
         OnTimelinePaused?.Invoke();
     }
 
     private void OnStopped(PlayableDirector director) {
         Debug.Log("stopped");
         s_isPlaying = false;
-        if (!_isMuted)
+        if (!_isMuted) {
             UICam.Instance.MyCam.gameObject.SetActive(true);
+            s_canControl = true;
+        }
         OnTimelineStopped?.Invoke();
         if (_autoBackPoolOnFinish) {
             PoolManager.Instance.Push(gameObject);

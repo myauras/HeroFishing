@@ -94,8 +94,8 @@ namespace HeroFishing.Battle {
             }
         }
         public void StartGame() {
-            Debug.Log("start game");
-            OnHeroAdd?.Invoke(AllocatedRoom.Instance.HeroIDs[Index], Index);
+            int index = AllocatedRoom.Instance.Index;
+            OnHeroAdd?.Invoke(AllocatedRoom.Instance.MyHeroID, index);
             UpdateHeros();
             if (GameConnector.Connected)
                 GameConnector.Instance.UpdateScene();
