@@ -52,7 +52,7 @@ namespace HeroFishing.Main {
             base.Init();
             _mapItemDatas = new List<MapItemData>();
             RefreshScrollView();
-            var glassController = Instantiate(MyGlass, transform);
+            var glassController = Instantiate(MyGlass);
             glassController.Init();
         }
 
