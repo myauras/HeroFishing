@@ -156,6 +156,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5497953583130954226}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3739381560979728096 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9198694667670843154, guid: baa8b1b300db2d04698df11f0d0b82b0,
+    type: 3}
+  m_PrefabInstance: {fileID: 5497953583130954226}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3985048334927552734 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8863396325182744876, guid: baa8b1b300db2d04698df11f0d0b82b0,
@@ -168,12 +180,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!111 &4201838660032983147 stripped
-Animation:
-  m_CorrespondingSourceObject: {fileID: 8503722264110283161, guid: baa8b1b300db2d04698df11f0d0b82b0,
-    type: 3}
-  m_PrefabInstance: {fileID: 5497953583130954226}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4749963977967338927 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 984006513280306269, guid: baa8b1b300db2d04698df11f0d0b82b0,
@@ -194,8 +200,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerColor: {r: 0.9960785, g: 0.8117648, b: 0.3529412, a: 1}
   _otherColor: {r: 0.68235296, g: 0.7254902, b: 0.84313726, a: 1}
-  _imgHeroIcon: {fileID: 0}
-  _animation: {fileID: 4201838660032983147}
+  _activeGO: {fileID: 0}
+  _imgHeroIcon: {fileID: 3739381560979728096}
+  _animations: []
   _playerGO:
   - {fileID: 3611361872790976919}
   _otherGO: []
