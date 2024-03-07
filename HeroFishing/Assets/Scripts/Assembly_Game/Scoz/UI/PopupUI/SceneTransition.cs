@@ -16,7 +16,6 @@ namespace Scoz.Func {
         [SerializeField] Animator TransitionAni = null;
         [SerializeField] Image SceneTransitionProgress = null;
         [SerializeField] Image SceneTransitionImg = null;
-        [SerializeField] Image SceneTransitionBGImg2 = null;
         [SerializeField] Text SceneTransitionText = null;
         [SerializeField] float WaitSecAfterFinishProgressPercent = 0.8f;
         public static MyScene PreviousScene = MyScene.StartScene;
@@ -82,7 +81,6 @@ namespace Scoz.Func {
                     progress = asyncLoad.progress * (1 - WaitSecAfterFinishProgressPercent);
                 } else
                     progress = asyncLoad.progress;
-                SceneTransitionBGImg2.color = new Color(SceneTransitionBGImg2.color.r, SceneTransitionBGImg2.color.g, SceneTransitionBGImg2.color.b, progress);
                 SceneTransitionProgress.fillAmount = progress;
                 yield return null;
             }
@@ -92,7 +90,6 @@ namespace Scoz.Func {
                 while (tmpWaitSecAfterFinish > 0) {
                     tmpWaitSecAfterFinish -= 0.1f;
                     progress = (1 - WaitSecAfterFinishProgressPercent) + WaitSecAfterFinishProgressPercent * (1 - tmpWaitSecAfterFinish / WaitSecAfterFinish);
-                    SceneTransitionBGImg2.color = new Color(SceneTransitionBGImg2.color.r, SceneTransitionBGImg2.color.g, SceneTransitionBGImg2.color.b, progress);
                     SceneTransitionProgress.fillAmount = progress;
                     yield return new WaitForSeconds(0.1f);
                 }

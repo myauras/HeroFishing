@@ -49,13 +49,17 @@ namespace HeroFishing.Main {
             //檢查realmg登入檢查
             RealmLoginCheck(() => {
                 //初始化UIs
-                PopupUI.FinishSceneTransitionProgress("LobbyUILoaded");
                 MyMapUI.Init();
                 UIs.Add(LobbyUIs.Map, MyMapUI);
                 MyHeroUI.Init();
                 MyHeroUI.LoadItemAsset();
                 UIs.Add(LobbyUIs.Hero, MyHeroUI);
-                SwitchUI(LobbyUIs.Lobby);
+                UniTask.Void(async () => {
+                    await UniTask.Delay(300);
+                    SwitchUI(LobbyUIs.Map);
+                    PopupUI.FinishSceneTransitionProgress("LobbyUILoaded");
+                });
+
             });
         }
 
