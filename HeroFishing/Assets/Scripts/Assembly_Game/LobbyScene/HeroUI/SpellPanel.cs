@@ -11,11 +11,10 @@ namespace HeroFishing.Main {
     public class SpellPanel : BaseUI {
 
         [SerializeField] SpellIconItem[] SpellItems = new SpellIconItem[3];
-        [SerializeField] TextMeshProUGUI HeroNameText;
-        [SerializeField] TextMeshProUGUI HeroTitleText;
-        [SerializeField] TextMeshProUGUI SPText;
-        [SerializeField] TextMeshProUGUI SpellNameText;
-        [SerializeField] TextMeshProUGUI SpellDescriptionText;
+        [SerializeField] Text HeroNameText;
+        [SerializeField] Text HeroTitleText;
+        [SerializeField] Text SpellNameText;
+        [SerializeField] Text SpellDescriptionText;
         [SerializeField] Image RoleTypeImg;
 
         HeroJsonData CurHero;
@@ -38,7 +37,7 @@ namespace HeroFishing.Main {
         public void SwitchSpell(SpellName _spellName) {
             if (_spellName == SpellName.attack) return;
             CurSpell = HeroSpellJsonData.GetSpell(CurHero.ID, _spellName);
-            for(int i=0;i< SpellItems.Length; i++) {
+            for (int i = 0; i < SpellItems.Length; i++) {
                 SpellItems[i].Switch((int)_spellName == (i + 1));
             }
             RefreshText();
@@ -49,7 +48,6 @@ namespace HeroFishing.Main {
             if (CurSpell == null) return;
             HeroNameText.text = CurHero.Name;
             HeroTitleText.text = CurHero.Title;
-            SPText.text = CurSpell.Cost.ToString();
             SpellNameText.text = CurSpell.Name;
             SpellDescriptionText.text = CurSpell.Description;
         }

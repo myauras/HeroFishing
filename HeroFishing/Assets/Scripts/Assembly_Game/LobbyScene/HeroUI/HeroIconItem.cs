@@ -12,6 +12,7 @@ namespace HeroFishing.Main {
         [SerializeField] Image HeroIconImg;
         [SerializeField] GameObject Lock;
         [SerializeField] Button EnterBtn;
+        [SerializeField] Text Name;
 
         public bool IsSelected { get; set; }
         public bool IsActive { get; set; }
@@ -31,6 +32,7 @@ namespace HeroFishing.Main {
                 EnterBtn.interactable = false;
                 return;
             }
+            Name.text = MyJsonHero.Name;
             bool unlock = true;
             Lock.SetActive(!unlock);
             EnterBtn.interactable = unlock;
