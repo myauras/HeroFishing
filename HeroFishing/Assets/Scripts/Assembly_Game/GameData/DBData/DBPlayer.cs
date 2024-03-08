@@ -5,6 +5,7 @@ using MongoDB.Bson;
 using Service.Realms;
 using Cysharp.Threading.Tasks;
 using Scoz.Func;
+using HeroFishing.Main;
 
 [MapTo("player")]
 public partial class DBPlayer : IRealmObject {
@@ -32,13 +33,6 @@ public partial class DBPlayer : IRealmObject {
     public int? HeroExp { get; private set; }
     [MapTo("inMatchgameID")]
     public string InMatchgameID { get; private set; }
-
-    [MapTo("leftGameAt")]
-    public DateTimeOffset? LeftGameAt { get; private set; }
-    [MapTo("spellCharges")]
-    public IList<int> SpellCharges { get; }
-    [MapTo("drops")]
-    public IList<int> Drops { get; }
 
 
     public void SetDeviceUID(string _deviceUID) {
@@ -68,8 +62,4 @@ public partial class DBPlayer : IRealmObject {
         });
     }
 
-    //public DateTime GetResetHeroTime() {
-    //    var timeDiff = LastSigninAt.add;
-    //    return
-    //}
 }

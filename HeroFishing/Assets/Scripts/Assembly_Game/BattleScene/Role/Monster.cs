@@ -119,7 +119,7 @@ namespace HeroFishing.Battle {
         public void Lock(bool active) {
             if (active) {
                 if (LockObj == null) {
-                    AddressablesLoader.GetParticle("OtherEffect/Script_LockEffect", (go, handle) => {
+                    AddressablesLoader.GetParticle("OtherEffect/LockEffect", (go, handle) => {
                         AddressableManage.SetToChangeSceneRelease(handle);
                         LockObj = Instantiate(go, transform);
                         LockObj.transform.localPosition = new Vector3(0, 1.19f, 0);
@@ -249,7 +249,7 @@ namespace HeroFishing.Battle {
                     material.SetFloat("_EdgePower", value * 2.8f);
                     material.SetFloat("_FreezeMask", value * 2f);
                     material.SetFloat("_IceAmount", value * 0.25f);
-                    material.SetFloat("_IcicleAmount", value);
+                    material.SetFloat("_IcicleAmount", value * 0.6f);
                     material.SetFloat("_Metallic", value * 0.2f);
                     material.SetFloat("_Smooth", value * 0.4f);
                 }

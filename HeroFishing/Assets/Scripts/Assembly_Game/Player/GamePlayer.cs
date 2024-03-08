@@ -60,9 +60,9 @@ namespace HeroFishing.Main {
         /// </summary>
         public async UniTask RedisSync() {
             var result = await GameConnector.SendRestfulAPI("player/syncredischeck", null); //檢查是否需要同步Redis資料回玩家資料
-            JsonData jsonData = JsonMapper.ToObject(result.ToString());
-            string resultStr = jsonData["result"].ToString();
-            WriteLog.LogColorFormat("syncredischeck: {0}", WriteLog.LogType.Realm, resultStr);
+            //JsonData jsonData = JsonMapper.ToObject(result.ToString());
+            //string resultStr = jsonData["result"].ToString();
+            //WriteLog.LogColorFormat("syncredischeck: {0}", WriteLog.LogType.Realm, resultStr);
         }
 
         /// <summary>

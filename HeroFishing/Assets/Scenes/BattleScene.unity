@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 8783b7bf4f27fa8469c239649a2557ed,
+  m_LightingDataAsset: {fileID: 112000000, guid: 665f0a434e276664dab5a20fb8a12212,
     type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
@@ -1369,6 +1369,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 641052101}
     m_Modifications:
+    - target: {fileID: 1628472442367225077, guid: dc48781206f6f7942b3d55a897543c72,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1944056606948876538, guid: dc48781206f6f7942b3d55a897543c72,
         type: 3}
       propertyPath: m_IsActive

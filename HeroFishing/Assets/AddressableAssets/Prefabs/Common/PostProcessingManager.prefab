@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4734299858842757752}
   - component: {fileID: 1315703482638644592}
   - component: {fileID: 7947000608219393331}
+  - component: {fileID: 1246222715335723126}
   m_Layer: 0
   m_Name: PostProcessingManager
   m_TagString: Untagged
@@ -68,3 +69,19 @@ MonoBehaviour:
     - Threshold: 0.7
       Intensity: 0.7
       TintColor: {r: 1, g: 1, b: 1, a: 1}
+  AutoDisableVolume: 1
+  testMin: 40
+  testMax: 50
+--- !u!114 &1246222715335723126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7427249648834665877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 557bc7b52ecd54a43976c46c246ad5f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InfoRefreshInterval: 0.5
