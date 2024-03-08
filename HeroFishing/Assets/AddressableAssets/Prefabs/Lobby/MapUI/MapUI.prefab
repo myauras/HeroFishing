@@ -875,7 +875,6 @@ GameObject:
   - component: {fileID: 7061887040280874108}
   - component: {fileID: 7919045307370184886}
   - component: {fileID: 7927702252200585506}
-  - component: {fileID: 981338921458669663}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -940,19 +939,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &981338921458669663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3991506614239128553}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3808bec6747b624890e2d95b3375fb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _refScreenSize: {x: 2026, y: 936}
 --- !u!1 &4082441092450567793
 GameObject:
   m_ObjectHideFlags: 0
@@ -2381,7 +2367,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8919634362594105636}
   - component: {fileID: 817724429784190929}
-  - component: {fileID: 4583133018330997357}
   m_Layer: 0
   m_Name: Frontground
   m_TagString: Untagged
@@ -2422,19 +2407,6 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
---- !u!114 &4583133018330997357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8553407765954102603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3808bec6747b624890e2d95b3375fb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _refScreenSize: {x: 2026, y: 936}
 --- !u!1001 &2854011937542049298
 PrefabInstance:
   m_ObjectHideFlags: 0
