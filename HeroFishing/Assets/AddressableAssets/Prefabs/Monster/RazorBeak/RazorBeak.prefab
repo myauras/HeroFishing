@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4172178774631868075}
   - component: {fileID: -3826221879322384885}
   - component: {fileID: 7877603509037616272}
+  - component: {fileID: 1008165180341617012}
   m_Layer: 10
   m_Name: RazorBeak
   m_TagString: Untagged
@@ -67,6 +68,27 @@ MonoBehaviour:
   _rigids:
   - {fileID: 1346303042679223541}
   _renderers: []
+--- !u!65 &1008165180341617012
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719050268189065540}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5117765, y: 0.77405596, z: 1}
+  m_Center: {x: -0.0025695858, y: 0.4023353, z: 3.564688e-11}
 --- !u!1001 &1465870286272155332
 PrefabInstance:
   m_ObjectHideFlags: 0

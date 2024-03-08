@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6094912186611294756}
   - component: {fileID: 8512643654026515103}
+  - component: {fileID: 8575012224449550507}
+  - component: {fileID: 8809062413138249394}
   m_Layer: 10
   m_Name: Krug
   m_TagString: Untagged
@@ -51,6 +53,42 @@ MonoBehaviour:
   _rigids:
   - {fileID: 330131957030721369}
   _renderers: []
+--- !u!114 &8575012224449550507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2972826557898706196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286c4f28fc8f7bb46b2683fc4b9b1055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DieDissolveParticle: {fileID: 0}
+  CoinParticle: {fileID: 0}
+  AddOnObjs: []
+--- !u!65 &8809062413138249394
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2972826557898706196}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.63161, y: 0.7352598, z: 0.6983268}
+  m_Center: {x: 0.013053088, y: 0.3586582, z: -0.058014184}
 --- !u!1001 &3669151019175671450
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1273058142030313145}
   - component: {fileID: 6140924353253637001}
   - component: {fileID: 5048013206834958824}
+  - component: {fileID: 5519673451128908115}
   m_Layer: 10
   m_Name: RazorMiniBeak
   m_TagString: Untagged
@@ -67,6 +68,27 @@ MonoBehaviour:
   _rigids:
   - {fileID: 1627161019033099282}
   _renderers: []
+--- !u!65 &5519673451128908115
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2822392860579301232}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.27637184, y: 0.49499393, z: 0.68557996}
+  m_Center: {x: -0.013759377, y: 0.25250304, z: -0.09771612}
 --- !u!1001 &4421080605715842914
 PrefabInstance:
   m_ObjectHideFlags: 0
