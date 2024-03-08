@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6746030812804204254}
   - component: {fileID: 2805813678460023513}
+  - component: {fileID: 8628752224934496668}
   m_Layer: 10
   m_Name: MurkMiniWolf
   m_TagString: Untagged
@@ -51,6 +52,21 @@ MonoBehaviour:
   _rigids:
   - {fileID: 1494019789821853521}
   _renderers: []
+--- !u!114 &8628752224934496668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4385858139503326116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286c4f28fc8f7bb46b2683fc4b9b1055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DieDissolveParticle: {fileID: 0}
+  CoinParticle: {fileID: 0}
+  AddOnObjs: []
 --- !u!1001 &5021794927020302412
 PrefabInstance:
   m_ObjectHideFlags: 0
