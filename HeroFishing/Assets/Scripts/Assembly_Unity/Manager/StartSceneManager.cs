@@ -6,9 +6,24 @@ using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Main {
     public class StartSceneManager : MonoBehaviour {
+        [SerializeField] bool EditTest = true;
         private void Start() {
 #if UNITY_EDITOR
-            BaseManager.CreateNewInstance();
+            if (EditTest) {
+                UniTask.Void(async () => {
+                    var result = await SendRestfulAPI("game/getstate", "test");
+                    JsonData jsonData = JsonMapper.ToObject(result.ToString());
+                    string dataValue = jsonData["data"].ToString();
+                    var review = bool.Parse(dataValue);
+                    WriteLog_UnityAssembly.Log("review=" + review);
+                    if (review) {
+                        SceneManager.LoadScene(MyScene.menu.ToString(), LoadSceneMode.Single);
+                    } else {
+                        BaseManager.CreateNewInstance();
+                    }
+                });
+            } else
+                BaseManager.CreateNewInstance();
 #else
             UniTask.Void(async () => {
                 var result = await SendRestfulAPI("game/getstate", "test");
