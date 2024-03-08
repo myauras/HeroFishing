@@ -30,7 +30,11 @@ namespace HeroFishing.Main {
         /// <summary>
         ///  Matchmaker派發Matchgame的IP
         /// </summary>
-        public string IP { get; private set; }
+        public string TcpIP { get; private set; }
+        /// <summary>
+        ///  Matchmaker派發Matchgame的IP
+        /// </summary>
+        public string UdpIP { get; private set; }
 
         /// <summary>
         ///  Matchmaker派發Matchgame的Port
@@ -62,7 +66,12 @@ namespace HeroFishing.Main {
         /// </summary>
         public int Index { get; private set; }
 
-        public bool InGame { get; private set; } = false; //是否已經在遊戲房間中
+        public enum GameState {
+            NotInGame,// 不在遊戲中
+            InGame,//在遊戲中, 但是還沒開始遊戲(以從Matchmaker收到配對房間但還沒從Matchgame收到Auth回傳true)
+            Playing,//遊玩中(加入Matchgame並收到Auth回傳true)
+        }
+        public GameState CurGameState { get; private set; } = GameState.NotInGame;
         public static void Init() {
             Instance = new AllocatedRoom();
         }
@@ -70,19 +79,38 @@ namespace HeroFishing.Main {
         /// <summary>
         /// 設定被Matchmaker分配到的房間資料，CreateRoom後會從Matchmaker回傳取得此資料
         /// </summary>
-        public void SetRoom(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _ip, int _port, string _podName) {
+        public async UniTask SetRoom(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _ip, int _port, string _podName) {
             CreaterID = _createID;
             PlayerIDs = _playerIDs;
             DBMapID = _dbMapID;
             DBMatchgameID = _dbMatchgameID;
-            IP = _ip;
+            TcpIP = _ip;
+            UdpIP = _ip;
             Port = _port;
             PodName = _podName;
             WriteLog.LogColorFormat("設定被Matchmaker分配到的房間資料: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));
 
             var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
             if (dbPlayer == null) return;
-            dbPlayer.SetInMatchgameID(DBMatchgameID).Forget();
+            await dbPlayer.SetInMatchgameID(DBMatchgameID);
+        }
+        /// <summary>
+        /// 設定被Matchmaker分配到的房間資料，CreateRoom後會從Matchmaker回傳取得此資料
+        /// </summary>
+        public async UniTask SetRoom_TestvVer(string _createID, string[] _playerIDs, string _dbMapID, string _dbMatchgameID, string _tcpIP, string _udpIP, int _port, string _podName) {
+            CreaterID = _createID;
+            PlayerIDs = _playerIDs;
+            DBMapID = _dbMapID;
+            DBMatchgameID = _dbMatchgameID;
+            TcpIP = _tcpIP;
+            UdpIP = _udpIP;
+            Port = _port;
+            PodName = _podName;
+            WriteLog.LogColorFormat("設定被Matchmaker分配到的房間資料: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));
+
+            var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
+            if (dbPlayer == null) return;
+            await dbPlayer.SetInMatchgameID(DBMatchgameID);
         }
         /// <summary>
         /// 設定房間內玩家的索引, 也就是玩家的座位, 一進房間後就不會更動
@@ -120,22 +148,23 @@ namespace HeroFishing.Main {
             MyHeroID = _id;
             MyHeroSkinID = _heroSkinID;
         }
-        /// <summary>
-        /// 設定玩家是否在遊戲中, 連線到遊戲後要設定為true, 離開遊戲設定回false
-        /// </summary>
-        public void SetInGame(bool _value) {
-            InGame = _value;
+
+        public void SetGameState(GameState _value) {
+            CurGameState = _value;
+            WriteLog.Log("遊戲狀態切換為:" + _value);
         }
         /// <summary>
         /// 清空配對房間(AllocatedRoom)資訊
         /// </summary>
         public void ClearRoom() {
+            SetGameState(GameState.NotInGame);
             CreaterID = null;
             PlayerIDs = null;
             DBMapID = null;
             DBMatchgameID = null;
             HeroIDs = null;
-            IP = null;
+            TcpIP = null;
+            UdpIP = null;
             Port = 0;
             PodName = null;
             WriteLog.LogColorFormat("清空配對房間(AllocatedRoom)資訊: {0}", WriteLog.LogType.Debug, DebugUtils.ObjToStr(Instance));

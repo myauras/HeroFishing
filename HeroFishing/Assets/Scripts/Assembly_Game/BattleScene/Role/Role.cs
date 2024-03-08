@@ -1,7 +1,6 @@
 using Scoz.Func;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Transforms;
 using UnityEngine;
 namespace HeroFishing.Battle {
     public abstract class Role : MonoBehaviour {

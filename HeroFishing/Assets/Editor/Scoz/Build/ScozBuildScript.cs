@@ -13,6 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEditor.VersionControl;
+using System.Text;
+using UnityEditor.Compilation;
+using System.Linq;
 
 namespace Scoz.Editor {
 
@@ -73,7 +76,7 @@ namespace Scoz.Editor {
             LogFile.AppendWrite(logPath, $"開始更新Dll  平台: {activeTarget}  版本: {VersionSetting.AppLargeVersion}");
             HybridCLR.Editor.Commands.AOTReferenceGeneratorCommand.GenerateAOTGenericReference(activeTarget);
             FixNotDllPrefixItems();// 因為HybridCLR自動產生的AOTGenericReferences.PatchedAOTAssemblyList不知道為什麼唯獨Realm不是已.dll結果, 所以這邊要寫自動化來修正
-            UpdateHybridCLManagerMetaData();//更新GameAssembly的元數據資料(UnityAssembly載好GameAssembly資源後會透過反射去取需求的元數據dll清單)
+            var metaDatas = UpdateHybridCLManagerMetaData();//更新GameAssembly的元數據資料(UnityAssembly載好GameAssembly資源後會透過反射去取需求的元數據dll清單)
             //HybridCLR.Editor.Commands.PrebuildCommand.GenerateAll(); //之前有GenerateAll過, 後續更新只需要使用CompileDll就可以
             HybridCLR.Editor.Commands.CompileDllCommand.CompileDllActiveBuildTarget();
             LogFile.AppendWrite(logPath, $"將需要的Dlls複製到AddressableAssets/Dlls/Dlls/");
@@ -99,13 +102,15 @@ namespace Scoz.Editor {
             string sourcePath = Path.Combine(Application.dataPath, $"../HybridCLRData/HotUpdateDlls/{activeTarget}/Game.dll");
             string targetPath = Path.Combine(Application.dataPath, "AddressableAssets/Dlls/Dlls/Game.dll.bytes");
             try {
-                File.Copy(sourcePath, targetPath,true);
+                File.Copy(sourcePath, targetPath, true);
                 LogFile.AppendWrite(logPath, $"成功! 從 {sourcePath} 到 {targetPath}");
             } catch (Exception _e) {
                 LogFile.AppendWrite(logPath, $"失敗! 從 {sourcePath} 到 {targetPath}  錯誤: {_e}");
             }
-            // 補充元數據
-            foreach (var item in AOTMetadata.AotDllList) {
+            // 補充元數據(使用 metaDatas來複製dll, 不可以直接使用AOTMetadata.AotDllList 因為自動化腳本修改.cs檔案後 在此自動化腳本中只能訪問未修改前的版本)
+            LogFile.AppendWrite(logPath, "MetaData Count: " + metaDatas.Length.ToString());
+            foreach (var item in metaDatas) {
+                LogFile.AppendWrite(logPath, item);
                 string dllName = item;
                 //// 檢查結尾是否為 ".dll" 如果不是，則追加 ".dll" (不知道為什麼Realm結尾不是.dll)
                 //if (!dllName.EndsWith(".dll")) {
@@ -122,9 +127,10 @@ namespace Scoz.Editor {
                 }
             }
 
-            // Unity重新import資料
+            // Unity重新import資料(必須要重新import 否則透過Unity取到的資料都會是舊的)
             string importPath = "Assets/AddressableAssets/Dlls/Dlls";
             AssetDatabase.ImportAsset(importPath, ImportAssetOptions.ImportRecursive);
+            LogFile.AppendWrite(logPath, $"重新import 路徑{importPath}");
 
             LogFile.AppendWrite(logPath, "結束更新Dlls : " + VersionSetting.AppLargeVersion);
         }
@@ -143,9 +149,15 @@ namespace Scoz.Editor {
                     content = Regex.Replace(content, "\"Realm\"", "\"Realm.dll\"");
                     reader.Close();
                     // 寫入修改後的內容
-                    using (StreamWriter writer = new StreamWriter(filePath)) {
+                    using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8)) {
                         writer.Write(content);
                     }
+
+                    // Unity重新import資料(必須要重新import 否則透過Unity取到的資料都會是舊的)
+                    string importPath = "Assets/HybridCLRGenerate/";
+                    AssetDatabase.ImportAsset(importPath, ImportAssetOptions.ImportRecursive);
+                    LogFile.AppendWrite(logPath, $"重新import 路徑{importPath}");
+
                     LogFile.AppendWrite(logPath, $"FixNotDllPrefixItems完成");
                 }
             } catch (Exception _e) {
@@ -156,12 +168,13 @@ namespace Scoz.Editor {
         /// <summary>
         /// 更新UpdateHybridCLManager內的補充元數據內容
         /// </summary>
-        static void UpdateHybridCLManagerMetaData() {
+        static string[] UpdateHybridCLManagerMetaData() {
             string logPath = "ScozBuildLog";
             string copyPath = "Assets/HybridCLRGenerate/AOTGenericReferences.cs";
             string pastePath = "Assets/Scripts/Assembly_Game/HybridCLR/AOTMetadata.cs";
 
             try {
+                string[] metaDatas = null;
                 // 讀取第一份文字檔的內容
                 using (StreamReader firstReader = new StreamReader(copyPath)) {
                     string firstContent = firstReader.ReadToEnd();
@@ -171,13 +184,15 @@ namespace Scoz.Editor {
                     if (match.Success) {
                         // 取PatchedAOTAssemblyList的內容
                         string patchedAOTAssemblyListContent = match.Groups[1].Value.Trim();
+                        //將dll名稱去掉"與空白字串並存到陣列中之後使用(不可以直接使用AOTMetadata.AotDllList 因為自動化腳本修改.cs檔案後 在此自動化腳本中只能訪問未修改前的版本)
+                        metaDatas = patchedAOTAssemblyListContent.Split(',');
+                        metaDatas = metaDatas.Select(s => Regex.Replace(s.Replace("\"", ""), "\\s+", "")).Where(s => !string.IsNullOrEmpty(s)).ToArray();
                         // 取第二份文字檔的內容
                         using (StreamReader secondReader = new StreamReader(pastePath)) {
                             string secondContent = secondReader.ReadToEnd();
 
                             // 使用正則表達式替換AotDllList的內容
-                            string updatedSecondContent = Regex.Replace(secondContent, @"public static List<string>\s+AotDllList\s*=\s*new List<string>\s*{(.+?)};", $"public static List<string> AotDllList = new List<string> {{{patchedAOTAssemblyListContent}}};", RegexOptions.Singleline);
-
+                            string updatedSecondContent = Regex.Replace(secondContent, @"public static List<string>\s+AotDllList\s*=\s*new List<string>\s*{(.*?)};", $"public static List<string> AotDllList = new List<string> {{{patchedAOTAssemblyListContent}}};", RegexOptions.Singleline);
                             // 替換版本字符串
                             string targetVersion = Application.version;
                             updatedSecondContent = Regex.Replace(updatedSecondContent, @"public static string Version { get; private set; } = ""\d+\.\d+\.\d+"";", $"public static string Version {{ get; private set; }} = \"{targetVersion}\";");
@@ -185,7 +200,7 @@ namespace Scoz.Editor {
                             secondReader.Close();
 
                             // 寫入修改後的內容
-                            using (StreamWriter writer = new StreamWriter(pastePath)) {
+                            using (StreamWriter writer = new StreamWriter(pastePath, false, Encoding.UTF8)) {
                                 writer.Write(updatedSecondContent);
                             }
                             LogFile.AppendWrite(logPath, $"UpdateHybridCLManagerMetaData完成");
@@ -196,10 +211,18 @@ namespace Scoz.Editor {
 
                     // 關閉原來的檔案
                     firstReader.Close();
+                    return metaDatas;
+                    //// Unity重新import資料(必須要重新import 否則透過Unity取到的資料都會是舊的)
+                    //string importPath = "Assets/Scripts/Assembly_Game/HybridCLR/AOTMetadata.cs";
+                    //AssetDatabase.ImportAsset(importPath, ImportAssetOptions.ImportRecursive);
+                    //CompilationPipeline.RequestScriptCompilation(RequestScriptCompilationOptions.CleanBuildCache);
+                    //LogFile.AppendWrite(logPath, $"重新import 路徑{importPath}");
                 }
             } catch (Exception _e) {
                 LogFile.AppendWrite(logPath, $"UpdateHybridCLManagerMetaData錯誤：{_e.Message}");
+                return null;
             }
+
         }
 
 

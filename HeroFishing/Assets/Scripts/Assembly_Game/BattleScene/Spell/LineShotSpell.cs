@@ -3,7 +3,6 @@ using HeroFishing.Main;
 using Scoz.Func;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -43,6 +42,7 @@ public class LineShotSpell : SpellBase {
             IgnoreFireModel = false,
             ProjectileDelay = _delay,
             LifeTime = _lifeTime,
+            IsDrop = playData.IsDrop,
         };
         if (!BulletSpawner.Spawn(spawnData, out Bullet bullet)) return;
         var bulletCollisionInfo = new BulletCollisionInfo() {

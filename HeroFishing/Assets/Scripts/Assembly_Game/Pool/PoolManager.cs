@@ -3,7 +3,6 @@ using Scoz.Func;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
 public class PoolManager : MonoBehaviour {
@@ -17,7 +16,7 @@ public class PoolManager : MonoBehaviour {
     private Dictionary<int, string> _heroNameDic;
 
     private const string POOL_BULLET = "bullet";
-    public enum PopType { Fire, Projectile, Hit }
+    public enum PopType { Fire, Projectile, Hit, Empty }
 
 
     public void Init() {
@@ -27,7 +26,14 @@ public class PoolManager : MonoBehaviour {
         _heroNameDic = new Dictionary<int, string>();
     }
 
+    public void ResetBattlePool() {
+        _pools.Clear();
+        _heroNameDic.Clear();
+    }
+
+
     public void InitHeroSpell(HeroSpellJsonData data) {
+        if (_heroNameDic.ContainsKey(data.PrefabID)) return;
         var heroData = HeroJsonData.GetData(data.HeroID);
         if (heroData == null)
             WriteLog.LogError("pool manager cannot find the hero data");
@@ -121,6 +127,9 @@ public class PoolManager : MonoBehaviour {
     }
 
     private string GetKey(int prefabID, int subPrefabID, PopType popType) {
+        if (popType == PopType.Empty)
+            return $"Bullet/BulletEmpty";
+
         if (!_heroNameDic.TryGetValue(prefabID, out var heroName) || string.IsNullOrEmpty(heroName))
             throw new Exception("hero name is not found");
         switch (popType) {

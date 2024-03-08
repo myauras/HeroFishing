@@ -4,8 +4,6 @@ using HeroFishing.Socket;
 using Scoz.Func;
 using System;
 using UniRx;
-using Unity.Entities;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace HeroFishing.Battle {
@@ -14,6 +12,7 @@ namespace HeroFishing.Battle {
         public int PrefabID;
         public int SubPrefabID;
         public bool IgnoreFireModel;
+        public bool IsDrop;
         public float Delay;
     }
 
@@ -88,7 +87,9 @@ namespace HeroFishing.Battle {
 
             var pool = PoolManager.Instance;
             //var path = string.Format("Assets/AddressableAssets/Particles/{0}.prefab", projectilePath);
-            pool.Pop(_info.PrefabID, _info.SubPrefabID, PoolManager.PopType.Projectile, Vector3.zero, Quaternion.identity, transform, go => {
+            //Debug.Log("is drop " + _info.IsDrop);
+            PoolManager.PopType popType = _info.IsDrop ? PoolManager.PopType.Empty : PoolManager.PopType.Projectile;
+            pool.Pop(_info.PrefabID, _info.SubPrefabID, popType, Vector3.zero, Quaternion.identity, transform, go => {
                 go.transform.localScale = Vector3.one;
                 Projectile = go;
                 LoadDone();

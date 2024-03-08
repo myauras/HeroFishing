@@ -17,11 +17,12 @@ public class SceneMaterialConverter : MonoBehaviour {
         get {
             if (_instance == null) {
                 _instance = FindObjectOfType<SceneMaterialConverter>();
-                _instance.Init();
             }
             if (_instance == null) {
                 WriteLog.LogErrorFormat("scene material converter is null");
+                return null;
             }
+            _instance.Init();
             return _instance;
         }
     }

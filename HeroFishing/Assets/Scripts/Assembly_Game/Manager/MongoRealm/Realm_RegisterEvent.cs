@@ -28,7 +28,8 @@ namespace Service.Realms {
                 GamePlayer.Instance.InitDBGameSettingDcos();//初始化遊戲設定DB資料
                 RegisterRealmEvents();//註冊Realm事件    
                 GameManager.Instance.AddComponent<GameTimer>().Init();//建立GameTimer
-            } catch (Exception _e) {
+            }
+            catch (Exception _e) {
                 WriteLog.LogError(_e);
             }
         }
@@ -79,7 +80,8 @@ namespace Service.Realms {
                         }
                     }
                 };
-            } catch (Exception _e) {
+            }
+            catch (Exception _e) {
                 Console.WriteLine(_e.Message);
             }
         }
@@ -107,6 +109,11 @@ namespace Service.Realms {
                     var propertyValue = player.GetType().GetProperty(propertyName).GetValue(player);
                     GameStateManager.Instance.InGameCheckCanPlayGame();
                     WriteLog.LogColorFormat("{0}表 Changed field: {0}  Value: {1}", WriteLog.LogType.Realm, "player", propertyName, propertyValue);
+
+                    var playerInfoUI = BaseUI.GetInstance<MapPlayerInfoUI>();
+                    if (playerInfoUI != null && playerInfoUI.gameObject.activeInHierarchy) {
+                        playerInfoUI.Refresh();
+                    }
                 };
             }
 
@@ -191,7 +198,7 @@ namespace Service.Realms {
                 }
 
                 var mapUI = MapUI.GetInstance<MapUI>();
-                if (mapUI != null && mapUI.gameObject.activeInHierarchy) mapUI.SpawnItems();
+                if (mapUI != null && mapUI.gameObject.activeInHierarchy) mapUI.RefreshScrollView();
 
             });
             Registers.Add("DBMap", token_dbMaps);

@@ -1,37 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Scoz.Func;
 using UnityEngine.UI;
 using System.Linq;
-using Service.Realms;
-using TMPro;
 using System;
-using HeroFishing.Socket;
-using Cysharp.Threading.Tasks;
-using LitJson;
+using UniRx;
 
 namespace HeroFishing.Main {
     public class HeroUI : ItemSpawner_Remote<HeroIconItem> {
 
         [SerializeField] ScrollRect MyScrollRect;
-        [SerializeField] TextMeshProUGUI TitleText;
         [SerializeField] SpellPanel MySpellPanel;
-        [SerializeField] SkinPanel MySkinPanel;
-        HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.LOL;
-        HeroJsonData CurHero;
-        HeroSkinJsonData CurHeroSkin;
+        [SerializeField] SkinScrollView MySkinScrollView;
+        [SerializeField] HeroJsonData.RoleCategory CurCategory = HeroJsonData.RoleCategory.All;
+        [SerializeField] GameObject[] CategoryTags;
+        [SerializeField] Image HeroBG;
+
+        HeroJsonData TmpCurHero;
+        HeroSkinJsonData TmpCurHeroSkin;
+        public static HeroJsonData CurHero { get; private set; }
+        public static HeroSkinJsonData CurHeroSkin { get; private set; }
 
         LoadingProgress MyLoadingProgress;
 
         public override void LoadItemAsset(Action _cb = null) {
             base.LoadItemAsset(_cb);
             MySpellPanel.Init();
-            MySkinPanel.Init();
-            MyLoadingProgress = new LoadingProgress(() => { SwitchCategory(0); }); //子UI都都載入完成再執行SwitchCategory
+            MyLoadingProgress = new LoadingProgress(() => {
+                CurHero = HeroJsonData.GetData(1);
+                CurHeroSkin = HeroSkinJsonData.GetData("1_1");
+                TmpCurHero = CurHero;
+                TmpCurHeroSkin = CurHeroSkin;
+                SwitchCategory(0);
+            }); //子UI都都載入完成再執行SwitchCategory
             MyLoadingProgress.AddLoadingProgress("Hero", "Skin");
-            MySkinPanel.LoadItemAsset(() => { MyLoadingProgress.FinishProgress("Skin"); });
-
+            MySkinScrollView.LoadItemAsset(() => { MyLoadingProgress.FinishProgress("Skin"); });
         }
 
         public override void OnLoadItemFinished() {
@@ -42,7 +44,6 @@ namespace HeroFishing.Main {
 
         public override void RefreshText() {
             base.RefreshText();
-            TitleText.text = StringJsonData.GetUIString("HeroUITitle");
         }
         public void SwitchCategory(int _categoryIndex) {
             HeroJsonData.RoleCategory changeToCategory;
@@ -53,6 +54,13 @@ namespace HeroFishing.Main {
             CurCategory = changeToCategory;
             SpawnItems();
             SwitchHero(GetFirstHero());
+            RefreshTags();
+        }
+
+        void RefreshTags() {
+            for (int i = 0; i < CategoryTags.Length; i++) {
+                CategoryTags[i].SetActive(i == (int)CurCategory);
+            }
         }
 
         public void SpawnItems() {
@@ -76,18 +84,19 @@ namespace HeroFishing.Main {
             }
             Filter();
         }
-        HeroJsonData GetFirstHero() {
+        HeroIconItem GetFirstHero() {
             for (int i = 0; i < ItemList.Count; i++) {
                 if (ItemList[i].IsActive == false) continue;
-                return ItemList[i].MyJsonHero;
+                return ItemList[i];
             }
             return null;
         }
         void Filter() {
             for (int i = 0; i < ItemList.Count; i++) {
                 if (ItemList[i].IsActive == false) continue;
-                ItemList[i].gameObject.SetActive(CurCategory == ItemList[i].MyJsonHero.MyRoleCategory);
-                ItemList[i].IsActive = CurCategory == ItemList[i].MyJsonHero.MyRoleCategory;
+                bool meetCatetory = (CurCategory == HeroJsonData.RoleCategory.All) || (CurCategory == ItemList[i].MyJsonHero.MyRoleCategory);
+                ItemList[i].gameObject.SetActive(meetCatetory);
+                ItemList[i].IsActive = meetCatetory;
             }
             MyScrollRect.verticalNormalizedPosition = 1;//至頂
         }
@@ -95,45 +104,37 @@ namespace HeroFishing.Main {
         public void OnCloseUIClick() {
             LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Map);
         }
-        public void SwitchHero(HeroJsonData _heroJsonData) {
-            if (_heroJsonData == null) return;
-            CurHero = _heroJsonData;
+        public void SwitchHero(HeroIconItem _item) {
+            if (_item == null) return;
+            SetItems(_item);
+            TmpCurHero = _item.MyJsonHero;
             //切換英雄後會自動選到第一個技能
-            MySpellPanel.SetHero(CurHero.ID);
+            MySpellPanel.SetHero(TmpCurHero.ID);
             //切換英雄後會自動選到第一個Skin
-            MySkinPanel.SetHero(CurHero.ID);
-            var firstSkin = HeroSkinJsonData.GetSkinDic(CurHero.ID).First().Value;
+            MySkinScrollView.RefreshScrollView(TmpCurHero.ID);
+            var firstSkin = HeroSkinJsonData.GetSkinDic(TmpCurHero.ID).First().Value;
             SwitchHeroSkin(firstSkin);
         }
-        public void SwitchHeroSkin(HeroSkinJsonData _heroSkinJsonData) {
-            CurHeroSkin = _heroSkinJsonData;
+        void SetItems(HeroIconItem _item) {
+            for (int i = 0; i < ItemList.Count; i++) {
+                ItemList[i].IsSelected = ItemList[i] == _item;
+                ItemList[i].RefreshItem();
+            }
         }
-        public void OnBattleStartClick() {
-            if (CurHero == null) return;
-            var mapUI = MapUI.GetInstance<MapUI>();
-            if (mapUI == null) return;
-            PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
-            UniTask.Void(async () => {
-                var result = await GameConnector.SendRestfulAPI("player/syncredischeck", null); //檢查是否需要同步Redis資料回玩家資料
-                JsonData jsonData = JsonMapper.ToObject(result.ToString());
-                string resultStr = jsonData["result"].ToString();
-                WriteLog.LogColorFormat("syncredischeck: {0}", WriteLog.LogType.Realm, resultStr);
-
-                AllocatedRoom.Init();
-                AllocatedRoom.Instance.SetMyHero(CurHero.ID, CurHeroSkin.ID); //設定本地玩家自己使用的英雄ID
-                //開始跑連線流程, 先連線Matchmaker後會轉連Matchgame並斷連Matchmaker
-                GameConnector.Instance.ConnToMatchmaker(mapUI.SelectedDBMap.Id, OnConnResult).Forget();
+        public void SwitchHeroSkin(HeroSkinJsonData _heroSkinJsonData) {
+            TmpCurHeroSkin = _heroSkinJsonData;
+            AddressablesLoader.GetSprite("HeroBG/" + TmpCurHeroSkin.ID, (sprite, handle) => {
+                HeroBG.sprite = sprite;
+                //Addressables.Release(handle);
             });
         }
-        void OnConnResult(bool _success) {
-            PopupUI.HideLoading();
-            if (!_success) {
-                WriteLog.LogError("連線失敗");
-                return;
-            }
-            GameConnector.Instance.SetHero(CurHero.ID, CurHeroSkin.ID); //送Server玩家使用的英雄ID
-
+        public void ConfirmBtn() {
+            CurHero = TmpCurHero;
+            CurHeroSkin = TmpCurHeroSkin;
+            LobbySceneUI.Instance.SwitchUI(LobbySceneUI.LobbyUIs.Map);
         }
+
+
     }
 
 

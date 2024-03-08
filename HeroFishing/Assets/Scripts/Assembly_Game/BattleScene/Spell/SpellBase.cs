@@ -1,8 +1,6 @@
 using HeroFishing.Battle;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Assertions;
-using Unity.Entities;
 using UnityEngine;
 using static HeroFishing.Battle.SpellIndicator;
 
@@ -14,6 +12,7 @@ public struct SpellPlayData {
     public Vector3 attackPos;
     public Vector3 heroPos;
     public Vector3 direction;
+    public bool IsDrop;
 }
 
 public abstract class SpellBase {

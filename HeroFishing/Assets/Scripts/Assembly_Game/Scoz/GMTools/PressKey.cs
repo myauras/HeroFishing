@@ -2,6 +2,11 @@ using UnityEngine;
 using Service.Realms;
 using System.Linq;
 using HeroFishing.Socket;
+using System;
+using Cysharp.Threading.Tasks;
+using UnityEngine.SceneManagement;
+using HeroFishing.Main;
+using System.Security.Cryptography;
 
 namespace Scoz.Func {
     public partial class TestTool : MonoBehaviour {
@@ -15,13 +20,33 @@ namespace Scoz.Func {
 
 
             if (Input.GetKeyDown(KeyCode.Q)) {
-                int[] monsterIdxs = new int[1] { 1 };
-                key++;
-                GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
+                DropManager.Instance.AddDrop(0, 4);
+
+                //int[] monsterIdxs = new int[1] { 1 };
+                //key++;
+                //GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
+            } else if (Input.GetKeyDown(KeyCode.T)) {
+                Action connFunc = null;
+                AllocatedRoom.Instance.SetMyHero(1, "1_1"); //設定本地玩家自己使用的英雄ID
+                if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString())
+                    PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
+                PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
+                connFunc = () => GameConnector.Instance.ConnectToMatchgameTestVer(() => {
+                    PopupUI.HideLoading();
+                    GameConnector.Instance.SetHero(1, "1_1"); //送Server玩家使用的英雄ID
+                }, () => {
+                    WriteLog.LogError("連線遊戲房失敗");
+                }, () => {
+                    if (AllocatedRoom.Instance.CurGameState == AllocatedRoom.GameState.Playing) {
+                        WriteLog.LogError("需要斷線重連");
+                        connFunc();
+                    }
+                });
+                connFunc();
             } else if (Input.GetKeyDown(KeyCode.W)) {
-                //GameConnector.Instance.Attack(1, "1_attack", 2);
+                GameConnector.Instance.DropSpell(4);
             } else if (Input.GetKeyDown(KeyCode.E)) {
-                GameConnector.Instance.Hit(1, new int[1] { 0 }, "1_attack");
+                GameConnector.Instance.LvUpSpell(0);
 
             } else if (Input.GetKeyDown(KeyCode.R)) {
                 GameConnector.Instance.DropSpell(4);

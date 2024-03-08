@@ -1,5 +1,6 @@
 using HeroFishing.Battle;
 using HeroFishing.Main;
+using HeroFishing.Socket;
 using Scoz.Func;
 using System;
 using System.Collections;
@@ -69,6 +70,10 @@ public class SpellUI : BaseUI {
         return GetSpellBtn(spellName).CanUse;
     }
 
+    public int GetSpellLevel(SpellName spellName) {
+        return GetSpellBtn(spellName).SpellLevel;
+    }
+
     private void OnUpgrade(SpellName spellName) {
         if (_hero.Level <= TotalSpellLevel) {
             CloseUpgradeBtn(_spellBtn1, spellName);
@@ -81,6 +86,10 @@ public class SpellUI : BaseUI {
                 CloseUpgradeBtn(_spellBtn2, spellName);
             if (!CanUpgrade(_spellBtn3, _hero.Level))
                 CloseUpgradeBtn(_spellBtn3, spellName);
+        }
+
+        if (GameConnector.Connected) {
+            GameConnector.Instance.LvUpSpell((int)spellName);
         }
     }
 

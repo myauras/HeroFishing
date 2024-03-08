@@ -3,7 +3,6 @@ using LitJson;
 using Scoz.Func;
 using System;
 using System.Reflection;
-using Unity.Entities;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -93,9 +92,10 @@ namespace HeroFishing.Main {
             WriteLog_UnityAssembly.LogColor("開始載Bundle包", WriteLog_UnityAssembly.LogType.Addressable);
             AddressableManage_UnityAssembly.Instance.StartLoadAsset(async () => {
                 await HybridCLRManager.LoadAssembly();//載入GameDll
+                WriteLog_UnityAssembly.LogFormat("開始載入GameManager");
                 AddressablesLoader_UnityAssebly.GetPrefabByRef(GameManagerAsset, (gameManagerPrefab, handle) => {
                     var gameManager = Instantiate(gameManagerPrefab);
-                    WriteLog_UnityAssembly.Log("gameManager=" + gameManager);
+                    WriteLog_UnityAssembly.Log("載入GameManager完成: " + gameManager);
                     //Addressables.Release(handle);
                 });
             });

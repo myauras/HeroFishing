@@ -46,8 +46,6 @@ namespace Scoz.Func {
             TransitionText.text = _description;
             TransitionImg.gameObject.SetActive(true);
             TransitionImg.sprite = _sprite;
-            TransitionImg.SetNativeSize();
-
         }
         public void OnTransition() {
             CoroutineJob.Instance.StartNewAction(() => {

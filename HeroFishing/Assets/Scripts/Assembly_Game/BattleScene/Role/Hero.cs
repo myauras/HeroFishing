@@ -17,17 +17,19 @@ namespace HeroFishing.Battle {
         private SpellActivationBehaviour ActivationBehaviour;
 
         private int _exp;
-        public int Exp => _exp;
         private int _level = 1;
-        public int Level => _level;
         private int _points;
-        public int Points => _points;
-        private GameObject _model;
-        public bool IsLoaded => _model != null;
-        private Dictionary<int, int> _storedMonsterPoints = new Dictionary<int, int>();
         private int _storedPoints;
+        private GameObject _model;
+        private Dictionary<int, int> _storedMonsterPoints = new Dictionary<int, int>();
+
+        public int Exp => _exp;
+        public int Level => _level;
+        public int Points => _points;
+        public bool IsLoaded => _model != null;
         public int TotalPoints => _points + _storedPoints;
-        private DBPlayer _dbPlayer;
+        public float AttackSpeedMultiplier { get; set; } = 1;
+
 
         public event Action<int> OnLevelUp;
         public event Action<int, int> OnExpUpdate;
@@ -58,7 +60,7 @@ namespace HeroFishing.Battle {
         }
 
         void LoadModel() {
-            string path = string.Format("Role/{0}/{1}.prefab", MyData.Ref, MyHeroSkinData.Prefab);
+            string path = string.Format("Role/{0}/{1}.prefab", MyData.Ref, MyHeroSkinData.ID);
             AddressablesLoader.GetPrefabResourceByPath<GameObject>(path, (prefab, handle) => {
                 _model = Instantiate(prefab, transform);
                 _model.transform.localPosition = prefab.transform.localPosition;
@@ -76,13 +78,14 @@ namespace HeroFishing.Battle {
 
         protected override void SetModel() {
             base.SetModel();
-            string path = string.Format("Role/{0}/{1}.png", MyData.Ref, MyHeroSkinData.Texture);
-            AddressablesLoader.GetPrefabResourceByPath<Texture>(path, (texture, handle) => {
-                PropertyBlock.SetTexture("_MainTex", texture);
-                SetPropertyBlock(PropertyBlock);
-                Addressables.Release(handle);
-                LoadDone();
-            });
+            LoadDone();
+            //string path = string.Format("Role/{0}/{1}.png", MyData.Ref, MyHeroSkinData.Texture);
+            //AddressablesLoader.GetPrefabResourceByPath<Texture>(path, (texture, handle) => {
+            //    PropertyBlock.SetTexture("_MainTex", texture);
+            //    SetPropertyBlock(PropertyBlock);
+            //    Addressables.Release(handle);
+            //    LoadDone();
+            //});
         }
 
         public void PlayIdleMotion() {

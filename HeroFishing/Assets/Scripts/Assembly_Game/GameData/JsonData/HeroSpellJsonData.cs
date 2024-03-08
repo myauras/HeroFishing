@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Scoz.Func;
 using LitJson;
-using Unity.Entities;
 using Unity.Collections;
 using Unity.Burst;
 using System.Linq;
@@ -56,7 +55,7 @@ namespace HeroFishing.Main {
         }
         public string Ref { get; private set; }
         public SpellName SpellName { get; private set; }
-        public float RTP { get; private set; }
+        public float[] RTP { get; private set; }
         public float CD { get; private set; }
         public int Cost { get; private set; }
         public int Waves { get; private set; }
@@ -92,7 +91,7 @@ namespace HeroFishing.Main {
                         Ref = item[key].ToString();
                         break;
                     case "RTP":
-                        RTP = float.Parse(item[key].ToString());
+                        RTP = TextManager.StringSplitToFloatArray(item[key].ToString(), ',');
                         break;
                     case "CD":
                         CD = float.Parse(item[key].ToString());

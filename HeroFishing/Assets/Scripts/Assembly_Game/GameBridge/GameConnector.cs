@@ -15,15 +15,16 @@ using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Socket {
     public partial class GameConnector : MonoBehaviour {
-        public static bool Connected => Instance != null && AllocatedRoom.Instance != null;
+        public static bool Connected => Instance != null && AllocatedRoom.Instance != null
+            && AllocatedRoom.Instance.CurGameState != AllocatedRoom.GameState.NotInGame;
         public static GameConnector Instance = null;
 
         #region 共用參數設定
 
         const float RETRY_INTERVAL_SECS = 3.0f; //重連間隔時間
-        const int MAX_RETRY_TIMES = 3; //最大重連次數
+        const int MAX_RETRY_TIMES = 1; //最大重連次數
         const float CONNECT_TIMEOUT_SECS = 60.0f; //連線超時時間60秒
-        int CurRetryTimes = 0; //目前重試次數
+
         HeroFishingSocket Socket => HeroFishingSocket.GetInstance();
 
         #endregion

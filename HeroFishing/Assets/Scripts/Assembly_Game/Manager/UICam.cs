@@ -16,5 +16,14 @@ namespace Scoz.Func {
                 cameraData.renderType = _type;
             }
         }
+        public void AddCameraStack(Camera overlayCam) {
+            var data = MyCam.GetUniversalAdditionalCameraData();
+            data.cameraStack.Add(overlayCam);
+        }
+        public void ClearCameraStack() {
+            if (MyCam == null) return;
+            var data = MyCam.GetUniversalAdditionalCameraData();
+            data.cameraStack.Clear();
+        }
     }
 }

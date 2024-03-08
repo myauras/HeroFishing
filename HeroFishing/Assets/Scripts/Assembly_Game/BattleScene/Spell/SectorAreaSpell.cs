@@ -2,7 +2,6 @@ using HeroFishing.Battle;
 using HeroFishing.Main;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -38,6 +37,7 @@ public class SectorAreaSpell : SpellBase {
             InitDirection = playData.direction,
             IgnoreFireModel = false,
             LifeTime = _lifeTime,
+            IsDrop = playData.IsDrop,
         };
         if (!BulletSpawner.Spawn(spawnBulletInfo, out Bullet bullet)) return;
         var collisionInfo = new AreaCollisionInfo {

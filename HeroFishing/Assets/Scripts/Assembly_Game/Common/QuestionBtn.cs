@@ -21,7 +21,7 @@ namespace HeroFishing.Main {
         /// </summary>
         public void OnQuestionBtnClick_WebViewURL(string _urlStringID) {
             Rect rect = new Rect(0, 0, Screen.width, Screen.height);
-            WebViewManager.Inst.ShowWebview(StringJsonData.GetUIString(_urlStringID), rect);
+            //WebViewManager.Inst.ShowWebview(StringJsonData.GetUIString(_urlStringID), rect);
         }
     }
 }

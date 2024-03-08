@@ -21,9 +21,11 @@ public struct SpawnMonsterInfo {
 public static class MonsterSpawner {
     public static bool Spawn(SpawnMonsterInfo spawn, out Monster monster) {
         monster = null;
+        if (WorldStateManager.Instance.IsFrozen) return false;
         bool hasSpawn = false;
         for (int i = 0; i < spawn.Monsters.Count; i++) {
             var spawnMonster = spawn.Monsters[i];
+            if (Monster.IdxToMonsterMapping.ContainsKey(spawnMonster.Idx)) continue;
             int monsterID = spawnMonster.ID;
             if (monsterID <= 0) continue;
 
@@ -33,7 +35,7 @@ public static class MonsterSpawner {
             Vector3 initPosition = Vector3.zero;
             if (routeData != null) {
                 var rotation = Quaternion.AngleAxis(spawn.PlayerIndex * 90f, Vector3.up);
-                initRotation = Quaternion.LookRotation(routeData.TargetPos - routeData.SpawnPos);
+                initRotation = rotation * Quaternion.LookRotation(routeData.TargetPos - routeData.SpawnPos);
                 if (spawn.SpawnTime == 0)
                     initPosition = rotation * routeData.SpawnPos;
                 else {

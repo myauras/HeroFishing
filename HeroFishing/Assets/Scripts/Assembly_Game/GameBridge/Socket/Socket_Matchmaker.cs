@@ -63,9 +63,9 @@ namespace HeroFishing.Socket {
             }
             //註冊回呼
             WriteLog.LogColor("註冊回呼", WriteLog.LogType.Connection);
-            RegisterMatchgameCommandCB(SocketContent.MatchmakerCMD_TCP.CREATEROOM_TOCLIENT.ToString(), id, OnCreateMatchmakerRoom_Reply);
+            RegisterMatchgameCommandCB(SocketContent.MatchmakerCMD_TCP.CREATEROOM_TOCLIENT.ToString(), id, OnMatchgameRoomCreated_Reply);
         }
-        public void OnCreateMatchmakerRoom_Reply(string _msg) {
+        public void OnMatchgameRoomCreated_Reply(string _msg) {
             WriteLog.LogColor("OnCreateMatchmakerRoom_Reply", WriteLog.LogType.Connection);
             var packet = LitJson.JsonMapper.ToObject<SocketCMD<CREATEROOM_TOCLIENT>>(_msg);
 
