@@ -36,7 +36,7 @@ namespace HeroFishing.Main {
 
         protected override void OnEnable() {
             base.OnEnable();
-            SetHeroIcon(HeroUI.CurHero);
+            if (IsInit) SetHeroIcon(HeroUI.CurHero);
         }
 
         public override void RefreshText() {
