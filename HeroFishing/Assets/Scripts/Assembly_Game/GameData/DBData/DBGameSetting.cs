@@ -15,6 +15,9 @@ public partial class DBGameSetting : IRealmObject {
     #region timer(各計時器的時間設定)
     [MapTo("onlineCheckSec")]
     public int? OnlineCheckSec { get; set; }
+    [MapTo("resetHeroExpMinute-testver-port")]
+    public int? ResetHeroExpMinute { get; set; }
+
     #endregion
 
     #region address(各網址設定)
