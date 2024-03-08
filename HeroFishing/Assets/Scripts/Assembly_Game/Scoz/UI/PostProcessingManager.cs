@@ -2,6 +2,7 @@ using HeroFishing.Main;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -19,9 +20,10 @@ namespace Scoz.Func {
 
         [Serializable] public class BloomSettingDicClass : SerializableDictionary<MyScene, BloomSetting> { }
         [SerializeField] BloomSettingDicClass MyBloomSettingDic;//字典攝影機設定字典
+        [SerializeField] bool AutoDisableVolume;
         Volume MyVolume;
-
         public static PostProcessingManager Instance;
+        private float _timer;
 
         public void Init() {
             Instance = this;
@@ -32,6 +34,22 @@ namespace Scoz.Func {
             //初始化時先執行一次
             OnLevelFinishedLoading(SceneManager.GetActiveScene(), LoadSceneMode.Single);
         }
+
+        private void Update() {
+            if (!AutoDisableVolume) return;
+            if (MyVolume == null || !MyVolume.enabled) return;
+            var fps = FPSChecker.GetFPS();
+            if (fps < 30) {
+                _timer += Time.deltaTime;
+                if (_timer > 3) {
+                    MyVolume.enabled = false;
+                }
+            }
+            else {
+                _timer = 0;
+            }
+        }
+
         private void OnDestroy() {
             SceneManager.sceneLoaded -= OnLevelFinishedLoading;
         }
@@ -67,7 +85,8 @@ namespace Scoz.Func {
                 bloom.threshold.value = MyBloomSettingDic[myScene].Threshold;
                 bloom.tint.value = MyBloomSettingDic[myScene].TintColor;
                 MyVolume.enabled = true;
-            } else {
+            }
+            else {
                 MyVolume.enabled = false;
             }
         }
