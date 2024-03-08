@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2009749321887912458}
   - component: {fileID: 2204909770596638559}
   - component: {fileID: 5787610412840455007}
+  - component: {fileID: 1548514846095488042}
   m_Layer: 10
   m_Name: MurkWolf
   m_TagString: Untagged
@@ -67,6 +68,27 @@ MonoBehaviour:
   DieDissolveParticle: {fileID: 0}
   CoinParticle: {fileID: 0}
   AddOnObjs: []
+--- !u!65 &1548514846095488042
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3357477671369615951}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.68, y: 0.7781106, z: 2.1664004}
+  m_Center: {x: -0.0000000014559394, y: 0.41208023, z: -0.05052721}
 --- !u!1001 &200809715794471609
 PrefabInstance:
   m_ObjectHideFlags: 0
