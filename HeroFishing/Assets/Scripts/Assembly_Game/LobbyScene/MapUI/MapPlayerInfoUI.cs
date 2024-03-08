@@ -23,6 +23,10 @@ public class MapPlayerInfoUI : BaseUI {
 
     public override void Init() {
         base.Init();
+        Refresh();
+    }
+
+    public void Refresh() {
         var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(Service.Realms.DBPlayerCol.player);
         SetPoints((int)(dbPlayer.Point ?? 0));
     }

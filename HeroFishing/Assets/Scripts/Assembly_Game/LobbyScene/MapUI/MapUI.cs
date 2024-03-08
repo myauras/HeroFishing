@@ -33,6 +33,8 @@ namespace HeroFishing.Main {
         private GlassController _myGlass;
         [SerializeField]
         private Image _heroIconImg;
+        [SerializeField]
+        private MapPlayerInfoUI _playerInfoUI;
 
         private GlassController _glassController;
         private List<MapItemData> _mapItemDatas;
@@ -58,6 +60,7 @@ namespace HeroFishing.Main {
             RefreshScrollView();
             _glassController = Instantiate(_myGlass);
             _glassController.Init();
+            _playerInfoUI.Init();
         }
 
         public void ResetScrollViewPos() {
