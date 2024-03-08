@@ -119,7 +119,7 @@ namespace HeroFishing.Battle {
         public void Lock(bool active) {
             if (active) {
                 if (LockObj == null) {
-                    AddressablesLoader.GetParticle("OtherEffect/Script_LockEffect", (go, handle) => {
+                    AddressablesLoader.GetParticle("OtherEffect/LockEffect", (go, handle) => {
                         AddressableManage.SetToChangeSceneRelease(handle);
                         LockObj = Instantiate(go, transform);
                         LockObj.transform.localPosition = new Vector3(0, 1.19f, 0);
