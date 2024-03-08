@@ -33,6 +33,14 @@ public partial class DBPlayer : IRealmObject {
     [MapTo("inMatchgameID")]
     public string InMatchgameID { get; private set; }
 
+    [MapTo("leftGameAt")]
+    public DateTimeOffset? LeftGameAt { get; private set; }
+    [MapTo("spellCharges")]
+    public IList<int> SpellCharges { get; }
+    [MapTo("drops")]
+    public IList<int> Drops { get; }
+
+
     public void SetDeviceUID(string _deviceUID) {
         RealmManager.MyRealm.WriteAsync(() => {
             DeviceUID = _deviceUID;
@@ -59,4 +67,9 @@ public partial class DBPlayer : IRealmObject {
             Point = points;
         });
     }
+
+    //public DateTime GetResetHeroTime() {
+    //    var timeDiff = LastSigninAt.add;
+    //    return
+    //}
 }
