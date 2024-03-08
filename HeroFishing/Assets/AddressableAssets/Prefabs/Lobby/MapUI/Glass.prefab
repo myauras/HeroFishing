@@ -768,6 +768,7 @@ GameObject:
   - component: {fileID: 1457184034880734807}
   - component: {fileID: 1587577673967393822}
   - component: {fileID: 9072762335315677650}
+  - component: {fileID: 7618447284877682482}
   m_Layer: 11
   m_Name: Glass whole (1)
   m_TagString: Untagged
@@ -840,6 +841,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7618447284877682482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2737653767306529093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c551f978b956e7648961dfc7ca0dbf79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RefScreenSize: {x: 2026, y: 936}
+  OriginScaleFactor: 9030
 --- !u!1 &2807630312897148724
 GameObject:
   m_ObjectHideFlags: 0
