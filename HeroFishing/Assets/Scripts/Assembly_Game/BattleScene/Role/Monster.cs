@@ -249,7 +249,7 @@ namespace HeroFishing.Battle {
                     material.SetFloat("_EdgePower", value * 2.8f);
                     material.SetFloat("_FreezeMask", value * 2f);
                     material.SetFloat("_IceAmount", value * 0.25f);
-                    material.SetFloat("_IcicleAmount", value);
+                    material.SetFloat("_IcicleAmount", value * 0.6f);
                     material.SetFloat("_Metallic", value * 0.2f);
                     material.SetFloat("_Smooth", value * 0.4f);
                 }
