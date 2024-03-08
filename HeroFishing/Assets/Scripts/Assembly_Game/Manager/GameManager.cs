@@ -42,6 +42,7 @@ namespace Scoz.Func {
 
         [HeaderAttribute("==============遊戲設定==============")]
         public int TargetFPS = 60;
+        [SerializeField] bool TestTool = false;
         public static EnvVersion CurVersion {//取得目前版本
             get {
 #if Dev
@@ -109,7 +110,7 @@ namespace Scoz.Func {
             //設定FPS與垂直同步
 #if Dev
             QualitySettings.vSyncCount = 0;
-            Application.targetFrameRate = 100;
+            Application.targetFrameRate = TargetFPS;
 #else
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = TargetFPS;
@@ -275,11 +276,13 @@ namespace Scoz.Func {
 
 #if !Release
             //載入TestTool
-            AddressablesLoader.GetPrefabByRef(Instance.TestToolAsset, (prefab, handle) => {
-                GameObject go = Instantiate(prefab);
-                go.GetComponent<TestTool>().Init();
-                Addressables.Release(handle);
-            });
+            if (TestTool) {
+                AddressablesLoader.GetPrefabByRef(Instance.TestToolAsset, (prefab, handle) => {
+                    GameObject go = Instantiate(prefab);
+                    go.GetComponent<TestTool>().Init();
+                    Addressables.Release(handle);
+                });
+            }
 #endif
 
         }

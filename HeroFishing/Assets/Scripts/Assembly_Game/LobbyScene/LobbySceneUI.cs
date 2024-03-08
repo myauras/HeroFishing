@@ -55,7 +55,7 @@ namespace HeroFishing.Main {
                 MyHeroUI.LoadItemAsset();
                 UIs.Add(LobbyUIs.Hero, MyHeroUI);
                 UniTask.Void(async () => {
-                    await UniTask.Delay(300);
+                    await UniTask.Delay(1000);
                     SwitchUI(LobbyUIs.Map);
                     PopupUI.FinishSceneTransitionProgress("LobbyUILoaded");
                 });
