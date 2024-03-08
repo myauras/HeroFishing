@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7089833698980122682}
   - component: {fileID: 3212894832073192093}
   - component: {fileID: 7496158177871485490}
+  - component: {fileID: 659244782304363622}
   m_Layer: 10
   m_Name: RiftHerald
   m_TagString: Untagged
@@ -68,6 +69,27 @@ MonoBehaviour:
   _rigids:
   - {fileID: 4070633408238795264}
   _renderers: []
+--- !u!65 &659244782304363622
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5944399805157139704}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9464617, y: 2.5593343, z: 2.27843}
+  m_Center: {x: 0.084757805, y: 1.3501816, z: -0.08828902}
 --- !u!1001 &202253752757350235
 PrefabInstance:
   m_ObjectHideFlags: 0

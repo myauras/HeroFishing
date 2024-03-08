@@ -30,18 +30,24 @@ namespace HeroFishing.Main {
         [SerializeField]
         private MapColorDicClass _txtColorDic;
         [SerializeField]
-        private Button _confirmButton;
-        [SerializeField] GlassController MyGlass;
-        [SerializeField] Image HeroIconImg;
+        private GlassController _myGlass;
+        [SerializeField]
+        private Image _heroIconImg;
+        [SerializeField]
+        private MapPlayerInfoUI _playerInfoUI;
 
+        private GlassController _glassController;
         private List<MapItemData> _mapItemDatas;
         private int[] _bets = new int[] { 1, 5, 10, 30, 50, 200, 200, 300 };
 
         public DBMap SelectedDBMap { get; private set; }
 
-        protected override void OnEnable() {
-            base.OnEnable();
-            SetHeroIcon(HeroUI.CurHero);
+        public override void SetActive(bool active) {
+            base.SetActive(active);
+            if (active) {
+                SetHeroIcon(HeroUI.CurHero);
+            }
+            _glassController?.gameObject.SetActive(active);
         }
 
         public override void RefreshText() {
@@ -52,8 +58,9 @@ namespace HeroFishing.Main {
             base.Init();
             _mapItemDatas = new List<MapItemData>();
             RefreshScrollView();
-            var glassController = Instantiate(MyGlass);
-            glassController.Init();
+            _glassController = Instantiate(_myGlass);
+            _glassController.Init();
+            _playerInfoUI.Init();
         }
 
         public void ResetScrollViewPos() {
@@ -91,7 +98,7 @@ namespace HeroFishing.Main {
 
         public void SetHeroIcon(HeroJsonData _jsonData) {
             AddressablesLoader.GetSpriteAtlas("HeroIcon", atlas => {
-                HeroIconImg.sprite = atlas.GetSprite(_jsonData.Ref);
+                _heroIconImg.sprite = atlas.GetSprite(_jsonData.Ref);
             });
         }
 
