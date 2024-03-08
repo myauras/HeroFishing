@@ -110,7 +110,6 @@ namespace Service.Realms {
                 // 等待Process等於2才完成
                 int process = 0;
                 Action checkProcess = () => {
-                    WriteLog.LogError("process=" + process);
                     if (process == 2) {
                         utcs.TrySetResult();
                     }
