@@ -86,14 +86,13 @@ namespace Scoz.Editor {
             process.StartInfo.WorkingDirectory = "./";
 #elif UNITY_EDITOR_OSX
         string fileName = "UploadBundle.sh";
-        process.Start();
         process.StartInfo.UseShellExecute = false;
         process.StartInfo.CreateNoWindow = true;
         process.StartInfo.RedirectStandardOutput = true;
         process.StartInfo.RedirectStandardError = true;
         process.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
         process.StartInfo.StandardErrorEncoding = System.Text.Encoding.UTF8;
-        process.StartInfo.FileName = "/bin/sh";
+        process.StartInfo.FileName = fileName;
         process.StartInfo.Arguments = Application.dataPath + string.Format("/../{0} {1} {2} {3}",fileName, googleProjectID, storagePath, VersionSetting.AppLargeVersion);
         process.StartInfo.WorkingDirectory = "./";
 #endif
