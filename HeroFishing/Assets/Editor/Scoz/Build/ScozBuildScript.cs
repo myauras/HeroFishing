@@ -48,7 +48,6 @@ namespace Scoz.Editor {
         [MenuItem("Scoz/Build Bundle/Update a previous build")]
         public static void UpdateAPreviousBuild() {
             BuildDll();
-            return;
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             var group = GetDefaultGroup();
             var path = ContentUpdateScript.GetContentStateDataPath(false);
