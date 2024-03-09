@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: Aura
-  productName: HeroFishing
+  productName: Mirror Matchup
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -185,7 +185,7 @@ PlayerSettings:
   strictShaderVariantMatching: 0
   VertexChannelCompressionMask: 4054
   iPhoneSdkVersion: 988
-  iOSTargetOSVersionString: 17.0
+  iOSTargetOSVersionString: 12.0
   tvOSSdkVersion: 0
   tvOSRequireExtendedGameController: 0
   tvOSTargetOSVersionString: 12.0
@@ -242,7 +242,7 @@ PlayerSettings:
   iOSManualSigningProvisioningProfileType: 0
   tvOSManualSigningProvisioningProfileType: 0
   VisionOSManualSigningProvisioningProfileType: 0
-  appleEnableAutomaticSigning: 0
+  appleEnableAutomaticSigning: 1
   iOSRequireARKit: 0
   iOSAutomaticallyDetectAndAddCapabilities: 1
   appleEnableProMotion: 0
@@ -816,7 +816,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Android: Dev;DEBUG_LOG
     Standalone: DEBUG_LOG;Dev;AMPLIFY_SHADER_EDITOR
-    iPhone: DEBUG_LOG;Dev;AMPLIFY_SHADER_EDITOR
+    iPhone: DEBUG_LOG;Dev
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
@@ -825,6 +825,7 @@ PlayerSettings:
     Android: 0
   il2cppCodeGeneration:
     Android: 1
+    iPhone: 1
   managedStrippingLevel:
     EmbeddedLinux: 1
     GameCoreScarlett: 1
@@ -845,7 +846,7 @@ PlayerSettings:
   useDeterministicCompilation: 1
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
-  gcIncremental: 1
+  gcIncremental: 0
   gcWBarrierValidation: 0
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
