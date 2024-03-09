@@ -33,7 +33,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// }} 
 
 	// {{ AOT generic types
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<DBPlayer.<SetInMatchgameID>d__55>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<DBPlayer.<SetInMatchgameID>d__45>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Main.AllocatedRoom.<SetRoom>d__62>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Main.AllocatedRoom.<SetRoom_TestvVer>d__63>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<HeroFishing.Main.GamePlayer.<GetMatchGame>d__17,object>
@@ -55,7 +55,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<OnSignin>d__30>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<Query_GetDoc>d__34,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<Service.Realms.RealmManager.<Signout>d__33>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<DBPlayer.<SetInMatchgameID>d__55>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<DBPlayer.<SetInMatchgameID>d__45>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Main.AllocatedRoom.<SetRoom>d__62>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Main.AllocatedRoom.<SetRoom_TestvVer>d__63>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<HeroFishing.Main.GamePlayer.<GetMatchGame>d__17,object>
@@ -164,9 +164,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// FancyScrollView.FancyScrollView<object,object>
 	// Loxodon.Framework.Observables.ObservableProperty<byte>
 	// Loxodon.Framework.Observables.ObservablePropertyBase<byte>
-	// Realms.CollectionExtensions.<>c__19<int>
 	// Realms.CollectionExtensions.<>c__19<object>
-	// Realms.IRealmCollection<int>
 	// Realms.IRealmCollection<object>
 	// Realms.MarshaledVector.<ToEnumerable>d__7<Realms.NotifiableObjectHandleBase.CollectionChangeSet.Move>
 	// Realms.MarshaledVector.<ToEnumerable>d__7<System.IntPtr>
@@ -176,27 +174,16 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Realms.MarshaledVector<System.IntPtr>
 	// Realms.Native.Arena.Buffer<Realms.NotifiableObjectHandleBase.CollectionChangeSet.Move>
 	// Realms.Native.Arena.Buffer<System.IntPtr>
-	// Realms.NotificationCallbackDelegate<int>
 	// Realms.NotificationCallbackDelegate<object>
-	// Realms.NotificationCallbacks.<>c<int>
 	// Realms.NotificationCallbacks.<>c<object>
-	// Realms.NotificationCallbacks.<>c__DisplayClass3_0<int>
 	// Realms.NotificationCallbacks.<>c__DisplayClass3_0<object>
-	// Realms.NotificationCallbacks<int>
 	// Realms.NotificationCallbacks<object>
-	// Realms.RealmCollectionBase.<>c<int>
 	// Realms.RealmCollectionBase.<>c<object>
-	// Realms.RealmCollectionBase.<>c__DisplayClass43_0<int>
 	// Realms.RealmCollectionBase.<>c__DisplayClass43_0<object>
-	// Realms.RealmCollectionBase.<>c__DisplayClass48_0<int>
 	// Realms.RealmCollectionBase.<>c__DisplayClass48_0<object>
-	// Realms.RealmCollectionBase.Enumerator<int>
 	// Realms.RealmCollectionBase.Enumerator<object>
-	// Realms.RealmCollectionBase<int>
 	// Realms.RealmCollectionBase<object>
-	// Realms.RealmList<int>
 	// Realms.RealmList<object>
-	// Realms.RealmResults<int>
 	// Realms.RealmResults<object>
 	// SerializableDictionary<int,Scoz.Func.BloomSetting>
 	// SerializableDictionary<int,UnityEngine.Color>
@@ -482,7 +469,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IReadOnlyCollection<System.IntPtr>
 	// System.Collections.Generic.IReadOnlyCollection<object>
 	// System.Collections.Generic.IReadOnlyDictionary<object,System.IntPtr>
-	// System.Collections.Generic.IReadOnlyList<int>
 	// System.Collections.Generic.IReadOnlyList<object>
 	// System.Collections.Generic.KeyValuePair<UnityEngine.Vector2Int,object>
 	// System.Collections.Generic.KeyValuePair<int,Scoz.Func.BloomSetting>
@@ -641,7 +627,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<byte>
 	// System.Func<float,byte>
 	// System.Func<int,byte>
-	// System.Func<int,int>
 	// System.Func<int,object>
 	// System.Func<int>
 	// System.Func<long,UnityEngine.AnimatorStateInfo>
@@ -918,7 +903,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__36>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<ConnToMatchmaker>d__36&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__18>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<JoinMatchgame>d__18&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__38>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,HeroFishing.Socket.GameConnector.<OnLoginToMatchmakerError>d__38&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,DBPlayer.<SetInMatchgameID>d__55>(System.Runtime.CompilerServices.TaskAwaiter&,DBPlayer.<SetInMatchgameID>d__55&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,DBPlayer.<SetInMatchgameID>d__45>(System.Runtime.CompilerServices.TaskAwaiter&,DBPlayer.<SetInMatchgameID>d__45&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,Service.Realms.RealmManager.<OnSignin>d__30>(System.Runtime.CompilerServices.TaskAwaiter&,Service.Realms.RealmManager.<OnSignin>d__30&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,Service.Realms.RealmManager.<Signout>d__33>(System.Runtime.CompilerServices.TaskAwaiter&,Service.Realms.RealmManager.<Signout>d__33&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<AnonymousSignup>d__26>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<AnonymousSignup>d__26&)
@@ -932,7 +917,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<GetProvider>d__29>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<GetProvider>d__29&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<GetValidAccessToken>d__28>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<GetValidAccessToken>d__28&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<Query_GetDoc>d__34>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<Query_GetDoc>d__34&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<DBPlayer.<SetInMatchgameID>d__55>(DBPlayer.<SetInMatchgameID>d__55&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<DBPlayer.<SetInMatchgameID>d__45>(DBPlayer.<SetInMatchgameID>d__45&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Main.AllocatedRoom.<SetRoom>d__62>(HeroFishing.Main.AllocatedRoom.<SetRoom>d__62&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Main.AllocatedRoom.<SetRoom_TestvVer>d__63>(HeroFishing.Main.AllocatedRoom.<SetRoom_TestvVer>d__63&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<HeroFishing.Main.GamePlayer.<RedisSync>d__13>(HeroFishing.Main.GamePlayer.<RedisSync>d__13&)
@@ -975,15 +960,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// Cysharp.Threading.Tasks.UniTask<object> Cysharp.Threading.Tasks.UniTaskExtensions.AsUniTask<object>(System.Threading.Tasks.Task<object>,bool)
 		// object LitJson.JsonMapper.ToObject<object>(string)
 		// Realms.IRealmCollection<object> Realms.CollectionExtensions.AsRealmCollection<object>(System.Linq.IQueryable<object>)
-		// System.Void Realms.CollectionExtensions.PopulateCollection<int>(System.Collections.Generic.ICollection<int>,System.Collections.Generic.ICollection<int>,bool,bool)
 		// System.Void Realms.CollectionExtensions.PopulateCollection<object>(System.Collections.Generic.ICollection<object>,System.Collections.Generic.ICollection<object>,bool,bool)
-		// System.Void Realms.CollectionExtensions.PopulateCollectionCore<int>(System.Collections.Generic.ICollection<int>,System.Collections.Generic.ICollection<int>,bool,bool,System.Func<int,object>)
 		// System.Void Realms.CollectionExtensions.PopulateCollectionCore<object>(System.Collections.Generic.ICollection<object>,System.Collections.Generic.ICollection<object>,bool,bool,System.Func<object,object>)
 		// System.IDisposable Realms.CollectionExtensions.SubscribeForNotifications<object>(System.Linq.IQueryable<object>,Realms.NotificationCallbackDelegate<object>)
 		// object Realms.Helpers.Argument.EnsureType<object>(object,string,string)
-		// System.Collections.Generic.IList<int> Realms.ManagedAccessor.GetListValue<int>(string)
 		// System.Collections.Generic.IList<object> Realms.ManagedAccessor.GetListValue<object>(string)
-		// Realms.RealmList<int> Realms.ObjectHandle.GetList<int>(Realms.Realm,string,Realms.Metadata,string)
 		// Realms.RealmList<object> Realms.ObjectHandle.GetList<object>(Realms.Realm,string,Realms.Metadata,string)
 		// object Realms.Realm.Add<object>(object,bool)
 		// System.Void Realms.Realm.AddInternal<object>(object,System.Type,bool)
