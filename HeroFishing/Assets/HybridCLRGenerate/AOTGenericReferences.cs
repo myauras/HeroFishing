@@ -23,6 +23,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		"UnityEngine.AndroidJNIModule.dll",
 		"UnityEngine.CoreModule.dll",
 		"mscorlib.dll",
+                        "Realm.PlatformHelpers.dll",
+                        "Realm.UnityUtils.dll",
+	                
 	};
 	// }}
 

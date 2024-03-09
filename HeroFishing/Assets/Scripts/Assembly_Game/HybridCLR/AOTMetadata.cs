@@ -21,5 +21,7 @@ public static class AOTMetadata {
 		"Unity.VisualScripting.Core.dll",
 		"UnityEngine.AndroidJNIModule.dll",
 		"UnityEngine.CoreModule.dll",
-		"mscorlib.dll",};
+		"mscorlib.dll",
+                        "Realm.PlatformHelpers.dll",
+                        "Realm.UnityUtils.dll",};
 }
