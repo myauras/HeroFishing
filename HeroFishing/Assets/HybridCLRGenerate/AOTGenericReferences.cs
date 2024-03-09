@@ -24,6 +24,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		"UnityEngine.AndroidJNIModule.dll",
 		"UnityEngine.CoreModule.dll",
 		"mscorlib.dll",
+                        "Realm.PlatformHelpers.dll",
+                        "Realm.UnityUtils.dll",
+	                
 	};
 	// }}
 
@@ -78,7 +81,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.LobbySceneUI.<<Init>b__18_1>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.MapUI.<>c__DisplayClass25_0.<<OnCreateRoom>b__0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.MapUI.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__16_0>d>
@@ -87,7 +90,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid.<>c<Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.LobbySceneUI.<<Init>b__18_1>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.MapUI.<>c__DisplayClass25_0.<<OnCreateRoom>b__0>d>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.MapUI.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid<HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__16_0>d>
@@ -940,7 +943,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<Service.Realms.RealmManager.<Query_GetDoc>d__34>(Service.Realms.RealmManager.<Query_GetDoc>d__34&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.LobbySceneUI.<<Init>b__18_1>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.LobbySceneUI.<<Init>b__18_1>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.MapUI.<>c__DisplayClass25_0.<<OnCreateRoom>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.MapUI.<>c__DisplayClass25_0.<<OnCreateRoom>b__0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.MapUI.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.MapUI.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,HeroFishing.Socket.GameConnector.<>c__DisplayClass17_0.<<ConnectToMatchgameTestVer>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,HeroFishing.Socket.GameConnector.<>c__DisplayClass17_0.<<ConnectToMatchgameTestVer>b__0>d&)
@@ -949,7 +952,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Service.Realms.RealmManager.<>c__DisplayClass24_0.<<CallAtlasFuncNoneAsync>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.LobbySceneUI.<<Init>b__18_1>d>(HeroFishing.Main.LobbySceneUI.<<Init>b__18_1>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d>(HeroFishing.Main.LobbySceneUI.<>c__DisplayClass19_0.<<RealmLoginCheck>b__0>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.MapUI.<>c__DisplayClass25_0.<<OnCreateRoom>b__0>d>(HeroFishing.Main.MapUI.<>c__DisplayClass25_0.<<OnCreateRoom>b__0>d&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.MapUI.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d>(HeroFishing.Main.MapUI.<>c__DisplayClass26_0.<<OnCreateRoom>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d>(HeroFishing.Main.StartSceneUI.<<AuthChek>b__21_0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d>(HeroFishing.Main.StartSceneUI.<>c__DisplayClass26_0.<<OnSignupClick>b__0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder.Start<HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__16_0>d>(HeroFishing.Socket.GameConnector.<<ConnToMatchgame>b__16_0>d&)

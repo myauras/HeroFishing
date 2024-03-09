@@ -48,6 +48,7 @@ namespace Scoz.Editor {
         [MenuItem("Scoz/Build Bundle/Update a previous build")]
         public static void UpdateAPreviousBuild() {
             BuildDll();
+            return;
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             var group = GetDefaultGroup();
             var path = ContentUpdateScript.GetContentStateDataPath(false);
@@ -147,6 +148,18 @@ namespace Scoz.Editor {
                     string content = reader.ReadToEnd();
                     // 使用正則表達式替換獨立的單詞 將"Realm"改為"Realm.dll"
                     content = Regex.Replace(content, "\"Realm\"", "\"Realm.dll\"");
+
+                    // 要增加的元數據dll
+                    string newItem1 = "\"Realm.PlatformHelpers.dll\",";
+                    string newItem2 = "\"Realm.UnityUtils.dll\",";
+                    // 找到List尾端加入要新增的元數據dll
+                    string listEndPattern = @"mscorlib.dll"",";
+                    string replacement = $@"mscorlib.dll"",
+                        {newItem1}
+                        {newItem2}
+	                ";
+                    content = Regex.Replace(content, listEndPattern, replacement);
+
                     reader.Close();
                     // 寫入修改後的內容
                     using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8)) {
