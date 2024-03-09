@@ -66,12 +66,7 @@ namespace Service.Realms {
         public static async Task<Dictionary<string, object>> CallAtlasFunc(AtlasFunc _func, Dictionary<string, string> _data) {
             string jsonResult = null;
             if (_data == null) jsonResult = await MyApp.CurrentUser.Functions.CallAsync<string>(_func.ToString());
-            else
-            {
-                WriteLog.Log("=========x");
-                jsonResult = await MyApp.CurrentUser.Functions.CallAsync<string>(_func.ToString(), _data);
-                WriteLog.Log("========z");
-            }
+            else jsonResult = await MyApp.CurrentUser.Functions.CallAsync<string>(_func.ToString());
             try {
                 //WriteLog.LogColorFormat("jsonResult: {0}", WriteLog.LogType.Realm, jsonResult);
                 var dataDic = HandleReplyData(jsonResult);
