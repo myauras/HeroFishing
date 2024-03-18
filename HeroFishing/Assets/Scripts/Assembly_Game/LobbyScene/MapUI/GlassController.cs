@@ -14,6 +14,8 @@ public class GlassController : MonoBehaviour {
     private Animator _breakGlassAnimator;
     [SerializeField]
     private Camera _camera;
+    [SerializeField]
+    private GlassScaler[] _scalers;
 
 
     private void OnDestroy() {
@@ -24,6 +26,9 @@ public class GlassController : MonoBehaviour {
     public void Init() {
         _instance = this;
         UICam.Instance.AddCameraStack(_camera);
+        for (int i = 0; i < _scalers.Length; i++) {
+            _scalers[i].Scale();
+        }
     }
 
     public void Select(bool active) {
