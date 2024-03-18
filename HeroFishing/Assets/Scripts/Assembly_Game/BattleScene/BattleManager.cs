@@ -236,7 +236,19 @@ namespace HeroFishing.Battle {
                 attackPos = attackPos,
                 direction = attackDir,
             };
+
             spellData.Spell.Play(playData);
+
+            var spell = spellData.Spell;
+            if (spell.Move != null) {
+                if (!hero.TryGetComponent<HeroMoveBehaviour>(out var move)) {
+                    move = hero.gameObject.AddComponent<HeroMoveBehaviour>();
+                }
+                spell.Move.Play(attackPos, hero.transform.position, attackDir, move);
+            }
+
+            if (spell.ShakeCamera != null)
+                spell.ShakeCamera.Play();
         }
 
         public void UpdateScene(Spawn[] spawns, SceneEffect[] effects) {
