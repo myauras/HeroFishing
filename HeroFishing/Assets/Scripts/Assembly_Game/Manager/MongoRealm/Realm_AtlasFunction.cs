@@ -63,10 +63,10 @@ namespace Service.Realms {
         /// <param name="_func">方法名稱</param>
         /// <param name="_params">傳入參數字典</param>
         /// <returns>回傳結果字典</returns>
-        public static async Task<Dictionary<string, object>> CallAtlasFunc(AtlasFunc _func, Dictionary<string, object> _data) {
+        public static async Task<Dictionary<string, object>> CallAtlasFunc(AtlasFunc _func, Dictionary<string, string> _data) {
             string jsonResult = null;
             if (_data == null) jsonResult = await MyApp.CurrentUser.Functions.CallAsync<string>(_func.ToString());
-            else jsonResult = await MyApp.CurrentUser.Functions.CallAsync<string>(_func.ToString(), _data);
+            else jsonResult = await MyApp.CurrentUser.Functions.CallAsync<string>(_func.ToString());
             try {
                 //WriteLog.LogColorFormat("jsonResult: {0}", WriteLog.LogType.Realm, jsonResult);
                 var dataDic = HandleReplyData(jsonResult);
@@ -82,7 +82,7 @@ namespace Service.Realms {
         /// </summary>
         /// <param name="_func">方法名稱</param>
         /// <param name="_data">傳入參數字典</param>
-        public static void CallAtlasFuncNoneAsync(AtlasFunc _func, Dictionary<string, object> _data) {
+        public static void CallAtlasFuncNoneAsync(AtlasFunc _func, Dictionary<string, string> _data) {
             UniTask.Void(async () => {
                 try {
                     await CallAtlasFunc(_func, _data);
@@ -98,7 +98,7 @@ namespace Service.Realms {
         /// </summary>
         public static async UniTask<Dictionary<string, object>> CallAtlasFunc_InitPlayerData(AuthType _authType) {
             try {
-                var dataDic = new Dictionary<string, object> { { "AuthType", _authType.ToString() } };
+                var dataDic = new Dictionary<string, string> { { "AuthType", _authType.ToString() } };
                 var replyData = await CallAtlasFunc(AtlasFunc.InitPlayerData, dataDic).AsUniTask();
                 if (replyData == null) {
                     WriteLog.LogErrorFormat("CallAtlasFunc_InitPlayerData發生錯誤");
