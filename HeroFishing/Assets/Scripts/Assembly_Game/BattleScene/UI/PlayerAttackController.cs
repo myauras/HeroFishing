@@ -44,7 +44,7 @@ namespace HeroFishing.Battle {
 
         private const float MOVE_SCALE_FACTOR = 2;
         private const float ATTACK_BUFFER_TIME = 0.2f;
-        private const float ATTACK_LOCK_TIME = 1.5f;
+        private const float ATTACK_LOCK_TIME = 0.5f;
         //private const float ATTACK_REPEAT_TIME = 1.0f;
         public bool ControlLock {
             get {
