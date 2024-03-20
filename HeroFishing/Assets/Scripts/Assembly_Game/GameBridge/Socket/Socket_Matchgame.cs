@@ -259,6 +259,10 @@ namespace HeroFishing.Socket {
                         var dropSpellPacket = JsonMapper.ToObject<SocketCMD<DROPSPELL_TOCLIENT>>(_msg);
                         HandleDropSepll(dropSpellPacket);
                         break;
+                    case SocketContent.MatchgameCMD_TCP.ADDBOT_TOCLIENT:
+                        var addBotPacket = JsonMapper.ToObject<SocketCMD<ADDBOT_TOCLIENT>>(_msg);
+                        HandleAddBot(addBotPacket);
+                        break;
                     default:
                         WriteLog.LogErrorFormat("收到尚未定義的命令類型: {0}", cmdType);
                         break;
@@ -324,7 +328,7 @@ namespace HeroFishing.Socket {
                 players.Add(player);
             }
             players.Sort((a, b) => {
-                if(b.GainPoints == a.GainPoints) {
+                if (b.GainPoints == a.GainPoints) {
                     return a.Idx - b.Idx;
                 }
                 return (int)(b.GainPoints - a.GainPoints);
@@ -367,6 +371,9 @@ namespace HeroFishing.Socket {
             var playerIdx = _packet.Content.PlayerIdx;
             var heroIndex = BattleManager.Instance.GetHeroIndex(playerIdx);
             DropManager.Instance.PlayDrop(heroIndex, _packet.Content.DropSpellJsonID);
+        }
+        void HandleAddBot(SocketCMD<ADDBOT_TOCLIENT> _packet) {
+            if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString()) return;
         }
 
     }

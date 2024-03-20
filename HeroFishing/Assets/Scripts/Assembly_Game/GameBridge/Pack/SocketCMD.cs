@@ -55,6 +55,8 @@ namespace HeroFishing.Socket {
             LVUPSPELL_TOCLIENT, //升級技能結果回傳
             DROPSPELL,//掉落施法
             DROPSPELL_TOCLIENT,//掉落施法-送Client
+            ADDBOT,//加入電腦
+            ADDBOT_TOCLIENT,//加入電腦-送Client
         }
         public enum MatchgameCMD_UDP {
             //ATTACK_TOCLIENT,//攻擊

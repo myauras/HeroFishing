@@ -9,14 +9,20 @@ namespace Scoz.Func {
         private void Update() {
             KeyDetector();
         }
+
+        [ContextMenu("Snap Shot")]
+        public void SnapShot() {
+            string date = DateTime.Now.ToString("MMdd-HHmmss");
+            string path = $"Assets/CaptureScreenshot_{date}.png";
+            Debug.LogError("存圖片至路徑: " + path);
+            ScreenCapture.CaptureScreenshot(path);
+        }
         // Update is called once per frame
         void KeyDetector() {
 
 
             if (Input.GetKeyDown(KeyCode.Q)) {
-                string path = "Assets/CaptureScreenshot.png";
-                Debug.LogError("存圖片至路徑: " + path);
-                ScreenCapture.CaptureScreenshot(path);
+                SnapShot();
 
             } else if (Input.GetKeyDown(KeyCode.T)) {
 

@@ -144,5 +144,9 @@ namespace HeroFishing.Socket {
             SocketCMD<LVUPSPELL> cmd = new SocketCMD<LVUPSPELL>(new LVUPSPELL(_idx));
             Socket.TCPSend(cmd);
         }
+        public void AddBot() {
+            SocketCMD<ADDBOT> cmd = new SocketCMD<ADDBOT>(new ADDBOT());
+            Socket.TCPSend(cmd);
+        }
     }
 }
