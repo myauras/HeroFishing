@@ -229,8 +229,12 @@ namespace HeroFishing.Battle {
             Quaternion rotation = Quaternion.AngleAxis(heroIndex * -90, Vector3.up);
             hero.FaceDir(rotation);
             hero.PlaySpell(spellData.SpellName);
-            Vector3 attackPos = rotation * new Vector3((float)content.AttackPos[0], (float)content.AttackPos[1], (float)content.AttackPos[2]);
-            Vector3 attackDir = rotation * new Vector3((float)content.AttackDir[0], (float)content.AttackDir[1], (float)content.AttackDir[2]);
+            Vector3 attackPos = Vector3.zero;
+            Vector3 attackDir = Vector3.zero;
+            if (!content.AttackLock) {
+                attackPos = rotation * new Vector3((float)content.AttackPos[0], (float)content.AttackPos[1], (float)content.AttackPos[2]);
+                attackDir = rotation * new Vector3((float)content.AttackDir[0], (float)content.AttackDir[1], (float)content.AttackDir[2]);
+            }
             SpellPlayData playData = new SpellPlayData {
                 lockAttack = content.AttackLock,
                 monsterIdx = content.MonsterIdx,
