@@ -20,7 +20,8 @@ namespace Scoz.Func {
 
 
             if (Input.GetKeyDown(KeyCode.Q)) {
-                DropManager.Instance.AddDrop(0, 4);
+                GameConnector.Instance.AddBot();
+                //DropManager.Instance.AddDrop(0, 4);
 
                 //int[] monsterIdxs = new int[1] { 1 };
                 //key++;
