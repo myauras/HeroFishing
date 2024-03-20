@@ -31,7 +31,7 @@ Shader"Project Hero VFX/FrozenTransparent"
                 "LightMode" = "UniversalForward"
             }
             ZTest LEqual
-            ZWrite On
+            ZWrite Off
             Blend SrcAlpha OneMinusSrcAlpha
             HLSLPROGRAM
             #pragma vertex vert

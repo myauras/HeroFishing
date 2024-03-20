@@ -15,6 +15,14 @@ namespace Scoz.Func {
 
         public static Animator MyAni;
         int key = 0;
+
+        [ContextMenu("Snap Shot")]
+        public void SnapShot() {
+            string date = DateTime.Now.ToString("MMdd-HHmmss");
+            string path = $"Assets/CaptureScreenshot_{date}.png";
+            Debug.LogError("存圖片至路徑: " + path);
+            ScreenCapture.CaptureScreenshot(path);
+        }
         // Update is called once per frame
         void KeyDetector() {
 
@@ -27,23 +35,24 @@ namespace Scoz.Func {
                 //key++;
                 //GameConnector.Instance.Hit(key, monsterIdxs, "1_attack");
             } else if (Input.GetKeyDown(KeyCode.T)) {
-                Action connFunc = null;
-                AllocatedRoom.Instance.SetMyHero(1, "1_1"); //設定本地玩家自己使用的英雄ID
-                if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString())
-                    PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
-                PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
-                connFunc = () => GameConnector.Instance.ConnectToMatchgameTestVer(() => {
-                    PopupUI.HideLoading();
-                    GameConnector.Instance.SetHero(1, "1_1"); //送Server玩家使用的英雄ID
-                }, () => {
-                    WriteLog.LogError("連線遊戲房失敗");
-                }, () => {
-                    if (AllocatedRoom.Instance.CurGameState == AllocatedRoom.GameState.Playing) {
-                        WriteLog.LogError("需要斷線重連");
-                        connFunc();
-                    }
-                });
-                connFunc();
+                SnapShot();
+                //Action connFunc = null;
+                //AllocatedRoom.Instance.SetMyHero(1, "1_1"); //設定本地玩家自己使用的英雄ID
+                //if (SceneManager.GetActiveScene().name != MyScene.BattleScene.ToString())
+                //    PopupUI.CallSceneTransition(MyScene.BattleScene);//跳轉到BattleScene
+                //PopupUI.ShowLoading(StringJsonData.GetUIString("Loading"));
+                //connFunc = () => GameConnector.Instance.ConnectToMatchgameTestVer(() => {
+                //    PopupUI.HideLoading();
+                //    GameConnector.Instance.SetHero(1, "1_1"); //送Server玩家使用的英雄ID
+                //}, () => {
+                //    WriteLog.LogError("連線遊戲房失敗");
+                //}, () => {
+                //    if (AllocatedRoom.Instance.CurGameState == AllocatedRoom.GameState.Playing) {
+                //        WriteLog.LogError("需要斷線重連");
+                //        connFunc();
+                //    }
+                //});
+                //connFunc();
             } else if (Input.GetKeyDown(KeyCode.W)) {
                 GameConnector.Instance.DropSpell(4);
             } else if (Input.GetKeyDown(KeyCode.E)) {

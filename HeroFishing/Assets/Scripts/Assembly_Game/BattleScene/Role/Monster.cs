@@ -24,6 +24,7 @@ namespace HeroFishing.Battle {
         private Vector3 _lastHitDirection;
 
         private GameObject LockObj;
+        private CompositeDisposable LockDisposables = new CompositeDisposable();
 
         private static readonly List<Monster> s_aliveMonsters = new List<Monster>();
         public static readonly Dictionary<int, Monster> IdxToMonsterMapping = new Dictionary<int, Monster>();
@@ -116,8 +117,30 @@ namespace HeroFishing.Battle {
             }, 0f, GameSettingJsonData.GetFloat(GameSetting.HitEffect_DecaySec));
         }
 
+        public void SetLockTarget() {
+            var startTime = Time.time;
+            Observable.EveryUpdate().Subscribe(_ => {
+                Color color = new Color(2.603922f, 7.529412f, 8f, 1.0f);
+                PropertyBlock.SetVector("_OutlineColor", color);
+                PropertyBlock.SetFloat("_Opacity", 1);
+                PropertyBlock.SetFloat("_FresnelPower", 3.5f);
+
+                var deltaTime = Time.time - startTime;
+                var value = Mathf.PingPong(deltaTime / 0.3f, 1);
+                PropertyBlock.SetFloat("_Opacity", value);
+                SetPropertyBlock(PropertyBlock);
+            }).AddTo(LockDisposables);
+        }
+
+        public void ResetLockTarget() {
+            LockDisposables.Clear();
+            PropertyBlock.SetFloat("_Opacity", 0);
+            SetPropertyBlock(PropertyBlock);
+        }
+
         public void Lock(bool active) {
             if (active) {
+                ResetLockTarget();
                 if (LockObj == null) {
                     AddressablesLoader.GetParticle("OtherEffect/LockEffect", (go, handle) => {
                         AddressableManage.SetToChangeSceneRelease(handle);

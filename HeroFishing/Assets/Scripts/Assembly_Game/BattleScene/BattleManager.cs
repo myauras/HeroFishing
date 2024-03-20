@@ -34,6 +34,8 @@ namespace HeroFishing.Battle {
         private bool _isSpellTest;
         [SerializeField]
         private float _localDieThreshold;
+        [SerializeField]
+        private bool _spawnMonster;
         public bool IsSpellTest => _isSpellTest;
         public float LocalDieThreshold => _localDieThreshold;
 
@@ -165,6 +167,7 @@ namespace HeroFishing.Battle {
         private void SpawnMonster() {
             if (MyMonsterScheduler == null) return;
             if (!MyMonsterScheduler.TryDequeueMonster(out var monsterInfo)) return;
+            if (Application.isEditor && !_spawnMonster) return;
             MonsterSpawner.Spawn(monsterInfo, out var monster);
             //if (!MyMonsterScheduler.TryDequeueMonster(out SpawnData spawnData)) return;
 
@@ -240,7 +243,19 @@ namespace HeroFishing.Battle {
                 attackPos = attackPos,
                 direction = attackDir,
             };
+
             spellData.Spell.Play(playData);
+
+            var spell = spellData.Spell;
+            if (spell.Move != null) {
+                if (!hero.TryGetComponent<HeroMoveBehaviour>(out var move)) {
+                    move = hero.gameObject.AddComponent<HeroMoveBehaviour>();
+                }
+                spell.Move.Play(attackPos, hero.transform.position, attackDir, move);
+            }
+
+            if (spell.ShakeCamera != null)
+                spell.ShakeCamera.Play();
         }
 
         public void UpdateScene(Spawn[] spawns, SceneEffect[] effects) {
