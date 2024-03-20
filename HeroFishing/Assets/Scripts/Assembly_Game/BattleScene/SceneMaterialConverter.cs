@@ -67,7 +67,7 @@ public class SceneMaterialConverter : MonoBehaviour {
             timer += deltaTime;
             var value = timer / SMOOTH_TIME;
             foreach (var material in materials) {
-                material.SetFloat("_EdgePower", Mathf.Lerp(8, 0, (float)value));
+                material.SetFloat("_EdgePower", Mathf.Lerp(8, 2, (float)value));
                 material.SetFloat("_FreezeMask", Mathf.Lerp(2, 0, (float)value));
                 material.SetFloat("_IceAmount", Mathf.Lerp(0.25f, 0, (float)value));
             }
@@ -80,7 +80,7 @@ public class SceneMaterialConverter : MonoBehaviour {
             foreach (var renderer in _renderers) {
                 for (int j = 0; j < renderer.sharedMaterials.Length; j++) {
                     var material = renderer.sharedMaterials[j];
-                    material.SetFloat("_EdgePower", 0);
+                    material.SetFloat("_EdgePower", 2);
                     material.SetFloat("_FreezeMask", 0);
                     material.SetFloat("_IceAmount", 0);
                 }
