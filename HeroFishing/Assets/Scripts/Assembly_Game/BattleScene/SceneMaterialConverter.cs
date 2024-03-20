@@ -8,6 +8,8 @@ using UniRx;
 using UnityEngine;
 
 public class SceneMaterialConverter : MonoBehaviour {
+    [SerializeField]
+    private GraphicConverter _graphicConverter;
     private Material _matFreezeOpaque;
     private Material _matFreezeTransparent;
     private Renderer[] _renderers;
@@ -29,6 +31,8 @@ public class SceneMaterialConverter : MonoBehaviour {
 
     private List<Material> _originMats = new List<Material>();
     private List<Material> _freezeMats = new List<Material>();
+
+    private const int SMOOTH_TIME = 1500;
 
     public void Init() {
         _matFreezeOpaque = ResourcePreSetter.GetMaterial("FreezeOpaque");
@@ -58,21 +62,25 @@ public class SceneMaterialConverter : MonoBehaviour {
     public void Unfreeze() {
         var materials = _renderers.SelectMany(r => r.sharedMaterials);
         double timer = 0;
-        Observable.EveryUpdate().TakeUntil(Observable.Timer(TimeSpan.FromMilliseconds(1500))).TimeInterval().Subscribe(t => {
+        Observable.EveryUpdate().TakeUntil(Observable.Timer(TimeSpan.FromMilliseconds(SMOOTH_TIME))).TimeInterval().Subscribe(t => {
             var deltaTime = t.Interval.TotalMilliseconds;
             timer += deltaTime;
-            var value = timer / 1500;
-            foreach(var material in materials ) {
-                material.SetFloat("_EdgePower", Mathf.Lerp(8, 100, (float)value));
+            var value = timer / SMOOTH_TIME;
+            foreach (var material in materials) {
+                material.SetFloat("_EdgePower", Mathf.Lerp(8, 2, (float)value));
                 material.SetFloat("_FreezeMask", Mathf.Lerp(2, 0, (float)value));
                 material.SetFloat("_IceAmount", Mathf.Lerp(0.25f, 0, (float)value));
-            }            
+            }
+
+            if (_graphicConverter != null) {
+                _graphicConverter.ChangeValue(1 - (float)value);
+            }
         }, () => {
             int matIndex = 0;
             foreach (var renderer in _renderers) {
                 for (int j = 0; j < renderer.sharedMaterials.Length; j++) {
                     var material = renderer.sharedMaterials[j];
-                    material.SetFloat("_EdgePower", 100);
+                    material.SetFloat("_EdgePower", 2);
                     material.SetFloat("_FreezeMask", 0);
                     material.SetFloat("_IceAmount", 0);
                 }
@@ -80,8 +88,12 @@ public class SceneMaterialConverter : MonoBehaviour {
                 renderer.SetSharedMaterials(matList);
                 matIndex += renderer.materials.Length;
             }
+
+            if (_graphicConverter != null) {
+                _graphicConverter.ChangeValue(0);
+            }
         });
-        
+
     }
 
     private void SetupFreezeMats() {
@@ -120,14 +132,31 @@ public class SceneMaterialConverter : MonoBehaviour {
 
     private void FreezeSmoothly() {
         var materials = _renderers.SelectMany(r => r.sharedMaterials);
-        
-        DOTween.To(() => 0f, value => {
-            //Debug.Log(value);
+
+        double timer = 0;
+        Observable.EveryUpdate().TakeUntil(Observable.Timer(TimeSpan.FromMilliseconds(SMOOTH_TIME))).TimeInterval().Subscribe(t => {
+            var deltaTime = t.Interval.TotalMilliseconds;
+            timer += deltaTime;
+            float value = (float)timer / SMOOTH_TIME;
             foreach (var material in materials) {
                 material.SetFloat("_EdgePower", Mathf.Lerp(0, 8f, value));
                 material.SetFloat("_FreezeMask", value * 2f);
                 material.SetFloat("_IceAmount", value * 0.25f);
             }
-        }, 1.0f, 1.5f);
+
+            if (_graphicConverter != null) {
+                _graphicConverter.ChangeValue((float)value);
+            }
+        }, () => {
+            foreach (var material in materials) {
+                material.SetFloat("_EdgePower", 8);
+                material.SetFloat("_FreezeMask", 2);
+                material.SetFloat("_IceAmount", 0.25f);
+            }
+
+            if (_graphicConverter != null) {
+                _graphicConverter.ChangeValue(1);
+            }
+        });
     }
 }

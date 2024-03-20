@@ -336,6 +336,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6158164425124015319}
   - component: {fileID: 2324859422453361248}
+  - component: {fileID: 5222365459235807135}
   m_Layer: 11
   m_Name: Break glass (1)
   m_TagString: Untagged
@@ -400,6 +401,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5222365459235807135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692393884460409752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3c0fdabd30f5548bb0aced3a840a5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _originScale: 1
 --- !u!1 &1744081863636276178
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,6 +707,9 @@ MonoBehaviour:
   _wholeGlass: {fileID: 2737653767306529093}
   _breakGlassAnimator: {fileID: 2324859422453361248}
   _camera: {fileID: 3745093789439941661}
+  _scalers:
+  - {fileID: 5820885930695865875}
+  - {fileID: 5222365459235807135}
 --- !u!1 &2527598006922488444
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,7 +785,7 @@ GameObject:
   - component: {fileID: 1457184034880734807}
   - component: {fileID: 1587577673967393822}
   - component: {fileID: 9072762335315677650}
-  - component: {fileID: 7618447284877682482}
+  - component: {fileID: 5820885930695865875}
   m_Layer: 11
   m_Name: Glass whole (1)
   m_TagString: Untagged
@@ -841,7 +858,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7618447284877682482
+--- !u!114 &5820885930695865875
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -850,11 +867,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2737653767306529093}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c551f978b956e7648961dfc7ca0dbf79, type: 3}
+  m_Script: {fileID: 11500000, guid: be3c0fdabd30f5548bb0aced3a840a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RefScreenSize: {x: 2026, y: 936}
-  OriginScaleFactor: 9030
+  _originScale: 9030
 --- !u!1 &2807630312897148724
 GameObject:
   m_ObjectHideFlags: 0
@@ -7445,8 +7461,8 @@ Camera:
   m_GameObject: {fileID: 7480534498439039669}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -7477,7 +7493,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 2048
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: d0183b8544f1cc9409241d96fa8182f5, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -7510,7 +7526,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 1
+  m_RenderPostProcessing: 0
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0

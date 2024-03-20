@@ -24,6 +24,7 @@ public enum GameSetting
 	CamShake_BossDebut_AmplitudeGain,
 	CamShake_BossDebut_FrequencyGain,
 	CamShake_BossDebut_Duration,
+	Attack_Lock_Time,
 	HitEffect_OutlineColor,
 	HitEffect_FresnelPower,
 	HitEffect_DecaySec,

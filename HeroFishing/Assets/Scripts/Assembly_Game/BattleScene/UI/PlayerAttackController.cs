@@ -30,7 +30,7 @@ namespace HeroFishing.Battle {
         private float _scheduledNextAttackTime;
         private float _scheduledRecoverTime;
         private float _scheduledLockTime;
-        private float _scheduledRepeatTime;
+        //private float _scheduledRepeatTime;
         private bool _isAttack;
         private bool _repeatAttack;
         private Monster _targetMonster;
@@ -44,8 +44,8 @@ namespace HeroFishing.Battle {
 
         private const float MOVE_SCALE_FACTOR = 2;
         private const float ATTACK_BUFFER_TIME = 0.2f;
-        private const float ATTACK_LOCK_TIME = 1.5f;
-        private const float ATTACK_REPEAT_TIME = 1.0f;
+        //private const float ATTACK_LOCK_TIME = 0.5f;
+        //private const float ATTACK_REPEAT_TIME = 1.0f;
         public bool ControlLock {
             get {
                 return (_currentMove != null && _currentMove.IsMoving) || !TimelinePlayer.CanControl;
@@ -66,7 +66,7 @@ namespace HeroFishing.Battle {
         //簡單說就是將攻擊指令存0.2秒，如果0.2秒內可以再次發射，會立刻發射。
         //比較不會導致狂點，但是射出時間有落差造成的卡頓感。
         private void AttackInput() {
-            if (Input.GetMouseButtonUp(0)) _repeatAttack = false;
+            //if (Input.GetMouseButtonUp(0)) _repeatAttack = false;
             if (!Input.GetMouseButtonDown(0) && !(Input.GetMouseButton(0) && _repeatAttack)) return;
             if (ControlLock) return;
             if (_isSkillMode) return;
@@ -105,32 +105,36 @@ namespace HeroFishing.Battle {
                 var ray = BattleManager.Instance.BattleCam.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hitInfo, 100, LayerMask.GetMask("Monster"), QueryTriggerInteraction.Ignore)) {
                     var monster = hitInfo.collider.GetComponentInParent<Monster>();
-                    if (monster.IsAlive) {
+                    if (monster.IsAlive && monster.InField) {
                         _targetMonster = monster;
+
+                        _targetMonster.SetLockTarget();
                     }
-                    _scheduledLockTime = Time.time + ATTACK_LOCK_TIME;
+                    _scheduledLockTime = Time.time + GameSettingJsonData.GetFloat(GameSetting.Attack_Lock_Time);
                 }
-                else {
-                    _scheduledRepeatTime = Time.time + ATTACK_REPEAT_TIME;
-                }
+                //else {
+                //    _scheduledRepeatTime = Time.time + ATTACK_REPEAT_TIME;
+                //}
             }
 
             // 確認有按到怪物，判斷是否真的進入鎖定狀態
             if (_targetMonster != null) {
                 // 時間內放開，將怪物清空
-                if (Input.GetMouseButtonUp(0) && Time.time <= _scheduledLockTime)
+                if (Input.GetMouseButtonUp(0) && Time.time <= _scheduledLockTime) {
+                    _targetMonster.ResetLockTarget();
                     _targetMonster = null;
+                }
                 // 超過指定時間，真的鎖定
                 else if (!_lockAttack && Time.time > _scheduledLockTime) {
                     _lockAttack = true;
                     _targetMonster.Lock(true);
                 }
             }
-            else {
-                if (Input.GetMouseButton(0) && Time.time > _scheduledRepeatTime) {
-                    _repeatAttack = true;
-                }
-            }
+            //else {
+            //    if (Input.GetMouseButton(0) && Time.time > _scheduledRepeatTime) {
+            //        _repeatAttack = true;
+            //    }
+            //}
         }
 
         private void Attack() {
