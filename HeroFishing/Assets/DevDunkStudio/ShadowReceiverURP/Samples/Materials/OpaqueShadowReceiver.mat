@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: OpaqueShadowReceiverDoubleSided
-  m_Shader: {fileID: -6465566751694194690, guid: 89c6140e741130941a7e4fd9541d5954,
+  m_Name: OpaqueShadowReceiver
+  m_Shader: {fileID: -6465566751694194690, guid: 1fed55a991e8c5b4c82e8b0506585d28,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -96,6 +96,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaClip: 0
+    - _Alpha_Clip: 0.5
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
