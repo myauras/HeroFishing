@@ -25,6 +25,8 @@ namespace HeroFishing.Battle {
 
         private GameObject LockObj;
         private CompositeDisposable LockDisposables = new CompositeDisposable();
+        private float _startTime;
+        private const float MIN_TIME = 0.5f;
 
         private static readonly List<Monster> s_aliveMonsters = new List<Monster>();
         public static readonly Dictionary<int, Monster> IdxToMonsterMapping = new Dictionary<int, Monster>();
@@ -118,21 +120,31 @@ namespace HeroFishing.Battle {
         }
 
         public void SetLockTarget() {
-            var startTime = Time.time;
+            _startTime = Time.time;
             Observable.EveryUpdate().Subscribe(_ => {
                 Color color = new Color(2.603922f, 7.529412f, 8f, 1.0f);
                 PropertyBlock.SetVector("_OutlineColor", color);
-                PropertyBlock.SetFloat("_Opacity", 1);
                 PropertyBlock.SetFloat("_FresnelPower", 3.5f);
 
-                var deltaTime = Time.time - startTime;
-                var value = Mathf.PingPong(deltaTime / 0.3f, 1);
+                var deltaTime = Time.time - _startTime;
+                var value = 1 - Mathf.PingPong(deltaTime / 0.3f, 1);
                 PropertyBlock.SetFloat("_Opacity", value);
                 SetPropertyBlock(PropertyBlock);
             }).AddTo(LockDisposables);
         }
 
         public void ResetLockTarget() {
+            if (Time.time >= _startTime + MIN_TIME) {
+                CancelLockTarget();
+            }
+            else {
+                Observable.Timer(TimeSpan.FromSeconds((_startTime + MIN_TIME) - Time.time)).Subscribe(_ => {
+                    CancelLockTarget();
+                });
+            }
+        }
+
+        private void CancelLockTarget() {
             LockDisposables.Clear();
             PropertyBlock.SetFloat("_Opacity", 0);
             SetPropertyBlock(PropertyBlock);
