@@ -1072,6 +1072,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6118726582693609100}
+    - targetCorrespondingSourceObject: {fileID: 1575467995223295031, guid: 174261cfc784c124ba16d175d9656b85,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 768994262717046645}
   m_SourcePrefab: {fileID: 100100000, guid: 174261cfc784c124ba16d175d9656b85, type: 3}
 --- !u!1 &26848142957062386 stripped
 GameObject:
@@ -1549,6 +1553,7 @@ MonoBehaviour:
   _dropUI: {fileID: 2881980762882703650}
   _rankUI: {fileID: 2462910669778169772}
   _playerInfoUI: {fileID: 7929388321948946647}
+  _bossBannerUI: {fileID: 768994262717046645}
 --- !u!114 &7929388321948946647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1633,6 +1638,12 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!95 &3320301628834468269 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5469201146610322561, guid: 174261cfc784c124ba16d175d9656b85,
+    type: 3}
+  m_PrefabInstance: {fileID: 7346098638638701868}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4492296428688054299 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6603757024708609335, guid: 174261cfc784c124ba16d175d9656b85,
@@ -1889,6 +1900,25 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7346098638638701868}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8083884369665743131 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1575467995223295031, guid: 174261cfc784c124ba16d175d9656b85,
+    type: 3}
+  m_PrefabInstance: {fileID: 7346098638638701868}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &768994262717046645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8083884369665743131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90f69d94b6d70bb47a55b0d3ef14194a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 3320301628834468269}
 --- !u!1 &8256940941667239916 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1685500474821630656, guid: 174261cfc784c124ba16d175d9656b85,

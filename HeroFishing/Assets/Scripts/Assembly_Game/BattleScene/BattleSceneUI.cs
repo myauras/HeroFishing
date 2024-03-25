@@ -31,6 +31,8 @@ public class BattleSceneUI : BaseUI {
     private RankUI _rankUI;
     [SerializeField]
     private PlayerInfoUI _playerInfoUI;
+    [SerializeField]
+    private BossBannerUI _bossBannerUI;
 
     private void Start() {
         Init();
@@ -53,6 +55,7 @@ public class BattleSceneUI : BaseUI {
             _dropUI.Init();
             _rankUI.Init();
             _playerInfoUI.Init();
+            _bossBannerUI.Init();
         });
     }
 

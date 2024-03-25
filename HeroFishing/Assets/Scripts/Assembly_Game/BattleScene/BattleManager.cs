@@ -63,8 +63,9 @@ namespace HeroFishing.Battle {
 
         private const int MAX_HERO_COUNT = 4;
 
-        public Action<int, int> OnHeroAdd;
-        public Action<int> OnHeroRemove;
+        public event Action<int, int> OnHeroAdd;
+        public event Action<int> OnHeroRemove;
+        public event Action OnBossSpawn;
         Action OnLeaveGameAC;
 
         public void Init() {
@@ -199,10 +200,7 @@ namespace HeroFishing.Battle {
 
             //是BOSS就會攝影機震動
             if (monsterInfo.IsBoss)
-                CamManager.ShakeCam(CamManager.CamNames.Battle,
-                GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_AmplitudeGain),
-                GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_FrequencyGain),
-                GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_Duration));
+                OnBossSpawn?.Invoke();
         }
 
         public void UpdateHeros() {
