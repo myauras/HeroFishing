@@ -423,7 +423,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 16896
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -525,6 +525,7 @@ GameObject:
   - component: {fileID: 8682492246731998559}
   - component: {fileID: 1778222739122154401}
   - component: {fileID: 7193715318701503855}
+  - component: {fileID: 5429826343660436178}
   m_Layer: 0
   m_Name: BattleCam
   m_TagString: SceneCam
@@ -586,7 +587,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 5587
+    m_Bits: 21971
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -643,6 +644,40 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &5429826343660436178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3088385365566719192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowDebugText: 0
+  m_ShowCameraFrustum: 1
+  m_IgnoreTimeScale: 0
+  m_WorldUpOverride: {fileID: 0}
+  m_UpdateMethod: 2
+  m_BlendUpdateMethod: 1
+  m_DefaultBlend:
+    m_Style: 1
+    m_Time: 2
+    m_CustomCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  m_CustomBlends: {fileID: 0}
+  m_CameraCutEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_CameraActivatedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3210715451820118169
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,7 +977,7 @@ GameObject:
   m_Component:
   - component: {fileID: 382998234740706322}
   - component: {fileID: 2896679513101682643}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: vCam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1103,7 +1138,7 @@ GameObject:
   - component: {fileID: 6845656777536393725}
   - component: {fileID: 7813551799476437280}
   - component: {fileID: 7779462221211456918}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}

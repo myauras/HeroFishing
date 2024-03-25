@@ -1,3 +1,4 @@
+using Cinemachine;
 using Cysharp.Threading.Tasks;
 using HeroFishing.Main;
 using HeroFishing.Socket;
@@ -7,6 +8,7 @@ using Service.Realms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -61,8 +63,9 @@ namespace HeroFishing.Battle {
 
         private const int MAX_HERO_COUNT = 4;
 
-        public Action<int, int> OnHeroAdd;
-        public Action<int> OnHeroRemove;
+        public event Action<int, int> OnHeroAdd;
+        public event Action<int> OnHeroRemove;
+        public event Action OnBossSpawn;
         Action OnLeaveGameAC;
 
         public void Init() {
@@ -116,6 +119,26 @@ namespace HeroFishing.Battle {
             //因為戰鬥場景的攝影機有分為場景與UI, 要把場景攝影機設定為Base, UI設定為Overlay, 並在BaseCamera中加入Camera stack
             UICam.Instance.SetRendererMode(CameraRenderType.Overlay);
             AddCamStack(UICam.Instance.MyCam);
+            if (!MyCam.TryGetComponent<CinemachineBrain>(out var camBrain)) {
+                Debug.LogError("brain is null");
+                return;
+            }
+            CamManager.SetCam(camBrain);
+            // 檢查virtual camera是否存在
+            if (camBrain.ActiveVirtualCamera != null) {
+                var vCam = camBrain.ActiveVirtualCamera as CinemachineVirtualCamera;
+                CamManager.AddVirtualCam(CamManager.CamNames.Battle, vCam);
+            }
+            else {
+                // 不存在的話等待一段時間，超時報錯
+                Observable.EveryUpdate().Where(_ => camBrain.ActiveVirtualCamera != null).Timeout(TimeSpan.FromSeconds(10)).First().Subscribe(_ => {
+                    var vCam = camBrain.ActiveVirtualCamera as CinemachineVirtualCamera;
+                    CamManager.AddVirtualCam(CamManager.CamNames.Battle, vCam);
+                }, ex => {
+                    Debug.LogError("virtual camera is null");
+                });
+            }
+
         }
         public void LeaveGame() {
             PoolManager.Instance.ResetBattlePool();//清除物件池
@@ -176,11 +199,8 @@ namespace HeroFishing.Battle {
             //_entityManager.AddComponent<SpawnTag>(entity);
 
             //是BOSS就會攝影機震動
-            //if (spawnData.IsBoss)
-            CamManager.ShakeCam(CamManager.CamNames.Battle,
-                GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_AmplitudeGain),
-                GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_FrequencyGain),
-                GameSettingJsonData.GetFloat(GameSetting.CamShake_BossDebut_Duration));
+            if (monsterInfo.IsBoss)
+                OnBossSpawn?.Invoke();
         }
 
         public void UpdateHeros() {
