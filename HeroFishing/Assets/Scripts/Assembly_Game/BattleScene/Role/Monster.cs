@@ -50,11 +50,13 @@ namespace HeroFishing.Battle {
                 _inField = value;
                 if (!_inField) {
                     Lock(false);
-                    DestroyGOAfterDelay(1.0f);
                 }
             }
         }
+        private bool _hasInField;
+        public bool HasInField { get => _hasInField; set => _hasInField = value; }
         public bool IsAlive => s_aliveMonsters.Contains(this);
+        public bool IsRunning { get; private set; }
 
 
 
@@ -64,6 +66,7 @@ namespace HeroFishing.Battle {
             if (!s_aliveMonsters.Contains(this)) {
                 s_aliveMonsters.Add(this);
                 IdxToMonsterMapping.Add(MonsterIdx, this);
+                IsRunning = true;
             }
             LoadModel(_ac);
         }
@@ -172,7 +175,8 @@ namespace HeroFishing.Battle {
             if (WorldStateManager.Instance.IsFrozen) {
                 if (Explosion != null)
                     Explosion.Explode();
-            } else {
+            }
+            else {
                 Observable.Timer(TimeSpan.FromMilliseconds(150)).Subscribe(_ => {
                     for (int i = 0; i < MySkinnedMeshRenderers.Length; i++) {
                         MySkinnedMeshRenderers[i].enabled = false;
@@ -196,21 +200,24 @@ namespace HeroFishing.Battle {
                 MyMonsterSpecialize.PlayCoinEffect(MyData.MyMonsterSize, MySkinnedMeshRenderers[0], KillHeroIndex, MonsterIdx);
                 if (MyData.DropID > 0) {
                     //if (MyData.DropID == 5)
-                        MyMonsterSpecialize.PlayDropEffect(MyData.DropID, heroIndex);
+                    MyMonsterSpecialize.PlayDropEffect(MyData.DropID, heroIndex);
                 }
             }
 
             Lock(false);
+            IsRunning = false;
             DestroyGOAfterDelay(3.5f);
         }
 
         public void DestroyGOAfterDelay(float delay) {
-            if (s_aliveMonsters.Contains(this)) {
-                s_aliveMonsters.Remove(this);
-                IdxToMonsterMapping.Remove(MonsterIdx);
-            }
+            if (!s_aliveMonsters.Contains(this)) return;
+
+            s_aliveMonsters.Remove(this);
+            IdxToMonsterMapping.Remove(MonsterIdx);
+
             Observable.Timer(TimeSpan.FromSeconds(delay)).Subscribe(_ => {
-                if (gameObject!=null) Destroy(gameObject);
+                IsRunning = false;
+                if (gameObject != null) Destroy(gameObject);
             });
             //Observable.Timer(TimeSpan.FromSeconds(delay)).Subscribe(_ => {
             //    try {
@@ -241,7 +248,8 @@ namespace HeroFishing.Battle {
                 allMatList = new List<Material>();
                 s_frozenMatDic.Add(id, allMatList);
                 SetupFrozenDic();
-            } else {
+            }
+            else {
                 for (int i = 0; i < MySkinnedMeshRenderers.Length; i++) {
                     var renderer = MySkinnedMeshRenderers[i];
                     var matList = allMatList.GetRange(startIndex, renderer.materials.Length);
@@ -334,7 +342,8 @@ namespace HeroFishing.Battle {
                 var monster = s_aliveMonsters[i];
                 if (active) {
                     monster.Freeze();
-                } else {
+                }
+                else {
                     monster.UnFreeze();
                 }
             }

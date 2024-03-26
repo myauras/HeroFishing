@@ -48,7 +48,7 @@ public class MonsterGrid : MonoBehaviour, IUpdate {
             s_currentFrameCount = Time.frameCount;
         }
 
-        if (_monster.MyData.Speed != 0 && !WorldStateManager.Instance.IsFrozen && _monster.IsAlive && !_forceMoving) {
+        if (_monster.MyData.Speed != 0 && !WorldStateManager.Instance.IsFrozen && _monster.IsRunning && !_forceMoving) {
             _position += _monster.MyData.Speed * deltaTime * transform.forward;
             _t.position = _position;
         }
@@ -58,18 +58,20 @@ public class MonsterGrid : MonoBehaviour, IUpdate {
             (int)(_position.z / CELL_SIZE)
         );
 
-        if (PosInGridBoundary(_position)) {
+        bool inField = PosInGridBoundary(_position);
+        if (inField) {
             if (!s_gridMap.TryGetValue(_gridPos, out var list)) {
                 list = new List<Monster>();
                 s_gridMap.Add(_gridPos, list);
             }
             list.Add(_monster);
-            _monster.InField = true;
+            _monster.HasInField = true;
         }
+        _monster.InField = inField;
 
         if (!PosInRemovalBoundary(_position)) {
-            if (_monster.InField) {
-                _monster.InField = false;
+            if (_monster.HasInField) {
+                _monster.DestroyGOAfterDelay(1.0f);
             }
         }
     }

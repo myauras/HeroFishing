@@ -56,11 +56,14 @@ public class BulletCollision : CollisionBase {
 
         bool hasTarget = _info.TargetMonsterIdx != -1;
         bool isTargetMonsterAlive = Monster.TryGetMonsterByIdx(_info.TargetMonsterIdx, out _targetMonster);
-        if (hasTarget && !isTargetMonsterAlive)
+        if (_targetMonster != null)
+            Debug.Log(_targetMonster.InField);
+        if (hasTarget && (!isTargetMonsterAlive || !_targetMonster.InField))
             hasTarget = false;
 
         if (hasTarget) {
             var targetPos = _targetMonster.transform.position;
+            targetPos.y = GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY);
             var direction = (targetPos - _position).normalized;
             _position += _info.Speed * deltaTime * direction;
             _t.rotation = Quaternion.LookRotation(direction);
