@@ -10,26 +10,38 @@ using HeroFishing.Socket;
 using UnityEngine.SceneManagement;
 
 namespace HeroFishing.Main {
-
-
+    [System.Serializable]
+    public class MapColor {
+        public bool Gradient;
+        public Color GlowColor;
+        [ShowIf(nameof(Gradient), true)]
+        public Color GlowColor2;
+        public Color TxtColor;
+        [ColorUsage(true, true)]
+        public Color EffectColor;
+    }
 
     public class MapUI : BaseUI {
         [System.Serializable]
         public class MapColorDicClass : SerializableDictionary<int, Color> { }
+        [System.Serializable]
+        public class MapColorDic : SerializableDictionary<int, MapColor> { }
         [SerializeField]
         private MapScrollView _mapScrollView;
         [SerializeField]
         private bool _localTest;
-        [SerializeField]
-        private MapColorDicClass _glowColorDic;
-        [SerializeField]
-        private MapColorDicClass _txtColorDic;
+        //[SerializeField]
+        //private MapColorDicClass _glowColorDic;
+        //[SerializeField]
+        //private MapColorDicClass _txtColorDic;
         [SerializeField]
         private GlassController _myGlass;
         [SerializeField]
         private Image _heroIconImg;
         [SerializeField]
         private MapPlayerInfoUI _playerInfoUI;
+        [SerializeField]
+        private SerializedDictionary<int, MapColor> _mapColorDic;
 
         private GlassController _glassController;
         private List<MapItemData> _mapItemDatas;
@@ -82,6 +94,7 @@ namespace HeroFishing.Main {
             foreach (var dbMap in dbmaps) {
                 if (!dbMap.Enable.HasValue || !dbMap.Enable.Value) continue;
                 var itemData = CreateMapItemData(dbMap.JsonMapID ?? 1, dbMap.Bet ?? 1, dbMap);
+                if (itemData == null) continue;
                 _mapItemDatas.Add(itemData);
             }
             _mapScrollView.UpdateData(_mapItemDatas);
@@ -130,16 +143,23 @@ namespace HeroFishing.Main {
 
         private MapItemData CreateMapItemData(int id, int bet, DBMap dbMap = null) {
             var mapData = MapJsonData.GetData(id);
+            if(!_mapColorDic.TryGetValue(bet, out var mapColor)) {
+                Debug.LogError($"取得顏色失敗: id: {id} bet: {bet}");
+                return null;
+            }
+
             var itemData = new MapItemData() {
                 Id = id,
                 Name = mapData.Name,
                 Bet = bet,
-                IsGradient = bet == _bets[_bets.Length - 1],
-                txtColor = _txtColorDic[bet],
+                IsGradient = mapColor.Gradient,
+                txtColor = mapColor.TxtColor,
                 dbMap = dbMap,
                 Position = mapData.ForegroundPos,
+                glowColor1 = mapColor.GlowColor,
+                glowColor2 = mapColor.GlowColor2,
+                effectColor = mapColor.EffectColor,
             };
-            itemData.glowColor = itemData.IsGradient ? Color.black : _glowColorDic[bet];
             return itemData;
         }
 

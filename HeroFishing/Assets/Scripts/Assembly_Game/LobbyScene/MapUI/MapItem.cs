@@ -55,6 +55,7 @@ namespace HeroFishing.Main {
         private const string PARAM_HIGHTLIGHT = "_HightLight";
 
         private bool _hasAnimation;
+        private UIGradient _uiGradient;
 
         private void Start() {
             _btnSelect.onClick.AddListener(() => Context.OnClick?.Invoke(Index));
@@ -70,6 +71,7 @@ namespace HeroFishing.Main {
             _imgBet.material = _hightlightMat;
             _imgFrame.material = _hightlightMat;
             _imgGlow.material = _glowMat;
+            _uiGradient = _imgGlow.GetComponent<UIGradient>();
         }
 
         public override async void UpdateContent(MapItemData itemData) {
@@ -95,8 +97,15 @@ namespace HeroFishing.Main {
             });
 
             // 如果需要漸層色，則開啟漸層色
-            _imgGlow.GetComponent<UIGradient>().enabled = itemData.IsGradient;
-            _imgGlow.color = itemData.glowColor;
+            _uiGradient.enabled = itemData.IsGradient;
+            if (!itemData.IsGradient) {
+                _imgGlow.color = itemData.glowColor1;
+            }
+            else {
+                _imgGlow.color = Color.white;
+                _uiGradient.LinearColor1 = itemData.glowColor1;
+                _uiGradient.LinearColor2 = itemData.glowColor2;
+            }
 
             // 替換文字顏色
             _txtName.color = itemData.txtColor;
@@ -113,9 +122,11 @@ namespace HeroFishing.Main {
                 animator.runtimeAnimatorController = ac;
                 animator.enabled = Context.SelectedIndex == Index;
             }
-            //if (Context.SelectedIndex == Index) {
-            //    Debug.Log("selected " + Index);
-            //}
+
+            if (Context.SelectedIndex == Index) {
+                Debug.Log("selected " + Index);
+                GlassController.Instance.SetColor(itemData.effectColor);
+            }
         }
 
         public override void UpdatePosition(float position) {

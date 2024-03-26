@@ -11,8 +11,10 @@ public class MapItemData {
     public string Name;
     public int Bet;
     public bool IsGradient;
-    public Color glowColor;
+    public Color glowColor1;
+    public Color glowColor2;
     public Color txtColor;
+    public Color effectColor;
     public Vector2 Position;
     public DBMap dbMap;
 }

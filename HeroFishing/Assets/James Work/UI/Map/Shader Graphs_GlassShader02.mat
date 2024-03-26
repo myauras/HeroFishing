@@ -24,6 +24,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Noise:
         m_Texture: {fileID: 2800000, guid: 0bdb4c362449aa14bbb7065c6aa22bcc, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -59,13 +63,14 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Smooth: 0
-    - _edge_glow: 0.5
+    - _Strength: 1
+    - _edge_glow: 0
     m_Colors:
-    - _Color: {r: 3.0405278, g: 2.2784379, b: 8.47419, a: 1}
+    - _Color: {r: 6.0129604, g: 3.1166656, b: 1.133333, a: 1}
     - _Distort_move: {r: 0, g: 0.3, b: 0, a: 0}
     - _Vector2: {r: 0, g: -0.1, b: 0, a: 0}
     - _albedo: {r: 1, g: 1, b: 1, a: 1}
-    - _egde_color: {r: 15.2481165, g: 12.436553, b: 47.937256, a: 1}
+    - _egde_color: {r: 6.0129604, g: 3.1166656, b: 1.133333, a: 1}
     - _offset: {r: 0, g: -0.2, b: 0, a: 0}
     - _tiling: {r: -0.5, g: -0.5, b: 0, a: 0}
   m_BuildTextureStacks: []

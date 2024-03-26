@@ -17,6 +17,7 @@ public class GlassController : MonoBehaviour {
     [SerializeField]
     private GlassScaler[] _scalers;
 
+    private Material _mat;
 
     private void OnDestroy() {
         if (_camera != null)
@@ -29,6 +30,7 @@ public class GlassController : MonoBehaviour {
         for (int i = 0; i < _scalers.Length; i++) {
             _scalers[i].Scale();
         }
+        _mat = _wholeGlass.GetComponent<Renderer>().sharedMaterial;
     }
 
     public void Select(bool active) {
@@ -44,5 +46,10 @@ public class GlassController : MonoBehaviour {
             .SkipWhile(stateInfo => stateInfo.normalizedTime < 0.95f).First().Subscribe(_ => {
                 _breakGlassAnimator.gameObject.SetActive(false);
             });
+    }
+
+    public void SetColor(Color color) {
+        _mat.SetColor("_Color", color);
+        _mat.SetColor("_egde_color", color);
     }
 }
