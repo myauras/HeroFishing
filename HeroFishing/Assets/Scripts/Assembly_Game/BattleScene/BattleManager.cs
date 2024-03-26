@@ -364,7 +364,8 @@ namespace HeroFishing.Battle {
                 if (Monster.TryGetMonsterByIdx(monsterIdxs[i], out Monster monster)) {
                     monster.Die(heroIndex);
                 }
-                totalExp += gainHeroExps[i];
+                if (gainHeroExps != null && i < gainHeroExps.Length) // Bot打怪gainHeroExps會是null
+                    totalExp += gainHeroExps[i];
             }
             //var entity = _entityManager.CreateEntity();
 
