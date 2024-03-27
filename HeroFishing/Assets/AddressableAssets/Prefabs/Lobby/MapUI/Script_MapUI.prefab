@@ -388,31 +388,69 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mapScrollView: {fileID: 7872217322758874391}
   _localTest: 0
-  _glowColorDic:
-    m_keys: 01000000050000000a0000001e0000003200000064000000c8000000
-    m_values:
-    - {r: 0.6392157, g: 0.6117647, b: 0.6117647, a: 1}
-    - {r: 0.5411765, g: 0.3647059, b: 0.3019608, a: 1}
-    - {r: 0.67058825, g: 0.5529412, b: 0.7411765, a: 1}
-    - {r: 0.7254902, g: 0.5647059, b: 0.30588236, a: 1}
-    - {r: 0, g: 0.7058824, b: 0.7019608, a: 1}
-    - {r: 1, g: 0.8039216, b: 0.15686275, a: 1}
-    - {r: 0.98039216, g: 0.25490198, b: 1, a: 1}
-  _txtColorDic:
-    m_keys: 01000000050000001e0000003200000064000000c80000002c0100000a000000
-    m_values:
-    - {r: 0.6117647, g: 0.59607846, b: 0.5921569, a: 1}
-    - {r: 0.74509805, g: 0.5254902, b: 0.42745098, a: 1}
-    - {r: 0.90588236, g: 0.7607843, b: 0.4, a: 1}
-    - {r: 0.011764706, g: 0.9843137, b: 0.9843137, a: 1}
-    - {r: 1, g: 0.7372549, b: 0.023529412, a: 1}
-    - {r: 1, g: 0.25882354, b: 0.6784314, a: 1}
-    - {r: 0.7882353, g: 0.7921569, b: 0.9882353, a: 1}
-    - {r: 0.73333335, g: 0.75686276, b: 0.8117647, a: 1}
   _myGlass: {fileID: 5371696828642159065, guid: c467d617b7d1a704e87bc69ba5a62269,
     type: 3}
   _heroIconImg: {fileID: 3994671399032663959}
   _playerInfoUI: {fileID: 4894489601939860512}
+  _mapColorDic:
+    pairs:
+    - key: 1
+      value:
+        Gradient: 0
+        GlowColor: {r: 0.6392157, g: 0.6117647, b: 0.6117647, a: 1}
+        GlowColor2: {r: 0, g: 0, b: 0, a: 0}
+        TxtColor: {r: 0.6117647, g: 0.59607846, b: 0.5921569, a: 1}
+        EffectColor: {r: 6.9050536, g: 6.675423, b: 8.47419, a: 1}
+    - key: 5
+      value:
+        Gradient: 0
+        GlowColor: {r: 0.5411765, g: 0.3647059, b: 0.3019608, a: 1}
+        GlowColor2: {r: 0, g: 0, b: 0, a: 0}
+        TxtColor: {r: 0.74509805, g: 0.5254902, b: 0.42745098, a: 1}
+        EffectColor: {r: 6.510532, g: 3.0337033, b: 1.7725008, a: 1}
+    - key: 10
+      value:
+        Gradient: 0
+        GlowColor: {r: 0.67058825, g: 0.5529412, b: 0.7411765, a: 1}
+        GlowColor2: {r: 0, g: 0, b: 0, a: 0}
+        TxtColor: {r: 0.73333335, g: 0.75686276, b: 0.8117647, a: 1}
+        EffectColor: {r: 5.13088, g: 2.285574, b: 8.44263, a: 1}
+    - key: 30
+      value:
+        Gradient: 0
+        GlowColor: {r: 0.7254902, g: 0.5647059, b: 0.30588236, a: 1}
+        GlowColor2: {r: 0, g: 0, b: 0, a: 0}
+        TxtColor: {r: 0.90588236, g: 0.7607843, b: 0.4, a: 1}
+        EffectColor: {r: 6.0129604, g: 3.1166656, b: 1.133333, a: 1}
+    - key: 50
+      value:
+        Gradient: 0
+        GlowColor: {r: 0, g: 0.7058824, b: 0.7019608, a: 1}
+        GlowColor2: {r: 0, g: 0, b: 0, a: 0}
+        TxtColor: {r: 0.011764706, g: 0.9843137, b: 0.9843137, a: 1}
+        EffectColor: {r: 1.5111105, g: 4.344443, b: 5.0055537, a: 1}
+    - key: 100
+      value:
+        Gradient: 0
+        GlowColor: {r: 1, g: 0.8039216, b: 0.15686275, a: 1}
+        GlowColor2: {r: 0, g: 0, b: 0, a: 0}
+        TxtColor: {r: 1, g: 0.7372549, b: 0.023529412, a: 1}
+        EffectColor: {r: 6.6732984, g: 5.1554503, b: 0, a: 1}
+    - key: 200
+      value:
+        Gradient: 0
+        GlowColor: {r: 0.98039216, g: 0.25490198, b: 1, a: 1}
+        GlowColor2: {r: 0, g: 0, b: 0, a: 0}
+        TxtColor: {r: 1, g: 0.25882354, b: 0.6784314, a: 1}
+        EffectColor: {r: 8.9092245, g: 0.31444323, b: 5.904545, a: 1}
+    - key: 300
+      value:
+        Gradient: 1
+        GlowColor: {r: 1, g: 0.54901963, b: 1, a: 1}
+        GlowColor2: {r: 0.5294118, g: 1, b: 1, a: 1}
+        TxtColor: {r: 0.7882353, g: 0.7921569, b: 0.9882353, a: 1}
+        EffectColor: {r: 6.723793, g: 3.414701, b: 6.12534, a: 1}
+    error: 0
 --- !u!114 &4894489601939860512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,9 +464,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _txtName: {fileID: 6994407284130340895}
-  _txtLv: {fileID: 0}
+  _txtLv: {fileID: 8232194709164615361}
+  _txtTime: {fileID: 8427082231650272753}
   _txtCoin: {fileID: 149154418320534643}
-  _txtTime: {fileID: 0}
 --- !u!114 &3994671399032663959 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6220926277522653205, guid: c3980f958eb46e6498629bfc0558facc,
@@ -538,3 +576,27 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7006130991737646978}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8232194709164615361 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1370332871637322051, guid: c3980f958eb46e6498629bfc0558facc,
+    type: 3}
+  m_PrefabInstance: {fileID: 7006130991737646978}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8427082231650272753 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1570003237357349491, guid: c3980f958eb46e6498629bfc0558facc,
+    type: 3}
+  m_PrefabInstance: {fileID: 7006130991737646978}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

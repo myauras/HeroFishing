@@ -31,8 +31,18 @@ public partial class DBPlayer : IRealmObject {
     public long? Point { get; private set; }
     [MapTo("heroExp")]
     public int? HeroExp { get; private set; }
+    [MapTo("spellLVs")]
+    public IList<int> SpellLVs { get; }
+    [MapTo("spellCharges")]
+    public IList<int> SpellCharges { get; }
+    [MapTo("drops")]
+    public IList<int> Drops { get; }
+    
     [MapTo("inMatchgameID")]
     public string InMatchgameID { get; private set; }
+    [MapTo("leftGameAt")]
+    public DateTimeOffset? LeftGameAt { get; private set; }
+    
 
 
     public void SetDeviceUID(string _deviceUID) {

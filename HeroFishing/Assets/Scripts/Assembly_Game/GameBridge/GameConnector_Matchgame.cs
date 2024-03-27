@@ -141,6 +141,7 @@ namespace HeroFishing.Socket {
             Socket.TCPSend(cmd);
         }
         public void LvUpSpell(int _idx) {
+            _idx -= 1;
             SocketCMD<LVUPSPELL> cmd = new SocketCMD<LVUPSPELL>(new LVUPSPELL(_idx));
             Socket.TCPSend(cmd);
         }
