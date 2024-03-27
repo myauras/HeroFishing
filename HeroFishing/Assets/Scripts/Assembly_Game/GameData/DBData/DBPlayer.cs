@@ -33,6 +33,10 @@ public partial class DBPlayer : IRealmObject {
     public int? HeroExp { get; private set; }
     [MapTo("spellLVs")]
     public IList<int> SpellLVs { get; }
+    [MapTo("spellCharges")]
+    public IList<int> SpellCharges { get; }
+    [MapTo("drops")]
+    public IList<int> Drops { get; }
     
     [MapTo("inMatchgameID")]
     public string InMatchgameID { get; private set; }
