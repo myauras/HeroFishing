@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: VFX_Crack_m_06
+  m_Shader: {fileID: 4800000, guid: 90ecf2127a6036042a76bb64a7a66852, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _PATH_R
+  - _RECEIVE_SHADOWS_OFF
+  m_InvalidKeywords:
+  - _RECEIVESHADOWS_OFF
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: _Vector0
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainText:
+        m_Texture: {fileID: 2800000, guid: 79ad6c7ecd0c74d4b9890a50b5f4c047, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample6:
+        m_Texture: {fileID: 2800000, guid: 4f13dc2f5559b88418e482b0ff6a30b4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _DissortStrenght: 0.315845
+    - _DissortStrength: 0.03
+    - _Float0: 1
+    - _Path: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 0
+    - _deep: 0.03
+    - _end: -1
+    - _show: 1
+    - _show1: 0.06479088
+    m_Colors:
+    - _Color0: {r: 2.9960783, g: 1.514478, b: 1.0881982, a: 1}
+    - _ColorA: {r: 0.084905684, g: 0.030838383, b: 0.038762625, a: 1}
+    - _ColorB: {r: 5.9921575, g: 0.9845418, b: 0.50196075, a: 1}
+    - _DissortVector: {r: 3, g: 3, b: 0, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Vector0: {r: -5.2, g: 1, b: 1, a: 0}
+    - _Vector1: {r: 2.95, g: 1, b: 0, a: 0.5}
+    - _WaveVector: {r: 0.5, g: 0.5, b: 0, a: 0.03}
+    - _offset: {r: 0, g: 0.24, b: 0, a: 0}
+  m_BuildTextureStacks: []
