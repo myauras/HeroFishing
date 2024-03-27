@@ -24,6 +24,7 @@ public class BulletCollision : CollisionBase {
 
     private BulletCollisionInfo _info;
     private Transform _t;
+    private Vector3 _direction;
     private Vector3 _position;
     private Monster _targetMonster;
     private List<Monster> _alreadyHitMonsters;
@@ -47,6 +48,7 @@ public class BulletCollision : CollisionBase {
         _info = info;
         _t = transform;
         _position = _t.position;
+        _direction = _info.Direction;
         if (!_info.DestroyOnCollision)
             _alreadyHitMonsters = new List<Monster>();
     }
@@ -56,20 +58,19 @@ public class BulletCollision : CollisionBase {
 
         bool hasTarget = _info.TargetMonsterIdx != -1;
         bool isTargetMonsterAlive = Monster.TryGetMonsterByIdx(_info.TargetMonsterIdx, out _targetMonster);
-        if (_targetMonster != null)
-            Debug.Log(_targetMonster.InField);
         if (hasTarget && (!isTargetMonsterAlive || !_targetMonster.InField))
             hasTarget = false;
 
         if (hasTarget) {
             var targetPos = _targetMonster.transform.position;
-            targetPos.y = GameSettingJsonData.GetFloat(GameSetting.Bullet_PositionY);
-            var direction = (targetPos - _position).normalized;
-            _position += _info.Speed * deltaTime * direction;
-            _t.rotation = Quaternion.LookRotation(direction);
+            var deltaPos = targetPos - _position;
+            deltaPos.y = 0;
+            _direction = deltaPos.normalized;
+            _position += _info.Speed * deltaTime * _direction;
+            _t.rotation = Quaternion.LookRotation(_direction);
         }
         else
-            _position += _info.Speed * deltaTime * _info.Direction;
+            _position += _info.Speed * deltaTime * _direction;
 
         var gridPos = new Vector2Int(
             (int)(_position.x / MonsterGrid.CELL_SIZE),
