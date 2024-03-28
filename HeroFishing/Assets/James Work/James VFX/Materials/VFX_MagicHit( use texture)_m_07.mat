@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_MagicHit(Ztest use texture)_m_01
+  m_Name: VFX_MagicHit( use texture)_m_07
   m_Shader: {fileID: -6465566751694194690, guid: 621e92f81221f1d4c9d1f0b24d8c5cf2,
     type: 3}
   m_Parent: {fileID: 0}
@@ -55,13 +55,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EndEdgeAlpha: 0.93
+    - _EndEdgeAlpha: 1.1
     - _HeadEdgeAlpha: 0
     - _Mask: -2
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
     - _Color: {r: 5.9921575, g: 5.9921575, b: 5.9921575, a: 1}
-    - _WaveOffset: {r: 0.2, g: 1, b: 0, a: 0}
-    - _WaveTiling: {r: 3, g: 0.4, b: 0, a: 0}
+    - _WaveOffset: {r: 0, g: 1, b: 0, a: 0}
+    - _WaveTiling: {r: 2, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []

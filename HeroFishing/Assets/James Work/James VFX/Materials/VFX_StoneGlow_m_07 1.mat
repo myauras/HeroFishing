@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_StoneGlow_m_07
-  m_Shader: {fileID: 4800000, guid: 67852691b75aa744ba5ad3a6fb14b466, type: 3}
+  m_Name: VFX_StoneGlow_m_07 1
+  m_Shader: {fileID: 4800000, guid: 6b09637fc39dbf64497a5663fb3fa0d4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -29,6 +29,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     - Texture2D_2CF0794C:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_E41DEFE2:
+        m_Texture: {fileID: 2800000, guid: 630c4afa400a5dc4584472ce817afe7b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_E56B392B:
+        m_Texture: {fileID: 2800000, guid: 22506efc8c913704388e741a97e86415, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -53,24 +61,35 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Boolean_557F0425: 0
     - Vector1_17EB7558: 0.12
     - Vector1_3ADE2CF7: 0.235
     - Vector1_5A41DF23: 0
+    - Vector1_CBD3A384: 0.292
     - Vector1_DA37CFC9: 0.19
+    - Vector1_EA86209E: 0.349
+    - Vector1_EC887322: 0
+    - _Blend: 0.68
     - _Cut: 0
     - _NormalIntensity: 0
     - _QueueControl: 1
     - _QueueOffset: 0
-    - _Rim: 0.62
-    - _RimValue: 1
+    - _Rim: 0.83
+    - _RimValue: 0.5
     - _Smoothness: 0
     m_Colors:
     - Color_16A8E7A: {r: 0.75608593, g: 0.9177007, b: 1.4980394, a: 1}
+    - Color_319E08F9: {r: 166.9273, g: 24.471008, b: 7.8656797, a: 1}
+    - Color_602EE6C6: {r: 0.103773594, g: 0.050418306, b: 0.050418306, a: 1}
     - Color_8ADDE21D: {r: 0.16164494, g: 0.16037738, b: 2, a: 1}
     - Color_DA2C7E2B: {r: 1.6037736, g: 1.42997, b: 0.34042367, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _RimColor: {r: 23.96862, g: 0.50196064, b: 0, a: 1}
-    - _SpecularColor: {r: 0.22745098, g: 0.10522679, b: 0.090196095, a: 1}
+    - Color_F0BA86C6: {r: 0.11834161, g: 0, b: 0.14150941, a: 1}
+    - Vector4_599CDF5F: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _BaseColor: {r: 9.734287, g: 7.5295124, b: 7.3007154, a: 1}
+    - _Color: {r: 0.5754717, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 47.937256, g: 0.9387967, b: 0, a: 1}
+    - _SpecularColor: {r: 0.4106371, g: 0, b: 0.024155147, a: 1}
+    - _TopColor: {r: 0.016635053, g: 0.0016478117, b: 0.0016478117, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &8676466064618065713
 MonoBehaviour:
