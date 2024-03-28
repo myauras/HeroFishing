@@ -19,14 +19,12 @@ public abstract class DropBase {
 
 public abstract class DropSpellBase : DropBase {
     protected DropSpellJsonData _spellData;
-    protected DropUI _dropUI;
+
     public DropSpellBase(DropJsonData data, DropSpellJsonData spellData) : base(data) {
         _spellData = spellData;
-        _dropUI = BaseUI.GetInstance<DropUI>();
     }
 
     public override void AddDrop(int heroIndex) {
-        if (heroIndex == 0)
-            _dropUI.OnDropAdd(_data.ID);
+
     }
 }

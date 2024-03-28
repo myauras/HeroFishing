@@ -24,10 +24,6 @@ public class DropSpeedup : DropSpellBase {
     }
 
     public override bool PlayDrop(int heroIndex) {
-        if (heroIndex == 0) {
-            _dropUI.OnDropPlay(_data.ID, _duration);
-        }
-
         _hero = BattleManager.Instance.GetHero(heroIndex);
         _hero.AttackSpeedMultiplier = _speedupMultiplier;
         string path = string.Format(DROP_BUFF_EFFECT, _data.Ref);

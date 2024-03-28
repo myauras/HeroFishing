@@ -21,8 +21,6 @@ public class DropHeroSpell : DropSpellBase {
 
     public override bool PlayDrop(int heroIndex) {
         Debug.Log("play hero spell");
-        if (heroIndex == 0)
-            _dropUI.OnDropPlay(_data.ID);
         string heroSpellID = string.Format(HERO_SPELL_ID, _data.ID);
         var heroSpellData = HeroSpellJsonData.GetData(heroSpellID);
         if (heroSpellData == null) {

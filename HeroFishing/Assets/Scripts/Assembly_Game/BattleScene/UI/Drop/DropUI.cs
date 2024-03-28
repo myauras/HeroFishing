@@ -20,9 +20,18 @@ public class DropUI : BaseUI
             _dropBtns[i].Init();
         }
 
+        DropManager.Instance.OnDropAdd += OnDropAdd;
+        DropManager.Instance.OnDropPlay += OnDropPlay;
+
         for (int i = 0; i < DropManager.Instance.CurrentDrop.Count; i++) {
             OnDropAdd(DropManager.Instance.CurrentDrop[i]);
         }
+    }
+
+    protected override void OnDestroy() {
+        base.OnDestroy();
+        DropManager.Instance.OnDropAdd -= OnDropAdd;
+        DropManager.Instance.OnDropPlay -= OnDropPlay;
     }
 
     public void OnDropAdd(int dropID) {

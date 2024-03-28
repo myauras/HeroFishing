@@ -23,6 +23,8 @@ public class DropManager {
 
     public List<int> CurrentDrop => _currentDrops;
 
+    public event Action<int> OnDropAdd;
+    public event Action<int, float> OnDropPlay;
     //public event Action<int> OnSpellAdd;
     //public event Action<int> OnSpellPlay;
 
@@ -30,7 +32,7 @@ public class DropManager {
         _currentDrops.Clear();
         for (int i = 0; i < drops.Count; i++) {
             if (drops[i] != 0)
-                _currentDrops.Add(drops[i]);
+                AddDrop(0, drops[i]);
         }
     }
 
@@ -53,8 +55,10 @@ public class DropManager {
             }
 
             drop.AddDrop(heroIndex);
-            if (heroIndex == 0)
+            if (heroIndex == 0) {
                 _currentDrops.Add(dropID);
+                OnDropAdd?.Invoke(dropID);
+            }
         }
     }
 
@@ -70,6 +74,7 @@ public class DropManager {
             }
             if (drop.PlayDrop(heroIndex)) {
                 if (heroIndex == 0) {
+                    OnDropPlay?.Invoke(dropID, drop.Duration);
                     if (drop.Duration == 0)
                         _currentDrops.Remove(dropID);
                     else {

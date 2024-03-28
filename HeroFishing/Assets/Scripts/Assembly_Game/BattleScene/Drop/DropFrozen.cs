@@ -19,9 +19,7 @@ public class DropFrozen : DropSpellBase {
     public override bool PlayDrop(int heroIndex) {
         if (!WorldStateManager.Instance.IsFrozen)
             WorldStateManager.Instance.Freeze(true);
-        //GameConnector.Instance.UpdateScene();
-        if (heroIndex == 0)
-            _dropUI.OnDropPlay(_data.ID, _duration);
+
         _disposables.Clear();
         Observable.Timer(TimeSpan.FromSeconds(_duration)).Subscribe(_ => {
             WorldStateManager.Instance.Freeze(false);
