@@ -21,6 +21,7 @@ public class MapPlayerInfoUI : BaseUI {
     private int _points;
 
     private const string TIME_ZONE_ID = "Taipei Standard Time";
+    private const string INVALID_TIME = "--:--:--";
 
     public override void RefreshText() {
         
@@ -35,7 +36,7 @@ public class MapPlayerInfoUI : BaseUI {
         var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(Service.Realms.DBPlayerCol.player);
         SetPoints((int)(dbPlayer.Point ?? 0));
         SetLevel(dbPlayer.HeroExp ?? 0);
-        SetDateCountdown();
+        SetDateCountdown(dbPlayer.LeftGameAt);
     }
 
     public void AddPoints(int points) {
@@ -62,13 +63,24 @@ public class MapPlayerInfoUI : BaseUI {
         _txtLv.text = "Lv." + level.ToString();
     }
 
-    public void SetDateCountdown() {
+    public void SetDateCountdown(DateTimeOffset? leftGameAt) {
+        if (!leftGameAt.HasValue) {
+            _txtTime.text = INVALID_TIME;
+            return;
+        }
+
         Observable.EveryUpdate().TakeUntilDisable(this).Subscribe(_ => {
-            TimeZoneInfo tst = TimeZoneInfo.FindSystemTimeZoneById(TIME_ZONE_ID);
-            DateTime now = TimeZoneInfo.ConvertTime(DateTime.Now, tst);
-            DateTime endDate = now.AddDays(1).Date;
-            var remainingTime = endDate.Subtract(now);
-            _txtTime.text = $"{remainingTime.Hours:00}:{remainingTime.Minutes:00}:{remainingTime.Seconds:00}";
+            var resetLevelAt = leftGameAt.Value.AddDays(1);
+            //TimeZoneInfo tst = TimeZoneInfo.FindSystemTimeZoneById(TIME_ZONE_ID);
+            //DateTime now = TimeZoneInfo.ConvertTime(DateTime.Now, tst);
+            //DateTime endDate = now.AddDays(1).Date;
+            var remainingTime = resetLevelAt.Subtract(DateTime.UtcNow);
+            if (remainingTime.Ticks < 0) {
+                _txtTime.text = INVALID_TIME;
+            }
+            else {
+                _txtTime.text = $"{remainingTime.Hours:00}:{remainingTime.Minutes:00}:{remainingTime.Seconds:00}";
+            }
         });
     }
 }
