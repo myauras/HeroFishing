@@ -34,6 +34,19 @@ public class MapPlayerInfoUI : BaseUI {
 
     public void Refresh() {
         var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(Service.Realms.DBPlayerCol.player);
+        Debug.Log($"left game at: {dbPlayer.LeftGameAt.Value}");
+        for (int i = 0; i < dbPlayer.SpellLVs.Count; i++) {
+            Debug.Log($"spell level {i}: {dbPlayer.SpellLVs[i]}");
+        }
+
+        for (int i = 0; i < dbPlayer.SpellCharges.Count; i++) {
+            Debug.Log($"spell charge {i}: {dbPlayer.SpellCharges[i]}");
+        }
+
+        for (int i = 0; i < dbPlayer.Drops.Count; i++) {
+            Debug.Log($"drops {i}: {dbPlayer.Drops[i]}");
+        }
+
         SetPoints((int)(dbPlayer.Point ?? 0));
         SetLevel(dbPlayer.HeroExp ?? 0);
         SetDateCountdown(dbPlayer.LeftGameAt);
