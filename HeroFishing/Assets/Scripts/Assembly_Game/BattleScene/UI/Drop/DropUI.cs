@@ -19,6 +19,10 @@ public class DropUI : BaseUI
         for (int i = 0; i < _dropBtns.Length; i++) {
             _dropBtns[i].Init();
         }
+
+        for (int i = 0; i < DropManager.Instance.CurrentDrop.Count; i++) {
+            OnDropAdd(DropManager.Instance.CurrentDrop[i]);
+        }
     }
 
     public void OnDropAdd(int dropID) {

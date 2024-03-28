@@ -20,15 +20,26 @@ namespace HeroFishing.Battle {
         private int _level = 1;
         private int _points;
         private int _storedPoints;
+        private IList<int> _spellLVs;
+        private IList<int> _spellCharges;
         private GameObject _model;
         private Dictionary<int, int> _storedMonsterPoints = new Dictionary<int, int>();
 
         public int Exp => _exp;
         public int Level => _level;
+        public int NextLevelExp {
+            get {
+                if (_level >= 10) return 0;
+                return HeroEXPJsonData.GetData(_level).EXP;
+            }
+        }
+
         public int Points => _points;
         public bool IsLoaded => _model != null;
         public int TotalPoints => _points + _storedPoints;
         public float AttackSpeedMultiplier { get; set; } = 1;
+        public IList<int> SpellLevels => _spellLVs;
+        public IList<int> SpellCharges => _spellCharges;
 
 
         public event Action<int> OnLevelUp;
@@ -40,8 +51,8 @@ namespace HeroFishing.Battle {
 
         public static int Bet => BattleManager.Instance.Bet;
 
-        private const int SPELL_COUNT = 4;
-        private const int MAX_LEVEL = 10;
+        public const int SPELL_COUNT = 4;
+        public const int MAX_LEVEL = 10;
 
         public void Register(SpellActivationBehaviour activationBehaviour) {
             ActivationBehaviour = activationBehaviour;
@@ -153,7 +164,26 @@ namespace HeroFishing.Battle {
                 LevelUp();
                 _exp -= nextLevelExp;
             }
+
             OnExpUpdate?.Invoke(_exp, nextLevelExp);
+        }
+
+        public void UpdateExp(int exp) {
+            int remainingExp = exp;
+            int level = 1;
+            int nextLevelExp;
+            do {
+                nextLevelExp = HeroEXPJsonData.GetData(level).EXP;
+                if (remainingExp >= nextLevelExp) {
+                    level++;
+                    remainingExp -= nextLevelExp;
+                    if (level == MAX_LEVEL) break;
+                }
+                else break;
+            } while (true);
+
+            _level = level;
+            _exp = remainingExp;
         }
 
         public void HoldStoredPoints(int monsterIdx, int points) {
@@ -178,12 +208,34 @@ namespace HeroFishing.Battle {
             OnPointUpdate?.Invoke(_points, false);
         }
 
+        public void UpdateState(DBPlayer player) {
+            if (player == null) return;
+            if (player.Point.HasValue) {
+                UpdatePoints((int)player.Point.Value);
+            }
+
+            if (player.HeroExp.HasValue) {
+                UpdateExp(player.HeroExp.Value);
+            }
+
+            if (player.SpellLVs != null && player.SpellLVs.Count > 0) {
+                _spellLVs = new List<int>(player.SpellLVs);
+            }
+
+            if (player.SpellCharges != null && player.SpellCharges.Count > 0) {
+                _spellCharges = new List<int>(player.SpellCharges);
+            }
+
+            if (player.Drops != null && player.Drops.Count > 0) {
+                DropManager.Instance.Init(player.Drops);
+            }
+        }
+
         public void UpdatePoints(int points) {
             _points = points;
             OnPointUpdate?.Invoke(points, false);
         }
 
-        [ContextMenu("Level Up")]
         public void LevelUp() {
             _level = Mathf.Min(_level + 1, MAX_LEVEL);
             OnLevelUp?.Invoke(_level);

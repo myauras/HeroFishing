@@ -71,6 +71,7 @@ public class SpellLevelUI : MonoBehaviour {
 
     public void SetLevel(int level) {
         _level = level;
+        if (level == 0) return;
         string param = string.Format(LEVEL + "_OK", _level);
         _animator.SetTrigger(param);
     }
