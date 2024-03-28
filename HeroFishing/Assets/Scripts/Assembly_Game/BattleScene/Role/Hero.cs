@@ -245,12 +245,12 @@ namespace HeroFishing.Battle {
             for (int i = 0; i < spellIndices.Length; i++) {
                 int spellIndex = spellIndices[i];
                 if (spellIndex <= 0) continue;
-                OnSpellCharge?.Invoke((SpellName)spellIndex);
+                OnSpellCharge?.Invoke((SpellName)(spellIndex + 1));
             }
         }
 
         public void ChargeSpell(int spellIndex) {
-            OnSpellCharge?.Invoke((SpellName)spellIndex);
+            OnSpellCharge?.Invoke((SpellName)(spellIndex + 1));
         }
     }
 }
