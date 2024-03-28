@@ -21,11 +21,17 @@ public class DropManager {
     private List<int> _currentDrops = new List<int>();
     private Dictionary<int, DropBase> _dropSpells = new Dictionary<int, DropBase>();
 
+    public List<int> CurrentDrop => _currentDrops;
+
     //public event Action<int> OnSpellAdd;
     //public event Action<int> OnSpellPlay;
 
-    private void Init() {
-
+    public void Init(IList<int> drops) {
+        _currentDrops.Clear();
+        for (int i = 0; i < drops.Count; i++) {
+            if (drops[i] != 0)
+                _currentDrops.Add(drops[i]);
+        }
     }
 
     public void AddDrop(int heroIndex, int dropID) {

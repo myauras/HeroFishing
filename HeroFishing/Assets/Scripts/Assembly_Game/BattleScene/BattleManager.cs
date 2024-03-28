@@ -173,8 +173,7 @@ namespace HeroFishing.Battle {
                 var map = RealmManager.MyRealm.Find<DBMap>(AllocatedRoom.Instance.DBMapID);
                 _bet = map.Bet ?? 1;
                 var player = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(DBPlayerCol.player);
-                if (player != null && player.Point.HasValue)
-                    hero.UpdatePoints((int)player.Point.Value);
+                hero.UpdateState(player);
             }
         }
 

@@ -81,10 +81,24 @@ public class SpellBtn : MonoBehaviour {
         OnSpellUpgradeAnimationComplete?.Invoke(_spellData.SpellName);
     }
 
+    public void SetLevel(int level) {
+        _levelButton.SetLevel(level);
+    }
+
     [ContextMenu("charge")]
     public void AddChargeValue() {
         if (_levelButton.IsNoLevel) return;
         float value = (float)++_chargeValue / MaxChargeValue;
+        _chargeButton.SetValue(value);
+        if (_chargeButton.IsFullCharge) {
+            _button.interactable = true;
+        }
+    }
+
+    public void SetChargeValue(int charge) {
+        if (_levelButton.IsNoLevel) return;
+        _chargeValue = charge;
+        float value = (float)_chargeValue / MaxChargeValue;
         _chargeButton.SetValue(value);
         if (_chargeButton.IsFullCharge) {
             _button.interactable = true;

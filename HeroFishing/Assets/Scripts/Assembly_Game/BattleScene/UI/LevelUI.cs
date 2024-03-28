@@ -23,15 +23,20 @@ public class LevelUI : BaseUI {
         _hero.OnLevelUp += OnLevelUp;
         _hero.OnExpUpdate += OnExpUpdate;
 
-        OnLevelUp(1);
+        OnLevelUp(_hero.Level);
+        OnExpUpdate(_hero.Exp, _hero.NextLevelExp);
     }
 
     private void OnLevelUp(int level) {
         _txtLevel.text = string.Format(TXT_LEVEL, level);
         _imgExp.fillAmount = 0;
+
+        if (level == Hero.MAX_LEVEL)
+            _imgExp.fillAmount = 1;
     }
 
     private void OnExpUpdate(int exp, int fullExp) {
+        if (fullExp == 0) return;
         _imgExp.fillAmount = (float)exp / fullExp;
     }
 }

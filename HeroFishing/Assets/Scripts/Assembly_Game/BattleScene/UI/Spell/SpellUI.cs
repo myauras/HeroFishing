@@ -51,7 +51,8 @@ public class SpellUI : BaseUI {
         _hero.OnSpellPlay += OnPlay;
 
         //_lockButton.OnClick += SetLockAttack;
-        OnLevelUp(1);
+        UpdateState(_hero.SpellLevels, _hero.SpellCharges);
+        OnLevelUp(_hero.Level);
     }
 
     public void OnLevelUp(int level) {
@@ -98,6 +99,17 @@ public class SpellUI : BaseUI {
         var btn = GetSpellBtn(spellName);
         if (CanUpgrade(btn, _hero.Level))
             btn.OpenUpgradeBtn();
+    }
+
+    private void UpdateState(IList<int> levels, IList<int> charges) {
+        if (levels == null || charges == null) return;
+        _spellBtn1.SetLevel(levels[0]);
+        _spellBtn2.SetLevel(levels[1]);
+        _spellBtn3.SetLevel(levels[2]);
+
+        _spellBtn1.SetChargeValue(charges[0]);
+        _spellBtn2.SetChargeValue(charges[1]);
+        _spellBtn3.SetChargeValue(charges[2]);
     }
 
     private SpellBtn GetSpellBtn(SpellName spellName) {
