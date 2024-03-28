@@ -24,7 +24,7 @@ public class MapPlayerInfoUI : BaseUI {
     private const string INVALID_TIME = "--:--:--";
 
     public override void RefreshText() {
-        
+
     }
 
     public override void Init() {
@@ -34,6 +34,7 @@ public class MapPlayerInfoUI : BaseUI {
 
     public void Refresh() {
         var dbPlayer = GamePlayer.Instance.GetDBPlayerDoc<DBPlayer>(Service.Realms.DBPlayerCol.player);
+        Debug.Log($"hero exp {dbPlayer.HeroExp.Value}");
         Debug.Log($"left game at: {dbPlayer.LeftGameAt.Value}");
         for (int i = 0; i < dbPlayer.SpellLVs.Count; i++) {
             Debug.Log($"spell level {i}: {dbPlayer.SpellLVs[i]}");
@@ -79,18 +80,18 @@ public class MapPlayerInfoUI : BaseUI {
             return;
         }
 
-        Observable.EveryUpdate().TakeUntilDisable(this).Subscribe(_ => {
-            var resetLevelAt = leftGameAt.Value.AddDays(1);
+        var resetLevelAt = leftGameAt.Value.AddDays(1);
+        var remainingTime = resetLevelAt.Subtract(DateTime.UtcNow);
+        Observable.EveryUpdate().TakeUntilDisable(this).TakeWhile(_ => remainingTime.Ticks >= 0).Subscribe(_ => {
+
             //TimeZoneInfo tst = TimeZoneInfo.FindSystemTimeZoneById(TIME_ZONE_ID);
             //DateTime now = TimeZoneInfo.ConvertTime(DateTime.Now, tst);
             //DateTime endDate = now.AddDays(1).Date;
-            var remainingTime = resetLevelAt.Subtract(DateTime.UtcNow);
-            if (remainingTime.Ticks < 0) {
-                _txtTime.text = INVALID_TIME;
-            }
-            else {
-                _txtTime.text = $"{remainingTime.Hours:00}:{remainingTime.Minutes:00}:{remainingTime.Seconds:00}";
-            }
+            remainingTime = resetLevelAt.Subtract(DateTime.UtcNow);
+            _txtTime.text = $"{remainingTime.Hours:00}:{remainingTime.Minutes:00}:{remainingTime.Seconds:00}";
+        }, () => {
+            _txtTime.text = INVALID_TIME;
+            _txtLv.text = "Lv.1";
         });
     }
 }
