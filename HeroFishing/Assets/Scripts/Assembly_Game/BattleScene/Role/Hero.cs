@@ -27,9 +27,15 @@ namespace HeroFishing.Battle {
 
         public int Exp => _exp;
         public int Level => _level;
+        public int PrevLevelExp {
+            get {
+                if (_level == 1) return 0;
+                return HeroEXPJsonData.GetData(_level - 1).EXP;
+            }
+        }
         public int NextLevelExp {
             get {
-                if (_level >= 10) return 0;
+                if (_level == 10) return 0;
                 return HeroEXPJsonData.GetData(_level).EXP;
             }
         }
@@ -159,31 +165,24 @@ namespace HeroFishing.Battle {
         public void AddExp(int exp) {
             if (_level == MAX_LEVEL) return;
             _exp += exp;
-            var nextLevelExp = HeroEXPJsonData.GetData(_level).EXP;
-            if (_exp >= nextLevelExp) {
+            if (_exp >= NextLevelExp) {
                 LevelUp();
-                _exp -= nextLevelExp;
             }
 
-            OnExpUpdate?.Invoke(_exp, nextLevelExp);
+            OnExpUpdate?.Invoke(_exp - PrevLevelExp, NextLevelExp - PrevLevelExp);
         }
 
         public void UpdateExp(int exp) {
-            int remainingExp = exp;
-            int level = 1;
-            int nextLevelExp;
+            _level = 1;
             do {
-                nextLevelExp = HeroEXPJsonData.GetData(level).EXP;
-                if (remainingExp >= nextLevelExp) {
-                    level++;
-                    remainingExp -= nextLevelExp;
-                    if (level == MAX_LEVEL) break;
+                if (exp >= NextLevelExp) {
+                    _level++;
+                    if (_level == MAX_LEVEL) break;
                 }
                 else break;
             } while (true);
 
-            _level = level;
-            _exp = remainingExp;
+            _exp = exp;
         }
 
         public void HoldStoredPoints(int monsterIdx, int points) {

@@ -24,7 +24,7 @@ public class LevelUI : BaseUI {
         _hero.OnExpUpdate += OnExpUpdate;
 
         OnLevelUp(_hero.Level);
-        OnExpUpdate(_hero.Exp, _hero.NextLevelExp);
+        OnExpUpdate(_hero.Exp - _hero.PrevLevelExp, _hero.NextLevelExp - _hero.PrevLevelExp);
     }
 
     private void OnLevelUp(int level) {
@@ -36,7 +36,7 @@ public class LevelUI : BaseUI {
     }
 
     private void OnExpUpdate(int exp, int fullExp) {
-        if (fullExp == 0) return;
+        if (fullExp <= 0) return;
         _imgExp.fillAmount = (float)exp / fullExp;
     }
 }

@@ -63,15 +63,12 @@ public class MapPlayerInfoUI : BaseUI {
     }
 
     public void SetLevel(int exp) {
-        int remainingExp = exp;
+        //int remainingExp = exp;
         int level = 1;
         for (int i = 1; i < 10; i++) {
             var levelExp = HeroEXPJsonData.GetData(i).EXP;
-            if (remainingExp >= levelExp) {
-                level++;
-                remainingExp -= levelExp;
-            }
-            else break;
+            if (exp < levelExp) break;
+            level++;
         }
         _txtLv.text = "Lv." + level.ToString();
     }
